@@ -1,7 +1,10 @@
 
 <div>
     <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
-    <div class="surface-card p-4 shadow-0 border-round w-full lg:w-12">
+    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        <div class="comp_volver">
+            <a href="/"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
+        </div>
         <div class="text-center mb-5">
             <img src="assets/images/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
             <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3">Únete a nosotros</div>
@@ -10,11 +13,11 @@
         <div>
             <label for="email1" class="block text-900 font-medium mb-2">Correo electrónico</label>
             <input id="email1" aria-describedby="email-help" type="text" autocomplete="off" (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3">
-            <small *ngIf="isWriting" id="email-help"><i class="pi pi-info-circle"></i> recuerda que este correo será usado para enviarte información respecto a tu cuenta.<br><br></small>
+            <small *ngIf="isWriting" id="email-help"><br><i class="pi pi-info-circle"></i> recuerda que este correo será usado para enviarte información respecto a tu cuenta.<br><br></small>
 
             <label for="password1" class="block text-900 font-medium mb-2">Contraseña</label>
             <input id="password1" aria-describedby="pass-help" type="password" placeholder="Contraseña" (focus)="onFocus(2)" (blur)="onBlur(2)" pInputText class="w-full mb-3">
-            <small *ngIf="isWritingP" id="pass-help"><i class="pi pi-info-circle"></i> Mínimo 8 caracteres, al menos una letra y un número.<br><br></small>
+            <small *ngIf="isWritingP" id="pass-help"><br><i class="pi pi-info-circle"></i> Mínimo 8 caracteres, al menos una letra y un número.<br><br></small>
 
             <!-- <p-password formControlName="value" [feedback]="true" [toggleMask]="true"/> -->
             <label for="password2" class="block text-900 font-medium mb-2">Confirmar contraseña</label>
@@ -24,8 +27,7 @@
             <p-inputOtp [(ngModel)]="valueSS" [integerOnly]="true" [length]="6" class="w-full mb-2" (input)="onInputChange()"/>
             <small id="codUnico-help">SS - {{valueShow}}</small>
 
-
-            <br><br>
+            <br><br><br>
             <div class="flex align-items-center justify-content-center mb-6"> <!-- between: cuando acompaña el rememberme -->
                 <!-- <div class="flex align-items-center">
                     <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>

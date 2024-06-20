@@ -1,5 +1,5 @@
 #div_line_bootom{
-    min-width: 270px;
+    /* min-width: 315px; */
     /* border-bottom: solid 1px var(--gray-300); */
 }
 #codUnico-help{
@@ -13,6 +13,7 @@ i{
 }
 small {
     color: var(--gray-500);
+    margin-top: 1rem;
 }
 #labelCodUnico{
     background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */

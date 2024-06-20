@@ -75,3 +75,40 @@ body {
     padding: .8rem;
 }
 
+#volver-icon{
+  font-size: 1.5em;
+}
+.comp_volver{
+  /* cursor: pointer; */
+}
+.comp_volver a{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  text-decoration: none;
+  max-width: 80px;
+}
+.comp_volver a p{
+  font-size: 15px;
+  color: var(--gray-500);
+}
+small{
+}
+
+/* Min-width para pantallas pequeñas y medianas */
+@media (min-width: 700px) {
+#div_line_bootom {
+    min-width: 600px;
+    }
+input{
+  max-width: 600px;
+}
+}
+@media (max-width: 699px) {
+  #div_line_bootom {
+      width: 100%;
+      }
+  input{
+    width: 100%;
+  }
+}
