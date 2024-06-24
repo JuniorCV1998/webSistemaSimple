@@ -77,6 +77,7 @@ body {
 
 #volver-icon{
   font-size: 1.5em;
+  color: var(--blue-400);
 }
 .comp_volver{
   /* cursor: pointer; */
@@ -111,4 +112,12 @@ input{
   input{
     width: 100%;
   }
+}
+
+
+//Component Register
+.terminos_condiciones{
+  color: var(--blue-400);
+  cursor: pointer;
+  border-bottom: solid 1px var(--blue-400);
 }

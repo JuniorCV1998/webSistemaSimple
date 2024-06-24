@@ -1,0 +1,57 @@
+
+<div>
+    <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
+    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        <div class="comp_volver">
+            <a href="/registrar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
+        </div>
+        <div class="text-center mb-5">
+            <img src="assets/images/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
+            <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3">¡Estamos en la recta final!</div>
+        </div>
+
+        <div>
+            <label for="nombres" class="block text-900 font-medium mb-2">Nombres</label>
+            <input id="nombres" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3">
+
+            <div class="flex flex-row gap-2 align-items-center justify-content-center">
+                <div class="flex flex-column w-full">
+                    <label for="apellidop" class="block text-900 font-medium mb-2">Apellido paterno</label>
+                    <input id="apellidop" type="text" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3">
+                </div>
+
+                <div class="flex flex-column w-full">
+                    <label for="apellidom" class="block text-900 font-medium mb-2">Apellido materno</label>
+                    <input id="apellidom" type="text" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3">
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-center justify-content-center">
+                <div class="flex flex-column w-full">
+                    <label for="celular" class="block text-900 font-medium mb-2">Celular</label>
+                    <input id="celular" type="text" placeholder="Celular" pInputText appNroCelular class="w-full mb-3">
+                </div>
+
+                <div class="flex flex-column w-full">
+                    <label for="direccion" class="block text-900 font-medium mb-2">Dirección</label>
+                    <input id="direccion" type="text" placeholder="Dirección" pInputText class="w-full mb-3">
+                </div>
+            </div>
+
+<!--             <div class="card flex justify-content-center">
+                
+                <p-card>
+                    <i id="i_image" class="pi pi-image"></i>
+                    <div class="flex flex-column w-9">
+                        <p id="p_body" class="m-0"><i id="i_info" class="pi pi-info-circle"></i> Puedes añadir o editar una imagen de tu negocio para que los clientes lo visualicen después de iniciar sesión en la aplicación.</p>
+                        <p id="p_pie" class="w-full">Inicio > Mi cuenta > Imagen de Inversor.</p>
+                    </div>
+                    
+                </p-card>
+            </div> -->
+            <br>
+
+            <button pButton pRipple label="Registrarme" (click)="registrarUsuario()" class="w-full"></button>
+        </div>
+    </div>
+</div>

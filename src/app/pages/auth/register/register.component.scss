@@ -8,9 +8,6 @@
     display: flex;
     justify-content: center;
 }
-i{
-    color: var(--blue-400)
-}
 small {
     color: var(--gray-500);
     margin-top: 1rem;
@@ -20,4 +17,11 @@ small {
     -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
     background-clip: text; /* Aplicar el fondo degradado al texto */
     -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+}
+#terminos_condiciones{
+    margin-left: 10px;
+}
+i{
+    color: var(--blue-400);
+    font-size: .8rem;
 }

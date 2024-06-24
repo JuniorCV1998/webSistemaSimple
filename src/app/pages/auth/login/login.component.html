@@ -10,11 +10,12 @@
         </div>
 
         <div>
+            <form #form="ngForm" (ngSubmit)="iniciarSesion(form)">
             <label for="email1" class="block text-900 font-medium mb-2">Correo electrónico</label>
-            <input id="email1" type="text" placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3">
+            <input id="email1" name="usuario" [(ngModel)]="credenciales.usuario" type="text" placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3">
 
             <label for="password1" class="block text-900 font-medium mb-2">Contraseña</label>
-            <input id="password1" type="password" placeholder="Contraseña" pInputText class="w-full mb-3">
+            <input id="password1" name="contrasena" [(ngModel)]="credenciales.contrasena" value="contrasena" type="password" placeholder="Contraseña" pInputText class="w-full mb-3">
             <!-- <p-password formControlName="value" [feedback]="true" [toggleMask]="true"/> -->
             
             <div class="flex align-items-center justify-content-center mb-6"> <!-- between: cuando acompaña el rememberme -->
@@ -25,7 +26,8 @@
                 <a class="font-medium no-underline ml-2 text-blue-400 text-right cursor-pointer">¿Has olvidado tu contraseña?</a>
             </div>
 
-            <button pButton pRipple label="Iniciar sesión" icon="pi pi-user" class="w-full"></button>
+            <button pButton pRipple label="Iniciar sesión" icon="pi pi-sign-in" class="w-full"></button>
+        </form>
         </div>
     </div>
 </div>

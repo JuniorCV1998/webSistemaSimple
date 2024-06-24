@@ -6,6 +6,7 @@ import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { InputOtpModule } from 'primeng/inputotp';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,11 +16,16 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  constructor(private router: Router) {}
 
   isWriting: boolean = false;
   isWritingP: boolean = false;
   valueSS: string = '';
   valueShow: string = '_ _ _ _ _ _';
+
+  validarDatos(){
+    this.router.navigate(['registrar/personal']);
+  }
 
   onFocus(value:number) {
     if(value==1) this.isWriting = true;

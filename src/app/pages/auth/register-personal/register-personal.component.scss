@@ -1,0 +1,23 @@
+#i_image{
+    color: var(--blue-400);
+    font-size: 4rem;
+}
+#i_info{
+    font-size: .8rem;
+    color: var(--blue-400);
+}
+#p_body{
+    font-size: 12px;
+    text-align: justify;
+    color: var(--gray-450);
+}
+#p_pie{
+    font-size: 10px;
+    font-weight: bold;
+}
+:host ::ng-deep p-card div{
+    padding: 6px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
