@@ -6,15 +6,12 @@ import { InicioComponent } from './pages/dashboard/inicio/inicio.component';
 
 export const routes: Routes = [
     {
+        path:'inicio',
+        loadChildren: () => import('./pages/dashboard/auth.routes').then(m => m.DASHBOARD_ROUTES)
+    },
+    {
         path:'',
         loadChildren: () => import('./pages/auth/auth.routes').then(m => m.AUTH_ROUTES)
     },
-    {
-        path:'inicio',
-        component: InicioComponent
-    },
-/*     {
-        path:'registrar/personal',
-        component: RegisterPersonalComponent
-    } */
+
 ];

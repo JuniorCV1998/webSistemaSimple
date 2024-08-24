@@ -121,3 +121,9 @@ input{
   cursor: pointer;
   border-bottom: solid 1px var(--blue-400);
 }
+
+//Ocupa todo el espacio horizontal disponible
+.width-full{
+  flex: 1;
+  grid-template-columns: 1fr;
+}

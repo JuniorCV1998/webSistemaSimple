@@ -30,7 +30,8 @@ export class LoginComponent {
     };
 
     iniciarSesion(form: NgForm){
-    console.log("credenciales: " + JSON.stringify(this.credenciales))
+    console.log("credenciales: " + JSON.stringify(this.credenciales));
+    this.router.navigate(['inicio']);
 /*     this.loginService.loguearse(this.credencial).subscribe(response =>{
       this.router.navigate(['navigation/inversiones']);
       

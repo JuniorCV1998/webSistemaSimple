@@ -1,2 +1,104 @@
-<p>inicio works!</p>
-<h1>Hola, Jose Octavio</h1>
+<!-- <div>
+    <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12" style="background-color: aquamarine !important;">
+        <h1>Hola, Jose</h1>
+        
+
+        <div class="flex flex-row gap-2 align-items-center justify-content-center" style="background-color: aqua; width: 100%;">
+            <div class="flex flex-column w-full custom-banner">
+                <h5>Inversiones</h5>
+                 <p>This is the banner content.</p>
+            </div>
+
+            <div class="flex flex-column w-full custom-banner">
+                <h5>Invertir</h5>
+                 <p>This is the banner content.</p>
+            </div>
+        </div>
+        
+        
+
+        
+    </div>
+
+    <div class="footer-menu">
+        <p-tabMenu 
+          [model]="items" 
+          class="small-tabmenu" 
+          styleClass="custom-tabmenu">
+        </p-tabMenu>
+      </div>
+</div> -->
+
+
+<div>
+    <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+        <div class="text-center mb-5">
+            <div id="div_line_bootom" class="text-2xl font-medium mb-3" style="text-align: left;"><label class="label-nombre">Hola, Jose</label></div>
+            <span class="text-600 font-medium line-height-3">¿Qué hacemos hoy?</span>
+        </div>
+
+        <div class="flex flex-row gap-2 align-items-center justify-content-center">
+            <div class="flex flex-column w-full custom-banner-1">
+                <i class="pi pi-chart-bar icon-span"></i>
+                <span class="txt-span">Inversiones</span>
+                 <!-- <p>This is the banner content.</p> -->
+            </div>
+
+            <div class="flex flex-column w-full custom-banner-2">
+                <i class="pi pi-money-bill icon-span"></i>
+                <span class="txt-span">Invertir</span>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-2 justify-content div-monto" (click)="mostrarMonto()">
+            <div class="flex-row w-full custom-banner-3">
+                <i *ngIf="mostrar" class="pi pi-eye"></i>
+                <i *ngIf="!mostrar" class="pi pi-eye-slash"></i>
+                <span class="txt-span">Monto invertido</span>
+                <span *ngIf="mostrar" class="txt-span">{{ monto | number:'1.2-2' }}</span>
+                <span *ngIf="!mostrar" class="txt-span">********</span>
+                 <!-- <p>This is the banner content.</p> -->
+            </div>
+        </div>
+
+        <!-- Tabla de los ultimos registros de inversiones -->
+         <div class="table-container">
+            <table class="w-full">
+                <thead>
+                  <div class="flex flex-row tr-cabecera">
+                    <div class="span-1 w-10 flex justify-content-between" >
+                        <span>Últimos registros</span>
+                        <i class="pi pi-refresh"></i>
+                    </div>
+                    <div class="span-2 w-5 flex justify-content-end">
+                        <span (click)="verRegistros()">Ver todos</span>
+                    </div>
+                    
+                  </div>
+                </thead>
+                <tbody>
+                  <div *ngFor="let inversion of ultimasInversiones" class="tr-registros">
+                    <div class="flex flex-row">
+                        <div class="flex flex-column w-10" >
+                            <span class="span-nombre">{{ inversion.nombre }}</span>
+                            <span class="span-fecha">{{ inversion.fecha }}</span>
+                        </div>
+                        <div class="flex flex-column justify-content-center w-5 ">
+                            <span class="flex justify-content-end span-monto" >{{ inversion.monto }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tr-registros">
+                    <div class="flex justify-content-center flex-row span-2">
+                        <span *ngIf="ultimasInversiones.length != 0" (click)="verRegistros()">Ver todos</span>
+                        <span *ngIf="ultimasInversiones.length == 0">Aún no hay registros.</span>
+                    </div>
+                </div>
+                </tbody>
+              </table>
+         </div>
+        
+
+
+    </div>
+</div>
