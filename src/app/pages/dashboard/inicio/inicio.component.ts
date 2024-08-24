@@ -3,6 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { CommonModule } from '@angular/common'; // Importa CommonModule
 import { TableModule } from 'primeng/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -11,7 +12,8 @@ import { TableModule } from 'primeng/table';
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })
-export class InicioComponent {
+export default class InicioComponent {
+  constructor(private router: Router){}
 
   items: MenuItem[] | undefined;
   monto: any = 20000.00;
@@ -40,6 +42,10 @@ export class InicioComponent {
       alert("No se encontraron registros. Por favor, actualice.")
     }
   }
+
+/*   routerInversion(){
+    this.router.navigate(['/inversion']);
+  } */
   
   data = [
   {id:1, nombre: 'Jose Cerron Vicente', fecha: 'Hoy - 16:08 p.m.', monto: '1200.00'},

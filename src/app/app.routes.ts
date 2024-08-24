@@ -1,17 +1,48 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './pages/auth/login/login.component';
-import { RegisterComponent } from './pages/auth/register/register.component';
-import { RegisterPersonalComponent } from './pages/auth/register-personal/register-personal.component';
-import { InicioComponent } from './pages/dashboard/inicio/inicio.component';
 
 export const routes: Routes = [
     {
         path:'inicio',
-        loadChildren: () => import('./pages/dashboard/auth.routes').then(m => m.DASHBOARD_ROUTES)
+        loadComponent: () => import('././pages/dashboard/inicio/inicio.component')
     },
     {
-        path:'',
-        loadChildren: () => import('./pages/auth/auth.routes').then(m => m.AUTH_ROUTES)
+        path:'login',
+        loadComponent:() => import('././pages/auth/login/login.component')
     },
+
+    /* Flujo de Authenticacion del Usuario */
+    {
+        path: 'registrar',
+        loadComponent:() => import ('././pages/auth/register/register.component')
+/*         children:[
+            {
+                path: 'personal',
+                title: '',
+                loadComponent:() => import ('././pages/auth/register-personal/register-personal.component')
+            }
+        ] */
+    },
+    {
+        path: 'registrar/personal',
+        loadComponent:() => import ('././pages/auth/register-personal/register-personal.component')
+    },
+
+    /* Flujo de Registrar Inversion */
+    {
+        path: 'inversion',
+        loadComponent:() => import ('././pages/dashboard/flow-register-inversion/datos-inversion/datos-inversion.component'),
+    },
+
+
+    {
+        path: '',
+        redirectTo: '/inicio',
+        pathMatch: 'full'
+    },
+    {
+        path: '**',
+        redirectTo: '/inicio',
+        pathMatch: 'full'
+    }
 
 ];

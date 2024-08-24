@@ -14,7 +14,7 @@ import { FormsModule, NgForm } from '@angular/forms';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export default class LoginComponent {
 
   constructor(
     private router: Router,
@@ -28,6 +28,10 @@ export class LoginComponent {
       usuario: '',
       contrasena: ''
     };
+
+    creaHoy(){
+      this.router.navigate(['/registrar']);
+    }
 
     iniciarSesion(form: NgForm){
     console.log("credenciales: " + JSON.stringify(this.credenciales));

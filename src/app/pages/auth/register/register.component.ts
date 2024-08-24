@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent {
+export default class RegisterComponent {
   constructor(private router: Router) {}
 
   isWriting: boolean = false;

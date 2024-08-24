@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
   templateUrl: './register-personal.component.html',
   styleUrl: './register-personal.component.scss'
 })
-export class RegisterPersonalComponent {
+export default class RegisterPersonalComponent {
   constructor(private router: Router) {}
   
   ngOnInit() {
