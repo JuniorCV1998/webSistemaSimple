@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './datos-cliente.component.html',
   styleUrl: './datos-cliente.component.scss'
 })
-export class DatosClienteComponent {
+export default class DatosClienteComponent {
 
 }
