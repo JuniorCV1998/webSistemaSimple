@@ -1,0 +1,18 @@
+.dataConfirm{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid var(--gray-400);
+}
+
+.btn-float{
+    position: fixed;
+    bottom: 20px; /* Ajusta el espacio desde el borde inferior */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 88%;
+    max-width: 550px;
+}
+div{
+    max-width: 550px;
+}

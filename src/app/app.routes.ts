@@ -36,6 +36,10 @@ export const routes: Routes = [
         path: 'registrar/datoscliente',
         loadComponent:() => import ('././pages/dashboard/flow-register-inversion/datos-cliente/datos-cliente.component'),
     },
+    {
+        path: 'registrar/confirmar',
+        loadComponent:() => import ('././pages/dashboard/flow-register-inversion/confirm-inversion/confirm-inversion.component'),
+    },
 
 
     {

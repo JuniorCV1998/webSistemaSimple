@@ -99,10 +99,10 @@ small{
 /* Min-width para pantallas pequeñas y medianas */
 @media (min-width: 700px) {
 #div_line_bootom {
-    min-width: 600px;
+    min-width: 550px;
     }
 input{
-  width: 100%;
+  /* width: 100%; */
   max-width: 600px;
 }
 }
@@ -127,4 +127,20 @@ input{
 .width-full{
   flex: 1;
   grid-template-columns: 1fr;
+}
+
+//titulo coloreado
+.label-title{
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
+  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text; /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+  font-weight: 900;
+}
+
+//Btn Continuar
+.btn-disabled{
+  background-color: var(--gray-400);
+  border: 1px solid var(--gray-400);
+  pointer-events: none; 
 }
