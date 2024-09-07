@@ -4,11 +4,12 @@ import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // ngPrime
 import { importProvidersFrom } from '@angular/core';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ 
     eventCoalescing: true }), 
     provideRouter(routes),provideHttpClient(),
-    importProvidersFrom([BrowserAnimationsModule]) 
+    importProvidersFrom([BrowserAnimationsModule]),MessageService
   ],
 };

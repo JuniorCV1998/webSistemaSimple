@@ -137,10 +137,29 @@ input{
   -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
   font-weight: 900;
 }
+//titulo coloreado verde
+.label-title-green{
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
+  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text; /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+  font-weight: 700;
+  font-size: 30px;
+}
 
 //Btn Continuar
 .btn-disabled{
   background-color: var(--gray-400);
   border: 1px solid var(--gray-400);
   pointer-events: none; 
+}
+
+//btn flotante al medio abajo
+.btn-float{
+  position: fixed;
+  bottom: 20px; /* Ajusta el espacio desde el borde inferior */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88%;
+  max-width: 550px;
 }

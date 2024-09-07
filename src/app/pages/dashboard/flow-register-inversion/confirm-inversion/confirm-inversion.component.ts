@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -15,6 +16,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 })
 export default class ConfirmInversionComponent {
 
+  constructor(private router: Router){}
 
   objClient: any = {
     "persona": {
@@ -36,7 +38,7 @@ export default class ConfirmInversionComponent {
 };
 
 registerInvTrue(){
-  alert("Holi")
+  this.router.navigate(['registrar/inversiondetalle'])
 }
 
 }

@@ -40,6 +40,10 @@ export const routes: Routes = [
         path: 'registrar/confirmar',
         loadComponent:() => import ('././pages/dashboard/flow-register-inversion/confirm-inversion/confirm-inversion.component'),
     },
+    {
+        path: 'registrar/inversiondetalle',
+        loadComponent:() => import ('././pages/dashboard/flow-register-inversion/inversion-registered/inversion-registered.component'),
+    },
 
 
     {
