@@ -98,13 +98,16 @@ small{
 
 /* Min-width para pantallas pequeñas y medianas */
 @media (min-width: 700px) {
-#div_line_bootom {
-    min-width: 550px;
-    }
-input{
-  /* width: 100%; */
-  max-width: 600px;
-}
+  #div_line_bootom {
+      min-width: 550px;
+      }
+  input{
+    /* width: 100%; */
+    max-width: 600px;
+  }
+  .flex-row-column{
+    flex-direction: row;
+  }
 }
 @media (max-width: 699px) {
   #div_line_bootom {
@@ -113,6 +116,9 @@ input{
   input{
     width: 100%;
   }
+  .flex-row-column{
+    flex-direction: column;
+}
 }
 
 
@@ -162,4 +168,40 @@ input{
   transform: translateX(-50%);
   width: 88%;
   max-width: 550px;
+}
+
+
+/* Diseño degradante de los iconos */
+.icon-span{
+  font-size: 28px;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
+  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text; /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+  margin-bottom: 8px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//PADDING
+.paddin-5{
+  padding: 5px;
+}
+.paddin-10{
+  padding: 10px;
+}
+.paddin-15{
+  padding: 15px;
+}
+.paddin-20{
+  padding: 20px;
 }

@@ -45,6 +45,17 @@ export const routes: Routes = [
         loadComponent:() => import ('././pages/dashboard/flow-register-inversion/inversion-registered/inversion-registered.component'),
     },
 
+    /* Componentes Inversion */
+    {
+        path: 'inversion/cartilla',
+        loadComponent:() => import ('././pages/dashboard/inversion/inversion-detail/inversion-detail.component'),
+    },
+    {
+        path: 'inversion/lista',
+        loadComponent:() => import ('././pages/dashboard/inversion/inversiones-list/inversiones-list.component'),
+    },
+
+
 
     {
         path: '',
