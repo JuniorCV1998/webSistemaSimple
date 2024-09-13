@@ -1,15 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CalendarModule  } from 'primeng/calendar';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
-  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule],
+  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
   styleUrl: './inversion-detail.component.scss'
 })
@@ -25,10 +29,14 @@ export default class InversionDetailComponent {
   nroCuotas: number = 24;
   nroCuotasPendientes = 0;
 
+  //Fecha a pagar
+  date: Date = new Date();
+
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private confirmationService: ConfirmationService
   ){}
   
   ngOnInit(): void {
@@ -52,7 +60,7 @@ export default class InversionDetailComponent {
   }
 
   pagarCuota(nroCuota: number){
-    alert("nro cuota: "+nroCuota);
+    this.confirm(nroCuota);
   }
   
   calcularCuotasPendientes(){
@@ -60,6 +68,21 @@ export default class InversionDetailComponent {
     .filter(key => key.startsWith('fp') && this.invDetail[key] !== null).length;
     this.nroCuotasPendientes = this.nroCuotas - countNonNullFP;
   }
+
+  confirm(nroCuota: number) {
+    this.date = new Date();
+    this.confirmationService.confirm({
+        header: 'Pagar cuota',
+        message: 'Confirme la fecha de pago de la cuota número '+nroCuota+'.',
+        accept: () => {
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Cuota actualizada', life: 3000 });
+            alert("La fecha es: " + this.date);
+        },
+        reject: () => {
+            /* this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 }); */
+        }
+    });
+}
 
   invDetail: any = {
     "idInversion": 30,

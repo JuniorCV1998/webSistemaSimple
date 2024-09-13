@@ -119,3 +119,9 @@ td{
   .pi{
     cursor: pointer;
   }
+
+  /* POP UP DE CONFIRMACION */
+  ::ng-deep .p-dialog{
+    width: 90%;
+    max-width: 550px;
+  }

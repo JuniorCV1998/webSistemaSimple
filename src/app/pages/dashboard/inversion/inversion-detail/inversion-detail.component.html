@@ -706,7 +706,44 @@
             </div>
         </div>
 
-
+        <p-confirmDialog #cd>
+            <ng-template pTemplate="headless" let-message>
+                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                    <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                        <img src="assets/images/logos/sello_ssimple.png" width="100" height="100">
+                    </div>
+                    <span class="font-bold text-2xl block mb-2 mt-4">
+                        {{ message.header }}
+                    </span>
+                    <p class="mb-2">{{ message.message }}</p>
+                    <div class="flex flex-column">
+                        <p-calendar 
+                        [(ngModel)]="date" 
+                        [showIcon]="true" 
+                        [showOnFocus]="true" 
+                        [touchUI]="true"
+                        [dateFormat]="'dd/mm/yy'"
+                        [showTime]="true"
+                        inputId="fecha" />
+                    </div>
+                    <div class="flex align-items-center gap-2 mt-4">
+                        <button 
+                            pButton 
+                            label="Cancelar" 
+                            (click)="cd.reject()" 
+                            class="p-button-outlined w-8rem ">
+                        </button>
+                        <button 
+                            pButton 
+                            label="Guardar" 
+                            (click)="cd.accept()" 
+                            class="w-8rem">
+                        </button>
+                        
+                    </div>
+                </div>
+            </ng-template>
+        </p-confirmDialog>
 
         <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full"></button>
         

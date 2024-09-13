@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputOtpModule } from 'primeng/inputotp';
@@ -35,7 +35,6 @@ export default class DatosInversionComponent {
   //Interes
   value: number = 20;
   interesPersonalizado = false;
-  formGroup: FormGroup | undefined;
 
   //Cuota
   valorCuota: number = 0;
@@ -48,9 +47,6 @@ export default class DatosInversionComponent {
   constructor(private router: Router){}
 
   ngOnInit() {
-    this.formGroup = new FormGroup({
-        city: new FormControl<string | null>(null)
-    });
 
 
 }
