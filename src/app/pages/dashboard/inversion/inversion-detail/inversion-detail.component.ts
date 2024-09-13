@@ -1,24 +1,35 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule],
   templateUrl: './inversion-detail.component.html',
   styleUrl: './inversion-detail.component.scss'
 })
 export default class InversionDetailComponent {
 
   idInversion: number | null = null;
+  //Mostrar clave usuario
+  mostrar: boolean = false;
+  copy: boolean = false;
 
   //inversion detail
   //-->invDetail: any = {}
   nroCuotas: number = 24;
   nroCuotasPendientes = 0;
 
-  constructor(private route: ActivatedRoute){}
+  constructor(
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+    private router: Router
+  ){}
   
   ngOnInit(): void {
     // Recuperar el parámetro de consulta `idInversion`
@@ -31,6 +42,14 @@ export default class InversionDetailComponent {
     this.calcularCuotasPendientes();
   }
 
+  mostrarContrasena(){
+    this.mostrar = !this.mostrar;
+  }
+  copyCredentials(){
+    if(this.copy == false) this.copy = true;
+
+    this.copyText(this.invDetail.credenciales.correo, this.invDetail.credenciales.contrasena);
+  }
 
   pagarCuota(nroCuota: number){
     alert("nro cuota: "+nroCuota);
@@ -46,19 +65,19 @@ export default class InversionDetailComponent {
     "idInversion": 30,
     "persona": {
         "idPersona": null,
-        "nombres": "Wuanyilo",
-        "apellidoPaterno": "Moto",
-        "apellidoMaterno": "Torres",
+        "nombres": "Angeles maria",
+        "apellidoPaterno": "Quispe",
+        "apellidoMaterno": "Casas",
         "celular": "909090999",
-        "direccion": "cañete de lima"
+        "direccion": "AAHH Las viñas de los milagros mz j lt 6, san vicente de cañete"
     },
     "monto": 5000.0,
     "nroCuotas": 24,
     "interes": 20.0,
     "valorCuota": 250.0,
-    "fechaRegistro": "07 de sept. 2024 - 10:48 a. m.",
-    "fechaInicio": "05 de may. 2024 - 12:12 p. m.",
-    "fechaFin": "09 de may. 2024 - 12:12 p. m.",
+    "fechaRegistro": "27 de Ago. 2024 - 16:08 p.m.",
+    "fechaInicio": "28/08/24 17:30",
+    "fechaFin": "28/09/24 17:30",
     "credenciales": {
         "correo": "wuanyilo43@ssimple.com",
         "contrasena": "43wuany070"
@@ -95,4 +114,31 @@ export default class InversionDetailComponent {
     "fp29": null,
     "fp30": null
 }
+
+async copyText(correo: string, contra: string): Promise<void> {
+  try {
+    var nombreCompleto = this.invDetail.persona.nombres;
+    var palabras = nombreCompleto.trim().split(' ');
+    var texto = palabras[0]+", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
+    await navigator.clipboard.writeText(texto);
+    // Mostrar una notificación o mensaje opcional
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Copiar',
+      detail: 'Texto copiado al portapapeles.',
+      life: 3000
+    });
+  } catch (err) {
+    // Manejar el error si la operación de copia falla
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Copiar',
+      detail: 'Error al copiar al portapapeles.',
+      life: 3000
+    });
+    console.error('Error al copiar al portapapeles:', err);
+  }
+}
+
+
 }

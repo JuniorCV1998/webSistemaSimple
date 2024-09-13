@@ -46,7 +46,7 @@ export default class InversionRegisteredComponent {
     try {
       var nombreCompleto = this.objInversion.nombres;
       var palabras = nombreCompleto.trim().split(' ');
-      var texto = palabras[0]+", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Pass: "+contra;
+      var texto = palabras[0]+", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
       await navigator.clipboard.writeText(texto);
       // Mostrar una notificación o mensaje opcional
       this.messageService.add({

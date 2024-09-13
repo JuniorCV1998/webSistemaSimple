@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <div class="flex flex-column w-full mb-3" *ngIf="nroCuotas == 7">
+        <ng-template [ngIf]="nroCuotas == 7">
             <div class="w-full">
                 <table>
                     <tbody>
@@ -97,10 +97,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pendiente-txt"><b>{{nroCuotasPendientes}}</b> Cuotas pendientes.</div>
-        </div>
+        </ng-template>
 
-        <div class="flex flex-column w-full mb-3" *ngIf="nroCuotas == 24">
+        <ng-template [ngIf]="nroCuotas == 24">
             <div class="w-full">
                 <table>
                     <tbody>
@@ -310,10 +309,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pendiente-txt"><b>{{nroCuotasPendientes}}</b> Cuotas pendientes.</div>
-        </div>
+        </ng-template>
 
-        <div class="flex flex-column w-full mb-3" *ngIf="nroCuotas == 30">
+        <ng-template [ngIf]="nroCuotas == 30">
             <div class="w-full">
                 <table>
                     <tbody>
@@ -575,32 +573,143 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pendiente-txt"><b>{{nroCuotasPendientes}}</b> Cuotas pendientes.</div>
+        </ng-template>
+
+        <div class="pendiente-txt mb-3"><b>{{nroCuotasPendientes}}</b> Cuotas pendientes.</div>
+
+        <div class="detail-inv">
+            <div class="mb-3">
+                <span class="txt-blue">DETALLES DE LA INVERSION</span>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                <div class="flex flex-column w-full">
+                    <span class="mb-2 params-txt">Monto invertido</span>
+                    <span class="valor-txt-detail">
+                        {{invDetail.monto | number:'1.2-2' }}
+                    </span>
+                </div>
+
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Número de cuotas</label>
+                    <span class="valor-txt-detail">
+                    {{invDetail.nroCuotas}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Interés</label>
+                    <span class="valor-txt-detail">
+                        {{invDetail.interes | number:'1.0-2' }} %
+                    </span>
+                </div>
+
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">valor de cuota</label>
+                    <span class="valor-txt-detail">
+                    {{invDetail.valorCuota | number:'1.2-2'}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Fecha de registro</label>
+                    <span class="valor-txt-detail">
+                        {{invDetail.fechaRegistro}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Fecha inicio</label>
+                    <span class="valor-txt-detail">
+                        {{invDetail.fechaFin}}
+                    </span>
+                </div>
+
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Fecha fin</label>
+                    <span class="valor-txt-detail">
+                    {{invDetail.fechaInicio}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <span class="txt-blue">DETALLES DEL CLIENTE</span>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-top justify-content-center mb-3">
+                <div class="flex flex-column w-8">
+                    <label class="mb-2 params-txt">Nombres</label>
+                    <span class="valor-txt-detail">
+                        {{invDetail.persona.nombres+' '+invDetail.persona.apellidoPaterno+' '+invDetail.persona.apellidoMaterno}}
+                    </span>
+                </div>
+                <div class="flex flex-column w-4">
+                    <label class="mb-2 params-txt">Celular</label>
+                    <span class="valor-txt-detail">
+                        {{invDetail.persona.celular}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Dirección</label>
+                    <span class="valor-txt-detail">
+                    {{invDetail.persona.direccion}}
+                    </span>
+                </div>
+            </div>
+
+            <div class="custom-banner-credentials mb-4">
+                <div class="flex flex-row w-full justify-content-center mb-2">
+                    <span class="txt-span-bold">CORREO:</span>
+                    <span class="w-full txt-span-text">{{invDetail.credenciales.correo}}</span>
+                </div><!--  -->
+                <div class="flex flex-row w-full justify-content-around mb-3">
+                    <span class="txt-span-bold">PASS:</span>
+                    <div class="flex flex-row justify-content-between w-full txt-span-text">
+                        <div class="w-10">
+                            <span *ngIf="mostrar" >{{ invDetail.credenciales.contrasena }}</span> <!-- .txt-span -->
+                            <span *ngIf="!mostrar" >**********</span>
+                        </div>
+                        <div class="w-2">
+                            <i *ngIf="mostrar" class="pi pi-eye" (click)="mostrarContrasena()"></i>
+                            <i *ngIf="!mostrar" class="pi pi-eye-slash" (click)="mostrarContrasena()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-row w-full text-center">
+                    <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small" (onClick)="copyCredentials()"/>
+                    <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small" (onClick)="copyCredentials()"/>
+                </div>
+                
+                <div>
+                    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+                </div>
+                
+            </div>
+            
+            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                <div class="flex flex-column w-full">
+                    <label class="mb-2 params-txt">Comentario</label>
+                    <span class="valor-txt-detail">
+                    {{invDetail.comentario}}
+                    </span>
+                </div>
+            </div>
         </div>
 
 
-       <!--  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <div class="flex flex-row gap-2 align-items-top justify-content-center">
-            <div class="flex flex-column w-full">
-                <label for="celular" class="block text-900 font-medium mb-2">Celular</label>
-                <div id="celular" pInputText class="w-full mb-3 dataConfirm">
-                    999 999 999
-                </div>
-            </div>
 
-            <div class="flex flex-column w-full">
-                <label for="direccion" class="block text-900 font-medium mb-2">Dirección</label>
-                <div id="direccion" pInputText class="w-full mb-3 dataConfirm">
-                AH HUMANO ASD ASD ASDA S
-                </div>
-            </div>
-        </div> -->
+        <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full"></button>
         
-        
-
-
-        <!-- <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button> -->
-
 
     </div>
 </div>
