@@ -13,12 +13,13 @@ import {PaginatorModule} from 'primeng/paginator';
 import { SoloLetrasDirective } from '../../../../components/directives/solo-letras.directive';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { ListEmptyComponent } from '../../../../components/resources/list-empty/list-empty.component';
 
 @Component({
   selector: 'app-inversiones-list',
   standalone: true,
   imports: [TableModule, InputTextModule, TagModule, IconFieldModule, InputIconModule,AvatarModule,
-    CommonModule,PaginatorModule,SoloLetrasDirective,InputGroupModule,InputGroupAddonModule
+    CommonModule,PaginatorModule,SoloLetrasDirective,InputGroupModule,InputGroupAddonModule,ListEmptyComponent
   ],
   templateUrl: './inversiones-list.component.html',
   styleUrl: './inversiones-list.component.scss'

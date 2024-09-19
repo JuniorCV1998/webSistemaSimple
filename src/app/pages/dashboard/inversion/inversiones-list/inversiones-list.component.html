@@ -27,7 +27,11 @@
         </div>
         <!-- Tabla de lista de ivnersioens -->
         <div class="flex flex-column justify-content-between" [ngClass]="{'card': listaInv.length >= 8}">
-            <table>
+            <ng-template [ngIf]="totalListCount==0">
+                <app-list-empty></app-list-empty>
+            </ng-template>
+            <ng-template [ngIf]="totalListCount!=0">
+                <table>
                     <thead>
                         <tr class="custom-banner">
                             <th colspan="2" style="padding: 8px; width: 98%;">Cliente</th>
@@ -54,14 +58,18 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="flex flex-row w-full justify-content-end align-items-center pagination gap-3" *ngIf="paginas > 1">
-                <div class="flex flex-row justify-content-between w-full">
-                    <span>{{totalListCount}} registros</span>
-                    <span>Página {{paginaActual}} de {{paginas}}</span>
+            </ng-template>
+            
+            <ng-template [ngIf]="totalListCount!=0">
+                <div class="flex flex-row w-full justify-content-end align-items-center pagination gap-3" *ngIf="paginas > 1">
+                    <div class="flex flex-row justify-content-between w-full">
+                        <span>{{totalListCount}} registros</span>
+                        <span>Página {{paginaActual}} de {{paginas}}</span>
+                    </div>
+                    <button id="prevBtn" class="no-decoracion" [disabled]="!isBack" (click)="paginaAnterior()"><i class="pi pi-angle-double-left"></i></button>
+                    <button id="nextBtn" class="no-decoracion" [disabled]="!isNext" (click)="siguientePagina()"><i class="pi pi-angle-double-right"></i></button>
                 </div>
-                <button id="prevBtn" class="no-decoracion" [disabled]="!isBack" (click)="paginaAnterior()"><i class="pi pi-angle-double-left"></i></button>
-                <button id="nextBtn" class="no-decoracion" [disabled]="!isNext" (click)="siguientePagina()"><i class="pi pi-angle-double-right"></i></button>
-            </div>
+            </ng-template>
         </div>
 
         <!-- <button pButton
