@@ -1,1 +1,71 @@
-<p>inversiones-list works!</p>
+
+<div>
+    <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
+    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        <div class="comp_volver">
+            <a href="/inicio"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
+        </div>
+        <div class="text-center mb-4">
+            <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3 label-title">Lista de inversiones</div>
+        </div>
+
+
+        <div class="w-full mb-3">
+            <span>Lista de inversiones registradas y su detalle.</span>
+        </div>
+
+        <div class="flex flex-row w-full justify-content-center gap-2 mb-3 align-items-center">
+            <!-- <i class="pi pi-filter w-1"></i> -->
+            <p-inputGroup>
+                <input class="w-6" type="text" placeholder="Buscar..." pInputText appSoloLetras [(ngModel)]="value" (input)="filtrarInversiones()" />
+                <p-inputGroupAddon (click)="clearFilter()" class="sin-estilo">
+                    <i class="pi pi-trash"></i>
+                </p-inputGroupAddon>
+            </p-inputGroup>
+            <span class="w-2 tag" (click)="changeOpen(true)" [ngClass]="open?'success':''">Abierto</span>
+            <span class="w-2 tag" (click)="changeOpen(false)" [ngClass]="!open?'success':''">Cerrado</span>
+        </div>
+        <!-- Tabla de lista de ivnersioens -->
+        <div class="flex flex-column justify-content-between" [ngClass]="{'card': listaInv.length >= 8}">
+            <table>
+                    <thead>
+                        <tr class="custom-banner">
+                            <th colspan="2" style="padding: 8px; width: 98%;">Cliente</th>
+                            <th style="padding: 8px; width: 2%;">Acción</th>
+                        </tr>
+                    </thead>
+                
+                <tbody id="object">
+                    <tr *ngFor="let object of listPaginador; let i = index">
+                        <td style="width: 8%; text-align: center; padding: 5px;">
+                            <p-avatar 
+                            label="{{object.avatar}}" 
+                            [style]="getAvatarStyle()" 
+                            styleClass="mr-2"
+                            shape="circle"/>
+                        </td>    
+                        <td style="width: 90%; padding: 8px;">
+                            <span class="nombre-txt">{{object.nombres + ' '+object.apellidoPaterno + ' ' + object.apellidoMaterno}}</span><br>
+                            <div class="flex flex-row justify-content-between gap-1"><span class="fecha-txt">{{object.fechaModificacion}}</span><span class="nroInversion-txt">#{{object.nroInversion}}</span></div>
+                        </td>
+                        <td style="width: 2%; text-align: center; padding: 2px;" (click)="abrirCartilla(object.idInversion)">
+                            <i class="pi pi-window-maximize" [ngClass]="object.estadoDeuda=='P'?'pi pi-window-maximize':'pi pi-window-maximize-gray'"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="flex flex-row w-full justify-content-end align-items-center pagination gap-3" *ngIf="paginas > 1">
+                <div class="flex flex-row justify-content-between w-full">
+                    <span>{{totalListCount}} registros</span>
+                    <span>Página {{paginaActual}} de {{paginas}}</span>
+                </div>
+                <button id="prevBtn" class="no-decoracion" [disabled]="!isBack" (click)="paginaAnterior()"><i class="pi pi-angle-double-left"></i></button>
+                <button id="nextBtn" class="no-decoracion" [disabled]="!isNext" (click)="siguientePagina()"><i class="pi pi-angle-double-right"></i></button>
+            </div>
+        </div>
+
+        <!-- <button pButton
+        pRipple label="Registrar" (click)="registerInvTrue()" class="btn-float"></button> -->
+
+    </div>
+</div>

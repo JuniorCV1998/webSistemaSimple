@@ -181,6 +181,17 @@ small{
   margin-bottom: 8px;
 }
 
+/* elemento sin decoracion */
+.no-decoracion {
+  background: none;        /* Quitar el fondo */
+  border: none;           /* Quitar el borde */
+  color: inherit;         /* Heredar el color del texto del padre */
+  font: inherit;          /* Heredar la fuente del padre */
+  padding: 0;             /* Quitar el padding */
+  cursor: pointer;        /* Mantener el cursor de puntero */
+  text-align: left;       /* Alinear el texto a la izquierda, opcional */
+}
+
 
 
 

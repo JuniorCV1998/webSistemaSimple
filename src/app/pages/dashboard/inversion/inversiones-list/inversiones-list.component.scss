@@ -1,0 +1,92 @@
+.custom-banner{
+    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
+    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
+    background: var(--primary-500);
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+    color: var(--gray-500);                 /* Color del texto del banner */
+    text-align: center;             /* Centra el texto dentro del banner */
+    
+    align-items: center;
+    cursor: pointer;
+  }
+.pi-filter{
+    color: var(--gray-400);
+    font-size: 1.7rem;
+}
+.sin-estilo{
+    background-color: transparent;
+    color: red;
+    cursor: pointer;
+}
+.tag-txt{
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+th {
+    /* border-top: 1px solid var(--gray-500);
+    border-bottom: 1px solid var(--gray-500); */
+    color: var(--primary-500);
+}
+tr{
+    transition: .5s;
+    cursor: pointer;
+}
+tr:hover{
+    background: var(--primary-100);
+}
+
+/* Estilo tabla */
+.nombre-txt{
+    font-weight: 600;
+    font-size: 13px;
+}
+.fecha-txt{
+    font-size: 11px;
+    margin-top: 5px;
+}
+.nroInversion-txt{
+    font-size: 11px;
+    color: var(--blue-500);
+    margin-top: 5px;
+}
+.pi-window-maximize{
+    color: var(--primary-500);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.pi-window-maximize-gray{
+    color: var(--gray-500);
+}
+
+/* tag filter */
+.tag{
+    background-color: var(--gray-200);
+    color: var(--gray-500);
+    border-radius: 50px;
+    font-size: 10px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+.success{
+    background-color: var(--primary-100);
+    color: var(--primary-500);
+}
+/* PAGINADOR */
+.pagination{
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 5px;
+}
+.card{
+    min-height: 500px;
+}
