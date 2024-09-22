@@ -1,30 +1,32 @@
-<!-- app.component.html -->
-<!-- <p-button label="¡Festejar!" (click)="triggerConfetti()"></p-button> -->
-
 
 <div>
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        <div class="comp_volver">
-            <a href="/registrar/confirmar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
-        </div>
+        <ng-template [ngIf]="fromList">
+            <div class="comp_volver">
+                <!-- <a href="/registrar/confirmar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
+                <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
+            </div>
+        </ng-template>
         
         <div class="text-center mb-3">
             <div id="div_line_bootom" class="text-700 text-2xl font-medium label-title">Cartilla de inversión</div>
         </div>
 
-        <div class="flex flex-row w-full mb-3">
-            <div class="flex flex-row w-7 paddin-5">
-                <div class="flex align-items-center"><i class="pi pi-user icon-span"></i></div>
+        <div class="flex flex-row w-full mb-3 custom-banner-present">
+            <div class="flex flex-row w-7 paddin-5 gap-1">
+                <div class="flex align-items-center"><i class="pi pi-user icon-span i-present"></i></div>
                 <div class="flex flex-column justify-content-center w-full">
-                    <span class="params-txt mb-1">Cliente</span>
+                    <!-- <span class="params-txt mb-1">Cliente</span> -->
                     <span class="valor-txt">{{invDetail.persona.nombres+' '+invDetail.persona.apellidoPaterno+' '+invDetail.persona.apellidoMaterno}}</span>
                 </div>
             </div>
-            <div class="flex flex-row w-5 paddin-5">
-                <div class="flex align-items-center"><i class="pi pi-dollar icon-span"></i></div>
+            <div class="flex flex-row w-5 paddin-5 cont-banner gap-1">
+                <div class="flex flex-column justify-content-center align-items-center" style="padding-top: 5px;">
+                    <span class="icon-span i-present">S/.</span>
+                </div>
                 <div class="flex flex-column justify-content-center w-full">
-                    <span class="params-txt mb-1">Monto</span>
-                    <span class="valor-txt">S/. {{invDetail.monto | number:'1.2-2'}}</span>
+                    <!-- <span class="params-txt mb-1">Monto</span> -->
+                    <span class="valor-txt">{{invDetail.monto | number:'1.2-2'}}</span>
                 </div>
             </div>
         </div>
@@ -578,132 +580,137 @@
         <div class="pendiente-txt mb-3"><b>{{nroCuotasPendientes}}</b> Cuotas pendientes.</div>
 
         <div class="detail-inv">
-            <div class="mb-3">
-                <span class="txt-blue">DETALLES DE LA INVERSION</span>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                <div class="flex flex-column w-full">
-                    <span class="mb-2 params-txt">Monto invertido</span>
-                    <span class="valor-txt-detail">
-                        {{invDetail.monto | number:'1.2-2' }}
-                    </span>
+            <div class="custom-banner-present mb-4">
+                <div class="mb-3">
+                    <span class="txt-detalles icon-span">DETALLES DE LA INVERSION</span>
                 </div>
-
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Número de cuotas</label>
-                    <span class="valor-txt-detail">
-                    {{invDetail.nroCuotas}}
-                    </span>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Interés</label>
-                    <span class="valor-txt-detail">
-                        {{invDetail.interes | number:'1.0-2' }} %
-                    </span>
-                </div>
-
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">valor de cuota</label>
-                    <span class="valor-txt-detail">
-                    {{invDetail.valorCuota | number:'1.2-2'}}
-                    </span>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Fecha de registro</label>
-                    <span class="valor-txt-detail">
-                        {{invDetail.fechaRegistro}}
-                    </span>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Fecha inicio</label>
-                    <span class="valor-txt-detail">
-                        {{invDetail.fechaFin}}
-                    </span>
-                </div>
-
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Fecha fin</label>
-                    <span class="valor-txt-detail">
-                    {{invDetail.fechaInicio}}
-                    </span>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <span class="txt-blue">DETALLES DEL CLIENTE</span>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-top justify-content-center mb-3">
-                <div class="flex flex-column w-8">
-                    <label class="mb-2 params-txt">Nombres</label>
-                    <span class="valor-txt-detail">
-                        {{invDetail.persona.nombres+' '+invDetail.persona.apellidoPaterno+' '+invDetail.persona.apellidoMaterno}}
-                    </span>
-                </div>
-                <div class="flex flex-column w-4">
-                    <label class="mb-2 params-txt">Celular</label>
-                    <span class="valor-txt-detail">
-                        {{invDetail.persona.celular}}
-                    </span>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Dirección</label>
-                    <span class="valor-txt-detail">
-                    {{invDetail.persona.direccion}}
-                    </span>
-                </div>
-            </div>
-
-            <div class="custom-banner-credentials mb-4">
-                <div class="flex flex-row w-full justify-content-center mb-2">
-                    <span class="txt-span-bold">CORREO:</span>
-                    <span class="w-full txt-span-text">{{invDetail.credenciales.correo}}</span>
-                </div><!--  -->
-                <div class="flex flex-row w-full justify-content-around mb-3">
-                    <span class="txt-span-bold">PASS:</span>
-                    <div class="flex flex-row justify-content-between w-full txt-span-text">
-                        <div class="w-10">
-                            <span *ngIf="mostrar" >{{ invDetail.credenciales.contrasena }}</span> <!-- .txt-span -->
-                            <span *ngIf="!mostrar" >**********</span>
-                        </div>
-                        <div class="w-2">
-                            <i *ngIf="mostrar" class="pi pi-eye" (click)="mostrarContrasena()"></i>
-                            <i *ngIf="!mostrar" class="pi pi-eye-slash" (click)="mostrarContrasena()"></i>
-                        </div>
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                    <div class="flex flex-column w-full">
+                        <span class="mb-2 params-txt">Monto invertido</span>
+                        <span class="valor-txt-detail">
+                            {{invDetail.monto | number:'1.2-2' }}
+                        </span>
+                    </div>
+    
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Número de cuotas</label>
+                        <span class="valor-txt-detail">
+                        {{invDetail.nroCuotas}}
+                        </span>
                     </div>
                 </div>
-                <div class="flex flex-row w-full text-center">
-                    <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small" (onClick)="copyCredentials()"/>
-                    <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small" (onClick)="copyCredentials()"/>
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Interés</label>
+                        <span class="valor-txt-detail">
+                            {{invDetail.interes | number:'1.0-2' }} %
+                        </span>
+                    </div>
+    
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">valor de cuota</label>
+                        <span class="valor-txt-detail">
+                        {{invDetail.valorCuota | number:'1.2-2'}}
+                        </span>
+                    </div>
                 </div>
-                
-                <div>
-                    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Fecha de registro</label>
+                        <span class="valor-txt-detail">
+                            {{invDetail.fechaRegistro}}
+                        </span>
+                    </div>
                 </div>
-                
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Fecha inicio</label>
+                        <span class="valor-txt-detail">
+                            {{invDetail.fechaFin}}
+                        </span>
+                    </div>
+    
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Fecha fin</label>
+                        <span class="valor-txt-detail">
+                        {{invDetail.fechaInicio}}
+                        </span>
+                    </div>
+                </div>
             </div>
             
-            <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
-                <div class="flex flex-column w-full">
-                    <label class="mb-2 params-txt">Comentario</label>
-                    <span class="valor-txt-detail">
-                    {{invDetail.comentario}}
-                    </span>
+            <div class="custom-banner-present mb-4">
+                <div class="mb-3">
+                    <span class="txt-detalles icon-span">DETALLES DEL CLIENTE</span>
+                </div>
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-center mb-3">
+                    <div class="flex flex-column w-8">
+                        <label class="mb-2 params-txt">Nombres</label>
+                        <span class="valor-txt-detail">
+                            {{invDetail.persona.nombres+' '+invDetail.persona.apellidoPaterno+' '+invDetail.persona.apellidoMaterno}}
+                        </span>
+                    </div>
+                    <div class="flex flex-column w-4">
+                        <label class="mb-2 params-txt">Celular</label>
+                        <span class="valor-txt-detail">
+                            {{invDetail.persona.celular}}
+                        </span>
+                    </div>
+                </div>
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Dirección</label>
+                        <span class="valor-txt-detail">
+                        {{invDetail.persona.direccion}}
+                        </span>
+                    </div>
+                </div>
+    
+                <div class="custom-banner-credentials mb-4">
+                    <div class="flex flex-row w-full justify-content-center mb-2">
+                        <span class="txt-span-bold">CORREO:</span>
+                        <span class="w-full txt-span-text">{{invDetail.credenciales.correo}}</span>
+                    </div><!--  -->
+                    <div class="flex flex-row w-full justify-content-around mb-3">
+                        <span class="txt-span-bold">PASS:</span>
+                        <div class="flex flex-row justify-content-between w-full txt-span-text">
+                            <div class="w-10">
+                                <span *ngIf="mostrar" >{{ invDetail.credenciales.contrasena }}</span> <!-- .txt-span -->
+                                <span *ngIf="!mostrar" >**********</span>
+                            </div>
+                            <div class="w-2">
+                                <i *ngIf="mostrar" class="pi pi-eye" (click)="mostrarContrasena()"></i>
+                                <i *ngIf="!mostrar" class="pi pi-eye-slash" (click)="mostrarContrasena()"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-row w-full text-center">
+                        <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small" (onClick)="copyCredentials()"/>
+                        <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small" (onClick)="copyCredentials()"/>
+                    </div>
+                    
+                    <div>
+                        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+                    </div>
+                    
+                </div>
+                
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Comentario</label>
+                        <span class="valor-txt-detail">
+                        {{invDetail.comentario}}
+                        </span>
+                    </div>
                 </div>
             </div>
+
         </div>
 
         <p-confirmDialog #cd>

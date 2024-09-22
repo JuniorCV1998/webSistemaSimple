@@ -14,6 +14,8 @@ import { SoloLetrasDirective } from '../../../../components/directives/solo-letr
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ListEmptyComponent } from '../../../../components/resources/list-empty/list-empty.component';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-inversiones-list',
@@ -44,7 +46,11 @@ export default class InversionesListComponent {
     temporalFilter: Array<any> = [];
     totalListCount: number = 0;
 
-    constructor(private messageService: MessageService,){}
+    constructor(
+      private messageService: MessageService,
+      private router: Router,
+      private location: Location
+    ){}
     
     ngOnInit(){
       this.listarInversiones();
@@ -160,10 +166,13 @@ export default class InversionesListComponent {
     }
 
     abrirCartilla(idInversion: number){
-      alert("idInversion: "+idInversion);
+      this.router.navigate(['/inversion/cartilla'], {queryParams:{idInversion, from: 'list'}});
     }
 
-    
+    volver() {
+      this.location.back();
+    }
+  
 
 
 /*       recalcularEstilo() {

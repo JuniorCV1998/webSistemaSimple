@@ -14,7 +14,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule  } from 'primeng/calendar';
 import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 import { KnobModule } from 'primeng/knob';
-
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -44,7 +44,10 @@ export default class DatosInversionComponent {
   date1: Date = new Date();
   date2: Date | undefined;
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private location: Location
+  ){}
 
   ngOnInit() {
 
@@ -53,6 +56,10 @@ export default class DatosInversionComponent {
 
 validarDatosInversion(){
   this.router.navigate(['registrar/datoscliente']);
+}
+
+volver() {
+  this.location.back();
 }
 
 simularCuota(){

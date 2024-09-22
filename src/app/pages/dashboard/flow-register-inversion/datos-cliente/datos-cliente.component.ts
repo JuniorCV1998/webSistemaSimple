@@ -12,6 +12,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ListboxModule } from 'primeng/listbox';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-datos-cliente',
@@ -44,13 +45,19 @@ export default class DatosClienteComponent {
   //Comentario
   txtComentario: string = '';
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private location: Location
+){}
 
   ngOnInit(){
     this.obtenerListaClientes();
     
   }
-  
+
+  volver() {
+    this.location.back();
+    }
 
   metodoMostrar(num: number){
   }

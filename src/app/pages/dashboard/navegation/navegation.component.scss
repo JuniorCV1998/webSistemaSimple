@@ -1,0 +1,36 @@
+router-outlet {
+    /* flex: 1; */ /* Esto permite que el contenido ocupe el espacio disponible */
+  }
+  
+/*   header {
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+  } */
+  
+
+/*   _______________________________________________________________________ */
+
+header {
+    position: fixed; /* Hace que el header esté fijo */
+    top: 0; /* Lo posiciona en la parte inferior */
+    left: 50%; /* Mueve el header al centro */
+    transform: translateX(-50%); /* Ajusta el header hacia la izquierda para centrarlo */
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5); /* Sombra para destacar el header */
+    max-width: 550px; /* Ancho máximo */
+    width: 100%; /* Asegura que ocupe el 100% del espacio disponible hasta max-width */
+    text-align: center; /* Centra el texto dentro del header */
+    height: 3.5rem;
+    background-color: white;
+  }
+  .flex {
+    height: 100%;
+}
+.pi-user{
+    font-size: 1.4rem;
+    padding: 6px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-400); 
+}
+

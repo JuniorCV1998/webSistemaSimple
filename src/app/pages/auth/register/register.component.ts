@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { InputOtpModule } from 'primeng/inputotp';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-register',
@@ -16,12 +17,19 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.scss'
 })
 export default class RegisterComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private location: Location
+  ) {}
 
   isWriting: boolean = false;
   isWritingP: boolean = false;
   valueSS: string = '';
   valueShow: string = '_ _ _ _ _ _';
+
+  volver() {
+    this.location.back();
+}
 
   validarDatos(){
     this.router.navigate(['registrar/personal']);

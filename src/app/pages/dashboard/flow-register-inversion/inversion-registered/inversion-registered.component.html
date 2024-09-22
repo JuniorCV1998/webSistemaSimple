@@ -1,11 +1,9 @@
-<!-- app.component.html -->
-<!-- <p-button label="¡Festejar!" (click)="triggerConfetti()"></p-button> -->
-
 
 <div>
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         <div class="comp_volver">
-            <a href="/registrar/confirmar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
+            <!-- <a href="/registrar/confirmar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
+            <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
         </div>
         <div class="text-center mb-1">
             <div id="div_line_bootom" class="text-700 label-title-green">¡INVERSION <br>REGISTRADA!</div>
@@ -58,7 +56,7 @@
             <span class="txt-aditional w-full">cód. op.: SS-{{objInversion.codOperacion}}</span>
         </div>
         <div class="flex flex-row w-full justify-content-center mb-5">
-            <a class="terminos_condiciones" [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: 21 }">Abrir cartilla</a>
+            <a class="terminos_condiciones" [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: 21 ,from: 'register'}">Abrir cartilla</a>
         </div>
 
 

@@ -8,6 +8,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CalendarModule  } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-inversion-detail',
@@ -18,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './inversion-detail.component.scss'
 })
 export default class InversionDetailComponent {
-
+  fromList: boolean = false;
   idInversion: number | null = null;
   //Mostrar clave usuario
   mostrar: boolean = false;
@@ -36,18 +37,26 @@ export default class InversionDetailComponent {
     private route: ActivatedRoute,
     private messageService: MessageService,
     private router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private location: Location
   ){}
   
   ngOnInit(): void {
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('idInversion');
+      const fromView = params.get('from');
+      if(fromView == 'list') this.fromList = true;
+      console.log("vengo desde: "+fromView);
       this.idInversion = id ? +id : null; // Convertir a número si existe
       console.log('ID de Inversión recibido:', this.idInversion);
     });
 
     this.calcularCuotasPendientes();
+  }
+
+  volver() {
+    this.location.back();
   }
 
   mostrarContrasena(){

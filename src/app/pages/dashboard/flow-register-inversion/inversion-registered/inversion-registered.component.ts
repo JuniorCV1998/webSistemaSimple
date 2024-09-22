@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-inversion-registered',
@@ -19,7 +19,8 @@ export default class InversionRegisteredComponent {
 
   constructor(
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ){}
 
   //Mostrar clave usuario
@@ -40,6 +41,10 @@ export default class InversionRegisteredComponent {
 
   ngOnInit(){
     this.triggerConfetti();
+  }
+  
+  volver() {
+    this.location.back();
   }
 
   async copyText(correo: string, contra: string): Promise<void> {

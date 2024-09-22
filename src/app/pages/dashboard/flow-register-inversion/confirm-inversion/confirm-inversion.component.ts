@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-confirm-inversion',
@@ -16,7 +17,10 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 })
 export default class ConfirmInversionComponent {
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private location: Location
+  ){}
 
   objClient: any = {
     "persona": {
@@ -39,6 +43,10 @@ export default class ConfirmInversionComponent {
 
 registerInvTrue(){
   this.router.navigate(['registrar/inversiondetalle'])
+}
+
+volver() {
+  this.location.back();
 }
 
 }

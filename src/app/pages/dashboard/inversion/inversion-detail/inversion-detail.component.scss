@@ -1,13 +1,22 @@
 
 .icon-span{
-    font-size: 1.5rem;
     color: var(--primary-500);
+    margin-bottom: 8px;
 }
-
+.i-present{
+    font-size: 1.3rem;
+}
+.pi-user{
+    font-size: 1.8rem;
+}
 .params-txt{
     margin-left: 5px;
     font-weight: 600;
     font-size: 15px;
+}
+.txt-detalles{
+    font-size: 1rem;
+    font-weight: 700;
 }
 .valor-txt{
     margin-left: 5px;
@@ -83,10 +92,6 @@ td{
 
 /* DATOS DE LA INVERSION */
 
-.txt-blue{
-    color: var(--blue-400);
-    font-weight: 600;
-}
 .valor-txt-detail{
     margin-left: 5px;
     color: var(--gray-500);
@@ -97,8 +102,7 @@ td{
 /* DATOS DEL CLIENTE */
 .custom-banner-credentials{
     flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 5px;                   /* Espacio alrededor de cada banner */
-    padding: 15px;                  /* Espacio dentro de cada banner */
+    padding: 10px;                  /* Espacio dentro de cada banner */
     /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
     background: var(--primary-500);
     background: #fff;
@@ -124,4 +128,17 @@ td{
   ::ng-deep .p-dialog{
     width: 90%;
     max-width: 550px;
+  }
+
+  /* banner gris */
+  .custom-banner-present {
+    background: var(--primary-500);
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2); 
+    color: var(--gray-500);                 /* Color del texto del banner */
+    border-radius: 8px;             /* Bordes redondeados */
+    min-width: 30px;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
   }

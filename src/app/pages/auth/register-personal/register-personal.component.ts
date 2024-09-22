@@ -11,6 +11,7 @@ import { SoloLetrasDirective } from '../../../components/directives/solo-letras.
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-register-personal',
@@ -22,11 +23,18 @@ import { Router } from '@angular/router';
   styleUrl: './register-personal.component.scss'
 })
 export default class RegisterPersonalComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private location: Location
+  ) {}
   
   ngOnInit() {
 
     }
+
+  volver() {
+      this.location.back();
+  }
   registrarUsuario(){
     this.router.navigate(['inicio']);
   }
