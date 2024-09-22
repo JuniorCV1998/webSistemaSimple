@@ -1,3 +1,4 @@
 export const appsettings = {
-    API_URL: "http://localhost:8080/"
+    API_SERVER: "http://localhost:8080/",
+
 }

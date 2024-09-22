@@ -9,7 +9,7 @@ import { appsettings } from '../../../appsettings';
 export class LoginService {
 
   private http = inject(HttpClient);
-  private baseUrl:string = appsettings.API_URL;
+  private baseUrl:string = appsettings.API_SERVER;
 
  user = {};
 
@@ -18,7 +18,7 @@ export class LoginService {
   ) {
    }
 
-  obtenerDatos(credenciales: any):Observable<any> {
+   iniciarSesion(credenciales: any):Observable<any> {
     return this.http.post<any>(`${this.baseUrl}login`,credenciales);
   }
 

@@ -5,11 +5,14 @@ import { provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // ngPrime
 import { importProvidersFrom } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { MessagePopUpComponent } from './pages/modal/message-pop-up/message-pop-up.component';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ 
     eventCoalescing: true }), 
     provideRouter(routes),provideHttpClient(),
-    importProvidersFrom([BrowserAnimationsModule]),MessageService
+    importProvidersFrom([BrowserAnimationsModule,DynamicDialogModule]),
+    MessageService,DialogService 
   ],
 };
