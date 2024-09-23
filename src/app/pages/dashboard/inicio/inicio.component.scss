@@ -101,6 +101,7 @@
 
   table .span-monto{
     margin-right: 5px;
+    font-size: 15px;
   }
   table .span-nombre{
     font-weight: 500;
@@ -160,4 +161,12 @@
   table .tr-cabecera .span-1{
     border-right: 1px solid var(--gray-300);
     padding-right: 10px;
+  }
+  .row-skeleton{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 8px; */
+    border-bottom: 1px solid var(--gray-300);
+    cursor: pointer;
   }

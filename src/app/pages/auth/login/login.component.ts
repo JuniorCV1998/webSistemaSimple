@@ -8,7 +8,7 @@ import { LoginService } from '../../../core/services/auth/login/login.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';  // Asegúrate de importar el módulo correcto
+import { ConfirmDialogModule } from 'primeng/confirmdialog'; 
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../core/constant/Constantes';

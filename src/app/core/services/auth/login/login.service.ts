@@ -1,7 +1,8 @@
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Inject, Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { finalize, map, Observable, tap } from 'rxjs';
 import { appsettings } from '../../../appsettings';
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,37 @@ export class LoginService {
   ) {
    }
 
-   iniciarSesion(credenciales: any):Observable<any> {
+  /*  iniciarSesion(credenciales: any):Observable<any> {
     return this.http.post<any>(`${this.baseUrl}login`,credenciales);
-  }
+  } */
 
-/*    getToken(){
-    return localStorage.getItem('token');
-   } */
+    iniciarSesion(credenciales: any): Observable<any> {
+      return this.http.post<any>(`${this.baseUrl}login`, credenciales, { observe: 'response' })
+        .pipe(
+          tap(response => {
+            // Recupera la cookie del encabezado de la respuesta
+            const cookie = response.headers.get('Authorization')!;
+            if (cookie) {
+              // Guarda la cookie en sesión
+              //sessionStorage.setItem('miCookie', cookie);
+              const token = cookie.replace("Bearer ","");
+              sessionStorage.setItem('token',token);
+            }
+          }),
+          map(response => response.body)
+        );
+    }
+
+   getToken(){
+    return sessionStorage.getItem('token');
+   }
+
+   isTokenValid(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    const decoded: any = jwtDecode(token);
+    const currentTime = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
+    return decoded.exp > currentTime; // Verifica si el token aún es válido
+  }
 
 }
