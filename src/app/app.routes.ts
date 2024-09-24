@@ -8,6 +8,12 @@ export const routes: Routes = [
         loadComponent: () => import('././pages/dashboard/inicio/inicio.component')
     },
     {
+        path:'listacompleta',
+        canActivate: [authGuard],
+        loadComponent: () => import('./pages/dashboard/inicio/list-all/list-all.component')
+    },
+
+    {
         path:'login',
         loadComponent:() => import('././pages/auth/login/login.component')
     },

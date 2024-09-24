@@ -1,0 +1,74 @@
+
+    /* Estilos para la tabla */
+
+    table .span-monto{
+      margin-right: 5px;
+      font-size: 15px;
+    }
+    table .span-nombre{
+      font-weight: 500;
+      color: black;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    table .span-fecha{
+      color: var(--gray-500);
+      font-size: 12px;
+    }
+    table .tr-registros{
+      padding: 5px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      /* margin-bottom: 8px; */
+      border-bottom: 1px solid var(--gray-300);
+      cursor: pointer;
+    }
+    table .tr-registros:hover{
+      background-color: var(--gray-100);
+    }
+    .table-container{
+      /* overflow-y: auto; */
+      max-height: 500px; 
+      -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+      scrollbar-width: none;  /* Para Firefox */
+    }
+  
+    .table-container::-webkit-scrollbar {
+      display: none;  /* Para Chrome, Safari y Opera */
+    }
+  
+    table .tr-cabecera{
+      padding: 5px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      /* margin-bottom: 10px; */
+      border-bottom: 1px solid var(--gray-300);
+      cursor: pointer;
+      
+    }
+    .span-1 span{
+      color: var(--primary-500);
+      font-size: 16px;
+    }
+    .span-2 span{
+      color: var(--blue-400);
+      font-size: 16px;
+    }
+    .span-1 i{
+      font-size: 16px;
+      color: var(--primary-500);
+      cursor: pointer;
+    }
+  
+    table .tr-cabecera .span-1{
+      border-right: 1px solid var(--gray-300);
+      padding-right: 10px;
+    }
+    .row-skeleton{
+      padding: 5px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      /* margin-bottom: 8px; */
+      border-bottom: 1px solid var(--gray-300);
+      cursor: pointer;
+    }

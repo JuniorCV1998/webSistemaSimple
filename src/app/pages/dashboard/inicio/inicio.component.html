@@ -34,7 +34,7 @@
         <!-- Tabla de los ultimos registros de inversiones -->
          <div class="table-container">
             <ng-template [ngIf]="skeletonShow">
-                <div class="flex flex-row" style="min-width: 287px;">
+                <div class="flex flex-row" style="min-width: 278px;">
                     <div class="w-full p-2">
                         <div class="flex w-full mb-1 gap-2 row-skeleton">
                             <p-skeleton class="w-7" styleClass="mb-2" height="1.5rem"/>
@@ -60,14 +60,14 @@
                             <span>Últimos registros</span>
                             <i class="pi pi-refresh" (click)="getInversionesLast()"></i>
                         </div>
-                        <div class="span-2 w-5 flex justify-content-end">
+                        <div *ngIf="ultimasInversiones.length > 10" class="span-2 w-5 flex justify-content-end">
                             <span (click)="verRegistros()">Ver todos</span>
                         </div>
                         
                       </div>
                     </thead>
                     <tbody>
-                      <div *ngFor="let inversion of ultimasInversiones" class="tr-registros">
+                      <div *ngFor="let inversion of ultimas10Inversiones" class="tr-registros">
                         <div class="flex flex-row">
                             <div class="flex flex-column w-10" >
                                 <span class="span-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="tr-registros">
                         <div class="flex justify-content-center flex-row span-2">
-                            <span *ngIf="ultimasInversiones.length != 0" (click)="verRegistros()">Ver todos</span>
+                            <span *ngIf="ultimasInversiones.length > 10" (click)="verRegistros()">Ver todos</span>
                             <span *ngIf="ultimasInversiones.length == 0">Aún no hay registros.</span>
                         </div>
                     </div>

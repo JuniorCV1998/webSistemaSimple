@@ -35,9 +35,11 @@ export default class InicioComponent {
   mostrar: boolean = false;
 
   ultimasInversiones: any[] = [];
+  ultimas10Inversiones: any[] = [];
+  isMore10: boolean = false;
 
   ngOnInit() {
-    //this.ultimasInversiones = this.data;
+    
   }
 
   ngAfterViewInit() {
@@ -60,7 +62,11 @@ export default class InicioComponent {
 
     this.getAmountService.getInversionesLast().pipe(delay(500),finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
-      if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) this.ultimasInversiones = resp.data;
+      if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
+        //this.ultimasInversiones = resp.data.slice(0, 10);
+        this.ultimasInversiones = resp.data;
+        this.ultimas10Inversiones = resp.data.slice(0, 10);
+      }
       else {
         this.monto = 'x';
       }
@@ -73,25 +79,9 @@ export default class InicioComponent {
   }
 
   verRegistros(){
-    if(this.ultimasInversiones.length == 0){
-      alert("No se encontraron registros. Por favor, actualice.")
-    }
+    const lista = this.ultimasInversiones;
+    this.router.navigate(['/listacompleta'], { queryParams: { lista: JSON.stringify(lista) } });
   }
 
-/*   routerInversion(){
-    this.router.navigate(['/inversion']);
-  } */
-  
-  data = [
-  {id:1, nombre: 'Jose Cerron Vicente', fecha: 'Hoy - 16:08 p.m.', monto: '1200.00'},
-  {id:2, nombre: 'Alfredo Quispe Vicente', fecha: 'Hoy - 13:08 p.m.', monto: '1000.00'},
-  {id:3, nombre: 'Angeles Casas Mia', fecha: 'Hoy - 10:08 a.m.', monto: '500.00'},
-  {id:4, nombre: 'Junior Cerron Quispe', fecha: 'Ayer - 16:08 p.m.', monto: '750.00'},
-  {id:5, nombre: 'Miguel Quispe Casas', fecha: 'Ayer - 16:08 p.m.', monto: '5000.00'},
-  {id:6, nombre: 'William Sanchez Sanchez', fecha: '08 de feb. 2024 - 16:08 p.m.', monto: '10000.00'},
-  {id:7, nombre: 'Mayte Hinostroza Huayta', fecha: '01 de feb. 2024 - 16:08 p.m.', monto: '12000.00'},
-  {id:8, nombre: 'Mayte Hinostroza Huayta', fecha: '01 de feb. 2024 - 16:08 p.m.', monto: '12000.00'},
-  {id:9, nombre: 'Mayte Hinostroza Huayta', fecha: '01 de feb. 2024 - 16:08 p.m.', monto: '12000.00'},
-  {id:10, nombre: 'Mayte Hinostroza Huayta', fecha: '01 de feb. 2024 - 16:08 p.m.', monto: '12000.00'},
-  ]
+
 }
