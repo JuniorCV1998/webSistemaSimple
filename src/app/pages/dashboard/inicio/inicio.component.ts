@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
 import { delay, finalize } from 'rxjs';
 import { LoadingComponent } from '../../modal/loading/loading.component';
-import { GetAmountService } from '../../../core/services/inversion/get-inversion.service';
+import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { Constantes } from '../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
 
@@ -26,7 +26,7 @@ export default class InicioComponent {
 
   constructor(
     private router: Router,
-    private getAmountService: GetAmountService
+    private getInversionService: GetInversionService
   ){}
 
   items: MenuItem[] | undefined;
@@ -48,7 +48,7 @@ export default class InicioComponent {
 
   getAmount(){
     this.montoCargado = false;
-    this.getAmountService.getAmount().pipe(delay(500),finalize(() => this.montoCargado = true)).
+    this.getInversionService.getAmount().pipe(delay(500),finalize(() => this.montoCargado = true)).
     subscribe((resp: any)=> {
       if(resp.codigo==Constantes.STATUS_SUCCESS_RI) this.monto = resp.monto;
       else {
@@ -60,7 +60,7 @@ export default class InicioComponent {
   getInversionesLast(){
     this.skeletonShow = true;
 
-    this.getAmountService.getInversionesLast().pipe(delay(500),finalize(() => this.skeletonShow = false)).
+    this.getInversionService.getInversionesLast().pipe(delay(500),finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
         //this.ultimasInversiones = resp.data.slice(0, 10);
@@ -68,7 +68,8 @@ export default class InicioComponent {
         this.ultimas10Inversiones = resp.data.slice(0, 10);
       }
       else {
-        this.monto = 'x';
+        this.ultimasInversiones = [];
+        this.ultimas10Inversiones = [];
       }
     } );
   }

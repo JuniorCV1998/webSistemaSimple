@@ -1,13 +1,11 @@
 
-import { Component, ViewChild } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { Component } from '@angular/core';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
-import { AvatarGroupModule } from 'primeng/avatargroup';
 import { CommonModule } from '@angular/common';
 import {PaginatorModule} from 'primeng/paginator';
 import { SoloLetrasDirective } from '../../../../components/directives/solo-letras.directive';
@@ -16,6 +14,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ListEmptyComponent } from '../../../../components/resources/list-empty/list-empty.component';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
 
 @Component({
   selector: 'app-inversiones-list',
@@ -47,24 +47,31 @@ export default class InversionesListComponent {
     totalListCount: number = 0;
 
     constructor(
-      private messageService: MessageService,
       private router: Router,
-      private location: Location
+      private location: Location,
+      private getInversionService: GetInversionService
     ){}
     
-    ngOnInit(){
+    ngOnInit(): void{
       this.listarInversiones();
-      this.renderizarTablaData();
-      this.calcularPaginas();
-      console.log("temporal: "+this.value.toLowerCase());
+      /* this.renderizarTablaData();
+      this.calcularPaginas(); */
     }
 
     listarInversiones(){
-      //Se obtiene todo
-      this.listaInv = this.data;
-      //se filtra solo los abiertos
-      console.log("tamaño: "+this.listaInv.length);
-      //this.listPaginador = this.listaInv.filter((item: any) => item.estadoDeuda == "P");
+      this.getInversionService.getInversionesList().pipe().
+      subscribe((resp: any)=> {
+        if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
+          this.listaInv = resp.data;
+          if(this.listaInv.length != 0){
+            this.renderizarTablaData();
+            this.calcularPaginas();
+          }
+        }
+        else {
+          this.listaInv = [];
+        }
+      } );
     }
 
     clearFilter(){
@@ -73,21 +80,18 @@ export default class InversionesListComponent {
     }
 
         // Método para filtrar inversiones basado en el input
-    filtrarInversiones() {
+      filtrarInversiones() {
       const filterValue = this.value.toLowerCase().trim();
   
       // Filtrar según el valor del input
       this.temporalFilter = this.listaInv.filter(item => {
-      return (
-            item.nombres.toLowerCase().includes(filterValue) ||
-            item.apellidoPaterno.toLowerCase().includes(filterValue) ||
-            item.apellidoMaterno.toLowerCase().includes(filterValue)
-              );
-          });
+        // Combinar los nombres y apellidos en una sola cadena
+        const fullName = `${item.nombres} ${item.apellidoPaterno} ${item.apellidoMaterno}`.toLowerCase().trim();
+        // Retornar verdadero si la cadena combinada incluye el valor del filtro
+        return fullName.includes(filterValue);
+        });
         this.renderizarTablaData(); // Renderizar la tabla con los datos filtrados
         this.calcularPaginas(); // Recalcular las páginas después del filtrado
-        console.log("temporal: "+this.temporalFilter.length);
-        console.log("temporal: "+filterValue);
       }
 
     changeOpen(status: boolean){
@@ -107,7 +111,6 @@ export default class InversionesListComponent {
       }
       let num = lista.length / this.registrosPag;
       this.paginas = num % 1 === 0 ? num : Math.ceil(num);
-      console.log("paginas: "+this.paginas);
     }
     paginaAnterior(){
       this.paginaActual -= 1;
@@ -125,21 +128,24 @@ export default class InversionesListComponent {
     renderizarTablaData(){
       const init = this.registrosPag * (this.paginaActual - 1);
       const fini = this.registrosPag * this.paginaActual;
-      let lista = this.listaInv.filter((item: any) => this.open ? item.estadoDeuda == "P":item.estadoDeuda == "C");
+      let lista = this.listaInv.filter((item: any) => {
+        return this.open ? item.estadoDeuda === "P" : item.estadoDeuda === "C";
+      });
+      
       if(this.value!="") {
         lista = this.temporalFilter.filter((item: any) => this.open ? item.estadoDeuda == "P":item.estadoDeuda == "C");
         this.calcularPaginas();
       }
       this.totalListCount = lista.length;
-      console.log("lista count: "+lista.length);
+      /* console.log("lista count: "+lista.length); */
       this.listPaginador = lista.slice(init,fini);
-      console.log("______________________________");
+      /* console.log("______________________________");
       console.log("registro inicial: "+init);
       console.log("registro final: "+fini);
       console.log("pagina actual: "+this.paginaActual);
       console.log("total paginas: "+this.paginas);
       console.log("total elementos: "+this.listPaginador.length);
-      console.log("______________________________");
+      console.log("______________________________"); */
     }
 
   // Función para obtener los colores para cada avatar

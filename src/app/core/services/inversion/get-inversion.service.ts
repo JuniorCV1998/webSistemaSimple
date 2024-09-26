@@ -6,7 +6,7 @@ import { appsettings } from '../../appsettings';
 @Injectable({
   providedIn: 'root'
 })
-export class GetAmountService {
+export class GetInversionService {
 
   private http = inject(HttpClient);
   private baseUrl: string = appsettings.API_SERVER;
@@ -21,6 +21,11 @@ export class GetAmountService {
   getInversionesLast(){
     return this.http.get(this.baseUrl+this.baseComponent+'getInversionesLast');
   }
+
+  getInversionesList(){
+    return this.http.get(this.baseUrl+this.baseComponent+'getInversionesList');
+  }
+
 
 
 }
