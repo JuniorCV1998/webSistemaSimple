@@ -27,6 +27,11 @@ export default class RegisterComponent {
   valueSS: string = '';
   valueShow: string = '_ _ _ _ _ _';
 
+  ngOnInit(): void{
+    sessionStorage.removeItem('token');
+  }
+
+  
   volver() {
     this.location.back();
 }

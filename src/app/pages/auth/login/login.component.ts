@@ -37,6 +37,10 @@ export default class LoginComponent {
     public dialogService: DialogService,
   ) {}
 
+  ngOnInit(): void{
+    sessionStorage.removeItem('token');
+  }
+
     credenciales = {
       correo: '',
       contrasena: ''

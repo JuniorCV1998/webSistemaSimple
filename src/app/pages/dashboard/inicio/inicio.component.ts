@@ -79,8 +79,8 @@ export default class InicioComponent {
   }
 
   verRegistros(){
-    const lista = this.ultimasInversiones;
-    this.router.navigate(['/listacompleta'], { queryParams: { lista: JSON.stringify(lista) } });
+    sessionStorage.setItem('listallinv',JSON.stringify(this.ultimasInversiones));
+    this.router.navigate(['/listacompleta']);
   }
 
 

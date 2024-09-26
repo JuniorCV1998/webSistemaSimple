@@ -1,16 +1,25 @@
-import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { LoginService } from '../../../core/services/auth/login/login.service';
+import { SidebarModule } from 'primeng/sidebar';
+import { Sidebar } from 'primeng/sidebar';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { StyleClassModule } from 'primeng/styleclass';
+import { AvatarModule } from 'primeng/avatar';
 
 @Component({
   selector: 'app-navegation',
   standalone: true,
-  imports: [RouterOutlet,CommonModule],
+  imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,AvatarModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss'
 })
 export class NavegationComponent {
+
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
   showVolverButton: boolean = true;
   showIconHome: boolean = false;
@@ -18,11 +27,16 @@ export class NavegationComponent {
 
   irInicio: boolean = false;
 
+  session: boolean = false;
+  outSession: boolean = false;
+
   private routerSubscription!: Subscription;
 
   constructor(
     private location: Location,
-    private router: Router
+    private router: Router,
+    private loginService: LoginService,
+    private route: ActivatedRoute
   ){}
 
   ngOnInit() {
@@ -32,15 +46,14 @@ export class NavegationComponent {
     const sinInicio = [
       '/registrar/inversiondetalle'
     ];
-    const irInicio = [
-      '/inversion/cartilla'
+    const flowOutSession = [
+      '/login','/registrar','/registrar/personal'
     ];
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url.split('?')[0]; // Para ignorar parámetros de query
-
         // Controlar la visibilidad del botón "Volver" en función de la ruta actual
         if (inicio.includes(currentRoute)) {
           this.showVolverButton = false;
@@ -49,18 +62,49 @@ export class NavegationComponent {
         } else if(sinInicio.includes(currentRoute)){
           this.showVolverButton = false;
           this.showAux = true;
-        }else if(irInicio.includes(currentRoute)){
-          this.showVolverButton = true;
-          this.irInicio = true;
         } else {
           this.showVolverButton = true;
           this.irInicio = false;
           this.showAux = false;
-          /* this.showIconHome = false; */
         }
+
+        //CONTROLAR VISIBILIDAD DEL HEADER
+        if(this.loginService.getToken()!=null) {
+          this.session=true;
+        }
+        else this.session=false; 
+
+        if (flowOutSession.includes(currentRoute)) this.outSession = true;
+        else this.outSession = false;
+
+        
       }
     });
+
+    //Definir de donde vengo
+    this.definirFrom();
+
   }
+
+  //Slider Module
+  closeCallback(e: Event): void {
+      this.sidebarRef.close(e);
+  }
+
+  sidebarVisible: boolean = false;
+  sidebarOpened: boolean = false;
+
+  openNav() {
+    //alert("")
+    this.sidebarOpened = true;
+  }
+
+  // Método para cerrar el sidebar
+  closeNav() {
+    this.sidebarOpened = false;
+  }
+
+
 
   ngOnDestroy() {
     // Limpiar la suscripción cuando el componente se destruya para evitar fugas de memoria
@@ -70,8 +114,18 @@ export class NavegationComponent {
   }
 
   volver() {
-    if(this.irInicio) this.router.navigate(['/inicio']);
+    if(this.irInicio || !this.fromList) this.router.navigate(['/inicio']);
     else this.location.back();
-}
+  }
+
+  fromList: boolean = false;
+  definirFrom(){
+    // Recuperar el parámetro de consulta `from`
+    this.route.queryParamMap.subscribe(params => {
+      const fromView = params.get('from');
+      if(fromView == 'list') this.fromList = true;
+      else this.fromList = false;
+    });
+  }
 
 }

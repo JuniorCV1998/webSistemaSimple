@@ -24,13 +24,24 @@ export default class ListAllComponent {
   ){}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    /* this.route.queryParams.subscribe(params => {
       if (params['lista']) {
         this.skeletonShow = false;
         this.ultimasInversiones = JSON.parse(params['lista']);
         console.log(this.ultimasInversiones);
       }
-    });
+    }); */
+
+    this.getListAllInvSession();
+
+  }
+
+  getListAllInvSession(){
+    const list = sessionStorage.getItem('listallinv');
+    if(list) {
+      this.skeletonShow = false;
+      this.ultimasInversiones = JSON.parse(list);
+    }
   }
 
   volver() {

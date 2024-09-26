@@ -28,9 +28,9 @@ export default class RegisterPersonalComponent {
     private location: Location
   ) {}
   
-  ngOnInit() {
-
-    }
+  ngOnInit(): void{
+    sessionStorage.removeItem('token');
+  }
 
   volver() {
       this.location.back();

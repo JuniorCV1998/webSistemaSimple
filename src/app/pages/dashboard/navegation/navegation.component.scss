@@ -1,5 +1,6 @@
 router-outlet {
     /* flex: 1; */ /* Esto permite que el contenido ocupe el espacio disponible */
+    padding: 0 !important;
   }
   
 /*   header {
@@ -39,4 +40,70 @@ header {
 }
 a{
   cursor: pointer;
+}
+
+
+/* slider */
+
+/* El sidebar inicial estará oculto con width: 0 */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+/* Estilo de los links en el sidebar */
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* Cambia el color cuando se pasa el mouse */
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+/* Botón para cerrar el sidebar */
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* El contenido principal no se mueve */
+#main {
+  padding: 16px;
+}
+
+/* Estilo del sidebar cuando está abierto */
+.sidebar.open {
+  width: 250px;
+}
+
+/* Botón para abrir el sidebar */
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+}
+
+/* Cambia el color del botón cuando se pasa el mouse */
+.openbtn:hover {
+  background-color: #444;
 }
