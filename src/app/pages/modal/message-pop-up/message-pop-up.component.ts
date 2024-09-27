@@ -28,7 +28,7 @@ export class MessagePopUpComponent {
   }
 
   close() {
-    this.ref.close();
+    this.ref.close('aceptar');
   }
 
 }

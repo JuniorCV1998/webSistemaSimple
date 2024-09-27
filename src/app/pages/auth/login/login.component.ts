@@ -53,7 +53,7 @@ export default class LoginComponent {
     login(form: NgForm) {
       this.loadingComponent.show();
       this.loginService.iniciarSesion(this.credenciales).subscribe({
-        next: response => {
+        next: response => { 
           this.loadingComponent.hide();
           this.router.navigate(['inicio']);
         },

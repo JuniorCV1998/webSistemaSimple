@@ -11,7 +11,7 @@
                 <div class="flex align-items-center"><i class="pi pi-user icon-span i-present"></i></div>
                 <div class="flex flex-column justify-content-center w-full">
                     <!-- <span class="params-txt mb-1">Cliente</span> -->
-                    <span class="valor-txt">{{invDetail.persona.nombres+' '+invDetail.persona.apellidoPaterno+' '+invDetail.persona.apellidoMaterno}}</span>
+                    <span class="valor-txt">{{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
                 </div>
             </div>
             <div class="flex flex-row w-5 paddin-5 cont-banner gap-1">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="flex flex-column justify-content-center w-full">
                     <!-- <span class="params-txt mb-1">Monto</span> -->
-                    <span class="valor-txt">{{invDetail.monto | number:'1.2-2'}}</span>
+                    <span class="valor-txt">{{objInvDetail.monto | number:'1.2-2'}}</span>
                 </div>
             </div>
         </div>
@@ -31,62 +31,62 @@
                     <tbody>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp1==null" class="position_pass" (click)="pagarCuota(1)">1</div>
-                                <div *ngIf="invDetail.fp1!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp1==null" class="position_pass" (click)="pagarCuota(1)">1</div>
+                                <div *ngIf="objInvDetail.fp1!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp1}}</span>
+                                    <span class="fecha">{{objInvDetail.fp1}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp1==null" class="position">2</div>
-                                <div *ngIf="invDetail.fp1!=null && invDetail.fp2==null" class="position_pass" (click)="pagarCuota(2)">2</div>
-                                <div *ngIf="invDetail.fp2!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp1==null" class="position">2</div>
+                                <div *ngIf="objInvDetail.fp1!=null && objInvDetail.fp2==null" class="position_pass" (click)="pagarCuota(2)">2</div>
+                                <div *ngIf="objInvDetail.fp2!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp2}}</span>
+                                    <span class="fecha">{{objInvDetail.fp2}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp2==null" class="position">3</div>
-                                <div *ngIf="invDetail.fp2!=null && invDetail.fp3==null" class="position_pass" (click)="pagarCuota(3)">3</div>
-                                <div *ngIf="invDetail.fp3!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp2==null" class="position">3</div>
+                                <div *ngIf="objInvDetail.fp2!=null && objInvDetail.fp3==null" class="position_pass" (click)="pagarCuota(3)">3</div>
+                                <div *ngIf="objInvDetail.fp3!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp3}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="flex flex-row w-full">
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp3==null" class="position">4</div>
-                                <div *ngIf="invDetail.fp3!=null && invDetail.fp4==null" class="position_pass" (click)="pagarCuota(4)">4</div>
-                                <div *ngIf="invDetail.fp4!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp4}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp4==null" class="position">5</div>
-                                <div *ngIf="invDetail.fp4!=null && invDetail.fp5==null" class="position_pass" (click)="pagarCuota(5)">5</div>
-                                <div *ngIf="invDetail.fp5!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp5}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp5==null" class="position">6</div>
-                                <div *ngIf="invDetail.fp5!=null && invDetail.fp6==null" class="position_pass" (click)="pagarCuota(6)">6</div>
-                                <div *ngIf="invDetail.fp6!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp6}}</span>
+                                    <span class="fecha">{{objInvDetail.fp3}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp6==null" class="position">7</div>
-                                <div *ngIf="invDetail.fp6!=null && invDetail.fp7==null" class="position_pass" (click)="pagarCuota(7)">7</div>
-                                <div *ngIf="invDetail.fp7!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp3==null" class="position">4</div>
+                                <div *ngIf="objInvDetail.fp3!=null && objInvDetail.fp4==null" class="position_pass" (click)="pagarCuota(4)">4</div>
+                                <div *ngIf="objInvDetail.fp4!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp7}}</span>
+                                    <span class="fecha">{{objInvDetail.fp4}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp4==null" class="position">5</div>
+                                <div *ngIf="objInvDetail.fp4!=null && objInvDetail.fp5==null" class="position_pass" (click)="pagarCuota(5)">5</div>
+                                <div *ngIf="objInvDetail.fp5!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp5}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp5==null" class="position">6</div>
+                                <div *ngIf="objInvDetail.fp5!=null && objInvDetail.fp6==null" class="position_pass" (click)="pagarCuota(6)">6</div>
+                                <div *ngIf="objInvDetail.fp6!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp6}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="flex flex-row w-full">
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp6==null" class="position">7</div>
+                                <div *ngIf="objInvDetail.fp6!=null && objInvDetail.fp7==null" class="position_pass" (click)="pagarCuota(7)">7</div>
+                                <div *ngIf="objInvDetail.fp7!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp7}}</span>
                                 </div>
                             </td>
                         </tr>
@@ -101,204 +101,204 @@
                     <tbody>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp1==null" class="position_pass" (click)="pagarCuota(1)">1</div>
-                                <div *ngIf="invDetail.fp1!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp1==null" class="position_pass" (click)="pagarCuota(1)">1</div>
+                                <div *ngIf="objInvDetail.fp1!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp1}}</span>
+                                    <span class="fecha">{{objInvDetail.fp1}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp1==null" class="position">2</div>
-                                <div *ngIf="invDetail.fp1!=null && invDetail.fp2==null" class="position_pass" (click)="pagarCuota(2)">2</div>
-                                <div *ngIf="invDetail.fp2!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp1==null" class="position">2</div>
+                                <div *ngIf="objInvDetail.fp1!=null && objInvDetail.fp2==null" class="position_pass" (click)="pagarCuota(2)">2</div>
+                                <div *ngIf="objInvDetail.fp2!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp2}}</span>
+                                    <span class="fecha">{{objInvDetail.fp2}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp2==null" class="position">3</div>
-                                <div *ngIf="invDetail.fp2!=null && invDetail.fp3==null" class="position_pass" (click)="pagarCuota(3)">3</div>
-                                <div *ngIf="invDetail.fp3!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp2==null" class="position">3</div>
+                                <div *ngIf="objInvDetail.fp2!=null && objInvDetail.fp3==null" class="position_pass" (click)="pagarCuota(3)">3</div>
+                                <div *ngIf="objInvDetail.fp3!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp3}}</span>
+                                    <span class="fecha">{{objInvDetail.fp3}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp3==null" class="position">4</div>
-                                <div *ngIf="invDetail.fp3!=null && invDetail.fp4==null" class="position_pass" (click)="pagarCuota(4)">4</div>
-                                <div *ngIf="invDetail.fp4!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp3==null" class="position">4</div>
+                                <div *ngIf="objInvDetail.fp3!=null && objInvDetail.fp4==null" class="position_pass" (click)="pagarCuota(4)">4</div>
+                                <div *ngIf="objInvDetail.fp4!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp4}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="flex flex-row w-full">
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp4==null" class="position">5</div>
-                                <div *ngIf="invDetail.fp4!=null && invDetail.fp5==null" class="position_pass" (click)="pagarCuota(5)">5</div>
-                                <div *ngIf="invDetail.fp5!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp5}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp5==null" class="position">6</div>
-                                <div *ngIf="invDetail.fp5!=null && invDetail.fp6==null" class="position_pass" (click)="pagarCuota(6)">6</div>
-                                <div *ngIf="invDetail.fp6!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp6}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp6==null" class="position">7</div>
-                                <div *ngIf="invDetail.fp6!=null && invDetail.fp7==null" class="position_pass" (click)="pagarCuota(7)">7</div>
-                                <div *ngIf="invDetail.fp7!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp7}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp7==null" class="position">8</div>
-                                <div *ngIf="invDetail.fp7!=null && invDetail.fp8==null" class="position_pass" (click)="pagarCuota(8)">8</div>
-                                <div *ngIf="invDetail.fp8!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp8}}</span>
+                                    <span class="fecha">{{objInvDetail.fp4}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp8==null" class="position">9</div>
-                                <div *ngIf="invDetail.fp8!=null && invDetail.fp9==null" class="position_pass" (click)="pagarCuota(9)">9</div>
-                                <div *ngIf="invDetail.fp9!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp4==null" class="position">5</div>
+                                <div *ngIf="objInvDetail.fp4!=null && objInvDetail.fp5==null" class="position_pass" (click)="pagarCuota(5)">5</div>
+                                <div *ngIf="objInvDetail.fp5!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp9}}</span>
+                                    <span class="fecha">{{objInvDetail.fp5}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp9==null" class="position">10</div>
-                                <div *ngIf="invDetail.fp9!=null && invDetail.fp10==null" class="position_pass" (click)="pagarCuota(10)">10</div>
-                                <div *ngIf="invDetail.fp10!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp5==null" class="position">6</div>
+                                <div *ngIf="objInvDetail.fp5!=null && objInvDetail.fp6==null" class="position_pass" (click)="pagarCuota(6)">6</div>
+                                <div *ngIf="objInvDetail.fp6!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp10}}</span>
+                                    <span class="fecha">{{objInvDetail.fp6}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp10==null" class="position">11</div>
-                                <div *ngIf="invDetail.fp10!=null && invDetail.fp11==null" class="position_pass" (click)="pagarCuota(11)">11</div>
-                                <div *ngIf="invDetail.fp11!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp6==null" class="position">7</div>
+                                <div *ngIf="objInvDetail.fp6!=null && objInvDetail.fp7==null" class="position_pass" (click)="pagarCuota(7)">7</div>
+                                <div *ngIf="objInvDetail.fp7!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp11}}</span>
+                                    <span class="fecha">{{objInvDetail.fp7}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp11==null" class="position">12</div>
-                                <div *ngIf="invDetail.fp11!=null && invDetail.fp12==null" class="position_pass" (click)="pagarCuota(12)">12</div>
-                                <div *ngIf="invDetail.fp12!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp7==null" class="position">8</div>
+                                <div *ngIf="objInvDetail.fp7!=null && objInvDetail.fp8==null" class="position_pass" (click)="pagarCuota(8)">8</div>
+                                <div *ngIf="objInvDetail.fp8!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp12}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="flex flex-row w-full">
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp12==null" class="position">13</div>
-                                <div *ngIf="invDetail.fp12!=null && invDetail.fp13==null" class="position_pass" (click)="pagarCuota(13)">13</div>
-                                <div *ngIf="invDetail.fp13!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp13}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp13==null" class="position">14</div>
-                                <div *ngIf="invDetail.fp13!=null && invDetail.fp14==null" class="position_pass" (click)="pagarCuota(14)">14</div>
-                                <div *ngIf="invDetail.fp14!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp14}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp14==null" class="position">15</div>
-                                <div *ngIf="invDetail.fp14!=null && invDetail.fp15==null" class="position_pass" (click)="pagarCuota(15)">15</div>
-                                <div *ngIf="invDetail.fp15!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp15}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp15==null" class="position">16</div>
-                                <div *ngIf="invDetail.fp15!=null && invDetail.fp16==null" class="position_pass" (click)="pagarCuota(16)">16</div>
-                                <div *ngIf="invDetail.fp16!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp16}}</span>
+                                    <span class="fecha">{{objInvDetail.fp8}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp16==null" class="position">17</div>
-                                <div *ngIf="invDetail.fp16!=null && invDetail.fp17==null" class="position_pass" (click)="pagarCuota(17)">17</div>
-                                <div *ngIf="invDetail.fp17!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp8==null" class="position">9</div>
+                                <div *ngIf="objInvDetail.fp8!=null && objInvDetail.fp9==null" class="position_pass" (click)="pagarCuota(9)">9</div>
+                                <div *ngIf="objInvDetail.fp9!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp17}}</span>
+                                    <span class="fecha">{{objInvDetail.fp9}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp17==null" class="position">18</div>
-                                <div *ngIf="invDetail.fp17!=null && invDetail.fp18==null" class="position_pass" (click)="pagarCuota(18)">18</div>
-                                <div *ngIf="invDetail.fp18!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp9==null" class="position">10</div>
+                                <div *ngIf="objInvDetail.fp9!=null && objInvDetail.fp10==null" class="position_pass" (click)="pagarCuota(10)">10</div>
+                                <div *ngIf="objInvDetail.fp10!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp18}}</span>
+                                    <span class="fecha">{{objInvDetail.fp10}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp18==null" class="position">19</div>
-                                <div *ngIf="invDetail.fp18!=null && invDetail.fp19==null" class="position_pass" (click)="pagarCuota(19)">19</div>
-                                <div *ngIf="invDetail.fp19!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp10==null" class="position">11</div>
+                                <div *ngIf="objInvDetail.fp10!=null && objInvDetail.fp11==null" class="position_pass" (click)="pagarCuota(11)">11</div>
+                                <div *ngIf="objInvDetail.fp11!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp19}}</span>
+                                    <span class="fecha">{{objInvDetail.fp11}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp19==null" class="position">20</div>
-                                <div *ngIf="invDetail.fp19!=null && invDetail.fp20==null" class="position_pass" (click)="pagarCuota(20)">20</div>
-                                <div *ngIf="invDetail.fp20!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp11==null" class="position">12</div>
+                                <div *ngIf="objInvDetail.fp11!=null && objInvDetail.fp12==null" class="position_pass" (click)="pagarCuota(12)">12</div>
+                                <div *ngIf="objInvDetail.fp12!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp20}}</span>
+                                    <span class="fecha">{{objInvDetail.fp12}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp20==null" class="position">21</div>
-                                <div *ngIf="invDetail.fp20!=null && invDetail.fp21==null" class="position_pass" (click)="pagarCuota(21)">21</div>
-                                <div *ngIf="invDetail.fp21!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp12==null" class="position">13</div>
+                                <div *ngIf="objInvDetail.fp12!=null && objInvDetail.fp13==null" class="position_pass" (click)="pagarCuota(13)">13</div>
+                                <div *ngIf="objInvDetail.fp13!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp21}}</span>
+                                    <span class="fecha">{{objInvDetail.fp13}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp21==null" class="position">22</div>
-                                <div *ngIf="invDetail.fp21!=null && invDetail.fp22==null" class="position_pass" (click)="pagarCuota(22)">22</div>
-                                <div *ngIf="invDetail.fp22!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp13==null" class="position">14</div>
+                                <div *ngIf="objInvDetail.fp13!=null && objInvDetail.fp14==null" class="position_pass" (click)="pagarCuota(14)">14</div>
+                                <div *ngIf="objInvDetail.fp14!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp22}}</span>
+                                    <span class="fecha">{{objInvDetail.fp14}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp22==null" class="position">23</div>
-                                <div *ngIf="invDetail.fp22!=null && invDetail.fp23==null" class="position_pass" (click)="pagarCuota(23)">23</div>
-                                <div *ngIf="invDetail.fp23!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp14==null" class="position">15</div>
+                                <div *ngIf="objInvDetail.fp14!=null && objInvDetail.fp15==null" class="position_pass" (click)="pagarCuota(15)">15</div>
+                                <div *ngIf="objInvDetail.fp15!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp23}}</span>
+                                    <span class="fecha">{{objInvDetail.fp15}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp23==null" class="position">24</div>
-                                <div *ngIf="invDetail.fp23!=null && invDetail.fp24==null" class="position_pass" (click)="pagarCuota(24)">24</div>
-                                <div *ngIf="invDetail.fp24!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp15==null" class="position">16</div>
+                                <div *ngIf="objInvDetail.fp15!=null && objInvDetail.fp16==null" class="position_pass" (click)="pagarCuota(16)">16</div>
+                                <div *ngIf="objInvDetail.fp16!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp24}}</span>
+                                    <span class="fecha">{{objInvDetail.fp16}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="flex flex-row w-full">
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp16==null" class="position">17</div>
+                                <div *ngIf="objInvDetail.fp16!=null && objInvDetail.fp17==null" class="position_pass" (click)="pagarCuota(17)">17</div>
+                                <div *ngIf="objInvDetail.fp17!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp17}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp17==null" class="position">18</div>
+                                <div *ngIf="objInvDetail.fp17!=null && objInvDetail.fp18==null" class="position_pass" (click)="pagarCuota(18)">18</div>
+                                <div *ngIf="objInvDetail.fp18!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp18}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp18==null" class="position">19</div>
+                                <div *ngIf="objInvDetail.fp18!=null && objInvDetail.fp19==null" class="position_pass" (click)="pagarCuota(19)">19</div>
+                                <div *ngIf="objInvDetail.fp19!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp19}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp19==null" class="position">20</div>
+                                <div *ngIf="objInvDetail.fp19!=null && objInvDetail.fp20==null" class="position_pass" (click)="pagarCuota(20)">20</div>
+                                <div *ngIf="objInvDetail.fp20!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp20}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="flex flex-row w-full">
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp20==null" class="position">21</div>
+                                <div *ngIf="objInvDetail.fp20!=null && objInvDetail.fp21==null" class="position_pass" (click)="pagarCuota(21)">21</div>
+                                <div *ngIf="objInvDetail.fp21!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp21}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp21==null" class="position">22</div>
+                                <div *ngIf="objInvDetail.fp21!=null && objInvDetail.fp22==null" class="position_pass" (click)="pagarCuota(22)">22</div>
+                                <div *ngIf="objInvDetail.fp22!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp22}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp22==null" class="position">23</div>
+                                <div *ngIf="objInvDetail.fp22!=null && objInvDetail.fp23==null" class="position_pass" (click)="pagarCuota(23)">23</div>
+                                <div *ngIf="objInvDetail.fp23!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp23}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp23==null" class="position">24</div>
+                                <div *ngIf="objInvDetail.fp23!=null && objInvDetail.fp24==null" class="position_pass" (click)="pagarCuota(24)">24</div>
+                                <div *ngIf="objInvDetail.fp24!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp24}}</span>
                                 </div>
                             </td>
                         </tr>
@@ -313,256 +313,256 @@
                     <tbody>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp1==null" class="position_pass" (click)="pagarCuota(1)">1</div>
-                                <div *ngIf="invDetail.fp1!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp1==null" class="position_pass" (click)="pagarCuota(1)">1</div>
+                                <div *ngIf="objInvDetail.fp1!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp1}}</span>
+                                    <span class="fecha">{{objInvDetail.fp1}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp1==null" class="position">2</div>
-                                <div *ngIf="invDetail.fp1!=null && invDetail.fp2==null" class="position_pass" (click)="pagarCuota(2)">2</div>
-                                <div *ngIf="invDetail.fp2!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp1==null" class="position">2</div>
+                                <div *ngIf="objInvDetail.fp1!=null && objInvDetail.fp2==null" class="position_pass" (click)="pagarCuota(2)">2</div>
+                                <div *ngIf="objInvDetail.fp2!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp2}}</span>
+                                    <span class="fecha">{{objInvDetail.fp2}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp2==null" class="position">3</div>
-                                <div *ngIf="invDetail.fp2!=null && invDetail.fp3==null" class="position_pass" (click)="pagarCuota(3)">3</div>
-                                <div *ngIf="invDetail.fp3!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp2==null" class="position">3</div>
+                                <div *ngIf="objInvDetail.fp2!=null && objInvDetail.fp3==null" class="position_pass" (click)="pagarCuota(3)">3</div>
+                                <div *ngIf="objInvDetail.fp3!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp3}}</span>
+                                    <span class="fecha">{{objInvDetail.fp3}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp3==null" class="position">4</div>
-                                <div *ngIf="invDetail.fp3!=null && invDetail.fp4==null" class="position_pass" (click)="pagarCuota(4)">4</div>
-                                <div *ngIf="invDetail.fp4!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp3==null" class="position">4</div>
+                                <div *ngIf="objInvDetail.fp3!=null && objInvDetail.fp4==null" class="position_pass" (click)="pagarCuota(4)">4</div>
+                                <div *ngIf="objInvDetail.fp4!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp4}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="flex flex-row w-full">
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp4==null" class="position">5</div>
-                                <div *ngIf="invDetail.fp4!=null && invDetail.fp5==null" class="position_pass" (click)="pagarCuota(5)">5</div>
-                                <div *ngIf="invDetail.fp5!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp5}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp5==null" class="position">6</div>
-                                <div *ngIf="invDetail.fp5!=null && invDetail.fp6==null" class="position_pass" (click)="pagarCuota(6)">6</div>
-                                <div *ngIf="invDetail.fp6!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp6}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp6==null" class="position">7</div>
-                                <div *ngIf="invDetail.fp6!=null && invDetail.fp7==null" class="position_pass" (click)="pagarCuota(7)">7</div>
-                                <div *ngIf="invDetail.fp7!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp7}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp7==null" class="position">8</div>
-                                <div *ngIf="invDetail.fp7!=null && invDetail.fp8==null" class="position_pass" (click)="pagarCuota(8)">8</div>
-                                <div *ngIf="invDetail.fp8!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp8}}</span>
+                                    <span class="fecha">{{objInvDetail.fp4}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp8==null" class="position">9</div>
-                                <div *ngIf="invDetail.fp8!=null && invDetail.fp9==null" class="position_pass" (click)="pagarCuota(9)">9</div>
-                                <div *ngIf="invDetail.fp9!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp4==null" class="position">5</div>
+                                <div *ngIf="objInvDetail.fp4!=null && objInvDetail.fp5==null" class="position_pass" (click)="pagarCuota(5)">5</div>
+                                <div *ngIf="objInvDetail.fp5!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp9}}</span>
+                                    <span class="fecha">{{objInvDetail.fp5}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp9==null" class="position">10</div>
-                                <div *ngIf="invDetail.fp9!=null && invDetail.fp10==null" class="position_pass" (click)="pagarCuota(10)">10</div>
-                                <div *ngIf="invDetail.fp10!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp5==null" class="position">6</div>
+                                <div *ngIf="objInvDetail.fp5!=null && objInvDetail.fp6==null" class="position_pass" (click)="pagarCuota(6)">6</div>
+                                <div *ngIf="objInvDetail.fp6!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp10}}</span>
+                                    <span class="fecha">{{objInvDetail.fp6}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp10==null" class="position">11</div>
-                                <div *ngIf="invDetail.fp10!=null && invDetail.fp11==null" class="position_pass" (click)="pagarCuota(11)">11</div>
-                                <div *ngIf="invDetail.fp11!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp6==null" class="position">7</div>
+                                <div *ngIf="objInvDetail.fp6!=null && objInvDetail.fp7==null" class="position_pass" (click)="pagarCuota(7)">7</div>
+                                <div *ngIf="objInvDetail.fp7!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp11}}</span>
+                                    <span class="fecha">{{objInvDetail.fp7}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp11==null" class="position">12</div>
-                                <div *ngIf="invDetail.fp11!=null && invDetail.fp12==null" class="position_pass" (click)="pagarCuota(12)">12</div>
-                                <div *ngIf="invDetail.fp12!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp7==null" class="position">8</div>
+                                <div *ngIf="objInvDetail.fp7!=null && objInvDetail.fp8==null" class="position_pass" (click)="pagarCuota(8)">8</div>
+                                <div *ngIf="objInvDetail.fp8!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp12}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="flex flex-row w-full">
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp12==null" class="position">13</div>
-                                <div *ngIf="invDetail.fp12!=null && invDetail.fp13==null" class="position_pass" (click)="pagarCuota(13)">13</div>
-                                <div *ngIf="invDetail.fp13!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp13}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp13==null" class="position">14</div>
-                                <div *ngIf="invDetail.fp13!=null && invDetail.fp14==null" class="position_pass" (click)="pagarCuota(14)">14</div>
-                                <div *ngIf="invDetail.fp14!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp14}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp14==null" class="position">15</div>
-                                <div *ngIf="invDetail.fp14!=null && invDetail.fp15==null" class="position_pass" (click)="pagarCuota(15)">15</div>
-                                <div *ngIf="invDetail.fp15!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp15}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp15==null" class="position">16</div>
-                                <div *ngIf="invDetail.fp15!=null && invDetail.fp16==null" class="position_pass" (click)="pagarCuota(16)">16</div>
-                                <div *ngIf="invDetail.fp16!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp16}}</span>
+                                    <span class="fecha">{{objInvDetail.fp8}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp16==null" class="position">17</div>
-                                <div *ngIf="invDetail.fp16!=null && invDetail.fp17==null" class="position_pass" (click)="pagarCuota(17)">17</div>
-                                <div *ngIf="invDetail.fp17!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp8==null" class="position">9</div>
+                                <div *ngIf="objInvDetail.fp8!=null && objInvDetail.fp9==null" class="position_pass" (click)="pagarCuota(9)">9</div>
+                                <div *ngIf="objInvDetail.fp9!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp17}}</span>
+                                    <span class="fecha">{{objInvDetail.fp9}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp17==null" class="position">18</div>
-                                <div *ngIf="invDetail.fp17!=null && invDetail.fp18==null" class="position_pass" (click)="pagarCuota(18)">18</div>
-                                <div *ngIf="invDetail.fp18!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp9==null" class="position">10</div>
+                                <div *ngIf="objInvDetail.fp9!=null && objInvDetail.fp10==null" class="position_pass" (click)="pagarCuota(10)">10</div>
+                                <div *ngIf="objInvDetail.fp10!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp18}}</span>
+                                    <span class="fecha">{{objInvDetail.fp10}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp18==null" class="position">19</div>
-                                <div *ngIf="invDetail.fp18!=null && invDetail.fp19==null" class="position_pass" (click)="pagarCuota(19)">19</div>
-                                <div *ngIf="invDetail.fp19!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp10==null" class="position">11</div>
+                                <div *ngIf="objInvDetail.fp10!=null && objInvDetail.fp11==null" class="position_pass" (click)="pagarCuota(11)">11</div>
+                                <div *ngIf="objInvDetail.fp11!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp19}}</span>
+                                    <span class="fecha">{{objInvDetail.fp11}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp19==null" class="position">20</div>
-                                <div *ngIf="invDetail.fp19!=null && invDetail.fp20==null" class="position_pass" (click)="pagarCuota(20)">20</div>
-                                <div *ngIf="invDetail.fp20!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp11==null" class="position">12</div>
+                                <div *ngIf="objInvDetail.fp11!=null && objInvDetail.fp12==null" class="position_pass" (click)="pagarCuota(12)">12</div>
+                                <div *ngIf="objInvDetail.fp12!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp20}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="flex flex-row w-full">
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp20==null" class="position">21</div>
-                                <div *ngIf="invDetail.fp20!=null && invDetail.fp21==null" class="position_pass" (click)="pagarCuota(21)">21</div>
-                                <div *ngIf="invDetail.fp21!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp21}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp21==null" class="position">22</div>
-                                <div *ngIf="invDetail.fp21!=null && invDetail.fp22==null" class="position_pass" (click)="pagarCuota(22)">22</div>
-                                <div *ngIf="invDetail.fp22!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp22}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp22==null" class="position">23</div>
-                                <div *ngIf="invDetail.fp22!=null && invDetail.fp23==null" class="position_pass" (click)="pagarCuota(23)">23</div>
-                                <div *ngIf="invDetail.fp23!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp23}}</span>
-                                </div>
-                            </td>
-                            <td class="w-full">
-                                <div *ngIf="invDetail.fp23==null" class="position">24</div>
-                                <div *ngIf="invDetail.fp23!=null && invDetail.fp24==null" class="position_pass" (click)="pagarCuota(24)">24</div>
-                                <div *ngIf="invDetail.fp24!=null" class="flex flex-column align-items-center cont-pago">
-                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp24}}</span>
+                                    <span class="fecha">{{objInvDetail.fp12}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp24==null" class="position">25</div>
-                                <div *ngIf="invDetail.fp24!=null && invDetail.fp25==null" class="position_pass" (click)="pagarCuota(25)">25</div>
-                                <div *ngIf="invDetail.fp25!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp12==null" class="position">13</div>
+                                <div *ngIf="objInvDetail.fp12!=null && objInvDetail.fp13==null" class="position_pass" (click)="pagarCuota(13)">13</div>
+                                <div *ngIf="objInvDetail.fp13!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp25}}</span>
+                                    <span class="fecha">{{objInvDetail.fp13}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp25==null" class="position">26</div>
-                                <div *ngIf="invDetail.fp25!=null && invDetail.fp26==null" class="position_pass" (click)="pagarCuota(26)">26</div>
-                                <div *ngIf="invDetail.fp26!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp13==null" class="position">14</div>
+                                <div *ngIf="objInvDetail.fp13!=null && objInvDetail.fp14==null" class="position_pass" (click)="pagarCuota(14)">14</div>
+                                <div *ngIf="objInvDetail.fp14!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp26}}</span>
+                                    <span class="fecha">{{objInvDetail.fp14}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp26==null" class="position">27</div>
-                                <div *ngIf="invDetail.fp26!=null && invDetail.fp27==null" class="position_pass" (click)="pagarCuota(27)">27</div>
-                                <div *ngIf="invDetail.fp27!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp14==null" class="position">15</div>
+                                <div *ngIf="objInvDetail.fp14!=null && objInvDetail.fp15==null" class="position_pass" (click)="pagarCuota(15)">15</div>
+                                <div *ngIf="objInvDetail.fp15!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp27}}</span>
+                                    <span class="fecha">{{objInvDetail.fp15}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp27==null" class="position">28</div>
-                                <div *ngIf="invDetail.fp27!=null && invDetail.fp28==null" class="position_pass" (click)="pagarCuota(28)">28</div>
-                                <div *ngIf="invDetail.fp28!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp15==null" class="position">16</div>
+                                <div *ngIf="objInvDetail.fp15!=null && objInvDetail.fp16==null" class="position_pass" (click)="pagarCuota(16)">16</div>
+                                <div *ngIf="objInvDetail.fp16!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp28}}</span>
+                                    <span class="fecha">{{objInvDetail.fp16}}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr class="flex flex-row w-full">
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp28==null" class="position">29</div>
-                                <div *ngIf="invDetail.fp28!=null && invDetail.fp29==null" class="position_pass" (click)="pagarCuota(29)">29</div>
-                                <div *ngIf="invDetail.fp29!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp16==null" class="position">17</div>
+                                <div *ngIf="objInvDetail.fp16!=null && objInvDetail.fp17==null" class="position_pass" (click)="pagarCuota(17)">17</div>
+                                <div *ngIf="objInvDetail.fp17!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp29}}</span>
+                                    <span class="fecha">{{objInvDetail.fp17}}</span>
                                 </div>
                             </td>
                             <td class="w-full">
-                                <div *ngIf="invDetail.fp29==null" class="position">30</div>
-                                <div *ngIf="invDetail.fp29!=null && invDetail.fp30==null" class="position_pass" (click)="pagarCuota(30)">30</div>
-                                <div *ngIf="invDetail.fp30!=null" class="flex flex-column align-items-center cont-pago">
+                                <div *ngIf="objInvDetail.fp17==null" class="position">18</div>
+                                <div *ngIf="objInvDetail.fp17!=null && objInvDetail.fp18==null" class="position_pass" (click)="pagarCuota(18)">18</div>
+                                <div *ngIf="objInvDetail.fp18!=null" class="flex flex-column align-items-center cont-pago">
                                     <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
-                                    <span class="fecha">{{invDetail.fp30}}</span>
+                                    <span class="fecha">{{objInvDetail.fp18}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp18==null" class="position">19</div>
+                                <div *ngIf="objInvDetail.fp18!=null && objInvDetail.fp19==null" class="position_pass" (click)="pagarCuota(19)">19</div>
+                                <div *ngIf="objInvDetail.fp19!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp19}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp19==null" class="position">20</div>
+                                <div *ngIf="objInvDetail.fp19!=null && objInvDetail.fp20==null" class="position_pass" (click)="pagarCuota(20)">20</div>
+                                <div *ngIf="objInvDetail.fp20!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp20}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="flex flex-row w-full">
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp20==null" class="position">21</div>
+                                <div *ngIf="objInvDetail.fp20!=null && objInvDetail.fp21==null" class="position_pass" (click)="pagarCuota(21)">21</div>
+                                <div *ngIf="objInvDetail.fp21!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp21}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp21==null" class="position">22</div>
+                                <div *ngIf="objInvDetail.fp21!=null && objInvDetail.fp22==null" class="position_pass" (click)="pagarCuota(22)">22</div>
+                                <div *ngIf="objInvDetail.fp22!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp22}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp22==null" class="position">23</div>
+                                <div *ngIf="objInvDetail.fp22!=null && objInvDetail.fp23==null" class="position_pass" (click)="pagarCuota(23)">23</div>
+                                <div *ngIf="objInvDetail.fp23!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp23}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp23==null" class="position">24</div>
+                                <div *ngIf="objInvDetail.fp23!=null && objInvDetail.fp24==null" class="position_pass" (click)="pagarCuota(24)">24</div>
+                                <div *ngIf="objInvDetail.fp24!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp24}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="flex flex-row w-full">
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp24==null" class="position">25</div>
+                                <div *ngIf="objInvDetail.fp24!=null && objInvDetail.fp25==null" class="position_pass" (click)="pagarCuota(25)">25</div>
+                                <div *ngIf="objInvDetail.fp25!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp25}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp25==null" class="position">26</div>
+                                <div *ngIf="objInvDetail.fp25!=null && objInvDetail.fp26==null" class="position_pass" (click)="pagarCuota(26)">26</div>
+                                <div *ngIf="objInvDetail.fp26!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp26}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp26==null" class="position">27</div>
+                                <div *ngIf="objInvDetail.fp26!=null && objInvDetail.fp27==null" class="position_pass" (click)="pagarCuota(27)">27</div>
+                                <div *ngIf="objInvDetail.fp27!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp27}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp27==null" class="position">28</div>
+                                <div *ngIf="objInvDetail.fp27!=null && objInvDetail.fp28==null" class="position_pass" (click)="pagarCuota(28)">28</div>
+                                <div *ngIf="objInvDetail.fp28!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp28}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="flex flex-row w-full">
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp28==null" class="position">29</div>
+                                <div *ngIf="objInvDetail.fp28!=null && objInvDetail.fp29==null" class="position_pass" (click)="pagarCuota(29)">29</div>
+                                <div *ngIf="objInvDetail.fp29!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp29}}</span>
+                                </div>
+                            </td>
+                            <td class="w-full">
+                                <div *ngIf="objInvDetail.fp29==null" class="position">30</div>
+                                <div *ngIf="objInvDetail.fp29!=null && objInvDetail.fp30==null" class="position_pass" (click)="pagarCuota(30)">30</div>
+                                <div *ngIf="objInvDetail.fp30!=null" class="flex flex-column align-items-center cont-pago">
+                                    <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                    <span class="fecha">{{objInvDetail.fp30}}</span>
                                 </div>
                             </td>
                         </tr>
@@ -583,14 +583,14 @@
                     <div class="flex flex-column w-full">
                         <span class="mb-2 params-txt">Monto invertido</span>
                         <span class="valor-txt-detail">
-                            {{invDetail.monto | number:'1.2-2' }}
+                            {{objInvDetail.monto | number:'1.2-2' }}
                         </span>
                     </div>
     
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Número de cuotas</label>
                         <span class="valor-txt-detail">
-                        {{invDetail.nroCuotas}}
+                        {{objInvDetail.nroCuotas}}
                         </span>
                     </div>
                 </div>
@@ -599,14 +599,14 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Interés</label>
                         <span class="valor-txt-detail">
-                            {{invDetail.interes | number:'1.0-2' }} %
+                            {{objInvDetail.interes | number:'1.0-2' }} %
                         </span>
                     </div>
     
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">valor de cuota</label>
                         <span class="valor-txt-detail">
-                        {{invDetail.valorCuota | number:'1.2-2'}}
+                        {{objInvDetail.valorCuota | number:'1.2-2'}}
                         </span>
                     </div>
                 </div>
@@ -615,7 +615,7 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Fecha de registro</label>
                         <span class="valor-txt-detail">
-                            {{invDetail.fechaRegistro}}
+                            {{objInvDetail.fechaRegistro}}
                         </span>
                     </div>
                 </div>
@@ -624,14 +624,14 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Fecha inicio</label>
                         <span class="valor-txt-detail">
-                            {{invDetail.fechaFin}}
+                            {{objInvDetail.fechaFin}}
                         </span>
                     </div>
     
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Fecha fin</label>
                         <span class="valor-txt-detail">
-                        {{invDetail.fechaInicio}}
+                        {{objInvDetail.fechaInicio}}
                         </span>
                     </div>
                 </div>
@@ -646,13 +646,13 @@
                     <div class="flex flex-column w-8">
                         <label class="mb-2 params-txt">Nombres</label>
                         <span class="valor-txt-detail">
-                            {{invDetail.persona.nombres+' '+invDetail.persona.apellidoPaterno+' '+invDetail.persona.apellidoMaterno}}
+                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}
                         </span>
                     </div>
                     <div class="flex flex-column w-4">
                         <label class="mb-2 params-txt">Celular</label>
                         <span class="valor-txt-detail">
-                            {{invDetail.persona.celular}}
+                            {{objInvDetail.persona.celular}}
                         </span>
                     </div>
                 </div>
@@ -661,7 +661,7 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Dirección</label>
                         <span class="valor-txt-detail">
-                        {{invDetail.persona.direccion}}
+                        {{objInvDetail.persona.direccion}}
                         </span>
                     </div>
                 </div>
@@ -669,13 +669,13 @@
                 <div class="custom-banner-credentials mb-4">
                     <div class="flex flex-row w-full justify-content-center mb-2">
                         <span class="txt-span-bold">CORREO:</span>
-                        <span class="w-full txt-span-text">{{invDetail.credenciales.correo}}</span>
+                        <span class="w-full txt-span-text">{{objInvDetail.credenciales.correo}}</span>
                     </div><!--  -->
                     <div class="flex flex-row w-full justify-content-around mb-3">
                         <span class="txt-span-bold">PASS:</span>
                         <div class="flex flex-row justify-content-between w-full txt-span-text">
                             <div class="w-10">
-                                <span *ngIf="mostrar" >{{ invDetail.credenciales.contrasena }}</span> <!-- .txt-span -->
+                                <span *ngIf="mostrar" >{{ objInvDetail.credenciales.contrasena }}</span> <!-- .txt-span -->
                                 <span *ngIf="!mostrar" >**********</span>
                             </div>
                             <div class="w-2">
@@ -699,7 +699,7 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Comentario</label>
                         <span class="valor-txt-detail">
-                        {{invDetail.comentario}}
+                        {{objInvDetail.comentario}}
                         </span>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { CommonModule } from '@angular/common'; // Importa CommonModule
+import { CommonModule, ViewportScroller } from '@angular/common'; // Importa CommonModule
 import { TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
 import { delay, finalize } from 'rxjs';
@@ -26,7 +26,8 @@ export default class InicioComponent {
 
   constructor(
     private router: Router,
-    private getInversionService: GetInversionService
+    private getInversionService: GetInversionService,
+    private viewportScroller: ViewportScroller
   ){}
 
   items: MenuItem[] | undefined;
@@ -39,7 +40,7 @@ export default class InicioComponent {
   isMore10: boolean = false;
 
   ngOnInit() {
-    
+    this.viewportScroller.scrollToPosition([0, 0]);
   }
 
   ngAfterViewInit() {

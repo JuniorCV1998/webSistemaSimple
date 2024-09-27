@@ -6,7 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import {PaginatorModule} from 'primeng/paginator';
 import { SoloLetrasDirective } from '../../../../components/directives/solo-letras.directive';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -49,7 +49,8 @@ export default class InversionesListComponent {
     constructor(
       private router: Router,
       private location: Location,
-      private getInversionService: GetInversionService
+      private getInversionService: GetInversionService,
+      private viewportScroller: ViewportScroller
     ){}
     
     ngOnInit(): void{
@@ -71,7 +72,7 @@ export default class InversionesListComponent {
         else {
           this.listaInv = [];
         }
-      } );
+      });
     }
 
     clearFilter(){
@@ -117,12 +118,22 @@ export default class InversionesListComponent {
       if(this.paginaActual != this.paginas) this.isNext = true;
       if(this.paginaActual == 1) this.isBack = false;
       this.renderizarTablaData();
+      this.scrollToBottom();
     }
     siguientePagina(){
       this.paginaActual += 1;
       if(this.paginaActual == this.paginas) this.isNext = false;
       if(this.paginaActual != 1) this.isBack = true;
       this.renderizarTablaData();
+      this.scrollToBottom();
+    }
+
+    scrollToBottom(): void {
+      // Esperar a que la vista se haya cargado completamente
+      setTimeout(() => {
+        const scrollHeight = document.documentElement.scrollHeight;
+        this.viewportScroller.scrollToPosition([0, scrollHeight]);
+      }, 0);
     }
 
     renderizarTablaData(){

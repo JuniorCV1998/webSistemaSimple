@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -9,6 +9,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CalendarModule  } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-inversion-detail',
@@ -25,31 +30,91 @@ export default class InversionDetailComponent {
   copy: boolean = false;
 
   //inversion detail
-  //-->invDetail: any = {}
   nroCuotas: number = 24;
   nroCuotasPendientes = 0;
 
   //Fecha a pagar
   date: Date = new Date();
 
+  //objeto detail
+  //objInvDetail: any = {};
+
   constructor(
     private route: ActivatedRoute,
     private messageService: MessageService,
-    private router: Router,
     private confirmationService: ConfirmationService,
-    private location: Location
+    private location: Location,
+    private getInversionService: GetInversionService,
+    public dialogService: DialogService,
+    private router: Router,
+    private viewportScroller: ViewportScroller
   ){}
   
   ngOnInit(): void {
+    this.viewportScroller.scrollToPosition([0, 0]);
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('idInversion');
       this.idInversion = id ? +id : null; // Convertir a número si existe
       console.log('ID de Inversión recibido:', this.idInversion);
     });
-
+    this.getInversionesDetail();
     this.calcularCuotasPendientes();
   }
+
+  getInversionesDetail(){
+    this.getInversionService.getInversionesDetail(this.idInversion===null?0:this.idInversion).pipe(
+            // Manejamos errores de respuesta HTTP con catchError
+            catchError((error) => {
+              console.error('Error capturado:', error);
+      
+              // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
+              if (error.status === 403) {
+                this.show('Acceso denegado', Constantes.MSG_GLOBAL); // Mensaje para 403
+              } else if (error.status === 500) {
+                this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para 500
+              } else {
+                this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
+              }
+              // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+              return of(null);
+            })
+    ).
+    subscribe((resp: any)=> { 
+      if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==1) {
+        this.objInvDetail = resp.data;
+      }
+      else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){
+        this.show(resp.message, Constantes.MSG_SIN_REGISTROS,);
+      }
+      else if (resp.codigo==Constantes.CODIGO_ERROR_403){
+        this.show(resp.descripcion, Constantes.MSG_GLOBAL);
+      }
+    }
+  
+  );}
+  
+  show(message: string, header: string) {
+    const ref = this.dialogService.open(MessagePopUpComponent, {
+      data: {
+        message: message
+      },
+      header: header,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,         
+      width: '90%'
+    });
+    
+    // Suscribirse al evento de cierre del diálogo
+    ref.onClose.subscribe((result: any) => {
+      if (result === 'aceptar') {
+        // Navegamos a la ruta deseada al aceptar
+        this.router.navigate(['/inicio']);
+      }
+    });
+}
+
 
   volver() {
     this.location.back();
@@ -61,61 +126,85 @@ export default class InversionDetailComponent {
   copyCredentials(){
     if(this.copy == false) this.copy = true;
 
-    this.copyText(this.invDetail.credenciales.correo, this.invDetail.credenciales.contrasena);
+    this.copyText(this.objInvDetail.credenciales.correo, this.objInvDetail.credenciales.contrasena);
   }
 
-  pagarCuota(nroCuota: number){
-    this.confirm(nroCuota);
+  pagarCuota(cuota: number){
+    if(!this.confirm(cuota)) return;
+
+    this.confirm(cuota).then((result) => {
+      if (result) {
+        const fecha = this.formatearFecha(this.date);
+        this.getInversionService.pagarCuota(this.idInversion===null?0:this.idInversion, cuota, fecha).pipe(
+          // Manejamos errores de respuesta HTTP con catchError
+          catchError((error) => {
+            console.error('Error capturado:', error);
+            this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
+            return of(null);
+          }))
+        .subscribe((resp: any)=> { 
+          if(resp.codigo==Constantes.STATUS_SUCCESS_RI) {
+            this.messageService.add({severity: 'success', summary: 'Pagar cuota', detail: resp.descripcion, life: 3000
+            });
+            this.getInversionesDetail();
+          }else{
+            this.messageService.add({severity: 'error', summary: 'Pagar cuota', detail: 'Error al pagar cuota.', life: 3000
+            })
+          }
+        });
+      }
+    });
   }
   
   calcularCuotasPendientes(){
-    const countNonNullFP = Object.keys(this.invDetail)
-    .filter(key => key.startsWith('fp') && this.invDetail[key] !== null).length;
+    const countNonNullFP = Object.keys(this.objInvDetail)
+    .filter(key => key.startsWith('fp') && this.objInvDetail[key] !== null).length;
     this.nroCuotasPendientes = this.nroCuotas - countNonNullFP;
   }
 
-  confirm(nroCuota: number) {
+  confirm(nroCuota: number): Promise<boolean> {
     this.date = new Date();
-    this.confirmationService.confirm({
-        header: 'Pagar cuota',
-        message: 'Confirme la fecha de pago de la cuota número '+nroCuota+'.',
-        accept: () => {
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Cuota actualizada', life: 3000 });
-            alert("La fecha es: " + this.date);
-        },
-        reject: () => {
-            /* this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 }); */
-        }
+    return new Promise((resolve) => {
+        this.confirmationService.confirm({
+            header: 'Pagar cuota',
+            message: 'Confirme la fecha de pago de la cuota número ' + nroCuota + '.',
+            accept: () => {
+                resolve(true);  // Resuelve la promesa con "true" si acepta
+            },
+            reject: () => {
+                resolve(false); // Resuelve la promesa con "false" si rechaza
+            }
+        });
     });
 }
 
-  invDetail: any = {
-    "idInversion": 30,
+objInvDetail: any = {
+    "idInversion": 0,
     "persona": {
         "idPersona": null,
-        "nombres": "Angeles maria",
-        "apellidoPaterno": "Quispe",
-        "apellidoMaterno": "Casas",
-        "celular": "909090999",
-        "direccion": "AAHH Las viñas de los milagros mz j lt 6, san vicente de cañete"
+        "nombres": "",
+        "apellidoPaterno": "",
+        "apellidoMaterno": "",
+        "celular": "",
+        "direccion": ""
     },
-    "monto": 5000.0,
-    "nroCuotas": 24,
-    "interes": 20.0,
-    "valorCuota": 250.0,
-    "fechaRegistro": "27 de Ago. 2024 - 16:08 p.m.",
-    "fechaInicio": "28/08/24 17:30",
-    "fechaFin": "28/09/24 17:30",
+    "monto": 0,
+    "nroCuotas": 0,
+    "interes": 0,
+    "valorCuota": 0,
+    "fechaRegistro": "",
+    "fechaInicio": "",
+    "fechaFin": "",
     "credenciales": {
-        "correo": "wuanyilo43@ssimple.com",
-        "contrasena": "43wuany070"
+        "correo": "",
+        "contrasena": ""
     },
-    "comentario": "Primera inversion con este cliente produccion.",
-    "fp1": "03/09/24 17:45",
-    "fp2": "03/09/24 17:45",
-    "fp3": "03/09/24 17:45",
-    "fp4": "03/09/24 17:45",
-    "fp5": "03/09/24 17:45",
+    "comentario": "",
+    "fp1": null,
+    "fp2": null,
+    "fp3": null,
+    "fp4": null,
+    "fp5": null,
     "fp6": null,
     "fp7": null,
     "fp8": null,
@@ -145,7 +234,7 @@ export default class InversionDetailComponent {
 
 async copyText(correo: string, contra: string): Promise<void> {
   try {
-    var nombreCompleto = this.invDetail.persona.nombres;
+    var nombreCompleto = this.objInvDetail.persona.nombres;
     var palabras = nombreCompleto.trim().split(' ');
     var texto = palabras[0]+", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
     await navigator.clipboard.writeText(texto);
@@ -166,6 +255,18 @@ async copyText(correo: string, contra: string): Promise<void> {
     });
     console.error('Error al copiar al portapapeles:', err);
   }
+}
+
+// Método para formatear la fecha
+private formatearFecha(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexado
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 

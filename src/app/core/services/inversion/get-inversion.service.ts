@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { appsettings } from '../../appsettings';
@@ -27,5 +27,25 @@ export class GetInversionService {
   }
 
 
+  getInversionesDetail(idInversion: number){
+    const params = new HttpParams()
+			.set('idInversion', Number(idInversion));
+    return this.http.get(this.baseUrl+this.baseComponent+'getInversionesDetail', {params});
+  }
+
+  pagarCuotsa(idInversion: number){
+    const params = new HttpParams()
+			.set('idInversion', Number(idInversion));
+    return this.http.get(this.baseUrl+this.baseComponent+'pagarCuota', {params});
+  }
+
+  pagarCuota(idInversion: number, nroCuota: number, fecha: string){
+    const params = new HttpParams()
+			.set('idInversion', Number(idInversion))
+			.set('nroCuota', Number(nroCuota))
+      .set('fecha', fecha.toString());
+      return this.http.post(this.baseUrl+this.baseComponent+'pagarCuota',null, {params});
+    
+   }
 
 }
