@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -16,9 +16,9 @@ import { CommonModule } from '@angular/common'; // Asegúrate de importar Common
 import { KnobModule } from 'primeng/knob';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { Constantes } from '../../../../core/constant/Constantes';
-import { catchError, of } from 'rxjs';
+import { catchError, delay, finalize, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
 
 
 @Component({
@@ -26,12 +26,14 @@ import { MessageService } from 'primeng/api';
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,InputOtpModule,FormsModule,
     NroCelularDirective,SoloLetrasDirective,CardModule,BreadcrumbModule,InputNumberModule,CalendarModule,
-    CommonModule,KnobModule
+    CommonModule,KnobModule,LoadingComponent
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'
 })
 export default class DatosInversionComponent {
+
+  @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
 
   valueMonto: number | null = null;
   selected: number = 0; // Ningún botón seleccionado inicialmente
@@ -39,14 +41,15 @@ export default class DatosInversionComponent {
   //Interes
   valueInteres: number = 20;
   valueInteresPerso: number | null = null;
-  interesPersonalizado = false;
+  statusPersonalizado = false;
 
   //Cuota
   nroCuota: number = 0;
   valorCuota: number = 0; // get simulacion
+  cuotaCargada: boolean = true;
 
   //fecha inicio y fin
-  establecerFecha: boolean = false;
+  statusFecha: boolean = false;
   date1: Date = new Date();
   date2: Date | null = null;
 
@@ -54,30 +57,51 @@ export default class DatosInversionComponent {
     private router: Router,
     private location: Location,
     private getInversionService: GetInversionService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ){}
 
   ngOnInit() {
-    this.getValidationValues();
+    const obj = sessionStorage.getItem('inversionNew');
+    if(obj) {
+      const objnew = JSON.parse(obj);
+      this.valueMonto = objnew.monto;
+      this.valueInteres = !objnew.statusPersonalizado?objnew.interes:20;
+      this.valueInteresPerso = objnew.statusPersonalizado?objnew.interesPerso:null;
+      this.statusPersonalizado = objnew.statusPersonalizado,
+      this.statusFecha = objnew.statusFecha;
+      if(objnew.statusFecha){
+        this.date1 = new Date(objnew.fechaInicio);
+      }
+      this.selectButton(objnew.selected, objnew.nroCuotas); //actualiza cuota
+    }
+  }  
 
-}
+  ngAfterViewInit(): void {
+    this.getValidationValues();
+  }
 
 validarDatosInversion(){
+  if(!this.isFormValid()) return;
   const request = {
     monto: this.valueMonto,
     nroCuotas: this.nroCuota,
-    interes: this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso,
-    fechaInicio: this.establecerFecha==false?null:this.getFormattedDate(this.date1),
-    fechaFin: this.establecerFecha==false?null:this.getFormattedDate(this.date2)
+    interes: !this.statusPersonalizado?this.valueInteres:null,
+    interesPerso: this.statusPersonalizado?this.valueInteresPerso:null,
+    statusPersonalizado: this.statusPersonalizado,
+    fechaInicio: this.statusFecha==false?null:this.getFormattedDate(this.date1),
+    fechaFin: this.statusFecha==false?null:this.getFormattedDate(this.date2),
+    statusFecha: this.statusFecha,
+    selected: this.selected
   }
-
-  console.log("datos: "+JSON.stringify(request))
-
-  //this.router.navigate(['registrar/datoscliente']);
+  //console.log("objeto: "+ JSON.stringify(request));
+  sessionStorage.setItem('inversionNew',JSON.stringify(request));
+  this.router.navigate(['registrar/datoscliente']);
 }
 
 getValidationValues() {
-  this.getInversionService.getValidationValues().pipe(
+  this.loadingComponent.show();
+    this.getInversionService.getValidationValues().pipe(
+    finalize(() => this.loadingComponent.hide()),
     catchError((error) => {
       this.handleCuotaSelection();
       return of(null); 
@@ -91,6 +115,7 @@ getValidationValues() {
 }
 
 private handleCuotaSelection() {
+  if(this.selected != 0) return;
   const cuota24 = this.objValidationValues?.cuotas?.find((cuota: any) => cuota.valor === 24);
   if (cuota24) {
     this.nroCuota = cuota24.valor;
@@ -103,12 +128,15 @@ volver() {
 }
 
 simularCuota(){
+  if(!this.isFormValid()) return;
   const request = {
     monto: this.valueMonto,
     cuotas: this.nroCuota,
     interes: this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso
   }
+  this.cuotaCargada = false;
   this.getInversionService.sendSimulation(request).pipe(
+    delay(3000), finalize(() => this.cuotaCargada = true),
     catchError((error) => {
       this.messageService.add({severity: 'error', summary: 'SE', detail: 'Error al simular cuota.', life: 3000});
       this.valorCuota = 0;
@@ -122,12 +150,12 @@ simularCuota(){
 }
 
 clicFechaInicioFin(){
-  this.establecerFecha = !this.establecerFecha;
+  //this.statusFecha = !this.statusFecha;
   this.updateDate2();
 }
 
   clicIntPersonalizado(){
-    this.interesPersonalizado = !this.interesPersonalizado;
+    //this.interesPersonalizado = !this.interesPersonalizado;
     this.valueInteresPerso = null;
   }
 

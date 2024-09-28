@@ -43,16 +43,16 @@
             <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3">
                 <div class="flex flex-column w-full">
                     <div class="card flex flex-column align-items-center w-full">
-                        <p-knob [(ngModel)]="valueInteres" size="100" readonly="true" [disabled]="interesPersonalizado"/>
+                        <p-knob [(ngModel)]="valueInteres" size="100" readonly="true" [disabled]="statusPersonalizado"/>
                         <div class="flex gap-2">
                             <p-button 
                                 icon="pi pi-plus" 
                                 (onClick)="valueInteres = valueInteres+5" 
-                                [disabled]="valueInteres >= 100 || interesPersonalizado"/>
+                                [disabled]="valueInteres >= 100 || statusPersonalizado"/>
                             <p-button 
                                 icon="pi pi-minus" 
                                 (onClick)="valueInteres = valueInteres-5" 
-                                [disabled]="valueInteres <= 5 || interesPersonalizado" />
+                                [disabled]="valueInteres <= 5 || statusPersonalizado" />
                         </div>
                     </div>
                 </div>
@@ -60,9 +60,10 @@
                 <div class="flex flex-column w-10"  style="margin-top: auto;">
                     <div class="flex align-items-center gap-1 mb-4">
                         <p-checkbox 
-                            value="New York" 
                             inputId="ny" 
-                        (click)="clicIntPersonalizado()"/>
+                            [(ngModel)]="statusPersonalizado" 
+                            [binary]="true" 
+                            (onChange)="clicIntPersonalizado()"/>
                         <label for="ny">Personalizado</label>
                     </div>
                         <p-inputNumber
@@ -72,7 +73,7 @@
                         mode="decimal" autocomplete="off" 
                         placeholder="Ingrese interés..." class="mb-3 w-full"
                         [min]="objValidationValues.interesLimit.interesMin" [max]="objValidationValues.interesLimit.interesMax"
-                        [disabled]="!interesPersonalizado"
+                        [disabled]="!statusPersonalizado"
                         />
                         <span *ngIf="valueInteresPerso !== null && valueInteresPerso < objValidationValues.interesLimit.interesMin" class="input-fail">El interés no puede ser menor a S/ {{objValidationValues.interesLimit.interesMin | number:'1.2-2'}}.</span>
                         <span *ngIf="valueInteresPerso !== null && valueInteresPerso > objValidationValues.interesLimit.interesMax" class="input-fail">El interés no puede ser mayor a S/ {{objValidationValues.interesLimit.interesMax | number:'1.0-0'}}.</span>
@@ -102,7 +103,10 @@
                             <span class="text-center mb-1 text-500 font-medium">Valor de la cuota</span>
                             <div class="flex flex-column justify-content-between align-items-center w-full">
                                 <span class="w-8">S/</span>
-                                <span class="text-4xl font-medium" style="word-break: break-all;">{{ valorCuota | number:'1.2-2' }}</span>
+                                <span class="text-4xl font-medium" style="word-break: break-all;">
+                                    <div *ngIf="cuotaCargada">{{ valorCuota | number:'1.2-2' }}</div>
+                                    <i *ngIf="!cuotaCargada" class="pi pi-spinner pi-spin" style="color: var(--gray-400); font-size: 1.8rem;"></i>
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -113,12 +117,13 @@
             <div class="flex flex-column gap-2 justify-content-center">
                 <div class="flex align-items-center gap-1 mb-3">
                     <p-checkbox 
-                        value="New York" 
+                        [(ngModel)]="statusFecha" 
+                        [binary]="true" 
                         inputId="fif" 
-                    (click)="clicFechaInicioFin()"/>
+                        (onChange)="clicFechaInicioFin()"/>
                     <label for="fif">Establecer fecha inicio y fin</label>
                 </div>
-                <div class="flex flex-column align-items-center gap-1 mb-4" *ngIf="establecerFecha">
+                <div class="flex flex-column align-items-center gap-1 mb-4" *ngIf="statusFecha">
                     <div class="flex flex-column w-full mb-2">
                         <label for="fecha1">Fecha inicio</label>
                         <p-calendar 
@@ -158,4 +163,5 @@
         
         </div>
     </div>
+    <app-loading></app-loading>
 </div>

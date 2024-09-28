@@ -41,6 +41,7 @@ export default class InicioComponent {
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
+    this.clearSessionStorageExcept(['token', '']);
   }
 
   ngAfterViewInit() {
@@ -49,7 +50,7 @@ export default class InicioComponent {
 
   getAmount(){
     this.montoCargado = false;
-    this.getInversionService.getAmount().pipe(delay(500),finalize(() => this.montoCargado = true)).
+    this.getInversionService.getAmount().pipe(delay(300),finalize(() => this.montoCargado = true)).
     subscribe((resp: any)=> {
       if(resp.codigo==Constantes.STATUS_SUCCESS_RI) this.monto = resp.monto;
       else {
@@ -61,7 +62,7 @@ export default class InicioComponent {
   getInversionesLast(){
     this.skeletonShow = true;
 
-    this.getInversionService.getInversionesLast().pipe(delay(500),finalize(() => this.skeletonShow = false)).
+    this.getInversionService.getInversionesLast().pipe(delay(300),finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
         //this.ultimasInversiones = resp.data.slice(0, 10);
@@ -85,5 +86,24 @@ export default class InicioComponent {
     this.router.navigate(['/listacompleta']);
   }
 
+  clearSessionStorageExcept(keysToKeep: string[]) {
+    // Guardar las claves y valores que no se deben eliminar
+    const valuesToKeep: { [key: string]: string | null } = {};
+  
+    keysToKeep.forEach((key) => {
+      const value = sessionStorage.getItem(key);
+      if (value !== null) {
+        valuesToKeep[key] = value;
+      }
+    });
+  
+    // Limpiar todo el sessionStorage
+    sessionStorage.clear();
+  
+    // Restaurar los valores que queremos conservar
+    Object.keys(valuesToKeep).forEach((key) => {
+      sessionStorage.setItem(key, valuesToKeep[key]!);
+    });
+  }
 
 }

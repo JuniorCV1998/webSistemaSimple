@@ -114,17 +114,23 @@ export class NavegationComponent {
   }
 
   volver() {
-    if(this.irInicio || !this.fromList) this.router.navigate(['/inicio']);
+    console.log("inicio: "+this.irInicio);
+    console.log("fromlist: "+this.fromList);
+    if(this.irInicio || (!this.fromList && this.fromList != null)) {
+      console.log("Entro :(")
+      this.router.navigate(['/inicio']);
+    }
     else this.location.back();
   }
 
-  fromList: boolean = false;
+  fromList: boolean | null = null;
   definirFrom(){
     // Recuperar el parámetro de consulta `from`
     this.route.queryParamMap.subscribe(params => {
       const fromView = params.get('from');
       if(fromView == 'list') this.fromList = true;
-      else this.fromList = false;
+      else if(fromView == 'register') this.fromList = false;
+      else this.fromList = null;
     });
   }
 

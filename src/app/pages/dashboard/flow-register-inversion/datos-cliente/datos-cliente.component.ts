@@ -48,7 +48,13 @@ export default class DatosClienteComponent {
   constructor(
     private router: Router,
     private location: Location
-){}
+){
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state) {
+      const receivedData = navigation.extras.state['data'];
+      console.log(receivedData); // Aquí tendrás los datos enviados
+    }
+}
 
   ngOnInit(){
     this.obtenerListaClientes();
