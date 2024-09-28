@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { appsettings } from '../../appsettings';
@@ -45,7 +45,14 @@ export class GetInversionService {
 			.set('nroCuota', Number(nroCuota))
       .set('fecha', fecha.toString());
       return this.http.post(this.baseUrl+this.baseComponent+'pagarCuota',null, {params});
-    
+   }
+
+   getValidationValues(){
+    return this.http.get(this.baseUrl+this.baseComponent+'getValidationValues');
+  }
+
+  sendSimulation(obj: any){
+      return this.http.post(this.baseUrl+this.baseComponent+'sendSimulation',obj);
    }
 
 }

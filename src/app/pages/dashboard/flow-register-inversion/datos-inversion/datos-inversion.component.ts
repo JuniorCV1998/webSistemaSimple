@@ -15,6 +15,10 @@ import { CalendarModule  } from 'primeng/calendar';
 import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 import { KnobModule } from 'primeng/knob';
 import { Location } from '@angular/common';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { catchError, of } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -29,33 +33,69 @@ import { Location } from '@angular/common';
 })
 export default class DatosInversionComponent {
 
-  value3: number = 2351.35;
+  valueMonto: number | null = null;
   selected: number = 0; // Ningún botón seleccionado inicialmente
 
   //Interes
-  value: number = 20;
+  valueInteres: number = 20;
+  valueInteresPerso: number | null = null;
   interesPersonalizado = false;
 
   //Cuota
-  valorCuota: number = 0;
+  nroCuota: number = 0;
+  valorCuota: number = 0; // get simulacion
 
   //fecha inicio y fin
   establecerFecha: boolean = false;
   date1: Date = new Date();
-  date2: Date | undefined;
+  date2: Date | null = null;
 
   constructor(
     private router: Router,
-    private location: Location
+    private location: Location,
+    private getInversionService: GetInversionService,
+    private messageService: MessageService
   ){}
 
   ngOnInit() {
-
+    this.getValidationValues();
 
 }
 
 validarDatosInversion(){
-  this.router.navigate(['registrar/datoscliente']);
+  const request = {
+    monto: this.valueMonto,
+    nroCuotas: this.nroCuota,
+    interes: this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso,
+    fechaInicio: this.establecerFecha==false?null:this.getFormattedDate(this.date1),
+    fechaFin: this.establecerFecha==false?null:this.getFormattedDate(this.date2)
+  }
+
+  console.log("datos: "+JSON.stringify(request))
+
+  //this.router.navigate(['registrar/datoscliente']);
+}
+
+getValidationValues() {
+  this.getInversionService.getValidationValues().pipe(
+    catchError((error) => {
+      this.handleCuotaSelection();
+      return of(null); 
+    })
+  ).subscribe((resp: any) => {
+    if (resp) {
+      this.objValidationValues = resp;
+      this.handleCuotaSelection();
+    }
+  });
+}
+
+private handleCuotaSelection() {
+  const cuota24 = this.objValidationValues?.cuotas?.find((cuota: any) => cuota.valor === 24);
+  if (cuota24) {
+    this.nroCuota = cuota24.valor;
+    this.selected = this.objValidationValues.cuotas.indexOf(cuota24) + 1; // Asegúrate de que el índice sea correcto
+  }
 }
 
 volver() {
@@ -63,21 +103,99 @@ volver() {
 }
 
 simularCuota(){
-  this.valorCuota = 60.00;
+  const request = {
+    monto: this.valueMonto,
+    cuotas: this.nroCuota,
+    interes: this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso
+  }
+  this.getInversionService.sendSimulation(request).pipe(
+    catchError((error) => {
+      this.messageService.add({severity: 'error', summary: 'SE', detail: 'Error al simular cuota.', life: 3000});
+      this.valorCuota = 0;
+      return of(null); 
+    })
+  ).subscribe((resp: any) => {
+    if (resp) {
+      this.valorCuota = resp.valorCuota;
+    }
+  });
 }
 
 clicFechaInicioFin(){
   this.establecerFecha = !this.establecerFecha;
+  this.updateDate2();
 }
 
   clicIntPersonalizado(){
     this.interesPersonalizado = !this.interesPersonalizado;
+    this.valueInteresPerso = null;
   }
 
-  selectButton(buttonNumber: number): void {
+  selectButton(buttonNumber: number, cuota:number): void {
     this.selected = buttonNumber; // Actualiza el botón seleccionado
+    this.nroCuota = cuota;
+    this.updateDate2();
   }
 
+  updateDate2() {
+    if (this.date1) {
+      const newDate = new Date(this.date1);
+      newDate.setDate(newDate.getDate() + this.nroCuota);
+      this.date2 = newDate;
+    } else {
+      this.date2 = null; // Limpiar date2 si date1 no está definido
+    }
+  }
 
+      // Método para verificar si todos los campos obligatorios están llenos
+      isFormValid(): boolean {
+        return (
+          this.valueMonto !== null && this.valueMonto !== 0 &&
+          this.nroCuota !== null && this.nroCuota !== 0 &&
+          (this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso) !== null &&
+          (this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso) !== 0 
+        );
+    }
+
+    getFormattedDate(date: any): string | null {
+      if (!date) {
+        return null; // Retorna null si la fecha es null
+    }
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque los meses son 0-indexados
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+objValidationValues: any = {
+  "montoLimit": {
+      "codMonto": "MON3",
+      "montoMin": 1,
+      "montoMax": 10000
+  },
+  "interesLimit": {
+      "codInteres": "INT2",
+      "interesMin": 1,
+      "interesMax": 2000
+  },
+  "cuotas": [
+      {
+          "codCuota": "CUO1",
+          "valor": 7
+      },
+      {
+          "codCuota": "CUO2",
+          "valor": 24
+      },
+      {
+          "codCuota": "CUO3",
+          "valor": 30
+      }
+  ]
+}
 
 }

@@ -8,24 +8,34 @@
         
         <div>
             <!-- Monto a invertir -->
-             <div class="classInputMonto">
+             <div class="classInputMonto mb-3">
                 <label for="monto" class="block text-900 font-medium mb-2">Monto</label>
                 <p-inputNumber
+                [(ngModel)]="valueMonto"
                  id="monto" 
                  [minFractionDigits]="2" [maxFractionDigits]="2"  
                  mode="decimal" autocomplete="off" 
-                 placeholder="Ingrese monto..." class="w-full mb-3"
-                 [min]="1" [max]="100000"
+                 placeholder="Ingrese monto..." class="w-full mb-1"
+                 [min]="objValidationValues.montoLimit.montoMin" [max]="objValidationValues.montoLimit.montoMax"
                  />
+                <span *ngIf="valueMonto !== null && valueMonto < objValidationValues.montoLimit.montoMin" class="input-fail">El monto no puede ser menor a S/ {{objValidationValues.montoLimit.montoMin | number:'1.2-2'}}.</span>
+                <span *ngIf="valueMonto !== null && valueMonto > objValidationValues.montoLimit.montoMax" class="input-fail">El monto no puede ser mayor a S/ {{objValidationValues.montoLimit.montoMax | number:'1.0-0'}}.</span>
              </div>
             
             
              <!-- cantidad de cuotas -->
              <label for="cuotas" class="block text-900 font-medium mb-2">Nro. de cuotas</label>
              <div class="button-container mb-3">
-                <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==1}" (click)="selectButton(1)">07</button>
+                <!-- <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==1}" (click)="selectButton(1)">07</button>
                 <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==2}" (click)="selectButton(2)">24</button>
-                <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==3}" (click)="selectButton(3)">30</button>
+                <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==3}" (click)="selectButton(3)">30</button> -->
+                <button *ngFor="let cuota of objValidationValues.cuotas; let i = index" 
+                    pButton pRipple 
+                    class="p-button-rounded" 
+                    [ngClass]="{'active-button': selected == i + 1}" 
+                    (click)="selectButton(i + 1, cuota.valor)">
+                    {{ ('0' + cuota.valor).slice(-2) }}
+                </button>
             </div>
 
             <!-- valor de interes a aplicar -->
@@ -33,16 +43,16 @@
             <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3">
                 <div class="flex flex-column w-full">
                     <div class="card flex flex-column align-items-center w-full">
-                        <p-knob [(ngModel)]="value" size="100" readonly="true" [disabled]="interesPersonalizado"/>
+                        <p-knob [(ngModel)]="valueInteres" size="100" readonly="true" [disabled]="interesPersonalizado"/>
                         <div class="flex gap-2">
                             <p-button 
                                 icon="pi pi-plus" 
-                                (onClick)="value = value+5" 
-                                [disabled]="value >= 100 || interesPersonalizado"/>
+                                (onClick)="valueInteres = valueInteres+5" 
+                                [disabled]="valueInteres >= 100 || interesPersonalizado"/>
                             <p-button 
                                 icon="pi pi-minus" 
-                                (onClick)="value = value-5" 
-                                [disabled]="value <= 5 || interesPersonalizado" />
+                                (onClick)="valueInteres = valueInteres-5" 
+                                [disabled]="valueInteres <= 5 || interesPersonalizado" />
                         </div>
                     </div>
                 </div>
@@ -56,13 +66,16 @@
                         <label for="ny">Personalizado</label>
                     </div>
                         <p-inputNumber
+                        [(ngModel)]="valueInteresPerso"
                         id="monto" 
                         [maxFractionDigits]="2"  
                         mode="decimal" autocomplete="off" 
                         placeholder="Ingrese interés..." class="mb-3 w-full"
-                        [min]="5" [max]="200"
+                        [min]="objValidationValues.interesLimit.interesMin" [max]="objValidationValues.interesLimit.interesMax"
                         [disabled]="!interesPersonalizado"
                         />
+                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso < objValidationValues.interesLimit.interesMin" class="input-fail">El interés no puede ser menor a S/ {{objValidationValues.interesLimit.interesMin | number:'1.2-2'}}.</span>
+                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso > objValidationValues.interesLimit.interesMax" class="input-fail">El interés no puede ser mayor a S/ {{objValidationValues.interesLimit.interesMax | number:'1.0-0'}}.</span>
                 </div>
             </div>
 
@@ -73,7 +86,11 @@
 
                 <div class="flex flex-column w-6">
                     <div class="card flex flex-column align-items-center w-full">
-                        <div class="button-press" (click)="simularCuota()">
+                        <div class="button-press" (click)="simularCuota()"
+                        [ngClass]="{
+                            'button-press-disabled': !isFormValid()
+                          }"
+                        >
                             <span>SIMULAR</span>
                         </div>
                     </div>
@@ -94,7 +111,7 @@
 
             <!-- Fecha inicio y fin -->
             <div class="flex flex-column gap-2 justify-content-center">
-                <div class="flex align-items-center gap-1 mb-2">
+                <div class="flex align-items-center gap-1 mb-3">
                     <p-checkbox 
                         value="New York" 
                         inputId="fif" 
@@ -111,7 +128,9 @@
                         [touchUI]="true"
                         [dateFormat]="'dd/mm/yy'"
                         [showTime]="true"
-                        inputId="fecha1" />
+                        inputId="fecha1" 
+                        (ngModelChange)="updateDate2()"
+                        />
                     </div>
                     <div class="flex flex-column w-full">
                         <label for="fecha2">Fecha fin</label>
@@ -122,13 +141,20 @@
                         [touchUI]="true"
                         [dateFormat]="'dd/mm/yy'"
                         [showTime]="true"
-                        inputId="fecha2" />
+                        inputId="fecha2" 
+                        [disabled]="true"
+                        />
                     </div>
                     
                 </div>
             </div>
              
-            <button pButton pRipple label="Siguiente" (click)="validarDatosInversion()" class="w-full"></button>
+            <button
+            [disabled]="!isFormValid()"
+            [ngClass]="{
+                'btn-disabled': !isFormValid()
+              }"
+            pButton pRipple label="Siguiente" (click)="validarDatosInversion()" class="w-full"></button>
         
         </div>
     </div>
