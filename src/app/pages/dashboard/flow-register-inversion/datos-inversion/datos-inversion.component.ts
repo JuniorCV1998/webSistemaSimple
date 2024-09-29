@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common'; // Asegúrate de importar Common
 import { KnobModule } from 'primeng/knob';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, delay, finalize, of } from 'rxjs';
+import { catchError, delay, finalize, lastValueFrom, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 
@@ -61,7 +61,7 @@ export default class DatosInversionComponent {
   ){}
 
   ngOnInit() {
-    const obj = sessionStorage.getItem('inversionNew');
+    const obj = sessionStorage.getItem('objInversion');
     if(obj) {
       const objnew = JSON.parse(obj);
       this.valueMonto = objnew.monto;
@@ -80,7 +80,8 @@ export default class DatosInversionComponent {
     this.getValidationValues();
   }
 
-validarDatosInversion(){
+  async validarDatosInversion(){
+  await this.simularCuota(); // Esperar a que la simulación se complete
   if(!this.isFormValid()) return;
   const request = {
     monto: this.valueMonto,
@@ -91,10 +92,10 @@ validarDatosInversion(){
     fechaInicio: this.statusFecha==false?null:this.getFormattedDate(this.date1),
     fechaFin: this.statusFecha==false?null:this.getFormattedDate(this.date2),
     statusFecha: this.statusFecha,
-    selected: this.selected
+    selected: this.selected,
+    valorCuota: this.valorCuota
   }
-  //console.log("objeto: "+ JSON.stringify(request));
-  sessionStorage.setItem('inversionNew',JSON.stringify(request));
+  sessionStorage.setItem('objInversion',JSON.stringify(request));
   this.router.navigate(['registrar/datoscliente']);
 }
 
@@ -127,26 +128,33 @@ volver() {
   this.location.back();
 }
 
-simularCuota(){
-  if(!this.isFormValid()) return;
+async simularCuota(): Promise<void> {
+  if (!this.isFormValid()) return;
   const request = {
-    monto: this.valueMonto,
-    cuotas: this.nroCuota,
-    interes: this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso
-  }
+      monto: this.valueMonto,
+      cuotas: this.nroCuota,
+      interes: this.valueInteresPerso == null ? this.valueInteres : this.valueInteresPerso,
+  };
   this.cuotaCargada = false;
-  this.getInversionService.sendSimulation(request).pipe(
-    delay(3000), finalize(() => this.cuotaCargada = true),
-    catchError((error) => {
-      this.messageService.add({severity: 'error', summary: 'SE', detail: 'Error al simular cuota.', life: 3000});
-      this.valorCuota = 0;
-      return of(null); 
-    })
-  ).subscribe((resp: any) => {
-    if (resp) {
-      this.valorCuota = resp.valorCuota;
-    }
-  });
+  try {
+      // Convertimos el observable a promesa usando lastValueFrom
+      const resp: any = await lastValueFrom(
+          this.getInversionService.sendSimulation(request).pipe(
+              finalize(() => this.cuotaCargada = true),
+              catchError((error) => {
+                  this.messageService.add({ severity: 'error', summary: 'SE', detail: 'Error al simular cuota.', life: 3000 });
+                  this.valorCuota = 0;
+                  return of(null); // Asegúrate de que aquí devuelves un observable
+              })
+          )
+      );
+      if (resp) {
+          this.valorCuota = resp.valorCuota; // Asignar el valor de cuota desde la respuesta
+      }
+  } catch (error) {
+      console.error("Error en la simulación de cuota:", error);
+      this.valorCuota = 0; // Manejar el error y restablecer valorCuota si es necesario
+  }
 }
 
 clicFechaInicioFin(){

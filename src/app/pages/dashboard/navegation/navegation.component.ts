@@ -114,10 +114,7 @@ export class NavegationComponent {
   }
 
   volver() {
-    console.log("inicio: "+this.irInicio);
-    console.log("fromlist: "+this.fromList);
     if(this.irInicio || (!this.fromList && this.fromList != null)) {
-      console.log("Entro :(")
       this.router.navigate(['/inicio']);
     }
     else this.location.back();

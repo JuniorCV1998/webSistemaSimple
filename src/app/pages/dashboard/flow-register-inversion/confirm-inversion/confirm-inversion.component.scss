@@ -3,8 +3,12 @@
     border-left: none;
     border-right: none;
     border-bottom: 1px solid var(--gray-400);
+    height: 100%;
 }
 
 div{
     max-width: 550px;
+}
+.fechas{
+    font-size: 13px;
 }

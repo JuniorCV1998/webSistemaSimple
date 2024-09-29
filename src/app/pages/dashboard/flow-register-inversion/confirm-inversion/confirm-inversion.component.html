@@ -11,21 +11,21 @@
         <div>
             <label for="nombres" class="block text-900 font-medium mb-2">Nombres</label>
             <div  id="nombres" pInputText class="w-full mb-3 dataConfirm">
-                {{objClient.persona.nombres +' '+ objClient.persona.apellidoPaterno+' '+ objClient.persona.apellidoMaterno}}
+                {{objNuevaInv.nombres +' '+ objNuevaInv.apellidoPaterno+' '+ objNuevaInv.apellidoMaterno}}
             </div>
              
-            <div class="flex flex-row gap-2 align-items-top justify-content-center">
+            <div class="flex flex-row gap-2 align-items-top justify-content-center mb-3">
                 <div class="flex flex-column w-full">
                     <label for="celular" class="block text-900 font-medium mb-2">Celular</label>
                     <div id="celular" pInputText class="w-full mb-3 dataConfirm">
-                        {{objClient.persona.celular}}
+                        {{objNuevaInv.celular}}
                     </div>
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="direccion" class="block text-900 font-medium mb-2">Dirección</label>
                     <div id="direccion" pInputText class="w-full mb-3 dataConfirm">
-                    {{objClient.persona.direccion}}
+                    {{objNuevaInv.direccion}}
                     </div>
                 </div>
             </div>
@@ -34,14 +34,14 @@
                 <div class="flex flex-column w-full">
                     <label for="montoi" class="block text-900 font-medium mb-2">Monto invertido</label>
                     <div id="montoi" pInputText class="w-full mb-3 dataConfirm">
-                        {{objClient.monto | number:'1.2-2' }}
+                        {{objNuevaInv.monto | number:'1.2-2' }}
                     </div>
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="cuotas" class="block text-900 font-medium mb-2">Número de cuotas</label>
                     <div id="cuotas" pInputText class="w-full mb-3 dataConfirm">
-                    {{objClient.cuotas}}
+                    {{objNuevaInv.nroCuotas}}
                     </div>
                 </div>
             </div>
@@ -50,14 +50,14 @@
                 <div class="flex flex-column w-full">
                     <label for="interes" class="block text-900 font-medium mb-2">Interes</label>
                     <div id="interes" pInputText class="w-full mb-3 dataConfirm">
-                        {{objClient.interes | number:'1.0-2' }} %
+                        {{objNuevaInv.interes | number:'1.0-2' }} %
                     </div>
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="valorCuota" class="block text-900 font-medium mb-2">valor de cuota</label>
                     <div id="valorCuota" pInputText class="w-full mb-3 dataConfirm">
-                    {{objClient.valorCuota | number:'1.2-2'}}
+                    {{objNuevaInv.valorCuota | number:'1.2-2'}}
                     </div>
                 </div>
             </div>
@@ -65,22 +65,22 @@
             <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
                 <div class="flex flex-column w-full">
                     <label for="fechai" class="block text-900 font-medium mb-2">Fecha inicio</label>
-                    <div id="fechai" pInputText class="w-full mb-3 dataConfirm">
-                        {{objClient.fechaFin}}
+                    <div id="fechai" pInputText class="w-full mb-3 dataConfirm fechas">
+                        {{objNuevaInv.fechaInicio | date: 'dd/MM/yy HH:mm'}}
                     </div>
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="fechaf" class="block text-900 font-medium mb-2">Fecha fin</label>
-                    <div id="fechaf" pInputText class="w-full mb-3 dataConfirm">
-                    {{objClient.fechaInicio}}
+                    <div id="fechaf" pInputText class="w-full mb-3 dataConfirm fechas">
+                    {{objNuevaInv.fechaFin | date: 'dd/MM/yy HH:mm'}}
                     </div>
                 </div>
             </div>
 
             <label for="comentario" class="block text-900 font-medium mb-2">Comentario</label>
             <div  id="comentario" pInputText class="w-full mb-3 dataConfirm mb-7">
-                {{objClient.comentario}}
+                {{objNuevaInv.comentario}}
             </div>
         </div>
 

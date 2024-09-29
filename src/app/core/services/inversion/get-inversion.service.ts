@@ -10,7 +10,7 @@ export class GetInversionService {
 
   private http = inject(HttpClient);
   private baseUrl: string = appsettings.API_SERVER;
-  private baseComponent: string = appsettings.API_COMPONENTE;
+  private baseComponent: string = appsettings.API_COMP_INVERSION;
 
   constructor() { }
 
@@ -47,12 +47,13 @@ export class GetInversionService {
       return this.http.post(this.baseUrl+this.baseComponent+'pagarCuota',null, {params});
    }
 
-   getValidationValues(){
+  getValidationValues(){
     return this.http.get(this.baseUrl+this.baseComponent+'getValidationValues');
   }
 
   sendSimulation(obj: any){
       return this.http.post(this.baseUrl+this.baseComponent+'sendSimulation',obj);
    }
+
 
 }
