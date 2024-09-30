@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -7,21 +7,35 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Location } from '@angular/common';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { catchError, delay, finalize, of } from 'rxjs';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-confirm-inversion',
   standalone: true,
-  imports: [InputTextareaModule,FloatLabelModule,InputTextModule,FormsModule,CommonModule,ButtonModule],
+  imports: [InputTextareaModule,FloatLabelModule,InputTextModule,FormsModule,CommonModule,ButtonModule,
+    ToastModule,LoadingComponent],
   templateUrl: './confirm-inversion.component.html',
   styleUrl: './confirm-inversion.component.scss'
 })
 export default class ConfirmInversionComponent {
 
+  @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+
   objNuevaInv: any = {};
 
   constructor(
     private router: Router,
-    private location: Location
+    private location: Location,
+    private messageService: MessageService,
+    private getInversionService: GetInversionService,
+    private dialogService: DialogService
   ){
     // recuperando objeto nueva inversion
     const obj = sessionStorage.getItem('objNuevaInv');
@@ -30,65 +44,90 @@ export default class ConfirmInversionComponent {
     }
   }
 
-  ngOnInit(): void{
-    console.log("objeto recuperado: "+JSON.stringify(this.objNuevaInv));
+  ngAfterViewInit(): void{
+    this.mostrarMensaje();
   }
 
-
-/*   objClient: any = {
-    "persona": {
-        "nombres": "Jose Octavio",
-        "apellidoPaterno": "Cerron",
-        "apellidoMaterno": "Vicente",
-        "celular": "921 754 924",
-        "direccion": "AAHH. Las viñas de los milagros",
-        "fullName": "",
-        "comentario":""
-    },
-    "monto": 1200.00,
-    "cuotas": 30,
-    "interes": 20,
-    "valorCuota": 60.00,
-    "fechaInicio": "03/09/24 17:46",
-    "fechaFin": "03/10/24 17:46",
-    "comentario": "Esta dejando de garantia ciertas cosas de valor.Esta dejando de garantia ciertas cosas de valor.Esta dejando de garantia ciertas cosas de valor."
-}; */
-
 registerInvTrue(){
-  /* const objNuevaInv = {
-    fkUsuario : this.statusClient==1?this.objClient?.idUsuario:null,
+  const objNuevaInv = {
+    fkUsuario : this.objNuevaInv.fkUsuario,
     // objeto inversion
-    monto: this.objInversion.monto,
-    nroCuotas: this.objInversion.nroCuotas,
-    interes: this.objInversion.interes,
-    fechaInicio: this.objInversion.fechaInicio,
-    fechaFin: this.objInversion.fechaFin,
+    monto: this.objNuevaInv.monto,
+    nroCuotas: this.objNuevaInv.nroCuotas,
+    interes: this.objNuevaInv.interes,
+    fechaInicio: this.objNuevaInv.fechaInicio,
+    fechaFin: this.objNuevaInv.fechaFin,
     //comentario
-    comentario: this.txtComentario.trim(),
+    comentario: this.objNuevaInv.comentario,
     // objeto cliente
-    nombres: this.statusClient==2?this.objClient.persona.nombres.trim():null,
-    apellidoPaterno: this.statusClient==2?this.objClient.persona.apellidoPaterno.trim():null,
-    apellidoMaterno: this.statusClient==2?this.objClient.persona.apellidoMaterno.trim():null,
-    celular: this.statusClient==2?this.formatCelular(this.objClient.persona.celular.trim()):null,
-    direccion: this.statusClient==2?this.objClient.persona.direccion.trim():null,
+    nombres: this.objNuevaInv.fkUsuario==null?this.objNuevaInv.nombres:null,
+    apellidoPaterno: this.objNuevaInv.fkUsuario==null?this.objNuevaInv.apellidoPaterno:null,
+    apellidoMaterno: this.objNuevaInv.fkUsuario==null?this.objNuevaInv.apellidoMaterno:null,
+    celular: this.objNuevaInv.fkUsuario==null?this.objNuevaInv.celular:null,
+    direccion: this.objNuevaInv.fkUsuario==null?this.objNuevaInv.direccion:null,
     // validate
-    validado: false
-} */
-  //this.router.navigate(['registrar/inversiondetalle'])
+    validado: true
+  }
+  console.log("obj registrar: "+JSON.stringify(objNuevaInv));
+  this.serviceTrueRegisterInversion(objNuevaInv);
+    
 }
 
-// Método para formatear la fecha
-formatearFecha(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexado
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  //return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  return `${day}-${month}-${year} ${hours}:${minutes}`;
+serviceTrueRegisterInversion(requestBody: any){
+  this.loadingComponent.show();
+  this.getInversionService.registerInversion(requestBody).pipe(
+    delay(3000),finalize(() => this.loadingComponent.hide()),
+    catchError((error) => {
+      if (error.status === 400) {
+        this.show(error.error.descripcion, Constantes.MSG_H_400); // Mensaje para 400
+      } else {
+        this.show(Constantes.MSG_H_500, Constantes.MSG_500); // Mensaje para otros errores
+      }
+      // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+      return of(null);
+    })
+  ).subscribe((resp: any) => {
+    if (resp) {
+      console.log("respuesta: "+JSON.stringify(resp))
+      //this.router.navigate(['registrar/inversiondetalle'])
+    }
+  });
 }
 
+mostrarMensaje(){
+  const storedMessage = sessionStorage.getItem('lastMessage');
+    if(storedMessage) {
+      const toast = JSON.parse(storedMessage);
+      this.messageService.add({
+        severity: toast.severity,
+        summary: toast.summary,
+        detail: toast.detail,
+        life: toast.life
+      });
+      setTimeout(() => {
+        sessionStorage.removeItem('lastMessage');
+      }, 100); 
+    }
+  }
+
+  show(message: string, header: string) {
+    const ref = this.dialogService.open(MessagePopUpComponent, {
+      data: {
+        message: message
+      },
+      header: header,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,         
+      width: '90%'
+    });
+    
+    // Suscribirse al evento de cierre del diálogo
+    ref.onClose.subscribe((result: any) => {
+      if (result === 'aceptar') {
+        this.router.navigate(['/inicio']);
+      }
+    });
+}
 
 }

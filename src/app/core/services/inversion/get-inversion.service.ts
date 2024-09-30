@@ -55,5 +55,9 @@ export class GetInversionService {
       return this.http.post(this.baseUrl+this.baseComponent+'sendSimulation',obj);
    }
 
+   registerInversion(obj: any){
+    return this.http.post(this.baseUrl+this.baseComponent+'registerInversion',obj);
+  }
+
 
 }

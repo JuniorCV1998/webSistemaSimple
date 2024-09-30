@@ -8,6 +8,11 @@ export const Constantes = {
     MSG_500: 'Error en el servidor. Inténtelo más tarde.',
     /* ERROR HTTP CODE 401 */
     MSG_401: 'Documento o contraseña inválida.',
+
+
+    /* CABECERA ERROR HTTP CODE 400 */
+    MSG_H_400: 'DATOS INCORRECTOS',
+    MSG_H_500: 'ERROR INTERNO',
     
     /* CODIGOS DE EXITO */
     STATUS_SUCCESS_RI:'SS00RI00',

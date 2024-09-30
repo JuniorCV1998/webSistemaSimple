@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -16,18 +16,27 @@ import { Location } from '@angular/common';
 import { catchError, delay, finalize, of } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { InversoresService } from '../../../../core/services/inversores/inversores.service';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-datos-cliente',
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,
     CommonModule,FormsModule,NroCelularDirective,SoloLetrasDirective,
-    CardModule,RadioButtonModule,InputTextareaModule,FloatLabelModule,ListboxModule],
+    CardModule,RadioButtonModule,InputTextareaModule,FloatLabelModule,ListboxModule,
+    LoadingComponent,ToastModule],
   templateUrl: './datos-cliente.component.html',
   styleUrl: './datos-cliente.component.scss'
 })
 export default class DatosClienteComponent {
 
+  @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+  
   statusClient: number = 1;
 
   //Clientes
@@ -46,9 +55,12 @@ export default class DatosClienteComponent {
   objInversion: any = {};
 
   constructor(
-    private router: Router,
     private location: Location,
-    private inversoresService: InversoresService
+    private inversoresService: InversoresService,
+    private getInversionService: GetInversionService,
+    private dialogService: DialogService,
+    private messageService: MessageService,
+    private router: Router
 ){
     // recuperando objeto inversion
     const obj = sessionStorage.getItem('objInversion');
@@ -74,13 +86,6 @@ export default class DatosClienteComponent {
 
   ngOnInit(): void{
     this.obtenerListaClientes();
-    console.log("objeto recuperado: " + JSON.stringify(this.objInversion));
-
-  }
-
-  ngAfterViewInit(): void {
-    //this.obtenerListaClientes();
-    this.addFullNameList();
   }
 
   volver() {
@@ -127,7 +132,6 @@ export default class DatosClienteComponent {
         interes: this.objInversion.interes,
         fechaInicio: this.objInversion.fechaInicio,
         fechaFin: this.objInversion.fechaFin,
-        valorCuota: this.objInversion.valorCuota,
         //comentario
         comentario: this.txtComentario.trim(),
         // objeto cliente
@@ -139,9 +143,55 @@ export default class DatosClienteComponent {
         // validate
         validado: false
     }
-    sessionStorage.setItem('objNuevaInv',JSON.stringify(objNuevaInv));
-    this.router.navigate(['registrar/confirmar']);
+    this.serviceFalseRegisterInversion(objNuevaInv);
   }
+
+  serviceFalseRegisterInversion(requestBody: any){
+      this.loadingComponent.show();
+      this.getInversionService.registerInversion(requestBody).pipe(
+        finalize(() => this.loadingComponent.hide()),
+        catchError((error) => {
+          if (error.status === 400) {
+            this.show(error.error.descripcion, Constantes.MSG_H_400); // Mensaje para 400
+          } else {
+            this.show(Constantes.MSG_H_500, Constantes.MSG_500); // Mensaje para otros errores
+          }
+          // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+          return of(null);
+        })
+      ).subscribe((resp: any) => {
+        if (resp) {
+          const messageData = {
+            severity: 'success',
+            summary: '¡DATOS VALIDADOS!',
+            detail: resp.descripcion,
+            life: 3000
+          };
+          sessionStorage.setItem('objNuevaInv',JSON.stringify(resp.data));
+          sessionStorage.setItem('lastMessage', JSON.stringify(messageData));
+          this.router.navigate(['registrar/confirmar']);
+        }
+      });
+  }
+
+  show(message: string, header: string) {
+    const ref = this.dialogService.open(MessagePopUpComponent, {
+      data: {
+        message: message
+      },
+      header: header,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,         
+      width: '90%'
+    });
+    
+    // Suscribirse al evento de cierre del diálogo
+    ref.onClose.subscribe((result: any) => {
+      if (result === 'aceptar') {
+      }
+    });
+}
 
   obtenerListaClientes(){
         this.inversoresService.getMyClients().pipe(

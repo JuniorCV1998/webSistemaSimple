@@ -81,22 +81,20 @@ export default class DatosInversionComponent {
   }
 
   async validarDatosInversion(){
-  await this.simularCuota(); // Esperar a que la simulación se complete
   if(!this.isFormValid()) return;
-  const request = {
-    monto: this.valueMonto,
-    nroCuotas: this.nroCuota,
-    interes: !this.statusPersonalizado?this.valueInteres:null,
-    interesPerso: this.statusPersonalizado?this.valueInteresPerso:null,
-    statusPersonalizado: this.statusPersonalizado,
-    fechaInicio: this.statusFecha==false?null:this.getFormattedDate(this.date1),
-    fechaFin: this.statusFecha==false?null:this.getFormattedDate(this.date2),
-    statusFecha: this.statusFecha,
-    selected: this.selected,
-    valorCuota: this.valorCuota
-  }
-  sessionStorage.setItem('objInversion',JSON.stringify(request));
-  this.router.navigate(['registrar/datoscliente']);
+    const request = {
+      monto: this.valueMonto,
+      nroCuotas: this.nroCuota,
+      interes: !this.statusPersonalizado?this.valueInteres:null,
+      interesPerso: this.statusPersonalizado?this.valueInteresPerso:null,
+      statusPersonalizado: this.statusPersonalizado,
+      fechaInicio: this.statusFecha==false?null:this.getFormattedDate(this.date1),
+      fechaFin: this.statusFecha==false?null:this.getFormattedDate(this.date2),
+      statusFecha: this.statusFecha,
+      selected: this.selected
+    }
+    sessionStorage.setItem('objInversion',JSON.stringify(request));
+    this.router.navigate(['registrar/datoscliente']);
 }
 
 getValidationValues() {
@@ -128,7 +126,29 @@ volver() {
   this.location.back();
 }
 
-async simularCuota(): Promise<void> {
+simularCuota(){
+  if(!this.isFormValid()) return;
+  const request = {
+    monto: this.valueMonto,
+    cuotas: this.nroCuota,
+    interes: this.valueInteresPerso==null?this.valueInteres:this.valueInteresPerso
+  }
+  this.cuotaCargada = false;
+  this.getInversionService.sendSimulation(request).pipe(
+    finalize(() => this.cuotaCargada = true),
+    catchError((error) => {
+      this.messageService.add({severity: 'error', summary: 'SE', detail: 'Error al simular cuota.', life: 3000});
+      this.valorCuota = 0;
+      return of(null); 
+    })
+  ).subscribe((resp: any) => {
+    if (resp) {
+      this.valorCuota = resp.valorCuota;
+    }
+  });
+}
+
+/* async simularCuota(): Promise<void> {
   if (!this.isFormValid()) return;
   const request = {
       monto: this.valueMonto,
@@ -155,7 +175,7 @@ async simularCuota(): Promise<void> {
       console.error("Error en la simulación de cuota:", error);
       this.valorCuota = 0; // Manejar el error y restablecer valorCuota si es necesario
   }
-}
+} */
 
 clicFechaInicioFin(){
   //this.statusFecha = !this.statusFecha;
