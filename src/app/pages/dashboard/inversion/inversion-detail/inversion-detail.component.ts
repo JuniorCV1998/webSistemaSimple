@@ -82,6 +82,15 @@ export default class InversionDetailComponent {
     ).
     subscribe((resp: any)=> { 
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==1) {
+        if(resp.data.fechaInicio!=null && resp.data.fechaFin!=null){
+          var fechaInicio = resp.data.fechaInicio.split('-');
+          var fechaFin = resp.data.fechaFin.split('-');
+          resp.data.fechaInicio = fechaInicio[0];
+          resp.data.fechaFin = fechaFin[0];
+        } else{
+          resp.data.fechaInicio = '-';
+          resp.data.fechaFin = '-';
+        }
         this.objInvDetail = resp.data;
       }
       else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){

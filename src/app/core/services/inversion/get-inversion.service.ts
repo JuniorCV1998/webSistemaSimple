@@ -59,5 +59,10 @@ export class GetInversionService {
     return this.http.post(this.baseUrl+this.baseComponent+'registerInversion',obj);
   }
 
+  getInversionRegistered(idInversion: number){
+    const params = new HttpParams()
+			.set('idInversion', Number(idInversion));
+    return this.http.get(this.baseUrl+this.baseComponent+'getInversionRegistered', {params});
+  }
 
 }

@@ -87,9 +87,8 @@ serviceTrueRegisterInversion(requestBody: any){
       return of(null);
     })
   ).subscribe((resp: any) => {
-    if (resp) {
-      console.log("respuesta: "+JSON.stringify(resp))
-      //this.router.navigate(['registrar/inversiondetalle'])
+    if (resp.codigo === Constantes.STATUS_SUCCESS_RI) {
+      this.router.navigate(['registrar/inversiondetalle'], {queryParams:{"idInversion":resp.data}})
     }
   });
 }
