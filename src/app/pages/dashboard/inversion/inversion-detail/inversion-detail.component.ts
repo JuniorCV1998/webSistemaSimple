@@ -1,5 +1,5 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -13,31 +13,32 @@ import { GetInversionService } from '../../../../core/services/inversion/get-inv
 import { Constantes } from '../../../../core/constant/Constantes';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
-import { catchError, of } from 'rxjs';
+import { catchError, delay, finalize, of } from 'rxjs';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
-  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule],
+  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
+    LoadingComponent
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
   styleUrl: './inversion-detail.component.scss'
 })
 export default class InversionDetailComponent {
+
+  @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+  
   idInversion: number | null = null;
   //Mostrar clave usuario
   mostrar: boolean = false;
   copy: boolean = false;
-
   //inversion detail
   nroCuotas: number = 24;
   nroCuotasPendientes = 0;
-
   //Fecha a pagar
   date: Date = new Date();
-
-  //objeto detail
-  //objInvDetail: any = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -50,7 +51,7 @@ export default class InversionDetailComponent {
     private viewportScroller: ViewportScroller
   ){}
   
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
@@ -62,22 +63,23 @@ export default class InversionDetailComponent {
   }
 
   getInversionesDetail(){
+    this.loadingComponent.show();
     this.getInversionService.getInversionesDetail(this.idInversion===null?0:this.idInversion).pipe(
-            // Manejamos errores de respuesta HTTP con catchError
-            catchError((error) => {
-              console.error('Error capturado:', error);
-      
-              // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
-              if (error.status === 403) {
-                this.show('Acceso denegado', Constantes.MSG_GLOBAL); // Mensaje para 403
-              } else if (error.status === 500) {
-                this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para 500
-              } else {
-                this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
-              }
-              // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
-              return of(null);
-            })
+        finalize(() => this.loadingComponent.hide()),
+        // Manejamos errores de respuesta HTTP con catchError
+        catchError((error) => {
+        console.error('Error capturado:', error);
+        // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
+        if (error.status === 403) {
+          this.show('Acceso denegado', Constantes.MSG_GLOBAL); // Mensaje para 403
+        } else if (error.status === 500) {
+          this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para 500
+        } else {
+          this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
+        }
+          // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+          return of(null);
+        })
     ).
     subscribe((resp: any)=> { 
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==1) {
@@ -91,6 +93,7 @@ export default class InversionDetailComponent {
           resp.data.fechaFin = '-';
         }
         this.objInvDetail = resp.data;
+        this.nroCuotas = resp.data.nroCuotas;
         this.calcularCuotasPendientes();
       }
       else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){

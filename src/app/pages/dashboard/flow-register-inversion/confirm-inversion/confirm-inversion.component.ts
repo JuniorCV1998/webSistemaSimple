@@ -68,7 +68,6 @@ registerInvTrue(){
     // validate
     validado: true
   }
-  console.log("obj registrar: "+JSON.stringify(objNuevaInv));
   this.serviceTrueRegisterInversion(objNuevaInv);
     
 }
@@ -88,6 +87,7 @@ serviceTrueRegisterInversion(requestBody: any){
     })
   ).subscribe((resp: any) => {
     if (resp.codigo === Constantes.STATUS_SUCCESS_RI) {
+      sessionStorage.setItem('confetti',JSON.stringify(true));
       this.router.navigate(['registrar/inversiondetalle'], {queryParams:{"idInversion":resp.data}})
     }
   });

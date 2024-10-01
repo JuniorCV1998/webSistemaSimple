@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Location } from '@angular/common';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @Component({
   selector: 'app-list-all',
   standalone: true,
-  imports: [SkeletonModule,CommonModule],
+  imports: [SkeletonModule,CommonModule,TabMenuModule],
   templateUrl: './list-all.component.html',
   styleUrl: './list-all.component.scss'
 })

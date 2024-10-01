@@ -29,6 +29,7 @@ export class NavegationComponent {
 
   session: boolean = false;
   outSession: boolean = false;
+  confetti: boolean = false;
 
   private routerSubscription!: Subscription;
 
@@ -37,7 +38,8 @@ export class NavegationComponent {
     private router: Router,
     private loginService: LoginService,
     private route: ActivatedRoute
-  ){}
+  ){
+  }
 
   ngOnInit() {
     const inicio = [
@@ -52,6 +54,8 @@ export class NavegationComponent {
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
     this.routerSubscription = this.router.events.subscribe((event) => {
+      //Definir valor de confetti
+      this.setValueConfetti();
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url.split('?')[0]; // Para ignorar parámetros de query
         // Controlar la visibilidad del botón "Volver" en función de la ruta actual
@@ -60,7 +64,8 @@ export class NavegationComponent {
           this.showAux = false;
           /* this.showIconHome = true; */
         } else if(sinInicio.includes(currentRoute)){
-          this.showVolverButton = false;
+          if(this.confetti) this.showVolverButton = false;
+          else this.showVolverButton = true;
           this.showAux = true;
         } else {
           this.showVolverButton = true;
@@ -76,14 +81,22 @@ export class NavegationComponent {
 
         if (flowOutSession.includes(currentRoute)) this.outSession = true;
         else this.outSession = false;
-
-        
       }
+      
+
     });
 
     //Definir de donde vengo
     this.definirFrom();
+  }
 
+  setValueConfetti(){
+    const obj = sessionStorage.getItem('confetti');
+    console.log("confetti :"+this.confetti);
+    if(obj) {
+      console.log("entro ?");
+      this.confetti = JSON.parse(obj);
+    }else this.confetti = false;
   }
 
   //Slider Module
@@ -115,6 +128,8 @@ export class NavegationComponent {
 
   volver() {
     if(this.irInicio || (!this.fromList && this.fromList != null)) {
+      console.log("inicio: "+this.irInicio);
+      console.log("fromlist: "+this.fromList);
       this.router.navigate(['/inicio']);
     }
     else this.location.back();
@@ -126,7 +141,10 @@ export class NavegationComponent {
     this.route.queryParamMap.subscribe(params => {
       const fromView = params.get('from');
       if(fromView == 'list') this.fromList = true;
-      else if(fromView == 'register') this.fromList = false;
+      else if(fromView == 'register') {
+        if(this.confetti) this.fromList = false;
+        else this.fromList = true;
+      }
       else this.fromList = null;
     });
   }

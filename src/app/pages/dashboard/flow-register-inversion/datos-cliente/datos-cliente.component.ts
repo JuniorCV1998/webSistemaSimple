@@ -154,7 +154,7 @@ export default class DatosClienteComponent {
           if (error.status === 400) {
             this.show(error.error.descripcion, Constantes.MSG_H_400); // Mensaje para 400
           } else {
-            this.show(Constantes.MSG_H_500, Constantes.MSG_500); // Mensaje para otros errores
+            this.show(Constantes.MSG_500, Constantes.MSG_H_500); // Mensaje para otros errores
           }
           // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
           return of(null);

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import confetti from 'canvas-confetti';
 import { MessageService } from 'primeng/api';
@@ -8,21 +8,25 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, of } from 'rxjs';
+import { catchError, delay, finalize, of } from 'rxjs';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../../core/constant/Constantes';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
 
 @Component({
   selector: 'app-inversion-registered',
   standalone: true,
-  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule],
+  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,LoadingComponent],
   templateUrl: './inversion-registered.component.html',
   styleUrl: './inversion-registered.component.scss'
 })
 export default class InversionRegisteredComponent {
 
+  @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+
   idInversion: number | null = null;
+  confetti: boolean = false;
 
   constructor(
     private messageService: MessageService,
@@ -31,7 +35,12 @@ export default class InversionRegisteredComponent {
     private route: ActivatedRoute,
     private getInversionService: GetInversionService,
     private dialogService: DialogService
-  ){}
+  ){
+    const obj = sessionStorage.getItem('confetti');
+    if(obj) {
+      this.confetti = JSON.parse(obj);
+    }
+  }
 
   //Mostrar clave usuario
   mostrar: boolean = false;
@@ -39,7 +48,7 @@ export default class InversionRegisteredComponent {
 
   objInversion: any = {
     "idInversion": 0,
-    "monto": 0,
+    "monto": "",
     "nombres": "",
     "apellidoPaterno": "",
     "apellidoMaterno": "",
@@ -49,13 +58,15 @@ export default class InversionRegisteredComponent {
     "codOperacion": ""
 };
 
-  ngOnInit(){
+  ngOnInit(): void{
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('idInversion');
       this.idInversion = id ? +id : null; // Convertir a número si existe
-      console.log('ID de Inversión recibido:', this.idInversion);
     });
+  }
+
+  ngAfterViewInit(): void{
     // Recupera la información de la inversión
     this.getInversionRegistered();
     // Brinda efecto confetti
@@ -63,11 +74,12 @@ export default class InversionRegisteredComponent {
   }
 
   getInversionRegistered(){
+    this.loadingComponent.show();
     this.getInversionService.getInversionRegistered(this.idInversion===null?0:this.idInversion).pipe(
+      finalize(() => this.loadingComponent.hide()),
             // Manejamos errores de respuesta HTTP con catchError
             catchError((error) => {
-                this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
-              // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+              this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
               return of(null);
             })
     ).
@@ -136,6 +148,7 @@ export default class InversionRegisteredComponent {
   }
 
   triggerConfetti() {
+    if(!this.confetti) return;
     confetti({
       particleCount: 100,
       spread: 70,

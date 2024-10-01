@@ -68,8 +68,8 @@
                     </thead>
                     <tbody>
                       <div *ngFor="let inversion of ultimas10Inversiones" class="tr-registros">
-                        <div class="flex flex-row">
-                            <div class="flex flex-column w-10" >
+                        <div class="flex flex-row" [routerLink]="['/registrar/inversiondetalle']" [queryParams]="{ idInversion: inversion.idInversion }">
+                            <div class="flex flex-column w-10">
                                 <span class="span-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
                                 <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
                             </div>
