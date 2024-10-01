@@ -85,7 +85,6 @@ export default class InversionRegisteredComponent {
     ).
     subscribe((resp: any)=> { 
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==1) {
-        console.log("obj: "+JSON.stringify(resp.data));
         this.objInversion = resp.data;
       }
       else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){

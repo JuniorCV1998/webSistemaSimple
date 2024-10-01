@@ -107,3 +107,15 @@ a{
 .openbtn:hover {
   background-color: #444;
 }
+
+/* estilo para cerrar sesion */
+.div_cerrarsesion{
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+}
+.closeSession .pi, .closeSession span{
+  color: red;
+}

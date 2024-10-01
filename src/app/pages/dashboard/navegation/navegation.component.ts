@@ -149,4 +149,11 @@ export class NavegationComponent {
     });
   }
 
+  sessionClear(){
+    const event = new Event('');
+    this.closeCallback(event);
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
 }
