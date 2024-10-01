@@ -13,7 +13,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ListboxModule } from 'primeng/listbox';
 import { Location } from '@angular/common';
-import { catchError, delay, finalize, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { InversoresService } from '../../../../core/services/inversores/inversores.service';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
@@ -129,7 +129,7 @@ export default class DatosClienteComponent {
         // objeto inversion
         monto: this.objInversion.monto,
         nroCuotas: this.objInversion.nroCuotas,
-        interes: this.objInversion.interes,
+        interes: this.objInversion.statusPersonalizado?this.objInversion.interesPerso:this.objInversion.interes,
         fechaInicio: this.objInversion.fechaInicio,
         fechaFin: this.objInversion.fechaFin,
         //comentario

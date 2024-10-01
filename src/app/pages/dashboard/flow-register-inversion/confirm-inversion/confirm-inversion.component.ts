@@ -11,7 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, delay, finalize, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -76,7 +76,7 @@ registerInvTrue(){
 serviceTrueRegisterInversion(requestBody: any){
   this.loadingComponent.show();
   this.getInversionService.registerInversion(requestBody).pipe(
-    delay(3000),finalize(() => this.loadingComponent.hide()),
+    finalize(() => this.loadingComponent.hide()),
     catchError((error) => {
       if (error.status === 400) {
         this.show(error.error.descripcion, Constantes.MSG_H_400); // Mensaje para 400

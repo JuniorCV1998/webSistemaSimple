@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common'; // Asegúrate de importar Common
 import { KnobModule } from 'primeng/knob';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, delay, finalize, lastValueFrom, of } from 'rxjs';
+import { catchError, finalize, lastValueFrom, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 

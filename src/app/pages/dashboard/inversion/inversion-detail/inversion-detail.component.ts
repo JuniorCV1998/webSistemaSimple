@@ -59,7 +59,6 @@ export default class InversionDetailComponent {
       console.log('ID de Inversión recibido:', this.idInversion);
     });
     this.getInversionesDetail();
-    this.calcularCuotasPendientes();
   }
 
   getInversionesDetail(){
@@ -92,6 +91,7 @@ export default class InversionDetailComponent {
           resp.data.fechaFin = '-';
         }
         this.objInvDetail = resp.data;
+        this.calcularCuotasPendientes();
       }
       else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){
         this.show(resp.message, Constantes.MSG_SIN_REGISTROS,);
@@ -169,6 +169,7 @@ export default class InversionDetailComponent {
     const countNonNullFP = Object.keys(this.objInvDetail)
     .filter(key => key.startsWith('fp') && this.objInvDetail[key] !== null).length;
     this.nroCuotasPendientes = this.nroCuotas - countNonNullFP;
+    console.log("cuotas pendiente: "+this.nroCuotasPendientes);
   }
 
   confirm(nroCuota: number): Promise<boolean> {

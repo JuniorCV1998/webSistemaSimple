@@ -61,7 +61,6 @@ export default class InicioComponent {
 
   getInversionesLast(){
     this.skeletonShow = true;
-
     this.getInversionService.getInversionesLast().pipe(delay(300),finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
