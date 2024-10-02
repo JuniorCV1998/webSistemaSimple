@@ -36,6 +36,7 @@ export default class RegisterPersonalComponent {
       this.location.back();
   }
   registrarUsuario(){
-    this.router.navigate(['inicio']);
+    console.log("Ir a Inicio");
+    //this.router.navigate(['inicio']);
   }
 }

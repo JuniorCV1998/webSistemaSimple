@@ -92,9 +92,7 @@ export class NavegationComponent {
 
   setValueConfetti(){
     const obj = sessionStorage.getItem('confetti');
-    console.log("confetti :"+this.confetti);
     if(obj) {
-      console.log("entro ?");
       this.confetti = JSON.parse(obj);
     }else this.confetti = false;
   }
@@ -128,8 +126,6 @@ export class NavegationComponent {
 
   volver() {
     if(this.irInicio || (!this.fromList && this.fromList != null)) {
-      console.log("inicio: "+this.irInicio);
-      console.log("fromlist: "+this.fromList);
       this.router.navigate(['/inicio']);
     }
     else this.location.back();

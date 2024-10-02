@@ -2,7 +2,7 @@
     /* min-width: 315px; */
     /* border-bottom: solid 1px var(--gray-300); */
 }
-#codUnico-help{
+.codUnico-help{
     font-size: 16px;
     font-weight: bold;
     display: flex;
@@ -10,9 +10,8 @@
 }
 small {
     color: var(--gray-500);
-    margin-top: 1rem;
 }
-#labelCodUnico{
+.labelCodUnico{
     background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
     -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
     background-clip: text; /* Aplicar el fondo degradado al texto */
@@ -24,4 +23,8 @@ small {
 i{
     color: var(--blue-400);
     font-size: .8rem;
+}
+#iconPassword1, #iconPassword2{
+    color: var(--gray-500);
+    font-size: 1rem;
 }

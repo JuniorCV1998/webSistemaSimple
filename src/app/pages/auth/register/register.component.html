@@ -13,32 +13,59 @@
 
         <div>
             <label for="email1" class="block text-900 font-medium mb-2">Correo electrónico</label>
-            <input id="email1" aria-describedby="email-help" type="text" autocomplete="off" (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3">
+            <input [(ngModel)]="objUser.correo" id="email1" aria-describedby="email-help" type="text" autocomplete="off" (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3">
             <small *ngIf="isWriting" id="email-help"><br><i class="pi pi-info-circle"></i> Recuerda que este correo será usado para enviarte información respecto a tu cuenta.<br><br></small>
 
             <label for="password1" class="block text-900 font-medium mb-2">Contraseña</label>
-            <input id="password1" aria-describedby="pass-help" type="password" placeholder="Contraseña" (focus)="onFocus(2)" (blur)="onBlur(2)" pInputText class="w-full mb-3">
-            <small *ngIf="isWritingP" id="pass-help"><br><i class="pi pi-info-circle"></i> Mínimo 8 caracteres, al menos una letra y un número.<br><br></small>
+            <div class="relative w-full mb-3">
+                <input [(ngModel)]="objUser.contrasena" id="password1" aria-describedby="pass-help" 
+                (ngModelChange)="isValidPassword = validarContrasena(objUser.contrasena)"
+                [type]="passwordFieldType" placeholder="Contraseña" (focus)="onFocus(2)" (blur)="onBlur(2)" 
+                pInputText class="w-full">
+                <!-- Icono de ojo -->
+                <i id="iconPassword1" class="pi" [ngClass]="passwordFieldType === 'password' ? 'pi-eye' : 'pi-eye-slash'" 
+                (click)="togglePasswordVisibility(1)" 
+                style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                </i>
+            </div>
+            <small *ngIf="isWritingP || (!isValidPassword && objUser?.contrasena?.length > 0)"
+                [style.color]="!isValidPassword && objUser?.contrasena?.length > 0 ? 'red' : 'inherit'"
+                 id="pass-help"><i class="pi pi-info-circle"></i> Mínimo 8 caracteres, al menos una letra y un número.<br><br></small>
 
             <!-- <p-password formControlName="value" [feedback]="true" [toggleMask]="true"/> -->
             <label for="password2" class="block text-900 font-medium mb-2">Confirmar contraseña</label>
-            <input id="password2" type="password" placeholder="Confirmar contraseña" pInputText class="w-full mb-3">
-            
-            <label id="labelCodUnico" for="codUnico" class="block text-900 font-medium mb-2"><b>Código Único</b></label>
-            <p-inputOtp [(ngModel)]="valueSS" [integerOnly]="true" [length]="6" class="w-full mb-2" (input)="onInputChange()"/>
-            <small id="codUnico-help">SS - {{valueShow}}</small>
-
-            <br><br><br>
-            <div class="flex align-items-center justify-content-center mb-6"> <!-- between: cuando acompaña el rememberme -->
-                <!-- <div class="flex align-items-center">
-                    <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>
-                    <label for="rememberme1">Acuérdate de mí</label>
-                </div> -->
-                <p-checkbox value="terminos" inputId="ny"/>
-                <label id="terminos_condiciones">He leído y acepto los <a class="terminos_condiciones">términos y condiciones de uso.</a></label>
+            <div class="relative w-full mb-3">
+                <input [(ngModel)]="objUser.contrasena2" id="password2" [type]="passwordFieldType2" placeholder="Confirmar contraseña" pInputText class="w-full">
+                <!-- Icono de ojo -->
+                <i id="iconPassword1" class="pi" [ngClass]="passwordFieldType2 === 'password' ? 'pi-eye' : 'pi-eye-slash'" 
+                (click)="togglePasswordVisibility(2)" 
+                style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                </i>
             </div>
 
-            <button pButton pRipple label="Continuar" (click)="validarDatos()" iconPos="right" icon="pi pi-angle-right" class="w-full"></button>
+            <label ngClass="labelCodUnico" for="codUnico" class="block text-900 font-medium mb-2"><b>Código Único</b></label>
+            <p-inputOtp [(ngModel)]="codigoUnico" [integerOnly]="true" [length]="6" class="w-full mb-2" (input)="onInputChange()"/>
+            <small
+            [ngClass]="{
+                'labelCodUnico': codigoUnico.length == 6
+              }"
+            class="codUnico-help">SS - {{valueShow}}</small>
+
+            <br><br><br>
+            <!-- <div class="flex align-items-center justify-content-center mb-6">
+                <div class="flex align-items-center">
+                    <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>
+                    <label for="rememberme1">Acuérdate de mí</label>
+                </div>
+                <p-checkbox value="terminos" inputId="ny"/>
+                <label id="terminos_condiciones">He leído y acepto los <a class="terminos_condiciones">términos y condiciones de uso.</a></label>
+            </div> -->
+
+            <button [ngClass]="{
+                'btn-disabled': !isFormValid()
+              }"
+             pButton pRipple label="Continuar" (click)="validarDatos()" [disabled]="!isFormValid()" iconPos="right" icon="pi pi-angle-right" class="w-full"></button>
         </div>
     </div>
+    <app-loading></app-loading>
 </div>

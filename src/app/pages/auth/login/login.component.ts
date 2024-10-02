@@ -38,7 +38,7 @@ export default class LoginComponent {
   ) {}
 
   ngOnInit(): void{
-    sessionStorage.removeItem('token');
+    sessionStorage.clear();
   }
 
     credenciales = {
