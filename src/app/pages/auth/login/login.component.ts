@@ -38,7 +38,11 @@ export default class LoginComponent {
   ) {}
 
   ngOnInit(): void{
-    sessionStorage.clear();
+    this.clearSessionStorageExcept(['correo']);
+    const obj = sessionStorage.getItem('correo');
+    if(obj) {
+      this.credenciales.correo = obj;
+    }
   }
 
     credenciales = {
@@ -90,6 +94,26 @@ export default class LoginComponent {
 
     togglePasswordVisibility() {
       this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+    }
+
+    clearSessionStorageExcept(keysToKeep: string[]) {
+      // Guardar las claves y valores que no se deben eliminar
+      const valuesToKeep: { [key: string]: string | null } = {};
+    
+      keysToKeep.forEach((key) => {
+        const value = sessionStorage.getItem(key);
+        if (value !== null) {
+          valuesToKeep[key] = value;
+        }
+      });
+    
+      // Limpiar todo el sessionStorage
+      sessionStorage.clear();
+    
+      // Restaurar los valores que queremos conservar
+      Object.keys(valuesToKeep).forEach((key) => {
+        sessionStorage.setItem(key, valuesToKeep[key]!);
+      });
     }
 
 }

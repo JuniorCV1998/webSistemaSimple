@@ -26,4 +26,11 @@ export const Constantes = {
     CODIGO_ERROR_403: 'SS00_403',
 
     
+    /* CONFIRM DIALOG */
+    CD_HEADER_MSG_CONF: 'Registrar cuenta',
+    CD_BODY_MSG_CONF: 'Antes de continuar, confirme los siguientes datos:',
+
+    CD_HEADER_MSG_BNV: '¡Bienvenido!',
+    CD_BODY_MSG_BNV: 'Nos alegra que te hayas registrado. Serás redirigido al inicio de sesión con tu correo en breve.'
+
 }

@@ -16,4 +16,8 @@ export class RegisterService {
   validateRegister(obj: any){
     return this.http.post(this.baseUrl+this.baseComponent+'validate',obj);
   }
+
+  confirmRegister(obj: any){
+    return this.http.post(this.baseUrl+this.baseComponent+'confirm',obj);
+  }
 }

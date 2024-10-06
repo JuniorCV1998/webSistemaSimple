@@ -9,6 +9,7 @@ import { LoadingComponent } from '../../modal/loading/loading.component';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { Constantes } from '../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
+import { LoginService } from '../../../core/services/auth/login/login.service';
 
 @Component({
   selector: 'app-inicio',
@@ -24,11 +25,20 @@ export default class InicioComponent {
   forSkeleton: number = 5;
   skeletonShow: boolean = true;
 
+  nombreUsuario = '';
+
   constructor(
     private router: Router,
     private getInversionService: GetInversionService,
-    private viewportScroller: ViewportScroller
-  ){}
+    private viewportScroller: ViewportScroller,
+    private loginService: LoginService
+  ){
+    const decodedToken = this.loginService.getDecodedToken();
+    if (decodedToken) {
+      const fullName = decodedToken.nombre.split(" ");
+      this.nombreUsuario = fullName[0];
+    }
+  }
 
   items: MenuItem[] | undefined;
   monto: any = 0;

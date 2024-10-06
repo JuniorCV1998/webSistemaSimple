@@ -52,7 +52,6 @@ export default class RegisterComponent {
     private dialogService: DialogService,
   ) {
     const objUser = sessionStorage.getItem('objUser');
-    console.log("obj recuperado: "+JSON.stringify(objUser));
     if(objUser) {
       this.objUser = JSON.parse(objUser);
       this.codigoUnico = this.objUser?.codigoUnico.replace("SS-","");
@@ -66,6 +65,7 @@ export default class RegisterComponent {
 
   ngOnInit(): void{
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('correo');
   }
 
   ngAfterViewInit(): void{
@@ -79,7 +79,6 @@ export default class RegisterComponent {
 validarDatos(){
   this.loadingComponent.show();
   this.objUser.codigoUnico = "SS-" + this.codigoUnico;
-  console.log("obj: "+JSON.stringify(this.objUser));
   this.registerService.validateRegister(this.objUser).pipe(
     finalize(() => this.loadingComponent.hide()),
     catchError((error) => {

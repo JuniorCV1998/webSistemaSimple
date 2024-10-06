@@ -13,29 +13,29 @@
 
         <div>
             <label for="nombres" class="block text-900 font-medium mb-2">Nombres</label>
-            <input id="nombres" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3">
+            <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3">
 
             <div class="flex flex-row gap-2 align-items-center justify-content-center">
                 <div class="flex flex-column w-full">
                     <label for="apellidop" class="block text-900 font-medium mb-2">Apellido paterno</label>
-                    <input id="apellidop" type="text" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3">
+                    <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3">
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="apellidom" class="block text-900 font-medium mb-2">Apellido materno</label>
-                    <input id="apellidom" type="text" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3">
+                    <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3">
                 </div>
             </div>
 
             <div class="flex flex-row gap-2 align-items-center justify-content-center">
                 <div class="flex flex-column w-full">
                     <label for="celular" class="block text-900 font-medium mb-2">Celular</label>
-                    <input id="celular" type="text" placeholder="Celular" pInputText appNroCelular class="w-full mb-3">
+                    <input id="celular" [(ngModel)]="objPersona.celular" type="text" placeholder="Celular" autocomplete="off" pInputText appNroCelular class="w-full mb-3">
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="direccion" class="block text-900 font-medium mb-2">Dirección</label>
-                    <input id="direccion" type="text" placeholder="Dirección" pInputText class="w-full mb-3">
+                    <input id="direccion" [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3">
                 </div>
             </div>
 
@@ -52,7 +52,71 @@
             </div> -->
             <br>
 
-            <button pButton pRipple label="Registrarme" (click)="registrarUsuario()" class="w-full"></button>
+            <button [ngClass]="{
+                'btn-disabled': !isFormValid()
+              }"
+            pButton pRipple label="Registrarme" (click)="registrarInversor()" [disabled]="!isFormValid()" class="w-full"></button>
         </div>
     </div>
+    <p-confirmDialog #cd>
+        <ng-template pTemplate="headless" let-message>
+            <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                <div *ngIf="!confirmCase" class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                    <img src="assets/images/logos/sello_ssimple.png" width="100" height="100">
+                </div>
+                <span class="font-bold text-2xl block mb-2 mt-4">
+                    {{ message.header }}
+                </span>
+                <p class="mb-3">{{ message.message }}</p>
+                <div *ngIf="!confirmCase" class="flex flex-column w-full align-items-left confirm-date">
+                    <div class="flex flex-row gap-2 p-3 align-items-center">
+                        <span>Correo:</span>
+                        <span style="color: var(--blue-500);">{{ correo }}</span>
+                    </div>
+                </div>
+                <div *ngIf="confirmCase" class="flex flex-column w-full align-items-left confirm-date">
+                    <div class="flex flex-row gap-2 p-3 align-items-center">
+                        <i class="pi pi-user"></i>
+                        <span>{{ objPersona.nombres+" "+objPersona.apellidoPaterno+" "+objPersona.apellidoMaterno}}</span>
+                    </div>
+                    <div class="flex flex-row gap-2 p-3 align-items-center">
+                        <i class="pi pi-at"></i>
+                        <span>{{ correo }}</span>
+                    </div>
+                    <div class="flex flex-row gap-2 p-3 align-items-center">
+                        <i class="pi pi-phone"></i>
+                        <span>{{ objPersona.celular }}</span>
+                    </div>
+                    <div class="flex flex-row gap-2 p-3 align-items-center">
+                        <i class="pi pi-map-marker"></i>
+                        <span>{{ objPersona.direccion }}</span>
+                    </div>
+                </div>
+
+                <div *ngIf="confirmCase" class="flex align-items-center gap-2 mt-4">
+                    <button 
+                        pButton 
+                        label="Cancelar" 
+                        (click)="cd.reject()" 
+                        class="p-button-outlined w-8rem ">
+                    </button>
+                    <button 
+                        pButton 
+                        label="Confirmar" 
+                        (click)="cd.accept()" 
+                        class="w-8rem">
+                    </button>
+                </div>
+                <div *ngIf="!confirmCase" class="flex align-items-center gap-2 mt-4">
+                    <button 
+                        pButton 
+                        label="Aceptar" 
+                        (click)="cd.accept()" 
+                        class="w-8rem">
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </p-confirmDialog>
+    <app-loading></app-loading>
 </div>

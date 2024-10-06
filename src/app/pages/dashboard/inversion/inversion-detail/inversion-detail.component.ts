@@ -57,7 +57,6 @@ export default class InversionDetailComponent {
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('idInversion');
       this.idInversion = id ? +id : null; // Convertir a número si existe
-      console.log('ID de Inversión recibido:', this.idInversion);
     });
     this.getInversionesDetail();
   }

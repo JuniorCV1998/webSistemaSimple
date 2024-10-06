@@ -21,3 +21,17 @@
     justify-content: space-around;
     align-items: center;
 }
+
+  /* POP UP DE CONFIRMACION */
+  ::ng-deep .p-dialog{
+    width: 90%;
+    max-width: 550px;
+  }
+
+  /* Estilo para la data por confirmar */
+  .confirm-date i{
+    color: var(--blue-400);
+  }
+  .confirm-date div{
+    border-bottom: 1px dashed var(--gray-400);
+  }

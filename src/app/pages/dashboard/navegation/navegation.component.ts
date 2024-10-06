@@ -39,6 +39,14 @@ export class NavegationComponent {
     private loginService: LoginService,
     private route: ActivatedRoute
   ){
+    const decodedToken = this.loginService.getDecodedToken();
+    if (decodedToken) {
+      console.log('Nombre:', decodedToken.nombre);
+      console.log('Código Único:', decodedToken.codigoUnico);
+      console.log('codPerfil:', decodedToken.codPerfil);
+      console.log('Correo:', decodedToken.usuario);
+      console.log('inversor',decodedToken.inversor);
+    }
   }
 
   ngOnInit() {

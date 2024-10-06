@@ -2,7 +2,7 @@
 <div>
     <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
         <div class="text-center mb-5">
-            <div id="div_line_bootom" class="text-2xl font-medium mb-3" style="text-align: left;"><label class="label-nombre">Hola, Jose</label></div>
+            <div id="div_line_bootom" class="text-2xl font-medium mb-3" style="text-align: left;"><label class="label-nombre">Hola, {{nombreUsuario}}</label></div>
             <span class="text-600 font-medium line-height-3">¿Qué hacemos hoy?</span>
         </div>
 
@@ -78,10 +78,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tr-registros">
+                    <div *ngIf="ultimasInversiones.length > 10 || ultimasInversiones.length === 0" class="tr-registros">
                         <div class="flex justify-content-center flex-row span-2">
                             <span *ngIf="ultimasInversiones.length > 10" (click)="verRegistros()">Ver todos</span>
-                            <span *ngIf="ultimasInversiones.length == 0">Aún no hay registros.</span>
+                            <span *ngIf="ultimasInversiones.length === 0">Aún no hay registros.</span>
                         </div>
                     </div>
                     </tbody>

@@ -59,7 +59,6 @@ export default class DatosClienteComponent {
     private inversoresService: InversoresService,
     private getInversionService: GetInversionService,
     private dialogService: DialogService,
-    private messageService: MessageService,
     private router: Router
 ){
     // recuperando objeto inversion
@@ -116,9 +115,9 @@ export default class DatosClienteComponent {
         return (
           this.objClient?.persona?.nombres.trim() !== '' &&
           this.objClient?.persona?.apellidoPaterno.trim() !== '' &&
-          this.objClient?.persona?.apellidoMaterno.trim() !== '' /* &&
-          this.objClient.persona.celular.trim() !== '' &&
-          this.objClient.persona.direccion.trim() !== '' */
+          this.objClient?.persona?.apellidoMaterno.trim() !== '' &&
+          /* this.objClient.persona.celular.trim() !== '' && */
+          this.objClient.persona.direccion.trim() !== ''
         );
     }
 
@@ -138,7 +137,7 @@ export default class DatosClienteComponent {
         nombres: this.objClient.persona.nombres.trim(),
         apellidoPaterno: this.objClient.persona.apellidoPaterno.trim(),
         apellidoMaterno: this.objClient.persona.apellidoMaterno.trim(),
-        celular: this.formatCelular(this.objClient.persona.celular.trim()),
+        celular: this.objClient.persona.celular.trim().replace(/\s+/g, ''),
         direccion: this.objClient.persona.direccion.trim(),
         // validate
         validado: false
@@ -203,6 +202,7 @@ export default class DatosClienteComponent {
         ).subscribe((resp: any) => {
             if (resp && resp.codigoMessage === Constantes.STATUS_SUCCESS_RI) {
                 this.listaClientes = resp.data;
+                if(this.listaClientes?.length === 0) this.functStatusClient(2);
             }
         });
   }
@@ -210,7 +210,7 @@ export default class DatosClienteComponent {
   addFullNameList(){
     if(this.callFullName) return;
     // Mapear la lista para añadir fullName
-    if (this.listaClientes.length > 0) {
+    if (this.listaClientes?.length > 0) {
         this.listaClientes = this.listaClientes.map((cliente: any) => {
             return {
                 ...cliente,

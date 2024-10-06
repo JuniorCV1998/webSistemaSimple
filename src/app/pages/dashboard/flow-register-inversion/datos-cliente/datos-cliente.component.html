@@ -70,8 +70,8 @@
 
             <div class="flex flex-row gap-2 align-items-center justify-content-center">
                 <div class="flex flex-column w-full">
-                    <label for="celular" class="block text-900 font-medium mb-2">Celular</label>
-                    <input [(ngModel)]="objClient?.persona.celular" [maxlength]="9" [disabled]="clientSelect" id="celular" type="text" placeholder="Celular" pInputText appNroCelular class="w-full mb-3">
+                    <label for="celular" class="block text-900 font-medium mb-2">Celular<span id="span-celular" *ngIf="statusClient == 2">(Opcional)</span></label>
+                    <input [(ngModel)]="objClient?.persona.celular" [maxlength]="11" [disabled]="clientSelect" id="celular" type="text" placeholder="Celular" pInputText appNroCelular class="w-full mb-3">
                 </div>
 
                 <div class="flex flex-column w-full">

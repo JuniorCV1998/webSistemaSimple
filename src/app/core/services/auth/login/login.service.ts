@@ -52,4 +52,13 @@ export class LoginService {
     return decoded.exp > currentTime; // Verifica si el token aún es válido
   }
 
+  getDecodedToken() {
+    const token = this.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token); // Decodifica el token
+      return decoded; // Devuelve el objeto decodificado
+    }
+    return null;
+  }
+
 }
