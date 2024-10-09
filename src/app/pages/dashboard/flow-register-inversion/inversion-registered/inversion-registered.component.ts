@@ -125,8 +125,10 @@ export default class InversionRegisteredComponent {
     try {
       var nombreCompleto = this.objInversion.nombres;
       var palabras = nombreCompleto.trim().split(' ');
-      var texto = palabras[0]+", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
-      await navigator.clipboard.writeText(texto);
+      // Uso de la función
+      var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
+
+      this.copyToClipboard(texto);
       // Mostrar una notificación o mensaje opcional
       this.messageService.add({
         severity: 'info',
@@ -162,8 +164,16 @@ export default class InversionRegisteredComponent {
 
   copyCredentials(){
     if(this.copy == false) this.copy = true;
-
     this.copyText(this.objInversion.correo, this.objInversion.contrasenaClient);
+  }
+
+  copyToClipboard(text: string) {
+    const el = document.createElement('textarea');
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
 }

@@ -46,6 +46,7 @@ export class NavegationComponent {
       console.log('codPerfil:', decodedToken.codPerfil);
       console.log('Correo:', decodedToken.usuario);
       console.log('inversor',decodedToken.inversor);
+      console.log('idUsuario:', decodedToken.idUsuario);
     }
   }
 

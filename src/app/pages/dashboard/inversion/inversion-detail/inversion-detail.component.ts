@@ -246,10 +246,17 @@ objInvDetail: any = {
 
 async copyText(correo: string, contra: string): Promise<void> {
   try {
+
     var nombreCompleto = this.objInvDetail.persona.nombres;
     var palabras = nombreCompleto.trim().split(' ');
-    var texto = palabras[0]+", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
-    await navigator.clipboard.writeText(texto);
+    // Uso de la función
+    var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
+
+    this.copyToClipboard(texto);
+    /* var texto = ", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
+    if(palabras) texto = palabras + texto;
+    else texto = "Hola" + texto;
+    await navigator.clipboard.writeText(texto); */
     // Mostrar una notificación o mensaje opcional
     this.messageService.add({
       severity: 'info',
@@ -281,5 +288,13 @@ private formatearFecha(date: Date): string {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+copyToClipboard(text: string) {
+  const el = document.createElement('textarea');
+  el.value = text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+}
 
 }
