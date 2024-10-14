@@ -15,6 +15,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { catchError, delay, finalize, of } from 'rxjs';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { LoginService } from '../../../../core/services/auth/login/login.service';
 
 @Component({
   selector: 'app-inversion-detail',
@@ -39,6 +40,8 @@ export default class InversionDetailComponent {
   nroCuotasPendientes = 0;
   //Fecha a pagar
   date: Date = new Date();
+  // cod perfil
+  codPerfil: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -48,8 +51,14 @@ export default class InversionDetailComponent {
     private getInversionService: GetInversionService,
     public dialogService: DialogService,
     private router: Router,
-    private viewportScroller: ViewportScroller
-  ){}
+    private viewportScroller: ViewportScroller,
+    private loginService: LoginService
+  ){
+    const decodedToken = this.loginService.getDecodedToken();
+    if (decodedToken) {
+      this.codPerfil = decodedToken.codPerfil;
+    }
+  }
   
   ngAfterViewInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
@@ -141,8 +150,8 @@ export default class InversionDetailComponent {
   }
 
   pagarCuota(cuota: number){
+    if(this.codPerfil==='CLI') return;
     if(!this.confirm(cuota)) return;
-
     this.confirm(cuota).then((result) => {
       if (result) {
         const fecha = this.formatearFecha(this.date);
@@ -171,7 +180,6 @@ export default class InversionDetailComponent {
     const countNonNullFP = Object.keys(this.objInvDetail)
     .filter(key => key.startsWith('fp') && this.objInvDetail[key] !== null).length;
     this.nroCuotasPendientes = this.nroCuotas - countNonNullFP;
-    console.log("cuotas pendiente: "+this.nroCuotasPendientes);
   }
 
   confirm(nroCuota: number): Promise<boolean> {

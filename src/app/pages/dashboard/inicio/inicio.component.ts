@@ -18,7 +18,7 @@ import { LoginService } from '../../../core/services/auth/login/login.service';
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })
-export default class InicioComponent {
+export class InicioComponent {
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
   
