@@ -1,5 +1,5 @@
 
-<div>
+<div *ngIf="!isLoading">
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
         <div class="text-center mb-1">
@@ -57,5 +57,6 @@
         </div>
         <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
     </div>
-    <app-loading></app-loading>
 </div>
+
+<app-loading *ngIf="isLoading"></app-loading> 

@@ -13,7 +13,7 @@ import { GetInversionService } from '../../../../core/services/inversion/get-inv
 import { Constantes } from '../../../../core/constant/Constantes';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
-import { catchError, delay, finalize, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
 
@@ -30,6 +30,7 @@ import { LoginService } from '../../../../core/services/auth/login/login.service
 export default class InversionDetailComponent {
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+  isLoading: boolean = true;
   
   idInversion: number | null = null;
   //Mostrar clave usuario
@@ -59,21 +60,32 @@ export default class InversionDetailComponent {
       this.codPerfil = decodedToken.codPerfil;
     }
   }
-  
-  ngAfterViewInit(): void {
-    this.viewportScroller.scrollToPosition([0, 0]);
+
+  ngOnInit(): void{
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('idInversion');
       this.idInversion = id ? +id : null; // Convertir a número si existe
     });
-    this.getInversionesDetail();
+
+    /* detall de inversion */
+    setTimeout(() => {
+      this.loadingComponent.show();
+      this.getInversionesDetail();
+  });
+  }
+  
+  ngAfterViewInit(): void {
+    this.viewportScroller.scrollToPosition([0, 0]);
   }
 
   getInversionesDetail(){
-    this.loadingComponent.show();
+    this.loadingComponent?.show();
     this.getInversionService.getInversionesDetail(this.idInversion===null?0:this.idInversion).pipe(
-        finalize(() => this.loadingComponent.hide()),
+      finalize(() => {
+        this.loadingComponent?.hide();
+        this.isLoading = false; // Cambia a falso cuando termine
+      }),
         // Manejamos errores de respuesta HTTP con catchError
         catchError((error) => {
         console.error('Error capturado:', error);

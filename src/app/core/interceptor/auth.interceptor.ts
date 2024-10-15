@@ -24,7 +24,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   
   // Agrega el token a las solicitudes, excepto para el login
   const clonedReq = token && !req.url.includes('/login') 
-    ? req.clone({ headers: req.headers.set('Authorization', `Bearer ${token}`) }) 
+    ? req.clone({ headers: req.headers
+      .set('Authorization', `Bearer ${token}`)
+      .set('ngrok-skip-browser-warning', '69420')
+    }) 
     : req;
 
   return next(clonedReq).pipe(

@@ -4,7 +4,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { CommonModule, ViewportScroller } from '@angular/common'; // Importa CommonModule
 import { TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
-import { delay, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { Constantes } from '../../../core/constant/Constantes';
@@ -60,7 +60,7 @@ export class InicioComponent {
 
   getAmount(){
     this.montoCargado = false;
-    this.getInversionService.getAmount().pipe(delay(300),finalize(() => this.montoCargado = true)).
+    this.getInversionService.getAmount().pipe(finalize(() => this.montoCargado = true)).
     subscribe((resp: any)=> {
       if(resp.codigo==Constantes.STATUS_SUCCESS_RI) this.monto = resp.monto;
       else {
@@ -71,7 +71,7 @@ export class InicioComponent {
 
   getInversionesLast(){
     this.skeletonShow = true;
-    this.getInversionService.getInversionesLast().pipe(delay(300),finalize(() => this.skeletonShow = false)).
+    this.getInversionService.getInversionesLast().pipe(finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
         //this.ultimasInversiones = resp.data.slice(0, 10);

@@ -7,6 +7,8 @@ npm install @capacitor/cli --save-dev
 npx cap init
 
 ng build
+ó 
+ng build --configuration production
 ---------------> dist/nameSistema <-----------------------
 
 --> Instalar capacitor Android & Ios
@@ -21,3 +23,8 @@ npx cap open android
 --> Generar archivos Ios & Compilar
 npx cap open android
 npx cap open ios
+
+/* CORREO CAMBIOS NEUVOS IMPLEMENTADOS LUEGO DE CORRER EL APK */
+ng build --configuration production
+npx cap sync 
+Run: Android studio

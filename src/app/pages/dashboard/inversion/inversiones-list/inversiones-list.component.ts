@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -16,20 +16,27 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-inversiones-list',
   standalone: true,
   imports: [TableModule, InputTextModule, TagModule, IconFieldModule, InputIconModule,AvatarModule,
-    CommonModule,PaginatorModule,SoloLetrasDirective,InputGroupModule,InputGroupAddonModule,ListEmptyComponent
+    CommonModule,PaginatorModule,SoloLetrasDirective,InputGroupModule,InputGroupAddonModule,ListEmptyComponent,
+    LoadingComponent
   ],
   templateUrl: './inversiones-list.component.html',
   styleUrl: './inversiones-list.component.scss'
 })
 export default class InversionesListComponent {
 
+  @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+
     customers!: any[];
     selectedInversion!: any;
+
+    isLoading: boolean = true;
 
     /* Filtro */
     value: string = '';
@@ -54,13 +61,24 @@ export default class InversionesListComponent {
     ){}
     
     ngOnInit(): void{
-      this.listarInversiones();
-      /* this.renderizarTablaData();
-      this.calcularPaginas(); */
+      /* this.listarInversiones(); */
+      setTimeout(() => {
+        this.loadingComponent.show();
+        this.listarInversiones();
+    });
+    }
+
+    ngAfterViewInit(): void {
     }
 
     listarInversiones(){
-      this.getInversionService.getInversionesList().pipe().
+      this.loadingComponent.show();
+      this.getInversionService.getInversionesList().pipe(
+        finalize(() => {
+          this.loadingComponent.hide();
+          this.isLoading = false; // Cambia a falso cuando termine
+        }),
+      ).
       subscribe((resp: any)=> {
         if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
           this.listaInv = resp.data;
@@ -148,15 +166,7 @@ export default class InversionesListComponent {
         this.calcularPaginas();
       }
       this.totalListCount = lista.length;
-      /* console.log("lista count: "+lista.length); */
       this.listPaginador = lista.slice(init,fini);
-      /* console.log("______________________________");
-      console.log("registro inicial: "+init);
-      console.log("registro final: "+fini);
-      console.log("pagina actual: "+this.paginaActual);
-      console.log("total paginas: "+this.paginas);
-      console.log("total elementos: "+this.listPaginador.length);
-      console.log("______________________________"); */
     }
 
   // Función para obtener los colores para cada avatar

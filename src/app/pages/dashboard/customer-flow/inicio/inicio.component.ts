@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
 import { CommonModule } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { delay, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Router } from '@angular/router';
@@ -43,7 +43,7 @@ export class InicioClientComponent {
 
   getInversionesClient(){
     this.skeletonShow = true;
-    this.getInversionService.getInversionesClient().pipe(delay(300),finalize(() => this.skeletonShow = false)).
+    this.getInversionService.getInversionesClient().pipe(finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
         this.data = resp.data;

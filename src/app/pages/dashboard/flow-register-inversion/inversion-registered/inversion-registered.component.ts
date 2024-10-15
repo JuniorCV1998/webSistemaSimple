@@ -8,7 +8,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, delay, finalize, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../../core/constant/Constantes';
@@ -27,6 +27,8 @@ export default class InversionRegisteredComponent {
 
   idInversion: number | null = null;
   confetti: boolean = false;
+
+  isLoading: boolean = true;
 
   constructor(
     private messageService: MessageService,
@@ -64,19 +66,24 @@ export default class InversionRegisteredComponent {
       const id = params.get('idInversion');
       this.idInversion = id ? +id : null; // Convertir a número si existe
     });
+
+    setTimeout(() => {
+      this.loadingComponent.show();
+      this.getInversionRegistered();
+  });
   }
 
   ngAfterViewInit(): void{
-    // Recupera la información de la inversión
-    this.getInversionRegistered();
     // Brinda efecto confetti
-    this.triggerConfetti();
   }
 
   getInversionRegistered(){
-    this.loadingComponent.show();
     this.getInversionService.getInversionRegistered(this.idInversion===null?0:this.idInversion).pipe(
-      finalize(() => this.loadingComponent.hide()),
+      finalize(() => {
+        this.loadingComponent.hide();
+        this.isLoading = false; // Cambia a falso cuando termine
+        this.triggerConfetti();
+      }),
             // Manejamos errores de respuesta HTTP con catchError
             catchError((error) => {
               this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores

@@ -1,5 +1,5 @@
 
-<div>
+<div *ngIf="!isLoading">
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
         <div class="text-center mb-3">
@@ -748,5 +748,6 @@
         </p-confirmDialog>
         <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full"></button>
     </div>
-    <app-loading></app-loading>
 </div>
+
+<app-loading *ngIf="isLoading"></app-loading> 

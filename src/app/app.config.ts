@@ -8,12 +8,22 @@ import { MessageService } from 'primeng/api';
 import { MessagePopUpComponent } from './pages/modal/message-pop-up/message-pop-up.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 import { authInterceptor } from './core/interceptor/auth.interceptor';
+import { loggingInterceptor } from './core/interceptor/logging.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ 
-    eventCoalescing: true }), 
-    provideRouter(routes),provideHttpClient(withInterceptors([authInterceptor])),
-    importProvidersFrom([BrowserAnimationsModule,DynamicDialogModule]),
-    MessageService,DialogService 
+  providers: [
+    provideZoneChangeDetection({ 
+      eventCoalescing: true 
+    }), 
+    provideRouter(routes),
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor,
+        loggingInterceptor // interceptor de logging
+      ])
+    ),
+    importProvidersFrom([BrowserAnimationsModule, DynamicDialogModule]),
+    MessageService,
+    DialogService 
   ],
 };
