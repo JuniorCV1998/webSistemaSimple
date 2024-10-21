@@ -29,13 +29,18 @@
                 <!-- <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==1}" (click)="selectButton(1)">07</button>
                 <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==2}" (click)="selectButton(2)">24</button>
                 <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==3}" (click)="selectButton(3)">30</button> -->
-                <button *ngFor="let cuota of objValidationValues.cuotas; let i = index" 
-                    pButton pRipple 
-                    class="p-button-rounded" 
-                    [ngClass]="{'active-button': selected == i + 1}" 
-                    (click)="selectButton(i + 1, cuota.valor)">
-                    {{ ('0' + cuota.valor).slice(-2) }}
-                </button>
+                <div *ngFor="let cuota of objValidationValues.cuotas; let i = index"  class="flex flex-column justify-content-between gap-2">
+                    <button 
+                        pButton pRipple 
+                        class="p-button-rounded" 
+                        [ngClass]="{'active-button': selected == i + 1}" 
+                        (click)="selectButton(i + 1, cuota.valor)">
+                        {{ ('0' + cuota.valor).slice(-2) }}
+                    </button>
+                    <span class="desc-cuota"
+                    [ngClass]="{'desc-cuota-active': selected == i + 1}" 
+                    >{{cuota.valor==4?"semanas":"días"}}</span>
+                </div>
             </div>
 
             <!-- valor de interes a aplicar -->

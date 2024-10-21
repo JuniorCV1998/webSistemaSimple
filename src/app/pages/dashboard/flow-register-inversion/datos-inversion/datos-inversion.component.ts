@@ -190,14 +190,24 @@ clicFechaInicioFin(){
   selectButton(buttonNumber: number, cuota:number): void {
     this.selected = buttonNumber; // Actualiza el botón seleccionado
     this.nroCuota = cuota;
+    this.setearFechaInicio();
     this.updateDate2();
+  }
+
+  setearFechaInicio(){
+    if (this.date1) {
+      const newFecha = new Date(); 
+      if(this.nroCuota==4) newFecha.setDate(newFecha.getDate() + 7);
+      else newFecha.setDate(newFecha.getDate() + 1); 
+      this.date1 = newFecha;
+    }
   }
 
   updateDate2() {
     if (this.date1) {
-      const newDate = new Date(this.date1);
-      newDate.setDate(newDate.getDate() + this.nroCuota);
-      this.date2 = newDate;
+      const newFecha2 = new Date(this.date1); 
+      newFecha2.setDate(newFecha2.getDate() + (this.nroCuota==4 ? 21 : this.nroCuota - 1 ) );
+      this.date2 = newFecha2;
     } else {
       this.date2 = null; // Limpiar date2 si date1 no está definido
     }

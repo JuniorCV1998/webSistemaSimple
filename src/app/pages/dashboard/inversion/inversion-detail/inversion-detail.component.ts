@@ -16,12 +16,13 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { catchError, finalize, of } from 'rxjs';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { TimelineModule } from 'primeng/timeline';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
-    LoadingComponent
+    LoadingComponent,TimelineModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
