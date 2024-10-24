@@ -49,7 +49,6 @@ export default class DatosInversionComponent {
   cuotaCargada: boolean = true;
 
   //fecha inicio y fin
-  statusFecha: boolean = false;
   date1: Date = new Date();
   date2: Date | null = null;
 
@@ -68,10 +67,7 @@ export default class DatosInversionComponent {
       this.valueInteres = !objnew.statusPersonalizado?objnew.interes:20;
       this.valueInteresPerso = objnew.statusPersonalizado?objnew.interesPerso:null;
       this.statusPersonalizado = objnew.statusPersonalizado,
-      this.statusFecha = objnew.statusFecha;
-      if(objnew.statusFecha){
-        this.date1 = new Date(objnew.fechaInicio);
-      }
+      this.date1 = new Date(objnew.fechaInicio);
       this.selectButton(objnew.selected, objnew.nroCuotas); //actualiza cuota
     }
   }  
@@ -88,9 +84,8 @@ export default class DatosInversionComponent {
       interes: !this.statusPersonalizado?this.valueInteres:null,
       interesPerso: this.statusPersonalizado?this.valueInteresPerso:null,
       statusPersonalizado: this.statusPersonalizado,
-      fechaInicio: this.statusFecha==false?null:this.getFormattedDate(this.date1),
-      fechaFin: this.statusFecha==false?null:this.getFormattedDate(this.date2),
-      statusFecha: this.statusFecha,
+      fechaInicio: this.getFormattedDate(this.date1),
+      fechaFin: this.getFormattedDate(this.date2),
       selected: this.selected
     }
     sessionStorage.setItem('objInversion',JSON.stringify(request));
@@ -119,6 +114,8 @@ private handleCuotaSelection() {
   if (cuota24) {
     this.nroCuota = cuota24.valor;
     this.selected = this.objValidationValues.cuotas.indexOf(cuota24) + 1; // Asegúrate de que el índice sea correcto
+    this.setearFechaInicio();
+    this.updateDate2();
   }
 }
 
@@ -148,40 +145,6 @@ simularCuota(){
   });
 }
 
-/* async simularCuota(): Promise<void> {
-  if (!this.isFormValid()) return;
-  const request = {
-      monto: this.valueMonto,
-      cuotas: this.nroCuota,
-      interes: this.valueInteresPerso == null ? this.valueInteres : this.valueInteresPerso,
-  };
-  this.cuotaCargada = false;
-  try {
-      // Convertimos el observable a promesa usando lastValueFrom
-      const resp: any = await lastValueFrom(
-          this.getInversionService.sendSimulation(request).pipe(
-              finalize(() => this.cuotaCargada = true),
-              catchError((error) => {
-                  this.messageService.add({ severity: 'error', summary: 'SE', detail: 'Error al simular cuota.', life: 3000 });
-                  this.valorCuota = 0;
-                  return of(null); // Asegúrate de que aquí devuelves un observable
-              })
-          )
-      );
-      if (resp) {
-          this.valorCuota = resp.valorCuota; // Asignar el valor de cuota desde la respuesta
-      }
-  } catch (error) {
-      console.error("Error en la simulación de cuota:", error);
-      this.valorCuota = 0; // Manejar el error y restablecer valorCuota si es necesario
-  }
-} */
-
-clicFechaInicioFin(){
-  //this.statusFecha = !this.statusFecha;
-  this.updateDate2();
-}
-
   clicIntPersonalizado(){
     //this.interesPersonalizado = !this.interesPersonalizado;
     this.valueInteresPerso = null;
@@ -204,6 +167,8 @@ clicFechaInicioFin(){
   }
 
   updateDate2() {
+    console.log("nro cuota: "+this.nroCuota);
+    console.log("fecha 1: "+this.date1);
     if (this.date1) {
       const newFecha2 = new Date(this.date1); 
       newFecha2.setDate(newFecha2.getDate() + (this.nroCuota==4 ? 21 : this.nroCuota - 1 ) );
@@ -251,7 +216,7 @@ objValidationValues: any = {
   "cuotas": [
       {
           "codCuota": "CUO1",
-          "valor": 7
+          "valor": 4
       },
       {
           "codCuota": "CUO2",

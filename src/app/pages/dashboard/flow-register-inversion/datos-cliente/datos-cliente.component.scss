@@ -39,7 +39,7 @@ small {
 }
 
 /* Lista de Clientes */
- ::ng-deep .p-listbox .p-listbox-list {
+ ::ng-deep #contListBox .p-listbox .p-listbox-list {
     display: none;
   }
 

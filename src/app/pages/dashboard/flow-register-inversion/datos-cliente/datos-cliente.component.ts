@@ -137,7 +137,7 @@ export default class DatosClienteComponent {
         nombres: this.objClient.persona.nombres.trim(),
         apellidoPaterno: this.objClient.persona.apellidoPaterno.trim(),
         apellidoMaterno: this.objClient.persona.apellidoMaterno.trim(),
-        celular: this.objClient.persona.celular.trim().replace(/\s+/g, ''),
+        celular: this.objClient.persona.celular?.trim().replace(/\s+/g, ''),
         direccion: this.objClient.persona.direccion.trim(),
         // validate
         validado: false
@@ -203,6 +203,7 @@ export default class DatosClienteComponent {
             if (resp && resp.codigoMessage === Constantes.STATUS_SUCCESS_RI) {
                 this.listaClientes = resp.data;
                 if(this.listaClientes?.length === 0) this.functStatusClient(2);
+                /* this.addFullNameList(); */
             }
         });
   }

@@ -118,18 +118,21 @@
                 </div>
             </div>
 
+            <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3 lineaSeparar"></div>
+
             <!-- Fecha inicio y fin -->
             <div class="flex flex-column gap-2 justify-content-center">
-                <div class="flex align-items-center gap-1 mb-3">
+                <label for="interes" class="block text-900 font-medium mb-2">Establecer fecha inicio y fin</label>
+                <!-- <div class="flex align-items-center gap-1 mb-3">
                     <p-checkbox 
                         [(ngModel)]="statusFecha" 
                         [binary]="true" 
                         inputId="fif" 
                         (onChange)="clicFechaInicioFin()"/>
                     <label for="fif">Establecer fecha inicio y fin</label>
-                </div>
-                <div class="flex flex-column align-items-center gap-1 mb-4" *ngIf="statusFecha">
-                    <div class="flex flex-column w-full mb-2">
+                </div> -->
+                <div class="flex flex-row justify-content-between align-items-center gap-2 mb-4">
+                    <div class="flex flex-column w-6 mb-2">
                         <label for="fecha1">Fecha inicio</label>
                         <p-calendar 
                         [(ngModel)]="date1" 
@@ -137,12 +140,12 @@
                         [showOnFocus]="true" 
                         [touchUI]="true"
                         [dateFormat]="'dd/mm/yy'"
-                        [showTime]="true"
+                        [showTime]="false"
                         inputId="fecha1" 
                         (ngModelChange)="updateDate2()"
                         />
                     </div>
-                    <div class="flex flex-column w-full">
+                    <div class="flex flex-column w-6 mb-2">
                         <label for="fecha2">Fecha fin</label>
                         <p-calendar 
                         [(ngModel)]="date2" 
@@ -150,7 +153,7 @@
                         [showOnFocus]="true" 
                         [touchUI]="true"
                         [dateFormat]="'dd/mm/yy'"
-                        [showTime]="true"
+                        [showTime]="false"
                         inputId="fecha2" 
                         [disabled]="true"
                         />

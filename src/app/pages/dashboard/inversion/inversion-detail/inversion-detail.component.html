@@ -26,13 +26,13 @@
         </div>
 
         <ng-template [ngIf]="nroCuotas == 4">
-            <div *ngIf="objInvDetail.fechaInicio!='-' && objInvDetail.fechaFin!='-'" class="flex flex-row w-full mb-3 custom-banner-blue">
+            <div class="flex flex-row w-full mb-3 custom-banner-blue">
                 <div class="flex flex-column w-full timeline mb-4">
                     <span class="mb-3 params-txt">Fechas de pago</span>
                     <div class="flex flex-row w-full timeline mb-1">
                         <span class="flex align-items-center w-4">{{objInvDetail.fechaInicio}}</span>
                         <div class="flex w-2"></div>
-                        <span class="flex align-items-center w-4">{{objInvDetail.fecha_2}}</span>
+                        <span class="flex align-items-center w-4">{{objInvDetail.fecha_3}}</span>
                         <div class="flex w-2"></div>
                     </div>
                     <div class="flex flex-row w-full timeline mb-1">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="flex flex-row w-full timeline mb-1">
                         <div class="flex w-3"></div>
-                        <span class="flex align-items-center w-4">{{objInvDetail.fecha_3}}</span>
+                        <span class="flex align-items-center w-4">{{objInvDetail.fecha_2}}</span>
                         <div class="flex w-1"></div>
                         <span class="flex justify-content-end w-4">{{objInvDetail.fechaFin}}</span>
                     </div>
