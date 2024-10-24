@@ -67,7 +67,10 @@ primeng/resources/themes/rhea/theme.css
 html {
   padding: 0;
 }
-
+app-root{
+  width: 100%;
+  max-width: 550px;
+}
 body {
     font-family: var(--font-family);
     display: flex;

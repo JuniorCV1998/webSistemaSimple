@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { LoginService } from '../../../core/services/auth/login/login.service';
+import { Constantes } from '../../../core/constant/Constantes';
 
 @Component({
   selector: 'app-send-inicio',
@@ -23,10 +24,10 @@ export default class SendInicioComponent implements AfterViewInit {
 
     let componentToLoad: any;
 
-    if (userDecode.codPerfil === 'CLI') {
+    if (userDecode.codPerfil === Constantes.PERFIL_CLI) {
       const { InicioClientComponent } = await import('../customer-flow/inicio/inicio.component');
       componentToLoad = InicioClientComponent;
-    } else if (userDecode.codPerfil === 'INV') {
+    } else if (userDecode.codPerfil === Constantes.PERFIL_INV) {
       const { InicioComponent } = await import('../inicio/inicio.component');
       componentToLoad = InicioComponent;
     }

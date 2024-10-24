@@ -1,0 +1,102 @@
+
+/* Estilo tabla diario */
+.table-diario, .table-semanal {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-diario th, .table-diario td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.table-diario th {
+    background-color: #f2f2f2;
+    font-size: 14px;
+}
+
+.table-diario tr:nth-child(even), .table-semanal tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-diario tr:hover, .table-semanal tr:hover {
+    background-color: #f1f1f1;
+}
+/* Estilo tabla semanal */
+.table-semanal th, .table-semanal td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.table-semanal th {
+    background-color: #f2f2f2;
+    font-size: 14px;
+}
+
+/* Estilo de etiquetas */
+.nroInv{
+    color: var(--blue-500);
+    font-size: 12px;
+    font-weight: 500;
+}
+.proxima-fecha{
+    display: inline-block;
+    white-space: nowrap;
+    padding: 4px;      
+    background: var(--green-100);
+    color: var(--green-800);
+    border-radius: 5px;
+    margin-top: .3rem;
+    font-size: 11px;
+}
+.amount-rec{
+    padding: 8px;
+    border: 1px solid var(--gray-300);
+    border-radius: 5px;
+    font-size: 14px;
+}
+.pi-wallet{
+    color: var(--primary-500);
+    font-size: 1.1rem;
+}
+
+/* Enviar a cartilla de inversion */
+.pi-window-maximize{
+    color: var(--primary-400);
+    font-size: .8rem;
+    cursor: pointer;
+}
+/* Estilo para el boton ver mas / ver menos */
+.futuristic-button {
+    background-color: #609af8; /* Color de fondo */
+    color: white;              /* Color del texto */
+    border: none;              /* Sin borde */
+    border-radius: 5px;       /* Bordes redondeados */
+    padding: 6px 12px;        /* Espaciado interno reducido */
+    font-size: 12px;          /* Tamaño de fuente más pequeño */
+    cursor: pointer;           /* Cambia el cursor al pasar el mouse */
+    transition: all 0.3s;     /* Transiciones suaves */
+    box-shadow: 0 3px 8px rgba(96, 154, 248, 0.5); /* Sombra */
+    outline: none;            /* Sin contorno al hacer clic */
+}
+
+.futuristic-button:hover {
+    background-color: #14b8a6; /* Color de fondo al pasar el mouse */
+    box-shadow: 0 5px 12px rgba(20, 184, 166, 0.5); /* Sombra más intensa */
+}
+
+.futuristic-button:active {
+    transform: translateY(1px); /* Efecto al hacer clic */
+    box-shadow: 0 2px 6px rgba(20, 184, 166, 0.5); /* Sombra más pequeña */
+}
+
+/* Estilo de los label's */
+.block{
+    color: var(--gray-500);
+    font-weight: bold;
+}
+

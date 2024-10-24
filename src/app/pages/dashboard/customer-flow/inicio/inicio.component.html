@@ -57,11 +57,11 @@
                     <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''" class="flex flex-row w-full gap-2">
                             <div class="flex flex-column w-6 gap-1">
                                 <span class="span-cuotas"><b>Fecha inicio</b></span>
-                                <span class="span-cuotas">{{formatDate(inversion.fechaInicio)}}</span>
+                                <span class="span-cuotas">{{inversion.fechaInicio}}</span>
                             </div>
                             <div class="flex flex-column w-6 gap-1">
                                 <span class="span-cuotas"><b>Fecha fin</b></span>
-                                <span class="span-cuotas">{{formatDate(inversion.fechaFin)}}</span>
+                                <span class="span-cuotas">{{inversion.fechaFin}}</span>
                             </div>
                     </div>
                 </div>

@@ -1,0 +1,39 @@
+.cont-list {
+    text-align: center;
+    padding: 20px;
+    /* background-color: #f8f8f8; */
+    background-color: var(--gray-100);
+    opacity: .9;
+    border-radius: 8px;
+    border: 2px dashed #ccc;
+}
+p{
+    font-size: 13px;
+    color: var(--gray-500);
+}
+.empty-message {
+    animation: fadeIn 1s ease;
+}
+
+.empty-icon {
+    width: 90px; /* Ajusta el tamaño según tu imagen */
+    margin-bottom: 10px;
+    animation: bounce 1s infinite;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}

@@ -69,4 +69,8 @@ export class GetInversionService {
     return this.http.get(this.baseUrl+this.baseComponent+'getInversionesClient');
   }
 
+  getReportCollection(){
+    return this.http.get(this.baseUrl+this.baseComponent+'getReportCollection');
+  }
+
 }

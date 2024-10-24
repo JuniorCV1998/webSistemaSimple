@@ -31,6 +31,14 @@ export const Constantes = {
     CD_BODY_MSG_CONF: 'Antes de continuar, confirme los siguientes datos:',
 
     CD_HEADER_MSG_BNV: '¡Bienvenido!',
-    CD_BODY_MSG_BNV: 'Nos alegra que te hayas registrado. Serás redirigido al inicio de sesión con tu correo en breve.'
+    CD_BODY_MSG_BNV: 'Nos alegra que te hayas registrado. Serás redirigido al inicio de sesión con tu correo en breve.',
+
+    /* PERFILES DE USUARIO */
+
+    PERFIL_INV: 'INV',
+    PERFIL_CLI: 'CLI',
+    PERFIL_ADM: 'ADM',
+
+
 
 }

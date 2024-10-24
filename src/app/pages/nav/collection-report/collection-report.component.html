@@ -1,0 +1,89 @@
+<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+    <div class="text-center mb-5">
+        <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3 label-title">Reporte de cobranza</div>
+    </div>
+
+    <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
+        <span class="block mb-2">Diario</span>
+        <div class="flex flex-column align-items-center" *ngIf="data.reportDiario.lista.length > 0">
+            <table class="table-diario mb-3">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Cuota</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5)">
+                        <td style="width: 90%;">{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></td>
+                        <td style="width: 2%;">{{item.valorCuota | number:'1.2-2'}}</td>
+                        <td style="width: 2%; text-align: center">
+                            <i
+                            [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
+                             class="pi pi-window-maximize"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: right; font-weight: bold;">Total</td>
+                        <td>{{data.reportDiario.totalCuotas | number:'1.2-2'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- Mostrar el botón solo si hay más de 5 registros -->
+            <button *ngIf="data.reportDiario.lista.length > 5" class="futuristic-button w-4 mb-3" (click)="toggleMostrar()">
+                {{ mostrarTodo ? 'Ver menos' : 'Ver más' }}
+            </button>
+            <div class="flex flex-row w-full justify-content-around align-items-center amount-rec">
+                <div class="flex w-fullalign-items-center gap-2 p-1">
+                    <i class="pi pi-wallet"></i><span>Monto recaudado:</span> 
+                </div>
+                <div style="font-weight: bold;">{{data.amountCharged | number:'1.2-2'}}</div>
+            </div>
+        </div>
+        <div *ngIf="data.reportDiario.lista.length == 0">
+            <app-list-empty-none></app-list-empty-none>
+        </div>
+        
+    </div>
+
+    <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
+        <span class="block mb-2">Semanal</span>
+        <div class="flex flex-column align-items-center" *ngIf="data.reportSemanal.length > 0">
+            <table class="table-semanal mb-3">
+                <thead>
+                    <tr>
+                        <th style="width: 70%;">Cliente</th>
+                        <th style="width: 2%;">Falta</th>
+                        <th style="width: 2%;">Cuota</th>
+                        <th style="width: 2%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5)">
+                        <td style="width: 80%;">
+                            <div>{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></div>
+                            <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
+                        </td>
+                        <td style="width: 5%;">{{item.cuotasPendientes}}</td>
+                        <td style="width: 10%;">{{item.valorCuota | number:'1.2-2'}}</td>
+                        <td style="width: 5%; text-align: center">
+                            <i
+                            [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
+                             class="pi pi-window-maximize"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button *ngIf="data.reportSemanal.length > 5" class="futuristic-button w-4" (click)="toggleMostrarS()">
+                {{ mostrarTodoS ? 'Ver menos' : 'Ver más' }}
+            </button>
+        </div>
+        <div *ngIf="data.reportSemanal.length == 0">
+            <app-list-empty-none></app-list-empty-none>
+        </div>
+        
+    </div>
+</div>
+
+<app-loading *ngIf="isLoading"></app-loading> 

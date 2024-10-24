@@ -54,11 +54,6 @@ export class InicioClientComponent {
     } );
   }
 
-  formatDate(dateString: string) {
-    var fecha = dateString.split(' ');
-    return fecha[0];
-}
-
 setupClickListener() {
   const iconoActualizar = document.getElementById('icono-actualizar');
 
@@ -72,66 +67,4 @@ setupClickListener() {
   });
 }
 
-  /* data: any = [
-        {
-            "idInversion": 6,
-            "monto": 7000,
-            "interes": 25,
-            "comentario": "Esta es la tercera inversion registrada",
-            "nroCuotas": 24,
-            "valorCuota": 60,
-            "codOperacion": "000000006",
-            "nroInversion": 2,
-            "estadoDeuda": "C",
-            "fechaInicio": "",
-            "fechaFin": "",
-            "fechaActualizacion": "Hoy - 08:54 a. m.",
-            "ctasPagadas": 24
-        },
-        {
-            "idInversion": 7,
-            "monto": 7000,
-            "interes": 25,
-            "comentario": "Esta es la tercera inversion registrada",
-            "nroCuotas": 24,
-            "valorCuota": 60,
-            "codOperacion": "000000007",
-            "nroInversion": 3,
-            "estadoDeuda": "P",
-            "fechaInicio": "",
-            "fechaFin": "",
-            "fechaActualizacion": "Hoy - 08:54 a. m.",
-            "ctasPagadas": 17
-        },
-        {
-            "idInversion": 8,
-            "monto": 7000,
-            "interes": 25,
-            "comentario": "Esta es la tercera inversion registrada",
-            "nroCuotas": 24,
-            "valorCuota": 60,
-            "codOperacion": "000000008",
-            "nroInversion": 4,
-            "estadoDeuda": "P",
-            "fechaInicio": "",
-            "fechaFin": "",
-            "fechaActualizacion": "Hoy - 08:55 a. m.",
-            "ctasPagadas": 10
-        },
-        {
-            "idInversion": 88,
-            "monto": 1233,
-            "interes": 20,
-            "comentario": "",
-            "nroCuotas": 24,
-            "valorCuota": 61.65,
-            "codOperacion": "000000088",
-            "nroInversion": 4,
-            "estadoDeuda": "P",
-            "fechaInicio": "13/10/24 08:56",
-            "fechaFin": "06/11/24 08:56",
-            "fechaActualizacion": "Hoy - 09:01 a. m.",
-            "ctasPagadas": 13
-        }
-    ] */
 }

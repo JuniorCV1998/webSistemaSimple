@@ -35,11 +35,13 @@ header {
     border: 3px solid var(--primary-400); 
 }
 
-.pi-home,.pi-angle-left{
+.pi-angle-left{
   font-size: 1.8rem !important;
 }
-a{
+
+li a{
   cursor: pointer;
+  text-decoration: none;
 }
 
 

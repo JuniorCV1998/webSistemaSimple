@@ -9,11 +9,12 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AvatarModule } from 'primeng/avatar';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @Component({
   selector: 'app-navegation',
   standalone: true,
-  imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,AvatarModule],
+  imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,AvatarModule,TabMenuModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss'
 })
@@ -33,13 +34,15 @@ export class NavegationComponent {
 
   private routerSubscription!: Subscription;
 
+  /* Datos del usuario */
+  codPefil: any = null;
+
   constructor(
     private location: Location,
     private router: Router,
     private loginService: LoginService,
     private route: ActivatedRoute
   ){
-    const decodedToken = this.loginService.getDecodedToken();
     /* if (decodedToken) {
       console.log('Nombre:', decodedToken.nombre);
       console.log('Código Único:', decodedToken.codigoUnico);
@@ -51,8 +54,8 @@ export class NavegationComponent {
   }
 
   ngOnInit() {
-    const inicio = [
-      '/inicio'
+    const showMenu = [
+      '/inicio', '/reporte/reporte-cobranza'
     ];
     const sinInicio = [
       '/registrar/inversiondetalle'
@@ -63,12 +66,15 @@ export class NavegationComponent {
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
     this.routerSubscription = this.router.events.subscribe((event) => {
+      /* Definir el perfil de usuario */
+      const decodedToken = this.loginService.getDecodedToken();
+      if(decodedToken) this.codPefil = decodedToken.codPerfil; 
       //Definir valor de confetti
       this.setValueConfetti();
       if (event instanceof NavigationEnd) {
         const currentRoute = event.url.split('?')[0]; // Para ignorar parámetros de query
         // Controlar la visibilidad del botón "Volver" en función de la ruta actual
-        if (inicio.includes(currentRoute)) {
+        if (showMenu.includes(currentRoute)) {
           this.showVolverButton = false;
           this.showAux = false;
           /* this.showIconHome = true; */
@@ -120,9 +126,9 @@ export class NavegationComponent {
   }
 
   // Método para cerrar el sidebar
-  closeNav() {
+/*   closeNav() {
     this.sidebarOpened = false;
-  }
+  } */
 
 
 
