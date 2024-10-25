@@ -20,14 +20,19 @@
 
         <div class="flex flex-row gap-2 justify-content div-monto" (click)="mostrarMonto()">
             <div class="flex-row w-full custom-banner-3">
-                <i *ngIf="mostrar" class="pi pi-eye"></i>
-                <i *ngIf="!mostrar" class="pi pi-eye-slash"></i>
-                <span class="txt-span">Monto invertido</span>
+                <div class="flex w-1 justify-content-center">
+                    <i *ngIf="mostrar" class="pi pi-eye"></i>
+                    <i *ngIf="!mostrar" class="pi pi-eye-slash"></i>
+                </div>
+                <div class="flex w-6 justify-content-center">
+                    <span class="txt-span">Saldo por cobrar</span>
+                </div>
+                <div class="flex w-5 justify-content-center">
+                    <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">{{ monto | number:'1.2-2' }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
+                    <span *ngIf="!mostrar" class="txt-span">********</span>
+                </div>
+
                 
-                <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">{{ monto | number:'1.2-2' }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
-                <!-- <span *ngIf="mostrar" class="txt-span">{{ monto | number:'1.2-2' }}</span> -->
-                <span *ngIf="!mostrar" class="txt-span">********</span>
-                 <!-- <p>This is the banner content.</p> -->
             </div>
         </div>
 
