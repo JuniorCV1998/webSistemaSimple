@@ -43,7 +43,6 @@
   border: 2px solid white;
   box-shadow: 0 0 0 3px var(--gray-200);
   color: rgb(81, 81, 81);
-  cursor: pointer;
 }
 .p-button-rounded:focus, .p-button-rounded:active {
   outline: none !important; /* Elimina el borde de enfoque predeterminado */
@@ -70,7 +69,6 @@
   text-shadow: 1px 1px var(--gray-200);
   box-shadow: 0px 5px 10px var(--gray-200), inset 0px 4px 6px var(--gray-200);
   transition: box-shadow 0.3s, transform 0.3s;
-  cursor: pointer;
 }
 .button-press-disabled{
   background-color: var(--gray-400);
@@ -97,7 +95,6 @@
   border-radius: 8px;             /* Bordes redondeados */
   min-width: 30px;
   min-height: 110px;
-  cursor: pointer;
 }
 
 .input-fail{

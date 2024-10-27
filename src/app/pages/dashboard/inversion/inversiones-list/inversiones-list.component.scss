@@ -8,7 +8,6 @@
     text-align: center;             /* Centra el texto dentro del banner */
     
     align-items: center;
-    cursor: pointer;
   }
 .pi-filter{
     color: var(--gray-400);
@@ -17,7 +16,6 @@
 .sin-estilo{
     background-color: transparent;
     color: red;
-    cursor: pointer;
 }
 .tag-txt{
     text-align: center;
@@ -38,7 +36,6 @@ th {
 }
 tr{
     transition: .5s;
-    cursor: pointer;
 }
 tr:hover{
     background: var(--primary-100);
@@ -75,7 +72,6 @@ tr:hover{
     font-size: 10px;
     padding: 5px;
     text-align: center;
-    cursor: pointer;
 }
 .success{
     background-color: var(--primary-100);

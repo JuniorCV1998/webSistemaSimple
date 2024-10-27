@@ -32,7 +32,6 @@
     background-color: var(--gray-300);
     border-radius: 50%;
     color: white;
-    cursor: pointer;
     text-align: center;
     font-size: 15px;
     padding: 5px;
@@ -42,7 +41,6 @@
     background-color: var(--primary-500);
     border-radius: 50%;
     color: white;
-    cursor: pointer;
     text-align: center;
     font-size: 15px;
     padding: 5px;
@@ -68,7 +66,6 @@ td{
     color: var(--gray-500);                 /* Color del texto del banner */
     text-align: center;             /* Centra el texto dentro del banner */
     align-items: center;
-    cursor: pointer;
 
 }
 
@@ -120,9 +117,6 @@ td{
   .txt-span-text{
     text-align: center;
   }
-  .pi{
-    cursor: pointer;
-  }
 
   /* POP UP DE CONFIRMACION */
   ::ng-deep .p-dialog{
@@ -139,7 +133,6 @@ td{
     border-radius: 8px;             /* Bordes redondeados */
     min-width: 30px;
     align-items: center;
-    cursor: pointer;
     padding: 10px;
   }
 

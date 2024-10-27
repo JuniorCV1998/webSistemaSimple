@@ -71,7 +71,8 @@ export class InicioComponent {
 
   getInversionesLast(){
     this.skeletonShow = true;
-    this.getInversionService.getInversionesLast().pipe(finalize(() => this.skeletonShow = false)).
+    this.getInversionService.getInversionesLast().pipe(
+      finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
         //this.ultimasInversiones = resp.data.slice(0, 10);
