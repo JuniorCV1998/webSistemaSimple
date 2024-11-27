@@ -1,35 +1,62 @@
 <div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-    <div class="text-center mb-5">
+    <div class="text-center mb-4">
         <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3 label-title">Reporte de cobranza</div>
     </div>
 
     <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
-        <span class="block mb-2">Diario</span>
+        <div class="flex flex-row w-full align-items-center justify-content-between">
+            <span class="block mb-2" 
+            >Diario</span>
+            <div class="card flex justify-content-center">
+                <p-selectButton  
+                    [options]="stateOptions" 
+                    [(ngModel)]="value" 
+                    optionLabel="label" 
+                    optionValue="value"
+                    />
+            </div>
+        </div>
+        
         <div class="flex flex-column align-items-center" *ngIf="data.reportDiario.lista.length > 0">
             <table class="table-diario mb-3">
                 <thead>
                     <tr>
-                        <th>Cliente</th>
-                        <th>Cuota</th>
+                        <th colspan="2">Cliente</th>
+                        <th *ngIf="value!='pago'">Cuota</th>
+                        <th *ngIf="value=='pago'">Pagar</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5)">
-                        <td style="width: 90%;">{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></td>
-                        <td style="width: 2%;">{{item.valorCuota | number:'1.2-2'}}</td>
-                        <td style="width: 2%; text-align: center">
-                            <i
+                    <tr *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5); let i = index">
+                        <td class="item-txt">{{i + 1}}.</td>
+                        <td>{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></td>
+                        <td *ngIf="value!='pago'" style=" text-align: center; padding: 0;">{{item.valorCuota | number:'1.2-2'}}</td>
+                        <td *ngIf="value=='pago'" style=" text-align: center; padding: 0;">
+                            <span [ngClass]="item.actualizado==1?'txt-actualizado-v':'txt-actualizado'">
+                                #{{item.ctasPagadas}}
+                            </span>
+                        </td>
+                        <td style=" text-align: center; padding: 0;">
+                            <i *ngIf="value!='pago'"
                             [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
                              class="pi pi-window-maximize"></i>
+                             <div *ngIf="value=='pago' && item.nroCuotas!=item.ctasPagadas" (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName)">
+                                <img src="assets/images/dashboard/money.png" height="20">
+                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: right; font-weight: bold;">Total</td>
-                        <td>{{data.reportDiario.totalCuotas | number:'1.2-2'}}</td>
+                        <td colspan="2">{{data.reportDiario.totalCuotas | number:'1.2-2'}}</td>
                     </tr>
                 </tbody>
             </table>
+            <!-- Copiar reporte diario -->
+            <div class="flex flex-row w-full justify-content-end gap-1" *ngIf="value=='pago'" (click)="onLongPress()" >
+                <div class="copy-txt">Copiar</div>
+                <i class="pi pi-clone"></i>
+            </div>
             <!-- Mostrar el botón solo si hay más de 5 registros -->
             <button *ngIf="data.reportDiario.lista.length > 5" class="futuristic-button w-4 mb-3" (click)="toggleMostrar()">
                 {{ mostrarTodo ? 'Ver menos' : 'Ver más' }}
@@ -53,14 +80,15 @@
             <table class="table-semanal mb-3">
                 <thead>
                     <tr>
-                        <th style="width: 70%;">Cliente</th>
+                        <th colspan="2" style="width: 70%;">Cliente</th>
                         <th style="width: 2%;">Falta</th>
                         <th style="width: 2%;">Cuota</th>
                         <th style="width: 2%;"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5)">
+                    <tr *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5); let i = index">
+                        <td class="item-txt">{{i + 1}}.</td>
                         <td style="width: 80%;">
                             <div>{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></div>
                             <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
@@ -86,4 +114,56 @@
     </div>
 </div>
 
-<app-loading *ngIf="isLoading"></app-loading> 
+<app-loading></app-loading> 
+
+<div class="toast">
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>
+
+<p-confirmDialog #cd>
+    <ng-template pTemplate="headless" let-message>
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                <img src="assets/images/logos/sello_ssimple.png" width="100" height="100">
+            </div>
+            <span class="font-bold text-2xl block mb-3 mt-4">
+                {{ message.header }}
+            </span>
+            <div class="flex flex-row w-full justify-content-start gap-2 user-confirm mb-2">
+                <i class="pi pi-user icon-span"></i>
+                <span>{{clienteSeleccionado}}</span>
+            </div>
+            <div class="flex flex-row w-full justify-content-start align-items-center gap-2 user-confirm mb-3">
+                <img src="assets/images/dashboard/money.png" height="25">
+                <span>{{message.message}}</span>
+            </div>
+            
+            <!-- <p class="mb-2 message-confirm">{{ message.message }}</p> -->
+            <div class="flex flex-column">
+                <p-calendar 
+                [(ngModel)]="date" 
+                [showIcon]="true" 
+                [showOnFocus]="true" 
+                [touchUI]="true"
+                [dateFormat]="'dd/mm/yy'"
+                [showTime]="true"
+                inputId="fecha" />
+            </div>
+            <div class="flex align-items-center gap-2 mt-4">
+                <button 
+                    pButton 
+                    label="Cancelar" 
+                    (click)="cd.reject()" 
+                    class="p-button-outlined w-8rem ">
+                </button>
+                <button 
+                    pButton 
+                    label="Guardar" 
+                    (click)="cd.accept()" 
+                    class="w-8rem">
+                </button>
+                
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>

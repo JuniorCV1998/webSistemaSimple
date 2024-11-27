@@ -16,13 +16,12 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { catchError, finalize, of } from 'rxjs';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
-import { TimelineModule } from 'primeng/timeline';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
-    LoadingComponent,TimelineModule
+    LoadingComponent
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
@@ -62,13 +61,14 @@ export default class InversionDetailComponent {
     }
   }
 
+  numero: number = 0;
+
   ngOnInit(): void{
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
       const id = params.get('idInversion');
       this.idInversion = id ? +id : null; // Convertir a número si existe
     });
-
     /* detall de inversion */
     setTimeout(() => {
       this.loadingComponent.show();
@@ -81,10 +81,10 @@ export default class InversionDetailComponent {
   }
 
   getInversionesDetail(){
-    this.loadingComponent?.show();
+    /* this.loadingComponent.show(); */
     this.getInversionService.getInversionesDetail(this.idInversion===null?0:this.idInversion).pipe(
       finalize(() => {
-        this.loadingComponent?.hide();
+        this.loadingComponent.hide();
         this.isLoading = false; // Cambia a falso cuando termine
       }),
         // Manejamos errores de respuesta HTTP con catchError
@@ -145,6 +145,7 @@ export default class InversionDetailComponent {
   }
 
   mostrarContrasena(){
+    this.loadingComponent.show();
     this.mostrar = !this.mostrar;
   }
   copyCredentials(){
@@ -159,6 +160,7 @@ export default class InversionDetailComponent {
     this.confirm(cuota).then((result) => {
       if (result) {
         const fecha = this.formatearFecha(this.date);
+        this.loadingComponent.show();
         this.getInversionService.pagarCuota(this.idInversion===null?0:this.idInversion, cuota, fecha).pipe(
           // Manejamos errores de respuesta HTTP con catchError
           catchError((error) => {
@@ -170,11 +172,11 @@ export default class InversionDetailComponent {
           if(resp.codigo==Constantes.STATUS_SUCCESS_RI) {
             this.messageService.add({severity: 'success', summary: 'Pagar cuota', detail: resp.descripcion, life: 3000
             });
-            this.getInversionesDetail();
           }else{
             this.messageService.add({severity: 'error', summary: 'Pagar cuota', detail: 'Error al pagar cuota.', life: 3000
             })
           }
+          this.getInversionesDetail();
         });
       }
     });
@@ -258,18 +260,12 @@ objInvDetail: any = {
 
 async copyText(correo: string, contra: string): Promise<void> {
   try {
-
     var nombreCompleto = this.objInvDetail.persona.nombres;
     var palabras = nombreCompleto.trim().split(' ');
     // Uso de la función
     var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
 
     this.copyToClipboard(texto);
-    /* var texto = ", usa estas credenciales para iniciar sesión en el sistema:\n\n"+"Correo: "+correo +"\n"+"Contraseña: "+contra;
-    if(palabras) texto = palabras + texto;
-    else texto = "Hola" + texto;
-    await navigator.clipboard.writeText(texto); */
-    // Mostrar una notificación o mensaje opcional
     this.messageService.add({
       severity: 'info',
       summary: 'Copiar',

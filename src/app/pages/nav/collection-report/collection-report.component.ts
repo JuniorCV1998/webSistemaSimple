@@ -6,13 +6,24 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ListEmptyNoneComponent } from '../../../components/resources/list-empty-none/list-empty-none.component';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { LoadingComponent } from '../../modal/loading/loading.component';
-import { delay, finalize } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { FormsModule } from '@angular/forms';
+import { DialogService } from 'primeng/dynamicdialog';
+import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CalendarModule } from 'primeng/calendar';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-collection-report',
   standalone: true,
-  imports: [TableModule, CommonModule, TabMenuModule, ListEmptyNoneComponent, LoadingComponent],
+  imports: [TableModule, CommonModule, TabMenuModule, ListEmptyNoneComponent, LoadingComponent,SelectButtonModule,
+    FormsModule,ToastModule,ConfirmDialogModule,CalendarModule],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './collection-report.component.html',
   styleUrl: './collection-report.component.scss'
 })
@@ -35,8 +46,20 @@ export default class CollectionReportComponent {
     amountCharged: 0
   };
 
+  /* Seleccionar modo -vista */
+  stateOptions: any[] = [{ label: 'Pago', value: 'pago' }];
+
+  value: string = 'off';
+
+    //Fecha a pagar
+    date: Date = new Date();
+    clienteSeleccionado = '';
+
   constructor(
-    private getInversionService: GetInversionService
+    private getInversionService: GetInversionService,
+    public dialogService: DialogService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
   ){}
 
   ngOnInit(): void{
@@ -56,11 +79,82 @@ export default class CollectionReportComponent {
     ).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
-        this.data = resp.data;
+        if(resp.data.reportDiario!=null) this.data.reportDiario = resp.data.reportDiario;
+        if(resp.data.reportSemanal!=null) this.data.reportSemanal = resp.data.reportSemanal;
+        if(resp.data.amountCharged!=null) this.data.amountCharged = resp.data.amountCharged;
       }
     });
   }
 
+  pagarCuota(idInversion: number, cuotasPagadas: number, cliente: string){
+    this.clienteSeleccionado = cliente;
+    var cuota = cuotasPagadas+1;
+    if(!this.confirm(cuota)) return;
+    this.confirm(cuota).then((result) => {
+      if (result) {
+        const fecha = this.formatearFecha(this.date);
+        this.loadingComponent.show();
+        this.getInversionService.pagarCuota(idInversion, cuota, fecha).pipe(
+          // Manejamos errores de respuesta HTTP con catchError
+          catchError((error) => {
+            console.error('Error capturado:', error);
+            this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
+            return of(null);
+          }))
+        .subscribe((resp: any)=> { 
+          if(resp.codigo==Constantes.STATUS_SUCCESS_RI) {
+            this.messageService.add({severity: 'success', summary: 'Pagar cuota', detail: resp.descripcion, life: 1500
+            });
+          }else{
+            this.messageService.add({severity: 'error', summary: 'Pagar cuota', detail: 'Error al pagar cuota.', life: 3000
+            })
+          }
+          this.getReportCollection();
+        });
+      }
+    });
+  }
+
+  confirm(nroCuota: number): Promise<boolean> {
+    this.date = new Date();
+    return new Promise((resolve) => {
+        this.confirmationService.confirm({
+            header: 'Pagar cuota',
+            message: 'Cuota: ' + nroCuota + '',
+            accept: () => {
+                resolve(true);  // Resuelve la promesa con "true" si acepta
+            },
+            reject: () => {
+                resolve(false); // Resuelve la promesa con "false" si rechaza
+            }
+        });
+    });
+}
+
+// Método para formatear la fecha
+private formatearFecha(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexado
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+show(message: string, header: string) {
+  const ref = this.dialogService.open(MessagePopUpComponent, {
+    data: {
+      message: message
+    },
+    header: header,
+    closable: false,
+    closeOnEscape: false,
+    modal: true,         
+    width: '90%'
+  });
+}
   // Método para alternar la visualización
   toggleMostrar() {
     this.mostrarTodo = !this.mostrarTodo;
@@ -69,6 +163,104 @@ export default class CollectionReportComponent {
     this.mostrarTodoS = !this.mostrarTodoS;
   }
 
+
+  /* COPIAR DATOS DEL REPORTE DIARIO */
+
+  async onLongPress(): Promise<void> {
+    try {
+      let texto = 'REPORTE DIARIO\n\n'; // Título de la tabla
+    
+      // Encabezado de la tabla
+      texto += '-----------------------------------\n';
+      texto += '| N° | Nombre               |Cuota|\n';
+      texto += '-----------------------------------\n';
+  
+      // Recorrer la lista y agregar filas a la tabla
+      this.data.reportDiario.lista.forEach((item, index) => {
+        const primerNombre = item.fullName.split(' ')[0]; // Primer nombre
+        const segundoNombre = item.fullName.split(' ')[1] || ''; // Segundo nombre (si existe)
+        let cuotaFormateado = item.ctasPagadas+"";
+        
+        // Formatear el nombre para que tenga el mismo número de caracteres
+        const nombreCompleto = `${primerNombre} ${segundoNombre}`;
+        const nombreFormateado = this.formatCell(nombreCompleto, 20); // Ajusta el tamaño de la celda a 20 caracteres
+        cuotaFormateado = this.formatCell(cuotaFormateado, 2); // Ajusta el tamaño de la celda a 2 caracteres
+        index += 1;
+        let indexFormateado = index+"";
+        if(index<=9) indexFormateado = "0"+ indexFormateado;
+  
+        const fila = `| ${indexFormateado} | ${nombreFormateado} | #${cuotaFormateado} |`; // Genera la fila con el índice y nombre
+        texto += fila + '\n';
+      });
+  
+      texto += '-----------------------------------\n'; // Cerrar la tabla
+      
+
+      //var nombreCompleto = this.objInvDetail.persona.nombres;
+      //var palabras = nombreCompleto.trim().split(' ');
+      // Uso de la función
+      //var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
+  
+      this.copyToClipboard(texto);
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Copiar',
+        detail: 'Lista copiada al portapapeles.',
+        life: 3000
+      });
+    } catch (err) {
+      // Manejar el error si la operación de copia falla
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Copiar',
+        detail: 'Error al copiar al portapapeles.',
+        life: 3000
+      });
+      console.error('Error al copiar al portapapeles:', err);
+    }
+  }
+
+
+    // Evento de inicio de la pulsación
+    pressTimer: any;
+
+    onMouseDown() {
+      this.pressTimer = setTimeout(() => {
+        this.onLongPress();
+      }, 2000);  // 3000 milisegundos (3 segundos)
+    }
+  
+    // Evento de finalización de la pulsación
+    onMouseUp() {
+      clearTimeout(this.pressTimer);  // Cancela el temporizador si se suelta antes de los 3 segundos
+    }
+
+      // Para dispositivos móviles, también agregamos eventos táctiles
+    onTouchStart() {
+      this.pressTimer = setTimeout(() => {
+        this.onLongPress();  // Llama al método cuando el tiempo se cumple
+      }, 2000);
+    }
+
+    onTouchEnd() {
+      clearTimeout(this.pressTimer);  // Cancela el temporizador si se suelta el toque
+    }
+
+    copyToClipboard(text: string) {
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
+
+    // Función para formatear el texto de la celda y ajustarlo al tamaño deseado
+    formatCell(cellContent: string, maxLength: number): string {
+      // Asegura que el contenido de la celda tenga el tamaño especificado (maxLength)
+      const padding = ' '.repeat(maxLength - cellContent.length); // Rellenar con espacios
+      return cellContent + padding; // Devuelve el contenido de la celda con el tamaño correcto
+    }
 
 }
 

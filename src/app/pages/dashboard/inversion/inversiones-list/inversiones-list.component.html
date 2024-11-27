@@ -31,9 +31,9 @@
             <ng-template [ngIf]="totalListCount!=0">
                 <table>
                     <thead>
-                        <tr class="custom-banner">
-                            <th colspan="2" style="padding: 8px; width: 98%;">Cliente</th>
-                            <th style="padding: 8px; width: 2%;">Acción</th>
+                        <tr>
+                            <th colspan="2" style="padding: 8px">Cliente</th>
+                            <th style="padding: 8px; padding-left: 20px;">Ir</th>
                         </tr>
                     </thead>
                 
@@ -48,7 +48,9 @@
                         </td>    
                         <td style="width: 90%; padding: 8px;">
                             <span class="nombre-txt">{{object.nombres + ' '+object.apellidoPaterno + ' ' + object.apellidoMaterno}}</span><br>
-                            <div class="flex flex-row justify-content-between gap-1"><span class="fecha-txt">{{object.fechaModificacion}}</span><span class="nroInversion-txt">#{{object.nroInversion}}</span></div>
+                            <div class="flex flex-row justify-content-between gap-1"><span class="fecha-txt">{{object.fechaModificacion}}</span>
+                                <span class="nroInversion-txt">#{{object.nroInversion}}<span class="cuota-sem" *ngIf="object.nroCuota==4"> S</span></span>
+                            </div>
                         </td>
                         <td style="width: 2%; text-align: center; padding: 2px;" (click)="abrirCartilla(object.idInversion)">
                             <i class="pi pi-window-maximize" [ngClass]="object.estadoDeuda=='P'?'pi pi-window-maximize':'pi pi-window-maximize-gray'"></i>

@@ -4,6 +4,9 @@ export interface ObjReporteDiario {
     fullName: string;
     nroInversion: number;
     valorCuota: number;
+    ctasPagadas: number;
+    nroCuotas: number;
+    actualizado: number;
 }
 
 export interface ObjReporteSemanal {

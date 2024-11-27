@@ -1,14 +1,3 @@
-.custom-banner{
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    
-    align-items: center;
-  }
 .pi-filter{
     color: var(--gray-400);
     font-size: 1.7rem;
@@ -33,6 +22,7 @@ th {
     /* border-top: 1px solid var(--gray-500);
     border-bottom: 1px solid var(--gray-500); */
     color: var(--primary-500);
+    font-weight: 600;
 }
 tr{
     transition: .5s;
@@ -54,6 +44,14 @@ tr:hover{
     font-size: 11px;
     color: var(--blue-500);
     margin-top: 5px;
+}
+.cuota-sem{
+    background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
+    -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+    background-clip: text; /* Aplicar el fondo degradado al texto */
+    -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+    font-size: 11px;
+    font-weight: 500;
 }
 .pi-window-maximize{
     color: var(--primary-500);

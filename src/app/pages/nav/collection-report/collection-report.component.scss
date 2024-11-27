@@ -12,9 +12,53 @@
     font-size: 14px;
 }
 
-.table-diario th {
-    background-color: #f2f2f2;
-    font-size: 14px;
+.table-diario th, .table-semanal th {
+    /* background-color: #f2f2f2; */
+    font-size: 15px;
+    color: var(--primary-500);
+    font-weight: 600;
+}
+.copy-txt{
+    font-size: 13px;
+    color: var(--gray-500);
+}
+.pi-clone{
+    font-size: .9rem;
+    color: var(--gray-500);
+}
+
+::ng-deep .card .p-element {
+    font-size: 10px;
+    padding: 8px;
+}
+
+::ng-deep .toast .p-element {
+    font-size: 15px ;
+    width: 50px;
+}
+
+/* ESTILO DE CONFIRMA DIALOG */
+.pi-user{
+    font-size: 1.2rem;
+}
+.user-confirm{
+    color: var(--gray-500);
+    font-weight: 500;
+}
+.message-confirm{
+    font-size: 15px;
+}
+
+.item-txt{
+    font-size: 12px !important;
+    padding: 0 !important;
+}
+.txt-actualizado{
+    color: var(--gray-500);
+}
+.txt-actualizado-v{
+    color: var(--primary-500);
+    font-weight: 600;
 }
 
 .table-diario tr:nth-child(even), .table-semanal tr:nth-child(even) {
@@ -29,11 +73,6 @@
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-    font-size: 14px;
-}
-
-.table-semanal th {
-    background-color: #f2f2f2;
     font-size: 14px;
 }
 
@@ -70,6 +109,14 @@
     font-size: .8rem;
     cursor: pointer;
 }
+
+ /* POP UP DE CONFIRMACION */
+ ::ng-deep .p-dialog{
+    width: 90%;
+    max-width: 550px;
+  }
+
+
 /* Estilo para el boton ver mas / ver menos */
 .futuristic-button {
     background-color: #609af8; /* Color de fondo */
