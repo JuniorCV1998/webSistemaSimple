@@ -145,7 +145,6 @@ export default class InversionDetailComponent {
   }
 
   mostrarContrasena(){
-    this.loadingComponent.show();
     this.mostrar = !this.mostrar;
   }
   copyCredentials(){

@@ -171,9 +171,9 @@ show(message: string, header: string) {
       let texto = 'REPORTE DIARIO\n\n'; // Título de la tabla
     
       // Encabezado de la tabla
-      texto += '-----------------------------------\n';
-      texto += '| N° | Nombre               |Cuota|\n';
-      texto += '-----------------------------------\n';
+      //texto += '-----------------------------------\n';
+      //texto += '| N° | Nombre               |Cuota|\n';
+      //texto += '-----------------------------------\n';
   
       // Recorrer la lista y agregar filas a la tabla
       this.data.reportDiario.lista.forEach((item, index) => {
@@ -183,13 +183,13 @@ show(message: string, header: string) {
         
         // Formatear el nombre para que tenga el mismo número de caracteres
         const nombreCompleto = `${primerNombre} ${segundoNombre}`;
-        const nombreFormateado = this.formatCell(nombreCompleto, 20); // Ajusta el tamaño de la celda a 20 caracteres
-        cuotaFormateado = this.formatCell(cuotaFormateado, 2); // Ajusta el tamaño de la celda a 2 caracteres
+        //const nombreFormateado = this.formatCell(nombreCompleto, 20); // Ajusta el tamaño de la celda a 20 caracteres
+        //cuotaFormateado = this.formatCell(cuotaFormateado, 2); // Ajusta el tamaño de la celda a 2 caracteres
         index += 1;
         let indexFormateado = index+"";
         if(index<=9) indexFormateado = "0"+ indexFormateado;
   
-        const fila = `| ${indexFormateado} | ${nombreFormateado} | #${cuotaFormateado} |`; // Genera la fila con el índice y nombre
+        const fila = `${indexFormateado}. ${nombreCompleto} #${cuotaFormateado}`; // Genera la fila con el índice y nombre
         texto += fila + '\n';
       });
   
