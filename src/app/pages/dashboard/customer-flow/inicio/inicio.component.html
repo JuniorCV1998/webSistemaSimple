@@ -66,8 +66,8 @@
                     </div>
                 </div>
                 <div class="flex flex-column w-1 justify-content-center align-items-center">
-                    <i class="pi "
-                    [ngClass]="inversion.estadoDeuda === 'P' ? 'pi-circle-off' : 'pi-circle-on'"
+                    <i class="pi pi-window-maximize"
+                    [ngClass]="inversion.estadoDeuda === 'P' ? 'pi-inv-off' : 'pi-inv-on'"
                     [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: inversion.idInversion}"
                     ></i>
                 </div>

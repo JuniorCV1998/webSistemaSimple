@@ -263,14 +263,7 @@ async copyText(correo: string, contra: string): Promise<void> {
     var palabras = nombreCompleto.trim().split(' ');
     // Uso de la función
     var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
-
     this.copyToClipboard(texto);
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Copiar',
-      detail: 'Texto copiado al portapapeles.',
-      life: 3000
-    });
   } catch (err) {
     // Manejar el error si la operación de copia falla
     this.messageService.add({

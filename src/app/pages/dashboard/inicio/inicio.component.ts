@@ -48,6 +48,7 @@ export class InicioComponent {
   ultimasInversiones: any[] = [];
   ultimas10Inversiones: any[] = [];
   isMore10: boolean = false;
+  mostrarUltRegistros: boolean = false;
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
@@ -55,7 +56,7 @@ export class InicioComponent {
   }
 
   ngAfterViewInit() {
-    this.getInversionesLast();
+    //this.getInversionesLast();
   }
 
   getAmount(){
@@ -72,10 +73,9 @@ export class InicioComponent {
   getInversionesLast(){
     this.skeletonShow = true;
     this.getInversionService.getInversionesLast().pipe(
-      finalize(() => this.skeletonShow = false)).
+    finalize(() => this.skeletonShow = false)).
     subscribe((resp: any)=> {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
-        //this.ultimasInversiones = resp.data.slice(0, 10);
         this.ultimasInversiones = resp.data;
         this.ultimas10Inversiones = resp.data.slice(0, 10);
       }
@@ -89,6 +89,11 @@ export class InicioComponent {
   mostrarMonto(){
     this.mostrar = !this.mostrar;
     if(this.mostrar) this.getAmount();
+  }
+
+  mostrarRegistros(){
+    this.mostrarUltRegistros = !this.mostrarUltRegistros;
+    this.getInversionesLast();
   }
 
   verRegistros(){

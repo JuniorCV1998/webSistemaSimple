@@ -70,15 +70,15 @@
   }
 
   /* Estilo de los iconos */
-  .pi-circle-off{
+  .pi-inv-off{
     color: var(--primary-500);
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 500;
   }
-  .pi-circle-on{
+  .pi-inv-on{
     color: var(--gray-400);
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 500;
   }
 /* Define la animación */
 @keyframes girar {

@@ -716,7 +716,7 @@
                     
                 </div>
                 
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+                <div *ngIf="objInvDetail.comentario!=''" class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Comentario</label>
                         <span class="valor-txt-detail">

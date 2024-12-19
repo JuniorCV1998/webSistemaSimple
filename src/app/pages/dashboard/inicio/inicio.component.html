@@ -38,60 +38,61 @@
 
         <!-- Tabla de los ultimos registros de inversiones -->
          <div class="table-container">
-            <ng-template [ngIf]="skeletonShow">
-                <div class="flex flex-row" style="min-width: 278px;">
-                    <div class="w-full p-2">
-                        <div class="flex w-full mb-1 gap-2 row-skeleton">
-                            <p-skeleton class="w-7" styleClass="mb-2" height="1.5rem"/>
-                            <p-skeleton class="w-2" styleClass="mb-2" height="1.5rem"/>
-                            <p-skeleton class="w-3" styleClass="mb-2" height="1.5rem"/>
+                 <!-- [ngIf]="!skeletonShow" -->
+                <div class="flex flex-column gap-2 div-monto custom-banner-4">
+                    <div class="flex flex-row justify-content-between  w-full">
+                        <div class="flex w-8 gap-2 justify-content-start">
+                            <i class="pi pi-list"></i> 
+                            <span class="txt-span">Últimos registros</span>
                         </div>
-                        <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-1 gap-2 row-skeleton">
-                            <div class="flex flex-column w-full gap-1">
-                                <p-skeleton class="w-10" height="1rem" />
-                                <p-skeleton class="w-8" height="1rem" />
-                            </div>
-                            <p-skeleton class="w-4" height="2rem" />
+                        <div class="flex w-2 justify-content-center">
+                            <i (click)="mostrarRegistros()" [class.pi-angle-down]="!mostrarUltRegistros" [class.pi-angle-up]="mostrarUltRegistros" class="pi"></i>
                         </div>
                     </div>
-                </div>
-            </ng-template>
-            
-            <ng-template [ngIf]="!skeletonShow">
-                <table class="w-full">
-                    <thead>
-                      <div class="flex flex-row tr-cabecera">
-                        <div class="span-1 w-10 flex justify-content-between" >
-                            <span>Últimos registros</span>
-                            <i class="pi pi-refresh" (click)="getInversionesLast()"></i>
-                        </div>
-                        <div *ngIf="ultimasInversiones.length > 10" class="span-2 w-5 flex justify-content-end">
-                            <span (click)="verRegistros()">Ver todos</span>
-                        </div>
+                    <ng-template [ngIf]="mostrarUltRegistros">
+                        <ng-template [ngIf]="!skeletonShow">
+                            <div class="w-full">
+                                <table class="w-full">
+                                    <tbody>
+                                      <div *ngFor="let inversion of ultimas10Inversiones" class="tr-registros">
+                                        <div class="flex flex-row" [routerLink]="['/registrar/inversiondetalle']" [queryParams]="{ idInversion: inversion.idInversion }">
+                                            <div class="flex flex-column w-10">
+                                                <span class="span-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
+                                                <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
+                                            </div>
+                                            <div class="flex flex-column justify-content-center w-5 ">
+                                                <span class="flex justify-content-end span-monto" >{{ inversion.monto | number:'1.2-2' }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="ultimasInversiones.length > 10 || ultimasInversiones.length === 0" class="tr-registros-s">
+                                        <div class="flex justify-content-center flex-row span-2">
+                                            <span *ngIf="ultimasInversiones.length > 10" (click)="verRegistros()">Ver todos</span>
+                                            <span *ngIf="ultimasInversiones.length === 0">Aún no hay registros.</span>
+                                        </div>
+                                    </div>
+                                    </tbody>
+                                  </table>
+                            </div>
+                        </ng-template>
                         
-                      </div>
-                    </thead>
-                    <tbody>
-                      <div *ngFor="let inversion of ultimas10Inversiones" class="tr-registros">
-                        <div class="flex flex-row" [routerLink]="['/registrar/inversiondetalle']" [queryParams]="{ idInversion: inversion.idInversion }">
-                            <div class="flex flex-column w-10">
-                                <span class="span-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
-                                <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
+                        <ng-template [ngIf]="skeletonShow">
+                            <div class="flex flex-row w-full" style="min-width: 278px;">
+                                <div class="w-full p-2">
+                                    <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-1 gap-2 row-skeleton">
+                                        <div class="flex flex-column w-full gap-1">
+                                            <p-skeleton class="w-10" height="1rem" />
+                                            <p-skeleton class="w-8" height="1rem" />
+                                        </div>
+                                        <p-skeleton class="w-4" height="2rem" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-column justify-content-center w-5 ">
-                                <span class="flex justify-content-end span-monto" >{{ inversion.monto | number:'1.2-2' }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="ultimasInversiones.length > 10 || ultimasInversiones.length === 0" class="tr-registros">
-                        <div class="flex justify-content-center flex-row span-2">
-                            <span *ngIf="ultimasInversiones.length > 10" (click)="verRegistros()">Ver todos</span>
-                            <span *ngIf="ultimasInversiones.length === 0">Aún no hay registros.</span>
-                        </div>
-                    </div>
-                    </tbody>
-                  </table>
-            </ng-template>
+                        </ng-template>
+                    </ng-template>
+                    
+
+                </div>
          </div>
     </div>
     <app-loading></app-loading>

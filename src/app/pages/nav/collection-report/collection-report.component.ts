@@ -166,25 +166,28 @@ show(message: string, header: string) {
 
   /* COPIAR DATOS DEL REPORTE DIARIO */
 
-  async onLongPress(): Promise<void> {
+  async onLongPress(n: number): Promise<void> {
     try {
-      let texto = 'REPORTE DIARIO\n\n'; // Título de la tabla
-    
-      // Encabezado de la tabla
-      //texto += '-----------------------------------\n';
-      //texto += '| N° | Nombre               |Cuota|\n';
-      //texto += '-----------------------------------\n';
-  
+      let texto = ''; // Título de la tabla
+      let lista: any[] = [];
+      if(n == 1) {
+        texto = 'REPORTE DIARIO\n\n';
+        lista = this.data.reportDiario.lista;
+      }
+      else {
+        texto = 'REPORTE SEMANAL\n\n';
+        lista = this.data.reportSemanal;
+      }
+
       // Recorrer la lista y agregar filas a la tabla
-      this.data.reportDiario.lista.forEach((item, index) => {
+      lista.forEach((item, index) => {
         const primerNombre = item.fullName.split(' ')[0]; // Primer nombre
         const segundoNombre = item.fullName.split(' ')[1] || ''; // Segundo nombre (si existe)
-        let cuotaFormateado = item.ctasPagadas+"";
+        let cuotaFormateado = "";
+        if (n == 1) cuotaFormateado += item.ctasPagadas;
+        else cuotaFormateado += (4-item.cuotasPendientes);
         
-        // Formatear el nombre para que tenga el mismo número de caracteres
         const nombreCompleto = `${primerNombre} ${segundoNombre}`;
-        //const nombreFormateado = this.formatCell(nombreCompleto, 20); // Ajusta el tamaño de la celda a 20 caracteres
-        //cuotaFormateado = this.formatCell(cuotaFormateado, 2); // Ajusta el tamaño de la celda a 2 caracteres
         index += 1;
         let indexFormateado = index+"";
         if(index<=9) indexFormateado = "0"+ indexFormateado;
@@ -195,19 +198,7 @@ show(message: string, header: string) {
   
       texto += '-----------------------------------\n'; // Cerrar la tabla
       
-
-      //var nombreCompleto = this.objInvDetail.persona.nombres;
-      //var palabras = nombreCompleto.trim().split(' ');
-      // Uso de la función
-      //var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
-  
       this.copyToClipboard(texto);
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Copiar',
-        detail: 'Lista copiada al portapapeles.',
-        life: 3000
-      });
     } catch (err) {
       // Manejar el error si la operación de copia falla
       this.messageService.add({
@@ -219,32 +210,6 @@ show(message: string, header: string) {
       console.error('Error al copiar al portapapeles:', err);
     }
   }
-
-
-    // Evento de inicio de la pulsación
-    pressTimer: any;
-
-    onMouseDown() {
-      this.pressTimer = setTimeout(() => {
-        this.onLongPress();
-      }, 2000);  // 3000 milisegundos (3 segundos)
-    }
-  
-    // Evento de finalización de la pulsación
-    onMouseUp() {
-      clearTimeout(this.pressTimer);  // Cancela el temporizador si se suelta antes de los 3 segundos
-    }
-
-      // Para dispositivos móviles, también agregamos eventos táctiles
-    onTouchStart() {
-      this.pressTimer = setTimeout(() => {
-        this.onLongPress();  // Llama al método cuando el tiempo se cumple
-      }, 2000);
-    }
-
-    onTouchEnd() {
-      clearTimeout(this.pressTimer);  // Cancela el temporizador si se suelta el toque
-    }
 
     copyToClipboard(text: string) {
       const el = document.createElement('textarea');
@@ -261,6 +226,5 @@ show(message: string, header: string) {
       const padding = ' '.repeat(maxLength - cellContent.length); // Rellenar con espacios
       return cellContent + padding; // Devuelve el contenido de la celda con el tamaño correcto
     }
-
 }
 

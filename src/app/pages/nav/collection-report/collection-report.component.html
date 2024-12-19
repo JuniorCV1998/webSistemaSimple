@@ -23,7 +23,7 @@
                     <tr>
                         <th colspan="2">Cliente</th>
                         <th *ngIf="value!='pago'">Cuota</th>
-                        <th *ngIf="value=='pago'">Pagar</th>
+                        <th *ngIf="value=='pago'">Pagó</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -53,9 +53,11 @@
                 </tbody>
             </table>
             <!-- Copiar reporte diario -->
-            <div class="flex flex-row w-full justify-content-end gap-1" *ngIf="value=='pago'" (click)="onLongPress()" >
-                <div class="copy-txt">Copiar</div>
-                <i class="pi pi-clone"></i>
+            <div class="flex justify-content-end w-full">
+                <div class="flex gap-1 mb-2" *ngIf="value=='pago'" (click)="onLongPress(1)">
+                    <div class="copy-txt">Copiar</div>
+                    <i class="pi pi-clone"></i>
+                </div>
             </div>
             <!-- Mostrar el botón solo si hay más de 5 registros -->
             <button *ngIf="data.reportDiario.lista.length > 5" class="futuristic-button w-4 mb-3" (click)="toggleMostrar()">
@@ -81,7 +83,7 @@
                 <thead>
                     <tr>
                         <th colspan="2" style="width: 70%;">Cliente</th>
-                        <th style="width: 2%;">Falta</th>
+                        <th style="width: 2%;">Pagó</th>
                         <th style="width: 2%;">Cuota</th>
                         <th style="width: 2%;"></th>
                     </tr>
@@ -93,7 +95,7 @@
                             <div>{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></div>
                             <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
                         </td>
-                        <td style="width: 5%;">{{item.cuotasPendientes}}</td>
+                        <td style="width: 5%;">{{ 4 - (item?.cuotasPendientes ?? 0) }}</td>
                         <td style="width: 10%;">{{item.valorCuota | number:'1.2-2'}}</td>
                         <td style="width: 5%; text-align: center">
                             <i
@@ -103,6 +105,13 @@
                     </tr>
                 </tbody>
             </table>
+            <!-- Copiar reporte semanal -->
+            <div class="flex justify-content-end w-full">
+                <div class="flex gap-1 mb-2" *ngIf="value=='pago'" (click)="onLongPress(2)">
+                    <div class="copy-txt">Copiar</div>
+                    <i class="pi pi-clone"></i>
+                </div>
+            </div>
             <button *ngIf="data.reportSemanal.length > 5" class="futuristic-button w-4" (click)="toggleMostrarS()">
                 {{ mostrarTodoS ? 'Ver menos' : 'Ver más' }}
             </button>

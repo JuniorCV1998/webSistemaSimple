@@ -40,8 +40,6 @@
     flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
     margin: 5px;                   /* Espacio alrededor de cada banner */
     padding: 30px;                  /* Espacio dentro de cada banner */
-    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
-    background: var(--primary-500);
     background: #fff;
     box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
     color: var(--gray-500);                 /* Color del texto del banner */
@@ -58,8 +56,6 @@
     flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
     margin: 5px;                   /* Espacio alrededor de cada banner */
     padding: 15px;                  /* Espacio dentro de cada banner */
-    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
-    background: var(--primary-500);
     background: #fff;
     box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2); 
     color: var(--gray-500);                 /* Color del texto del banner */
@@ -72,8 +68,24 @@
     pointer-events: auto;
   }
 
+  .custom-banner-4 {
+    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
+    margin: 5px;                   /* Espacio alrededor de cada banner */
+    padding: 15px;                  /* Espacio dentro de cada banner */
+    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+    color: var(--primary-500);                 /* Color del texto del banner */
+    text-align: center;             /* Centra el texto dentro del banner */
+    border-radius: 8px;             /* Bordes redondeados */
+    min-width: 30px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: auto;
+  }
 
-  .custom-banner-3 i{
+  .custom-banner-3 i, .custom-banner-4 i{
     font-size: 18px;
     margin-right: .5rem;
   }
@@ -109,10 +121,12 @@
     color: black;
     font-size: 15px;
     margin-bottom: 4px;
+    text-align: left;
   }
   table .span-fecha{
     color: var(--gray-500);
     font-size: 12px;
+    text-align: left;
   }
   table .tr-registros{
     padding: 5px;
@@ -120,6 +134,11 @@
     padding-bottom: 10px;
     /* margin-bottom: 8px; */
     border-bottom: 1px solid var(--gray-300);
+  }
+  table .tr-registros-s{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   table .tr-registros:hover{
     background-color: var(--gray-100);
