@@ -16,10 +16,14 @@ export const routes: Routes = [
         data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_ADM] }
     },
 
-    /* Flujo de Authenticacion del Usuario */
+    /* Flujo de Authenticacion del Usuario */ 
     {
         path:'login',
         loadComponent:() => import('././pages/auth/login/login.component')
+    },
+    {
+        path:'login-user',
+        loadComponent:() => import('././pages/auth/login-user/login-user.component')
     },
     {
         path: 'registrar',

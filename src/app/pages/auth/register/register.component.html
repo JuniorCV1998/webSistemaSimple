@@ -18,8 +18,8 @@
 
             <label for="password1" class="block text-900 font-medium mb-2">Contraseña</label>
             <div class="relative w-full mb-3">
-                <input [(ngModel)]="objUser.contrasena" id="password1" aria-describedby="pass-help" 
-                (ngModelChange)="isValidPassword = validarContrasena(objUser.contrasena)"
+                <input [(ngModel)]="objUser.contrasena" id="password1" aria-describedby="pass-help" [maxlength]="6" appSoloNumeros
+                (ngModelChange)="isValidPassword = validarContrasena(objUser.contrasena.trim())"
                 [type]="passwordFieldType" placeholder="Contraseña" (focus)="onFocus(2)" (blur)="onBlur(2)" 
                 pInputText class="w-full">
                 <!-- Icono de ojo -->
@@ -30,12 +30,13 @@
             </div>
             <small *ngIf="isWritingP || (!isValidPassword && objUser?.contrasena?.length > 0)"
                 [style.color]="!isValidPassword && objUser?.contrasena?.length > 0 ? 'red' : 'inherit'"
-                 id="pass-help"><i class="pi pi-info-circle"></i> Mínimo 8 caracteres, al menos una letra y un número.<br><br></small>
+                 id="pass-help"><i class="pi pi-info-circle"></i> Debe contener exactamente 6 caracteres numéricos.<br><br></small>
 
             <!-- <p-password formControlName="value" [feedback]="true" [toggleMask]="true"/> -->
             <label for="password2" class="block text-900 font-medium mb-2">Confirmar contraseña</label>
             <div class="relative w-full mb-3">
-                <input [(ngModel)]="objUser.contrasena2" id="password2" [type]="passwordFieldType2" placeholder="Confirmar contraseña" pInputText class="w-full">
+                <input [(ngModel)]="objUser.contrasena2" id="password2" [type]="passwordFieldType2" [maxlength]="6" appSoloNumeros
+                 placeholder="Confirmar contraseña" pInputText class="w-full">
                 <!-- Icono de ojo -->
                 <i id="iconPassword1" class="pi" [ngClass]="passwordFieldType2 === 'password' ? 'pi-eye' : 'pi-eye-slash'" 
                 (click)="togglePasswordVisibility(2)" 

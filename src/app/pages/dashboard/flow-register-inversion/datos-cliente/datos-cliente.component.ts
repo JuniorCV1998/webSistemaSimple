@@ -20,7 +20,6 @@ import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
 @Component({

@@ -14,12 +14,13 @@ import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
+import { SoloNumerosDirective } from '../../../components/directives/solo-numeros.directive';
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,CommonModule,InputOtpModule,FormsModule,
-    LoadingComponent
+    LoadingComponent,SoloNumerosDirective
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -55,7 +56,7 @@ export default class RegisterComponent {
     if(objUser) {
       this.objUser = JSON.parse(objUser);
       this.codigoUnico = this.objUser?.codigoUnico.replace("SS-","");
-      this.isValidPassword = this.validarContrasena(this.objUser?.contrasena)
+      this.isValidPassword = this.validarContrasena(this.objUser?.contrasena.trim());
     }else this.codRegisterValidate = null;
   }
 
@@ -177,7 +178,8 @@ ref.onClose.subscribe((result: any) => {
 }
 
 validarContrasena(contrasena: string): boolean {
-  const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  const regex = /^\d{6}$/; // Solo 6 dígitos numéricos
+  console.log("aqui :D: "+contrasena);
   return regex.test(contrasena);
 }
 

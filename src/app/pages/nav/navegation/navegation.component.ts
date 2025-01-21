@@ -164,7 +164,7 @@ export class NavegationComponent {
     const event = new Event('');
     this.closeCallback(event);
     sessionStorage.clear();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login-user']);
   }
 
 }

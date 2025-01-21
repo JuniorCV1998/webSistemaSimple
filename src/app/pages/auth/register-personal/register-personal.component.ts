@@ -20,13 +20,14 @@ import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-register-personal',
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,
     CommonModule,InputOtpModule,FormsModule,NroCelularDirective,SoloLetrasDirective,
-    CardModule,BreadcrumbModule,LoadingComponent,ConfirmDialogModule],
+    CardModule,BreadcrumbModule,LoadingComponent,ConfirmDialogModule,DialogModule],
   providers: [ConfirmationService],
   templateUrl: './register-personal.component.html',
   styleUrl: './register-personal.component.scss'
@@ -39,6 +40,10 @@ export default class RegisterPersonalComponent {
   correo: string = '';
 
   confirmCase: boolean = true;
+  // Política de Privacidad
+  checked: boolean = false;
+  visible: boolean = false;
+  userEmail = 'generalservicesjyr@gmail.com';
 
   objPersona: any = {
     nombres: "",
@@ -96,7 +101,7 @@ export default class RegisterPersonalComponent {
           })
         ).subscribe((resp: any) => {
           if (resp?.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord == 1) {
-            sessionStorage.setItem('correo',resp.data);
+            sessionStorage.setItem('emailCreate',resp.data);
             this.confirmCase = false;
             this.confirm(resp.message, Constantes.CD_BODY_MSG_BNV).then((result) => {
                 this.router.navigate(['login']);
@@ -153,10 +158,14 @@ export default class RegisterPersonalComponent {
         this.objPersona.apellidoMaterno.trim() !== '' &&
         this.objPersona.celular.trim() !== '' &&
         this.objPersona.celular.length === 11 &&
-        this.objPersona.direccion.trim() !== ''
+        this.objPersona.direccion.trim() !== '' &&
+        this.checked != false
       );
   }
 
+  showDialog() {
+      this.visible = true;
+  }
 
 /* formatCelular(input: string): string {
   const value = input.replace(' ','');

@@ -39,6 +39,13 @@
                 </div>
             </div>
 
+            <div class="flex flex-row gap-3 align-items-center justify-content-center">
+                <p-checkbox [(ngModel)]="checked" [binary]="true" />
+                <p>He leído y acepto la 
+                    <a class="font-medium no-underline text-blue-400 cursor-pointer" (click)="showDialog()">Política de Privacidad</a>
+                 y confirmo que soy mayor de 18 años de edad.</p>
+            </div>
+
 <!--             <div class="card flex justify-content-center">
                 
                 <p-card>
@@ -58,6 +65,70 @@
             pButton pRipple label="Registrarme" (click)="registrarInversor()" [disabled]="!isFormValid()" class="w-full"></button>
         </div>
     </div>
+
+    <!-- TERMINOS Y CONDICIONES -->
+    <p-dialog header="Política de Privacidad" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+        <p>
+            Actualizado: 20 de enero de 2025<br><br>
+
+            <b>1. Introducción</b><br><br>
+
+            En Sistema Simple, nos comprometemos a proteger la privacidad y la seguridad de los datos personales de nuestros usuarios. <br>Esta política de privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos la información personal que nos proporcionas al utilizar nuestra aplicación.
+            <br><br>
+            <b>2. Datos que recopilamos</b><br><br>
+
+            Al registrarte y utilizar nuestra aplicación, recopilamos los siguientes datos personales:
+            <br><br>
+            Nombre completo, 
+            Apellido, 
+            Dirección, 
+            Número de celular, 
+            Correo electrónico.<br><br>
+
+            Estos datos se recopilan cuando creas una cuenta y se utilizan exclusivamente para la gestión de préstamos y la administración de la información relacionada con los mismos.
+            <br><br>
+            <b>3. Uso de la información</b><br><br>
+
+            La información que recopilamos es utilizada exclusivamente para los siguientes fines:<br><br>
+
+            Gestionar los préstamos realizados a tus clientes.<br>
+            Registrar y almacenar los datos para facilitar el acceso a la información relacionada con los préstamos.<br>
+            Proveerte con una experiencia personalizada y eficiente en la aplicación.<br><br>
+
+            <b>4. Almacenamiento de la información</b><br><br>
+
+            Tu información personal será almacenada en nuestros servidores de manera segura. Tomamos las medidas necesarias para proteger tus datos de accesos no autorizados, alteración o eliminación.
+            <br><br>
+            <b>5. No validación de la información</b><br><br>
+
+            Es importante tener en cuenta que no validamos la veracidad de los datos proporcionados. La aplicación únicamente almacena y organiza la información tal como se introduce, sin verificar si los datos son correctos o reales. Es responsabilidad del usuario proporcionar datos precisos y completos.
+            <br><br>
+            <b>6. Compartición de la información</b><br><br>
+
+            No compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con las leyes o regulaciones aplicables, o si es requerido por un proceso legal.
+            <br><br>
+            
+            <b>7. Seguridad de los datos</b><br><br>
+
+            Implementamos medidas de seguridad razonables para proteger tu información personal. Sin embargo, ninguna transmisión de datos a través de Internet o sistema de almacenamiento electrónico es completamente segura, por lo que no podemos garantizar la seguridad absoluta de tus datos.
+            <br><br>
+            <b>8. Cambios en esta política de privacidad</b><br><br>
+
+            Nos reservamos el derecho de actualizar o modificar esta política de privacidad en cualquier momento. Cualquier cambio será publicado en esta página, y la fecha de la última actualización será indicada al inicio de la política.
+            <br><br>
+            <b>9. Contacto</b><br><br>
+
+            Si tienes alguna pregunta o inquietud sobre esta política de privacidad o cómo manejamos tus datos, no dudes en contactarnos a través de:
+            <br><br>
+            <a class="font-medium no-underline text-blue-400 cursor-pointer"> {{userEmail}} </a>
+        </p>
+    </p-dialog>
+    <!-- 7. Retención de los datos<br><br>
+
+            Retendremos tus datos personales mientras sea necesario para los fines descritos en esta política o hasta que tu cuenta sea eliminada. Puedes eliminar tu cuenta y los datos asociados en cualquier momento a través de las opciones dentro de la aplicación.
+            <br><br> -->
+    <!-- FIN TERMINOS Y CONDICIONES -->
+
     <p-confirmDialog #cd>
         <ng-template pTemplate="headless" let-message>
             <div class="flex flex-column align-items-center p-5 surface-overlay border-round">

@@ -7,7 +7,7 @@
         <div class="flex flex-row w-full align-items-center justify-content-between">
             <span class="block mb-2" 
             >Diario</span>
-            <div class="card flex justify-content-center">
+            <div *ngIf="data.reportDiario.lista.length > 0 || data.reportSemanal.length > 0" class="card flex justify-content-center">
                 <p-selectButton  
                     [options]="stateOptions" 
                     [(ngModel)]="value" 

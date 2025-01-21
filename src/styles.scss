@@ -62,7 +62,8 @@ primeng/resources/themes/rhea/theme.css
 * {
     //margin: 0;
     box-sizing: border-box;
-    user-select: none;
+    user-select: none; /* Texto sin poder seleccionar */
+    -webkit-tap-highlight-color: transparent; /* Elimina el fondo de resaltado en dispositivos móviles */
   }
 
 html {
@@ -195,6 +196,12 @@ small{
   padding: 0;             /* Quitar el padding */
   cursor: pointer;        /* Mantener el cursor de puntero */
   text-align: left;       /* Alinear el texto a la izquierda, opcional */
+}
+
+/* ESTILO PARA MOBILE */
+
+.no-clic-movil{
+  -webkit-tap-highlight-color: transparent; /* Elimina el fondo de resaltado en dispositivos móviles */
 }
 
 

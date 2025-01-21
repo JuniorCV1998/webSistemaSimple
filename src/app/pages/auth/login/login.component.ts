@@ -13,13 +13,14 @@ import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../core/constant/Constantes';
 import { LoadingComponent } from '../../modal/loading/loading.component';
+import { InputOtpModule } from 'primeng/inputotp';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,FormsModule,
-    ConfirmDialogModule,CommonModule,LoadingComponent],
+    ConfirmDialogModule,CommonModule,LoadingComponent,InputOtpModule],
   providers: [ConfirmationService],
   templateUrl: './login.component.html', 
   styleUrl: './login.component.scss'
@@ -27,21 +28,25 @@ import { LoadingComponent } from '../../modal/loading/loading.component';
 export default class LoginComponent {
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
-  
-  /* Mostrar/ocultar contraseña */
-  passwordFieldType: string = 'password';
+
+  /*Limpiar correo  */
+  cleanCorreo: string = 'clean';
+  codigoUnico: string = '';
   
   constructor(
     private router: Router,
     private loginService:LoginService,
     public dialogService: DialogService,
-  ) {}
+  ) {
+    const correo = localStorage.getItem('correo');
+      if(correo) router.navigate(['/login-user']);
+  }
 
   ngOnInit(): void{
-    this.clearSessionStorageExcept(['correo']);
-    const obj = sessionStorage.getItem('correo');
-    if(obj) {
-      this.credenciales.correo = obj;
+    const emailCreate = sessionStorage.getItem('emailCreate');
+    if(emailCreate) {
+      this.credenciales.correo = emailCreate;
+      sessionStorage.clear();
     }
   }
 
@@ -59,6 +64,7 @@ export default class LoginComponent {
       this.loginService.iniciarSesion(this.credenciales).subscribe({
         next: response => { 
           this.loadingComponent.hide();
+          localStorage.setItem('correo', this.credenciales.correo)
           this.router.navigate(['inicio']);
         },
         error: err => {
@@ -88,32 +94,13 @@ export default class LoginComponent {
     isFormValid(): boolean {
         return (
           this.credenciales.correo.trim() !== '' &&
-          this.credenciales.contrasena.trim() !== ''
+          this.credenciales.contrasena.length === 6
         );
     }
 
-    togglePasswordVisibility() {
-      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-    }
-
-    clearSessionStorageExcept(keysToKeep: string[]) {
-      // Guardar las claves y valores que no se deben eliminar
-      const valuesToKeep: { [key: string]: string | null } = {};
-    
-      keysToKeep.forEach((key) => {
-        const value = sessionStorage.getItem(key);
-        if (value !== null) {
-          valuesToKeep[key] = value;
-        }
-      });
-    
-      // Limpiar todo el sessionStorage
-      sessionStorage.clear();
-    
-      // Restaurar los valores que queremos conservar
-      Object.keys(valuesToKeep).forEach((key) => {
-        sessionStorage.setItem(key, valuesToKeep[key]!);
-      });
+    cleanCorreoFunct() {
+      this.cleanCorreo = this.cleanCorreo === 'clean' ? '' : 'clean';
+      this.credenciales.correo = '';
     }
 
 }
