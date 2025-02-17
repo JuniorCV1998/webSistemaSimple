@@ -73,4 +73,8 @@ export class GetInversionService {
     return this.http.get(this.baseUrl+this.baseComponent+'getReportCollection');
   }
 
+  renewInversion(obj: any){
+    return this.http.post(this.baseUrl+this.baseComponent+'renewInversion',obj);
+  }
+
 }

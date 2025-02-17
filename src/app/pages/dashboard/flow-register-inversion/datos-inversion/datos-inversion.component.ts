@@ -8,15 +8,13 @@ import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { Router } from '@angular/router';
-import { NroCelularDirective } from '../../../../components/directives/nro-celular.directive';
-import { SoloLetrasDirective } from '../../../../components/directives/solo-letras.directive';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule  } from 'primeng/calendar';
 import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 import { KnobModule } from 'primeng/knob';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, finalize, lastValueFrom, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 
@@ -24,9 +22,9 @@ import { LoadingComponent } from '../../../modal/loading/loading.component';
 @Component({
   selector: 'app-datos-inversion',
   standalone: true,
-  imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,InputOtpModule,FormsModule,
-    NroCelularDirective,SoloLetrasDirective,CardModule,BreadcrumbModule,InputNumberModule,CalendarModule,
-    CommonModule,KnobModule,LoadingComponent
+  imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,InputOtpModule,FormsModule
+            ,CardModule,BreadcrumbModule,InputNumberModule,CalendarModule,
+           CommonModule,KnobModule,LoadingComponent
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'
@@ -167,8 +165,6 @@ simularCuota(){
   }
 
   updateDate2() {
-    console.log("nro cuota: "+this.nroCuota);
-    console.log("fecha 1: "+this.date1);
     if (this.date1) {
       const newFecha2 = new Date(this.date1); 
       newFecha2.setDate(newFecha2.getDate() + (this.nroCuota==4 ? 21 : this.nroCuota - 1 ) );
@@ -189,18 +185,18 @@ simularCuota(){
     }
 
     getFormattedDate(date: any): string | null {
-      if (!date) {
-        return null; // Retorna null si la fecha es null
+        if (!date) {
+          return null; // Retorna null si la fecha es null
+        }
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque los meses son 0-indexados
+          const day = String(date.getDate()).padStart(2, '0');
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          const seconds = String(date.getSeconds()).padStart(2, '0');
+      
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // +1 porque los meses son 0-indexados
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-  
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  }
 
 objValidationValues: any = {
   "montoLimit": {

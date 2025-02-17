@@ -16,12 +16,16 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { catchError, finalize, of } from 'rxjs';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { CarouselModule } from 'primeng/carousel';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
-    LoadingComponent
+    LoadingComponent,CarouselModule,FloatLabelModule,InputTextareaModule,CheckboxModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
@@ -43,6 +47,17 @@ export default class InversionDetailComponent {
   date: Date = new Date();
   // cod perfil
   codPerfil: string = '';
+
+  //lista de productos disponibles para el usuario
+  products: any = [];
+
+  //Renovacion
+  //fecha inicio y fin
+  date1: Date = new Date();
+  date2: Date | null = null;
+  showComent: number | null = null;
+  txtComentario: string = "";
+  valorCuota: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -73,7 +88,8 @@ export default class InversionDetailComponent {
     setTimeout(() => {
       this.loadingComponent.show();
       this.getInversionesDetail();
-  });
+    });
+    this.setearFechaInicio();
   }
   
   ngAfterViewInit(): void {
@@ -155,10 +171,10 @@ export default class InversionDetailComponent {
 
   pagarCuota(cuota: number){
     if(this.codPerfil==='CLI') return;
-    if(!this.confirm(cuota)) return;
-    this.confirm(cuota).then((result) => {
+    if(!this.confirmCuota(cuota)) return;
+    this.confirmCuota(cuota).then((result) => {
       if (result) {
-        const fecha = this.formatearFecha(this.date);
+        const fecha = this.formatearFecha(this.date) ?? '';
         this.loadingComponent.show();
         this.getInversionService.pagarCuota(this.idInversion===null?0:this.idInversion, cuota, fecha).pipe(
           // Manejamos errores de respuesta HTTP con catchError
@@ -187,10 +203,11 @@ export default class InversionDetailComponent {
     this.nroCuotasPendientes = this.nroCuotas - countNonNullFP;
   }
 
-  confirm(nroCuota: number): Promise<boolean> {
+  confirmCuota(nroCuota: number): Promise<boolean> {
     this.date = new Date();
     return new Promise((resolve) => {
         this.confirmationService.confirm({
+            key: 'cdpago',
             header: 'Pagar cuota',
             message: 'Confirme la fecha de pago de la cuota número ' + nroCuota + '.',
             accept: () => {
@@ -201,7 +218,159 @@ export default class InversionDetailComponent {
             }
         });
     });
-}
+  }
+
+  renovacion(){
+    if(this.codPerfil==='CLI') return;
+    this.valorCuota = 0;
+    const ctaDesde = this.objInvDetail.ctasPagadas + 1;
+    const ctaHasta = this.objInvDetail.nroCuotas;
+    //this.setearFechaInicio();
+    this.updateDate2();
+
+    if(!this.confirmRenovacion(ctaDesde, ctaHasta)) return;
+    this.confirmRenovacion(ctaDesde, ctaHasta).then((result) => {
+      if (result) {
+        this.renovarInversionService(false);
+        /* Confirmar datos de renovación */
+        this.confirmRenovacion_ok().then((result) => {
+          if(result) this.renovarInversionService(true);
+        });
+      }
+    });
+  }
+
+  renovarInversionService(validado: boolean){
+    if(!this.showComent) this.txtComentario = '';
+    const objRenewInv = {
+      idInversion: this.objInvDetail.idInversion,
+      ctaDesde: this.objInvDetail.ctasPagadas + 1,
+      ctaHasta: this.objInvDetail.nroCuotas,
+      fecha: this.formatearFecha(this.date),
+      obj:
+          {
+              fkUsuario: this.objInvDetail.idUsuario,
+              monto: this.objInvDetail.monto,
+              nroCuotas: this.objInvDetail.nroCuotas,
+              interes: this.objInvDetail.interes,
+              comentario: this.txtComentario,
+              fechaInicio: this.formatearFecha(this.date1),
+              fechaFin: this.date2 ? this.formatearFecha(this.date2) : null,
+              validado: validado // 'false' -> En la pantalla 1, 'true' -> En la pantalla 2 
+              // false o true, Se obtendra datos del usuario a nivel de front
+          }
+    }
+    this.loadingComponent.show();
+    this.getInversionService.renewInversion(objRenewInv).pipe(
+      finalize(() => this.loadingComponent.hide()),
+      // Manejamos errores de respuesta HTTP con catchError
+      catchError((error) => {
+        if (error.status === 400) { // Verificar código HTTP 400
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Error en la solicitud',
+            detail: error.error?.descripcion || 'Solicitud incorrecta',
+            life: 3000
+          });
+        } else {
+          this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Para otros errores
+        }
+        return of(null);
+      }))
+    .subscribe((resp: any)=> { 
+      if(resp.codigo===Constantes.CODIGO_STATUS_202 || resp.codigo===Constantes.STATUS_SUCCESS_RI ) {
+        this.valorCuota = resp.data.valorCuota;
+        this.messageService.add({severity: 'success', summary: 'Renovar préstamo', detail: resp.descripcion, life: 3000
+        });
+        if(validado) {
+          sessionStorage.setItem('confetti',JSON.stringify(true));
+          this.router.navigate(['registrar/inversiondetalle'], {queryParams:{"idInversion":resp.data}})
+        }
+      }else{
+        this.messageService.add({severity: 'warn', summary: 'Renovar préstamo', detail: resp.descripcion, life: 3000
+        })
+      }
+    });
+  }
+
+  confirmRenovacion(ctaDesde: number, ctaHasta: number): Promise<boolean> {
+    return new Promise((resolve) => {
+        this.confirmationService.confirm({
+            key: 'cdrenovacion',
+            header: 'Renovar préstamo',
+            message: 'Confirme la fecha de pago de la cuota número '  + '.',
+            accept: () => {
+                resolve(true);  // Resuelve la promesa con "true" si acepta
+            },
+            reject: () => {
+                resolve(false); // Resuelve la promesa con "false" si rechaza
+            }
+        });
+    });
+  }
+
+  confirmRenovacion_ok(): Promise<boolean> {
+    return new Promise((resolve) => {
+        this.confirmationService.confirm({
+            key: 'cdrenovacion_ok',
+            header: 'Confirmar renovación',
+            message: 'Confirme la fecha de pago de la cuota número '  + '.',
+            accept: () => {
+                resolve(true);  // Resuelve la promesa con "true" si acepta
+            },
+            reject: () => {
+              this.renovacion(); // Resuelve la promesa con "false" si rechaza
+            }
+        });
+    });
+  }
+
+/*   renovacion_cli(): Promise<boolean> {
+    return new Promise((resolve) => {
+        this.confirmationService.confirm({
+            key: "reno_cli",
+            header: 'Confirmar renovación',
+            message: 'Confirme la fecha de pago de la cuota número '  + '.',
+            accept: () => {
+                resolve(true);  // Resuelve la promesa con "true" si acepta
+            }
+        });
+    });
+  } */
+
+    confirm_cli() {
+      this.confirmationService.confirm({
+          key: 'reno_cli',
+          header: 'FELICIDADES',
+          message: '¡Tu préstamo está listo para renovación!',
+          accept: () => {
+            
+          }
+      });
+  }
+
+  getRango(inicio: number, fin: number): number[] {
+    return Array.from({ length: fin - inicio + 1 }, (_, i) => inicio + i);
+  }
+
+  updateDate2() {
+    if (this.date1) {
+      const newFecha2 = new Date(this.date1); 
+      newFecha2.setDate(newFecha2.getDate() + (this.objInvDetail.nroCuotas==4 ? 21 : this.objInvDetail.nroCuotas - 1 ) );
+      this.date2 = newFecha2;
+    } else {
+      this.date2 = null; // Limpiar date2 si date1 no está definido
+    }
+  }
+
+  setearFechaInicio(){
+    if (this.date1) {
+      const newFecha = new Date(); 
+      if(this.objInvDetail.nroCuota==4) newFecha.setDate(newFecha.getDate() + 7);
+      else newFecha.setDate(newFecha.getDate() + 1); 
+      this.date1 = newFecha;
+    }
+  }
 
 objInvDetail: any = {
     "idInversion": 0,
@@ -254,7 +423,10 @@ objInvDetail: any = {
     "fp27": null,
     "fp28": null,
     "fp29": null,
-    "fp30": null
+    "fp30": null,
+    "renovacion": 'N',
+    "ctasPagadas": 0,
+    "idUsuario": null
 }
 
 async copyText(correo: string, contra: string): Promise<void> {
@@ -277,7 +449,8 @@ async copyText(correo: string, contra: string): Promise<void> {
 }
 
 // Método para formatear la fecha
-private formatearFecha(date: Date): string {
+private formatearFecha(date: Date): string | null {
+  
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes es 0-indexado
   const day = String(date.getDate()).padStart(2, '0');

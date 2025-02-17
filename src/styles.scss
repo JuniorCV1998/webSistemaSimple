@@ -204,7 +204,10 @@ small{
   -webkit-tap-highlight-color: transparent; /* Elimina el fondo de resaltado en dispositivos móviles */
 }
 
-
+/*  Asegura que las palabras largas se dividan */
+.txt-break{
+  word-break: break-word;
+}
 
 
 

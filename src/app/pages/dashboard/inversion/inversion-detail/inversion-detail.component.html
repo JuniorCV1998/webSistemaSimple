@@ -593,6 +593,13 @@
 
         <div class="pendiente-txt mb-3"><b>{{nroCuotasPendientes}}</b> Cuotas pendientes.</div>
 
+        <ng-template [ngIf]="objInvDetail.renovacion == 'S'">
+            <div class="flex flex-column align-items-center mb-3">
+                    <img *ngIf="codPerfil==='INV'" (click)="renovacion()" src="assets/images/gates/RENOVACION_INV.png" width="98%" class="promocion_cash">
+                    <img *ngIf="codPerfil==='CLI'" (click)="confirm_cli()" src="assets/images/gates/RENOVACION_CLI.png" width="98%" class="promocion_cash">
+            </div>
+        </ng-template>
+
         <div class="detail-inv">
             <div class="custom-banner-present mb-4">
                 <div class="mb-3">
@@ -728,13 +735,13 @@
 
         </div>
 
-        <p-confirmDialog #cd>
+        <p-confirmDialog #cdpago key="cdpago">
             <ng-template pTemplate="headless" let-message>
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <img src="assets/images/logos/sello_ssimple.png" width="100" height="100">
+                        <img src="assets/images/logos/sello_ssimple.png" width="110" height="110">
                     </div>
-                    <span class="font-bold text-2xl block mb-2 mt-4">
+                    <span class="font-bold text-2xl block mb-2 mt-4 txt-primary">
                         {{ message.header }}
                     </span>
                     <p class="mb-2">{{ message.message }}</p>
@@ -752,13 +759,13 @@
                         <button 
                             pButton 
                             label="Cancelar" 
-                            (click)="cd.reject()" 
+                            (click)="cdpago.reject()" 
                             class="p-button-outlined w-8rem ">
                         </button>
                         <button 
                             pButton 
                             label="Guardar" 
-                            (click)="cd.accept()" 
+                            (click)="cdpago.accept()" 
                             class="w-8rem">
                         </button>
                         
@@ -766,6 +773,219 @@
                 </div>
             </ng-template>
         </p-confirmDialog>
+
+        <p-confirmDialog #cdrenovacion key="cdrenovacion">
+            <ng-template pTemplate="headless" let-message>
+                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                        <img src="assets/images/logos/renovacion.png" width="110" height="110">
+                    </div>
+                    <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
+                        {{ message.header }}
+                    </span>
+                    <!-- <p class="mb-2">{{ message.message }}</p> -->
+                     <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Estas son las cuotas a cancelar</span>
+                     <div class="flex flex-row align-items-center gap-4 mb-3">
+                        <div class="position" *ngFor="let num of getRango(objInvDetail.ctasPagadas + 1, objInvDetail.nroCuotas)">
+                            {{ num }}
+                        </div>
+                     </div>
+                     <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto a renovar</span>
+                     <div class="flex flex-row align-items-center gap-4 mb-3">
+                        <span class="monto-txt">S/. {{objInvDetail.monto | number:'1.2-2'}}</span>
+                     </div>
+
+                     <!-- Fecha inicio y fin -->
+            <div class="flex flex-column gap-2 justify-content-center">
+                <label for="interes" class="block txt-left mb-2"><i class="pi pi-chevron-circle-right mr-1"></i>Establecer fecha inicio y fin</label>
+                <div class="flex flex-row justify-content-between align-items-center gap-2 mb-3">
+                    <div class="flex flex-column w-6 mb-2">
+                        <label for="fecha1" class="txt-left">Fecha inicio</label>
+                        <p-calendar 
+                        [(ngModel)]="date1" 
+                        [showIcon]="true" 
+                        [showOnFocus]="true" 
+                        [touchUI]="true"
+                        [dateFormat]="'dd/mm/yy'"
+                        [showTime]="false"
+                        inputId="fecha1" 
+                        (ngModelChange)="updateDate2()"
+                        />
+                    </div>
+                    <div class="flex flex-column w-6 mb-2">
+                        <label for="fecha2" class="txt-left">Fecha fin</label>
+                        <p-calendar 
+                        [(ngModel)]="date2" 
+                        [showIcon]="true" 
+                        [showOnFocus]="true" 
+                        [touchUI]="true"
+                        [dateFormat]="'dd/mm/yy'"
+                        [showTime]="false"
+                        inputId="fecha2" 
+                        [disabled]="true"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex align-items-center gap-1 mb-4 txt-left">
+                <p-checkbox 
+                    inputId="ny" 
+                    [(ngModel)]="showComent" 
+                    [binary]="true" />
+                <label for="ny">Agregar comentario(opcional)</label>
+            </div>
+
+            <div *ngIf="showComent" class="card w-full mb-1">
+                <p-floatLabel class="w-full">
+                    <textarea 
+                        class="w-full"
+                        id="float-comentario" 
+                        rows="3"
+                        cols="30" 
+                        [(ngModel)]="txtComentario"
+                        [maxLength]="180"
+                        pInputTextarea>
+                    </textarea>
+                    <label for="float-comentario">Comentario</label>
+                </p-floatLabel>
+            </div>
+                    <div class="flex align-items-center gap-2 mt-2">
+                        <button 
+                            pButton 
+                            label="Cancelar" 
+                            (click)="cdrenovacion.reject()" 
+                            class="p-button-outlined w-8rem ">
+                        </button>
+                        <button 
+                            pButton 
+                            label="Siguiente" 
+                            (click)="cdrenovacion.accept()" 
+                            class="w-8rem">
+                        </button>
+                        
+                    </div>
+                </div>
+            </ng-template>
+        </p-confirmDialog>
+
+        <p-confirmDialog #cdrenovacion_ok key="cdrenovacion_ok">
+            <ng-template pTemplate="headless" let-message>
+                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                        <img src="assets/images/logos/renovacion.png" width="110" height="110">
+                    </div>
+                    <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
+                        {{ message.header }}
+                    </span>
+                    
+                    <div class="w-full">
+                        <div  class="mb-2 txt-label">Nombres</div>
+                        <div pInputText class="w-full mb-3 dataConfirm linea">
+                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaternoo}}
+                        </div>
+            
+                        <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
+                            <div class="flex flex-column w-full">
+                                <div class="txt-label mb-2">Monto</div>
+                                <div pInputText class="w-full dataConfirm">
+                                    {{objInvDetail.monto | number:'1.2-2' }}
+                                </div>
+                            </div>
+            
+                            <div class="flex flex-column w-full">
+                                <div for="cuotas" class="txt-label mb-2">Nro. Cuotas</div>
+                                <div id="cuotas" pInputText class="w-full dataConfirm">
+                                {{objInvDetail.nroCuotas}}
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
+                            <div class="flex flex-column w-full">
+                                <div for="interes" class="txt-label mb-2">Interés</div>
+                                <div id="interes" pInputText class="w-full dataConfirm">
+                                    {{objInvDetail.interes | number:'1.0-2' }} %
+                                </div>
+                            </div>
+            
+                            <div class="flex flex-column w-full">
+                                <div class="txt-label mb-2">Valor de cuota</div>
+                                <div pInputText class="w-full dataConfirm">
+                                {{valorCuota | number:'1.2-2'}}
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
+                            <div class="flex flex-column w-full">
+                                <div for="fechai" class="txt-label mb-2">Fecha inicio</div>
+                                <div id="fechai" pInputText class="w-full dataConfirm fechas">
+                                    {{date1 | date: 'dd MMM yyyy'}}
+                                </div>
+                            </div>
+            
+                            <div class="flex flex-column w-full">
+                                <div class="txt-label mb-2">Fecha fin</div>
+                                <div pInputText class="w-full dataConfirm fechas">
+                                {{date2 | date: 'dd MMM yyyy'}}
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div *ngIf="txtComentario!==''" class="w-full linea">
+                            <div class="txt-label mb-2">Comentario</div>
+                            <div pInputText class="w-full dataConfirm txt-break">
+                                {{txtComentario}}
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="flex align-items-center gap-2 mt-4">
+                        <button 
+                            pButton 
+                            label="Volver" 
+                            (click)="cdrenovacion_ok.reject()" 
+                            class="p-button-outlined w-8rem ">
+                        </button>
+                        <button 
+                            pButton 
+                            label="Registrar" 
+                            (click)="cdrenovacion_ok.accept()" 
+                            class="w-8rem">
+                        </button>
+                        
+                    </div>
+                </div>
+            </ng-template>
+        </p-confirmDialog>
+
+        <p-confirmDialog #reno_cli key="reno_cli">
+            <ng-template pTemplate="headless" let-message>
+                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                        <img src="assets/images/logos/renovacion.png" width="110" height="110">
+                    </div>
+                    <span class="font-bold text-2xl block mb-3 mt-4 txt-primary">
+                        {{ message.header }}
+                    </span>
+                    <span class="text-1xl block mb-3 txt-label">
+                        <strong>{{ message.message }}</strong>, Comunícate con tu socio(a) y accede a las mejores opciones para ti.
+                    </span>
+                    <div class="flex align-items-center gap-2 mt-3">
+                        <button 
+                            pButton 
+                            label="Aceptar" 
+                            (click)="reno_cli.reject()" 
+                            class="p-button-outlined w-16rem ">
+                        </button>
+                        
+                    </div>
+                </div>
+            </ng-template>
+        </p-confirmDialog>
+        
+
         <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full"></button>
     </div>
 </div>

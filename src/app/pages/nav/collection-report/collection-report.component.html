@@ -41,7 +41,7 @@
                             <i *ngIf="value!='pago'"
                             [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
                              class="pi pi-window-maximize"></i>
-                             <div *ngIf="value=='pago' && item.nroCuotas!=item.ctasPagadas" (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName)">
+                             <div *ngIf="value=='pago' && item.nroCuotas!=item.ctasPagadas" (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota)">
                                 <img src="assets/images/dashboard/money.png" height="20">
                              </div>
                         </td>
@@ -142,9 +142,13 @@
                 <i class="pi pi-user icon-span"></i>
                 <span>{{clienteSeleccionado}}</span>
             </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2 user-confirm mb-3">
+            <div class="flex flex-row w-full justify-content-start align-items-center gap-2 user-confirm mb-2">
                 <img src="assets/images/dashboard/money.png" height="25">
                 <span>{{message.message}}</span>
+            </div>
+            <div class="flex flex-row w-full justify-content-start align-items-center gap-2 user-confirm mb-3">
+                <i class="pi pi-money-bill"></i>
+                <span>{{valorCuota | number:'1.2-2'}}</span>
             </div>
             
             <!-- <p class="mb-2 message-confirm">{{ message.message }}</p> -->

@@ -168,3 +168,48 @@ td{
     border-radius: 8px;
     min-width: 3px;
   }
+
+  // CAROUSEL
+.promocion_cash{
+    flex: 1;  
+    background: #fff;
+    box-shadow: 0 0px 6px var(--primary-400);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.txt-primary{
+    color: var(--primary-500);
+}
+.txt-left {
+    text-align: left;
+    width: 100%;
+    color: var(--gray-500);
+    font-weight: 500;
+    font-size: 15px;
+}
+.txt-left .pi{
+    color: var(--primary-500);
+    font-size: 12px;
+    font-weight: 700;
+}
+.monto-txt{
+    color: var(--primary-500);
+    font-weight: 700;
+    font-size: 18px;
+}
+/* Confirmacion */
+.txt-label{
+    color: var(--gray-500);
+}
+.dataConfirm{
+    color: var(--primary-500);
+    font-weight: 500;
+}
+.linea{
+    border-bottom: 1px dashed var(--gray-400);
+    padding-bottom: 12px;
+}
+.pi-question{
+    font-size: 20px;
+}
