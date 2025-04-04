@@ -28,3 +28,16 @@ npx cap open ios
 ng build --configuration production
 npx cap sync 
 Run: Android studio
+
+
+
+
+/* Ejecutar desde visual */
+npx cap run android
+
+/* POSIBLES SOLUCIONES */
+-- cambiar de version
+compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }

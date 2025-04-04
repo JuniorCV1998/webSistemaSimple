@@ -89,7 +89,6 @@ export default class InversionDetailComponent {
       this.loadingComponent.show();
       this.getInversionesDetail();
     });
-    this.setearFechaInicio();
   }
   
   ngAfterViewInit(): void {
@@ -225,7 +224,7 @@ export default class InversionDetailComponent {
     this.valorCuota = 0;
     const ctaDesde = this.objInvDetail.ctasPagadas + 1;
     const ctaHasta = this.objInvDetail.nroCuotas;
-    //this.setearFechaInicio();
+    this.setearFechaInicio();
     this.updateDate2();
 
     if(!this.confirmRenovacion(ctaDesde, ctaHasta)) return;
@@ -366,11 +365,19 @@ export default class InversionDetailComponent {
   setearFechaInicio(){
     if (this.date1) {
       const newFecha = new Date(); 
-      if(this.objInvDetail.nroCuota==4) newFecha.setDate(newFecha.getDate() + 7);
+      if(this.objInvDetail.nroCuotas==4){
+        newFecha.setDate(newFecha.getDate() + 7);
+      } 
       else newFecha.setDate(newFecha.getDate() + 1); 
       this.date1 = newFecha;
     }
   }
+
+  focusTextArea(event: any) {
+    setTimeout(() => {
+      event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  }  
 
 objInvDetail: any = {
     "idInversion": 0,

@@ -18,7 +18,14 @@
             </div>
         </div>
 
-        <div class="flex flex-row gap-2 justify-content div-monto" (click)="mostrarMonto()">
+        <div class="flex flex-row gap-2 align-items-center justify-content-center">
+            <div class="flex flex-column w-full justify-content-center custom-banner-cobranza" routerLink="/reporte/reporte-cobranza">
+                <img src="assets/images/dashboard/money.png" height="40">
+                <span class="txt-span">Cobranza</span>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-2 div-monto" (click)="mostrarMonto()">
             <div class="flex-row w-full custom-banner-3">
                 <div class="flex w-1 justify-content-center">
                     <i *ngIf="mostrar" class="pi pi-eye"></i>

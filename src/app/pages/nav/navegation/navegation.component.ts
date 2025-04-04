@@ -54,8 +54,9 @@ export class NavegationComponent {
   }
 
   ngOnInit() {
+    /* Muestra las barras de Menu */
     const showMenu = [
-      '/inicio', '/reporte/reporte-cobranza'
+      '/inicio'
     ];
     const sinInicio = [
       '/registrar/inversiondetalle'

@@ -65,15 +65,15 @@
             <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
                 <div class="flex flex-column w-full">
                     <label for="fechai" class="block text-900 font-medium mb-2">Fecha inicio</label>
-                    <div id="fechai" pInputText class="w-full mb-3 dataConfirm fechas">
-                        {{objNuevaInv.fechaInicio | date: 'dd/MM/yy HH:mm'}}
+                    <div id="fechai" pInputText class="w-full mb-3 dataConfirm">
+                        {{objNuevaInv.fechaInicio}}
                     </div>
                 </div>
 
                 <div class="flex flex-column w-full">
                     <label for="fechaf" class="block text-900 font-medium mb-2">Fecha fin</label>
-                    <div id="fechaf" pInputText class="w-full mb-3 dataConfirm fechas">
-                    {{objNuevaInv.fechaFin | date: 'dd/MM/yy HH:mm'}}
+                    <div id="fechaf" pInputText class="w-full mb-3 dataConfirm">
+                    {{objNuevaInv.fechaFin}}
                     </div>
                 </div>
             </div>

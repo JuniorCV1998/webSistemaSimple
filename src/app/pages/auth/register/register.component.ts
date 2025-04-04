@@ -179,7 +179,6 @@ ref.onClose.subscribe((result: any) => {
 
 validarContrasena(contrasena: string): boolean {
   const regex = /^\d{6}$/; // Solo 6 dígitos numéricos
-  console.log("aqui :D: "+contrasena);
   return regex.test(contrasena);
 }
 

@@ -165,6 +165,12 @@ export default class DatosClienteComponent {
             detail: resp.descripcion,
             life: 3000
           };
+          const fechas = {
+            fechaInicio: this.objInversion.fechaInicio,
+            fechaFin: this.objInversion.fechaFin
+          }
+
+          sessionStorage.setItem('fechasInv', JSON.stringify(fechas));
           sessionStorage.setItem('objNuevaInv',JSON.stringify(resp.data));
           sessionStorage.setItem('lastMessage', JSON.stringify(messageData));
           this.router.navigate(['registrar/confirmar']);

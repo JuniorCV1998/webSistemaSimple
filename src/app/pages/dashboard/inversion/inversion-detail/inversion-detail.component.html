@@ -838,7 +838,7 @@
 
             <div *ngIf="showComent" class="card w-full mb-1">
                 <p-floatLabel class="w-full">
-                    <textarea 
+                    <textarea (focus)="focusTextArea($event)"
                         class="w-full"
                         id="float-comentario" 
                         rows="3"

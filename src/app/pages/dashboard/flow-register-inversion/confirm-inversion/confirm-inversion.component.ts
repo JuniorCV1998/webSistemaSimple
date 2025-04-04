@@ -29,18 +29,20 @@ export default class ConfirmInversionComponent {
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
 
   objNuevaInv: any = {};
+  fechasInv: any = {};
 
   constructor(
     private router: Router,
-    private location: Location,
     private messageService: MessageService,
     private getInversionService: GetInversionService,
     private dialogService: DialogService
   ){
     // recuperando objeto nueva inversion
     const obj = sessionStorage.getItem('objNuevaInv');
-    if(obj) {
+    const fechas = sessionStorage.getItem('fechasInv');
+    if(obj && fechas) {
       this.objNuevaInv = JSON.parse(obj);
+      this.fechasInv = JSON.parse(fechas);
     }
   }
 
@@ -55,8 +57,8 @@ registerInvTrue(){
     monto: this.objNuevaInv.monto,
     nroCuotas: this.objNuevaInv.nroCuotas,
     interes: this.objNuevaInv.interes,
-    fechaInicio: this.objNuevaInv.fechaInicio,
-    fechaFin: this.objNuevaInv.fechaFin,
+    fechaInicio: this.fechasInv.fechaInicio,
+    fechaFin: this.fechasInv.fechaFin,
     //comentario
     comentario: this.objNuevaInv.comentario,
     // objeto cliente
