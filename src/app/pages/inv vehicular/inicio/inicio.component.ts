@@ -7,6 +7,7 @@ import { Constantes } from '../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Router } from '@angular/router';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-inicio',
@@ -26,6 +27,7 @@ export default class InicioComponent {
   constructor(
     private inversionVehService: InversionVehService,
     private router: Router,
+    private tempDataService: TempDataService
   ){}
 
   ngOnInit(): void{
@@ -33,6 +35,7 @@ export default class InicioComponent {
   }
   ngAfterViewInit(): void {
     this.getInversionesVehiculares();
+    this.tempDataService.clear();
   }
 
   changeOpen(estado: boolean){
