@@ -1,0 +1,101 @@
+/* BOTONES DE PENDIENTE Y CERRADOS */
+.button-style-none{
+    padding: 5px;
+    text-align: center;
+    color: var(--gray-400);
+    font-weight: 700;
+    /* transition: background-color 0.3s ease, transform 0.3s ease-in-out, opacity 0.3s ease; */
+}
+.button-style-primary{
+    color: var(--primary-500);
+    background-color: rgba(16, 185, 129, 0.1);
+}
+.button-style-danger{
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* LISTA DE INVERSIONES */
+.pi-car{
+    color: var(--gray-200);
+    font-size: 35px;
+}
+
+.color1{
+    height: 8px;
+    border-top: solid 1px var(--gray-300);
+    border-left: solid 1px var(--gray-300);
+    border-bottom: solid 1px var(--gray-300);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    /* background-color: #8b0dfa; */
+}
+.color2{
+    height: 8px;
+    border-top: solid 1px var(--gray-300);
+    border-right: solid 1px var(--gray-300);
+    border-bottom: solid 1px var(--gray-300);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    /* background-color: #adff2f; */
+}
+.span-nombre{
+    font-weight: 500;
+    color: black;
+    font-size: 15px;
+    text-align: left;
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+  }
+.span-desc{
+    color: var(--gray-500);
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+  }
+  .span-empty{
+    color: var(--gray-500);
+    font-size: 12px;
+    text-align: center;
+  }
+  .span-monto{
+    background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
+    -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+    background-clip: text; /* Aplicar el fondo degradado al texto */
+    -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+
+    font-weight: 600;
+    color: black;
+    font-size: 15px;
+    text-align: left;
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+  }
+  .custom-banner-1{
+    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
+    padding: 15px;                  /* Espacio dentro de cada banner */
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+    color: var(--gray-500);                 /* Color del texto del banner */
+    border-radius: 8px;             /* Bordes redondeados */
+    min-width: 30px;
+    align-items: center;
+  }
+  .custom-banner-2{
+    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
+    padding: 15px;                  /* Espacio dentro de cada banner */
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(255, 9, 9, 0.5);
+    color: var(--gray-500);                 /* Color del texto del banner */
+    border-radius: 8px;             /* Bordes redondeados */
+    min-width: 30px;
+    align-items: center;
+  }
+  a{
+    color: var(--blue-500);
+    cursor: pointer;
+  }

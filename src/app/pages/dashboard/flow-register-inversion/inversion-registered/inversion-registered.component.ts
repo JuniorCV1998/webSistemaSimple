@@ -123,10 +123,6 @@ export default class InversionRegisteredComponent {
       }
     });
 }
-  
-  volver() {
-    this.location.back();
-  }
 
   async copyText(correo: string, contra: string): Promise<void> {
     try {

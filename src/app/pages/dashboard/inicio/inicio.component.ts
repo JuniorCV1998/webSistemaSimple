@@ -10,6 +10,7 @@ import { GetInversionService } from '../../../core/services/inversion/get-invers
 import { Constantes } from '../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LoginService } from '../../../core/services/auth/login/login.service';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-inicio',
@@ -31,7 +32,8 @@ export class InicioComponent {
     private router: Router,
     private getInversionService: GetInversionService,
     private viewportScroller: ViewportScroller,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private tempDataService: TempDataService
   ){
     const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
@@ -53,10 +55,12 @@ export class InicioComponent {
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
     this.clearSessionStorageExcept(['token', '']);
+
   }
 
   ngAfterViewInit() {
     //this.getInversionesLast();
+    this.tempDataService.clear();
   }
 
   getAmount(){

@@ -1,17 +1,17 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // ngPrime
-import { importProvidersFrom } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { MessagePopUpComponent } from './pages/modal/message-pop-up/message-pop-up.component';
 import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptor/auth.interceptor';
 import { loggingInterceptor } from './core/interceptor/logging.interceptor';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimations(),
     provideZoneChangeDetection({ 
       eventCoalescing: true 
     }), 

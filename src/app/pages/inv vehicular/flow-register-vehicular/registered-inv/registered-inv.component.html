@@ -1,0 +1,39 @@
+<div *ngIf="!isLoading">
+    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12 mb-5">
+        <div class="text-center mb-5">
+            <div id="div_line_bootom" class="text-700 label-title-green">¡INVERSION <br>REGISTRADA!</div>
+        </div>
+
+        <div class="flex w-full flex-column justify-content-center align-items-center mb-5">
+            <div class="flex flex-column align-items-center w-full mb-3">
+                <i class="pi pi-car icon-span" (click)="triggerConfetti()"></i>
+            </div>
+            <div class="flex flex-column w-full mb-2">
+                <span class="span-1">{{objInversionVeh.fullName}}</span>
+            </div>
+            <div class="flex flex-column w-full">
+                <span class="span-2">{{objInversionVeh.descripcion}}</span>
+            </div>
+        </div>
+
+        <div class="flex w-full flex-column justify-content-center align-items-center mb-5">
+            <div class="flex flex-column align-items-center w-full mb-2">
+                <span class=" w-full txt-aditional"><b>¡Genial! Tu registro se realizó con éxito</b></span>
+            </div>
+            <div class="flex flex-column w-full mb-3">
+                <span class="w-full txt-aditional">{{objInversionVeh.fechaCreacion}}</span>
+            </div>
+            <div class="flex flex-row w-full justify-content-center">
+                <a class="terminos_condiciones" [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: objInversionVeh.idInversionVeh ,from: 'registerVeh'}">Abrir cartilla</a>
+            </div>
+        </div>
+
+    <button pButton pRipple label="Ver inversiones" routerLink="/vehicular/inicio" class="btn-float"></button>
+
+    </div>
+</div>
+
+
+
+
+<app-loading *ngIf="isLoading"></app-loading> 

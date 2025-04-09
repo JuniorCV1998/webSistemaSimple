@@ -1,0 +1,50 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        
+    <div class="text-center mb-4">
+        <div class="text-700 text-2xl mb-3 label-title">Nuevo cliente</div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between mb-3">
+        <span class="text-500 font-medium line-height-3 text-center w-full">Ingresa los datos del nuevo cliente</span>
+    </div>
+
+    <div>
+        <label for="nombres" class="block text-600 font-medium mb-2">Nombres</label>
+        <input [(ngModel)]="persona.nombres" [maxlength]="25" [disabled]="clientSelect" id="nombres" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3">
+         
+        <div class="flex flex-row gap-2 align-items-center justify-content-center">
+            <div class="flex flex-column w-full">
+                <label for="apellidop" class="block text-600 font-medium mb-2">Apellido paterno</label>
+                <input [(ngModel)]="persona.apellidoPaterno" [maxlength]="20" [disabled]="clientSelect" id="apellidop" type="text" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3">
+            </div>
+
+            <div class="flex flex-column w-full">
+                <label for="apellidom" class="block text-600 font-medium mb-2">Apellido materno</label>
+                <input [(ngModel)]="persona.apellidoMaterno" [maxlength]="20" [disabled]="clientSelect" id="apellidom" type="text" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3">
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-2 align-items-center justify-content-center">
+            <div class="flex flex-column w-full">
+                <label for="celular" class="block text-600 font-medium mb-2">Celular<span id="span-celular">(Opcional)</span></label>
+                <input [(ngModel)]="persona.celular" [maxlength]="11" [disabled]="clientSelect" id="celular" type="text" placeholder="Celular" pInputText appNroCelular class="w-full mb-3">
+            </div>
+
+            <div class="flex flex-column w-full">
+                <label for="direccion" class="block text-600 font-medium mb-2">Dirección</label>
+                <input [(ngModel)]="persona.direccion" [maxlength]="60" [disabled]="clientSelect" id="direccion" type="text" placeholder="Dirección" pInputText class="w-full mb-3">
+            </div>
+        </div>
+
+        <div class="flex flex-row justify-content-center gap-1 w-full mb-5" style="max-width: 550px;">
+            <i class="pi pi-info-circle"></i><small>Al crear la inversión se creara un correo y contraseña para que tu cliente le pueda dar seguimiento.</small>
+        </div>
+
+    </div>
+
+    <button pButton [ngClass]="{
+        'btn-disabled': !isFormValid()
+      }"
+    pRipple label="Siguiente" (click)="irDatosInversion()" [disabled]="!isFormValid()" class="p-component w-full"></button>
+
+</div>

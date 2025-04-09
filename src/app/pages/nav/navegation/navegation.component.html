@@ -1,6 +1,6 @@
 
 <div class="flex flex-column" [ngClass]="{'gap-6': session}">
-    <header *ngIf="session && !outSession">
+    <header *ngIf="session && !outSession" style="position: absolute; z-index: 10;">
         <div class="flex flex-row justify-content-between align-items-center p-2">
           <div class="comp_volver">
             
@@ -16,8 +16,16 @@
 
         </div>
     </header>
-      
-    <router-outlet style="padding-top: 1rem;"></router-outlet>
+
+    <div style="position: relative; min-height: 100%; margin-top: 50px;">
+        <div
+          [@routeAnimations]="prepareRoute(outlet)"
+          style="position: absolute; width: 100%; top: 0; left: 0;"
+        >
+          <router-outlet #outlet="outlet" style="padding-top: 1rem;"></router-outlet>
+        </div>
+      </div>
+    
 </div>
 
 
@@ -73,13 +81,16 @@
                                   </li>
                               </ul>
                           </li>
-                          <!-- <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                  <i class="pi pi-users mr-2"></i>
-                                  <span class="font-medium">Team</span>
-                              </a>
-                          </li>
                           <li>
+                            <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                            [routerLink]="['/vehicular/inicio']"
+                            (click)="closeCallback($event)"
+                            >
+                                <i class="pi pi-car mr-2"></i>
+                                <span class="font-medium">Crédito Vehicular</span>
+                            </a>
+                        </li>
+                          <!-- <li>
                               <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-comments mr-2"></i>
                                   <span class="font-medium">Messages</span>

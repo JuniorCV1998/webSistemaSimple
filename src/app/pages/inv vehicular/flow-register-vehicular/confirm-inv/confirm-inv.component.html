@@ -1,0 +1,147 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+
+    <div class="text-center mb-4">
+        <div class="text-700 text-2xl mb-3 label-title">Confirmar inversión</div>
+    </div>
+
+    <!-- DATOS DEL CLIENTE  -->
+
+    <div class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
+        <div class="flex flex-row w-full gap-2">
+            <div class="flex flex-row w-full">
+                <span class="span-padre">Cliente</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between gap-2 container-line" [ngClass]="response.idUsuario==null?'':'mb-5'">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Nombre</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-desc">{{response.persona.nombres+' '+response.persona.apellidoPaterno+' '+response.persona.apellidoMaterno}}</span>
+        </div>
+    </div>
+
+    <div *ngIf="response.idUsuario==null">
+        <div *ngIf="response.persona.celular!=''" class="flex flex-row w-full justify-content-center gap-2 container-line">
+            <div class="flex flex-column w-5 gap-1">
+                <span class="span-2">Celular</span>
+            </div>
+            <div class="flex flex-column w-7 gap-1">
+                <span class="span-1">{{formatNumberEspaciado(response.persona.celular)}}</span>
+            </div>
+        </div>
+    
+        <div class="flex flex-row w-full justify-content-center gap-2 container-line mb-5">
+            <div class="flex flex-column w-5 gap-1">
+                <span class="span-2">Dirección</span>
+            </div>
+            <div class="flex flex-column w-7 gap-1">
+                <span class="span-desc">{{response.persona.direccion}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DATOS DEL VEHICULO  -->
+
+    <div class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
+        <div class="flex flex-row w-full gap-2">
+            <div class="flex flex-row w-full">
+                <span class="span-padre">Inversión Vehicular</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Monto por día</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-1">S/. {{response.montoDiario | number:'1.2-2'}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Duración de pago</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-1">{{response.duracionPago}} meses</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Frecuencia de pago</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-1">{{response.frecuencia}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Placa de Vehículo</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-1">{{response.placa}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Fecha inicio</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-1">{{response.fechaInicio}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Fecha fin</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-1">{{response.fechaFin}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Descripción</span>
+        </div>
+        <div class="flex flex-column w-7 gap-1">
+            <span class="span-desc">{{response.descripcion}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Color principal</span>
+        </div>
+        <div class="flex flex-row justify-content-end w-7 gap-3">
+            <span class="span-2">{{response.color1}}</span>
+             <div class="cuadro-color" [style.backgroundColor]="response.color1"></div>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 container-line mb-8">
+        <div class="flex flex-column w-5 gap-1">
+            <span class="span-2">Color secundario</span>
+        </div>
+        <div class="flex flex-row justify-content-end w-7 gap-3">
+            <span class="span-2">{{response.color2}}</span>
+            <div class="cuadro-color" [style.backgroundColor]="response.color2"></div>
+        </div>
+    </div>
+
+    <button pButton
+    pRipple label="Siguiente" (click)="registerInvTrue()" class="btn-float"></button>
+
+    <app-loading></app-loading>
+    <div>
+        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+    </div>
+</div>
+

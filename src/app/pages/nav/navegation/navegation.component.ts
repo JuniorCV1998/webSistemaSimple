@@ -1,24 +1,30 @@
+import { CommonModule, Location } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { CommonModule, Location } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { LoginService } from '../../../core/services/auth/login/login.service';
-import { SidebarModule } from 'primeng/sidebar';
-import { Sidebar } from 'primeng/sidebar';
+import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
 import { StyleClassModule } from 'primeng/styleclass';
-import { AvatarModule } from 'primeng/avatar';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { Subscription } from 'rxjs';
+import { LoginService } from '../../../core/services/auth/login/login.service';
+import { slideInAnimation } from '../animation/slideInAnimation ';
 
 @Component({
   selector: 'app-navegation',
   standalone: true,
   imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,AvatarModule,TabMenuModule],
   templateUrl: './navegation.component.html',
-  styleUrl: './navegation.component.scss'
+  styleUrl: './navegation.component.scss',
+  animations: [slideInAnimation]
 })
 export class NavegationComponent {
+
+  prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData?.['animation'];
+  }
+  
 
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
@@ -31,6 +37,9 @@ export class NavegationComponent {
   session: boolean = false;
   outSession: boolean = false;
   confetti: boolean = false;
+
+  /* Vehicular */
+  registerVeh: boolean = false;
 
   private routerSubscription!: Subscription;
 
@@ -56,10 +65,10 @@ export class NavegationComponent {
   ngOnInit() {
     /* Muestra las barras de Menu */
     const showMenu = [
-      '/inicio'
+      '/inicio','/reporte/reporte-cobranza','/vehicular/inicio'
     ];
     const sinInicio = [
-      '/registrar/inversiondetalle'
+      '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
     ];
     const flowOutSession = [
       '/login','/registrar','/registrar/personal'
@@ -141,8 +150,10 @@ export class NavegationComponent {
   }
 
   volver() {
+    //console.log("inicio: "+this.irInicio + " fromList: "+this.fromList);
     if(this.irInicio || (!this.fromList && this.fromList != null)) {
-      this.router.navigate(['/inicio']);
+      if(this.registerVeh) this.router.navigate(['/vehicular/inicio']);
+      else this.router.navigate(['/inicio']);
     }
     else this.location.back();
   }
@@ -156,6 +167,9 @@ export class NavegationComponent {
       else if(fromView == 'register') {
         if(this.confetti) this.fromList = false;
         else this.fromList = true;
+      } else if(fromView == 'registerVeh') {
+        this.fromList = false;
+        this.registerVeh = true;
       }
       else this.fromList = null;
     });

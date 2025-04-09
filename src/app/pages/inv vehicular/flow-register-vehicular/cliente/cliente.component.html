@@ -1,0 +1,64 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        
+    <div class="text-center mb-4">
+        <div class="text-700 text-2xl mb-3 label-title">Datos del cliente</div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between mb-3">
+        <span class="text-500 font-medium line-height-3 text-center w-full">Selecciona un cliente</span>
+    </div>
+
+    <div class="relative w-full mb-3">
+        <input (input)="filtrarCliente()" id="email1" name="usuario" [(ngModel)]="busqueda" [maxlength]="30" type="text" placeholder="Buscar por nombre o celular" pInputText class="w-full mb-3">
+            <i class="pi" [ngClass]="busqueda ? 'pi-times-circle' : ''" 
+            (click)="cleanFiltroFunct()" 
+            style="position: absolute; top: 40%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+            </i>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between mb-5">
+        <span class="text-500 font-medium line-height-3 text-center w-full">Tus clientes</span>
+    </div>
+
+    <div *ngIf="filtroVacio && listaClientesRecovery.length!=0" class="flex flex-column w-full justify-content-center align-items-center gap-2">
+        <i class="pi pi-search-minus"></i>
+        <span class="span-empty">Parece que no tienes un cliente <b>"{{busqueda}}"</b></span>
+    </div>
+
+    <div *ngIf="listaClientesRecovery.length==0 && !isLoading" class="flex flex-row justify-content-center align-items-center w-full">
+        <span class="w-10 span-empty">Aún no tienes clientes registrados. <a [routerLink]="'/vehicular/registro/clientenuevo'">¡Agrega uno haciendo clic aquí!</a></span>
+    </div>
+
+    <ng-template [ngIf]="isLoading">
+        <div class="flex flex-row w-full" style="min-width: 278px;">
+            <div class="w-full p-2">
+                <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-3 gap-2 row-skeleton">
+                    <div class="flex flex-column w-full gap-1">
+                        <p-skeleton class="w-10" height="1rem" />
+                        <p-skeleton class="w-4" height="1rem" />
+                    </div>
+                    <p-skeleton class="w-2" height="2rem" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    
+    <ng-template [ngIf]="!isLoading">
+        <div *ngFor="let cliente of listaClientes" class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
+            <div class="flex flex-row w-full justify-content-center container-cliente gap-2" (click)="seleccionarCliente(cliente.idUsuario)">
+                <div class="flex flex-column w-10 gap-1">
+                    <span class="span-nombre">{{cliente.persona.nombres+' '+cliente.persona.apellidoPaterno}}</span>
+                    <span class="span-desc">{{ formatNumberEspaciado(cliente.persona.celular) }}</span>
+                </div>
+                <div class="flex flex-row justify-content-end align-items-center w-2 gap-1">
+                    <i class="pi pi-angle-right"></i>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    
+    <div style="height: 60px;"></div>
+    <button pButton
+        pRipple label="Nuevo cliente" [routerLink]="'/vehicular/registro/clientenuevo'" severity="info" class="btn-float" ><i class="pi pi-user-plus"></i></button>
+
+</div>

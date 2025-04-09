@@ -1,0 +1,22 @@
+:host ::ng-deep p-dropdown .p-dropdown, :host ::ng-deep p-inputNumber .p-inputnumber {
+    width: 100%;
+}
+.input-fail{
+    color: red;
+    font-size: 12px;
+  }
+
+:host ::ng-deep p-colorpicker .p-colorpicker{
+    width: 20%;
+}
+::ng-deep .paleta-color1 .p-colorpicker-panel {
+  transform: translate(-10%,-50%) !important;
+  margin-top: -0.5rem !important;
+}
+
+::ng-deep .paleta-color2 .p-colorpicker-panel {
+  transform: translate(-40%,-50%) !important;
+  margin-top: -0.5rem !important;
+}
+
+

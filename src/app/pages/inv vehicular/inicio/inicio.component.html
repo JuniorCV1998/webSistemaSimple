@@ -1,0 +1,69 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        
+    <div class="text-center mb-4">
+        <div class="text-700 text-2xl mb-3 label-title">Crédito Vehicular</div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between mb-5">
+        <span class="text-500 font-medium line-height-3 text-left w-10">Tus inversiones vehiculares</span>
+        <i class="pi pi-plus-circle icon-span w-2 text-center" [routerLink]="['/vehicular/registro/datoscliente']"></i>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center gap-2 align-items-center" [ngClass]="listInvVehiculares.length==0?'mb-8':'mb-5'">
+        <span class="w-full button-style-none" (click)="changeOpen(true)" [ngClass]="pendiente?'button-style-primary':''">Pendientes</span>
+        <span class="w-full button-style-none" (click)="changeOpen(false)" [ngClass]="!pendiente?'button-style-danger':''">Cerrados</span>
+    </div>
+
+    <ng-template [ngIf]="!isLoading"> <!-- [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: inversion.idInversionVeh}" -->
+        <div *ngFor="let inversion of listInvVehiculares" >
+            <div class="flex flex-row w-full justify-content-center gap-2 mb-3 align-items-center" [ngClass]="pendiente?'custom-banner-1':'custom-banner-2'">
+                <div class="flex flex-column w-2 gap-2">
+                    <div class="flex flex-column justify-content-center align-items-center">
+                        <i class="pi pi-car icon-span"></i>
+                    </div>
+                    <div class="flex flex-row justify-content-center">
+                        <div class="flex w-5 color1" [ngStyle]="{'background-color': inversion.color1}"></div>
+                        <div class="flex w-5 color2" [ngStyle]="{'background-color': inversion.color2}"></div>
+                    </div>
+                </div>
+                <div class="flex flex-column w-6 gap-1">
+                    <span class="span-nombre">{{inversion.fullName}}</span>
+                    <span class="span-desc">{{inversion.descripcion}}</span>
+                </div>
+                <div class="flex flex-column w-4 align-items-center gap-1">
+                    <span class="span-monto">S/{{inversion.totalPagado | number:'1.2-2'}}</span>
+                    <span class="span-desc">Recaudado</span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="listInvVehiculares.length==0" class="flex flex-row justify-content-center align-items-center w-full">
+            <span class="w-8 span-empty" *ngIf="pendiente">Aún no tienes inversiones activas. <a [routerLink]="['/vehicular/registro/datoscliente']">¡Agrega una haciendo clic aquí!</a></span>
+            <span class="w-8 span-empty" *ngIf="!pendiente">Aún no tienes inversiones cerradas.</span>
+        </div>
+    </ng-template>
+    
+
+    <ng-template [ngIf]="isLoading">
+        <div class="flex flex-row w-full" style="min-width: 278px;">
+            <div class="w-full p-2">
+                <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-2 gap-2 row-skeleton">
+                    <p-skeleton class="w-3" height="3rem" />
+                    <div class="flex flex-column justify-content-center w-6 gap-1">
+                        <p-skeleton class="w-full" height="1rem" />
+                        <p-skeleton class="w-8" height="1rem" />
+                    </div>
+                    <div class="flex flex-column justify-content-center align-items-center w-4 gap-1">
+                        <p-skeleton class="w-8" height="1rem" />
+                        <p-skeleton class="w-6" height="1rem" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    
+    
+    
+
+</div>
+
+<!-- label-title-green -- registrada -->
