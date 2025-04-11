@@ -15,8 +15,8 @@
     </div>
 
     <ng-template [ngIf]="!isLoading"> <!-- [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: inversion.idInversionVeh}" -->
-        <div *ngFor="let inversion of listInvVehiculares" >
-            <div class="flex flex-row w-full justify-content-center gap-2 mb-3 align-items-center" [ngClass]="pendiente?'custom-banner-1':'custom-banner-2'">
+        <div *ngFor="let inversion of listInvVehiculares">
+            <div [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: inversion.idInversionVeh}" class="flex flex-row w-full justify-content-center gap-2 mb-3 align-items-center" [ngClass]="pendiente?'custom-banner-1':'custom-banner-2'">
                 <div class="flex flex-column w-2 gap-2">
                     <div class="flex flex-column justify-content-center align-items-center">
                         <i class="pi pi-car icon-span"></i>
@@ -62,7 +62,9 @@
     </ng-template>
     
     
-    
+    <div>
+        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+    </div>
 
 </div>
 

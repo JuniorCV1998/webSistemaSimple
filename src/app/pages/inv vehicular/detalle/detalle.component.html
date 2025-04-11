@@ -1,1 +1,332 @@
-<p>detalle works!</p>
+<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        
+    <div class="text-center mb-4">
+        <div class="text-700 text-2xl mb-3 label-title">Detalle Vehicular</div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-center align-items-center gap-2 mb-5">
+        <div class="flex flex-column w-4 gap-2">
+            <div class="flex flex-column justify-content-center align-items-center">
+                <i class="pi pi-car icon-span"></i>
+            </div>
+            <div class="flex flex-row justify-content-center">
+                <div class="flex w-4 color1" [ngStyle]="{'background-color': invDetail.color1}"></div>
+                <div class="flex w-4 color2" [ngStyle]="{'background-color': invDetail.color2}"></div>
+            </div>
+        </div>
+        <div class="flex flex-column w-10 gap-1">
+            <span class="span-nombre">{{invDetail.fullName}}</span>
+            <span class="span-desc">{{invDetail.descripcion}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-2">Frecuencia</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-1">{{invDetail.frecuencia}}</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-2">Monto por día</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-1">S/. {{invDetail.montoDiario | number:'1.2-2'}}</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-2">Placa vehículo</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-1">{{invDetail.placaVehiculo}}</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-2">Duración pago</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-1">{{invDetail.duracionPago}} meses</span>
+        </div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between gap-2 container-line mb-3">
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-2">Fecha inicio</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-1">{{invDetail.fechaInicio}}</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-2">Fecha fin</span>
+        </div>
+        <div class="flex flex-column w-3 gap-1">
+            <span class="span-1">{{invDetail.fechaFin}}</span>
+        </div>
+    </div>
+
+    <!-- *************************************************************** -->
+
+    <!-- HEADER -->
+    <div class="flex flex-row gap-1 align-items-center justify-content-center custom-banner-header mb-3" (click)="agregarCuota()">
+        <div class="flex flex-column gap-1 justify-content-center align-items-center" [ngClass]="invDetail.estadoDeuda==='P'?'w-6':'w-6'">
+            <div>
+                <span class="span-body-desc">Recaudado a la fecha</span>
+            </div>
+            <div>
+                <span class="span-1-header">S/. {{invDetail.totalPagado | number:'1.2-2'}}</span>
+            </div>
+        </div>
+        <div class="line-right"></div>
+        <div class="flex flex-column w-6 gap-1 justify-content-center" [ngClass]="invDetail.estadoDeuda==='P'?'w-4':'w-6'">
+            <div>
+                <span class="span-body-desc">Cuotas canceladas</span>
+            </div>
+            <div >
+                <span class="span-1-header">{{ invDetail.ultimaCuota | number:'2.0-0' }}</span>
+            </div>
+        </div>
+        <div *ngIf="invDetail.estadoDeuda==='P'" class="line-right"></div>
+        <div *ngIf="invDetail.estadoDeuda==='P'" class="flex flex-column w-2 justify-content-center align-items-center" >
+            <div class="flex flex-row justify-content-center w-full">
+                <i class="pi pi-plus-circle icon-span" (click)="agregarCuota()"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- BODY SEMANAL -->
+    <ng-template [ngIf]="invDetail.frecuencia==='SEMANAL'">
+        <div *ngFor="let operaciones of invDetail.body; let o = index" class="flex flex-column justify-content-center custom-banner-detail-body-padre mb-3"> <!-- Padre -->
+            <div><span class="span-body-desc paddin-5"><b>{{operaciones.mes}}</b></span></div>
+            <div class="flex flex-column justify-content-center"> <!-- Hijos -->
+                <div *ngFor="let operacion of operaciones.pagosAgrupados; let i = index" class="flex flex-column align-items-center justify-content-center custom-banner-detail-body mb-1" (click)="mostrarDetalle(i, o)">
+                    <div class="flex flex-row justify-content-center align-items-center mb-1 w-full" style="height: 10px;">
+                        <div class="flex flex-column align-items-center w-5">
+                            <span class="span-body-desc">{{operacion.fechaPago}}</span>
+                        </div>
+                        <div class="line-right"></div>
+                        <div class="flex flex-column w-4 gap-1 align-items-center ">
+                            <span class="span-body-desc">Cuota {{ operacion.nroCuota | number:'2.0-0' }}</span>
+                        </div>
+                        <div class="line-right"></div>
+                        <div class="flex flex-column w-3 align-items-center" >
+                            <span class="span-body-desc"><b>S/. {{operacion.montoPagado | number:'1.2-2'}}</b></span>
+                        </div>
+                    </div>
+                    <div *ngIf="operacion.mostrarDetalle" class="flex flex-column align-items-center w-full gap-2 detalle-cuota">
+                        <div class="flex flex-row justify-content-between w-full gap-1">
+                            <span class="span-body-desc">Fecha de registro</span>
+                            <span class="span-body-desc"><b>{{operacion.fechaCreacion}}</b></span>
+                        </div>
+                        <div class="flex flex-row justify-content-between w-full gap-1">
+                            <span class="span-body-desc">cód. op.</span>
+                            <span class="span-body-desc"><b>SSV-{{operacion.codOperacion}}</b></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row justify-content-end w-full gap-3 paddin-5">
+                <span class="span-body-desc">Total</span>
+                <span class="span-body-desc" style="margin-right: 5px;"><b>S/. {{operaciones.montoTotal | number:'1.2-2'}}</b></span>
+            </div>
+        
+         </div>
+    </ng-template>
+
+    <!-- BODY MENSUAL -->
+    <ng-template [ngIf]="invDetail.frecuencia==='MENSUAL'">
+        <div class="flex flex-column justify-content-center"> <!-- Hijos -->
+            <div *ngFor="let operacion of invDetail.body; let i = index" class="flex flex-column align-items-center justify-content-center custom-banner-detail-body mb-1" (click)="mostrarDetalle(i, 0)">
+                <div class="flex flex-row justify-content-center align-items-center mb-1 w-full" style="height: 10px;">
+                    <div class="flex flex-column align-items-center w-5">
+                        <span class="span-body-desc">{{operacion.fechaPago}}</span>
+                    </div>
+                    <div class="line-right"></div>
+                    <div class="flex flex-column w-4 gap-1 align-items-center ">
+                        <span class="span-body-desc">Cuota {{ operacion.nroCuota | number:'2.0-0' }}</span>
+                    </div>
+                    <div class="line-right"></div>
+                    <div class="flex flex-column w-3 align-items-center" >
+                        <span class="span-body-desc"><b>S/. {{operacion.montoPagado | number:'1.2-2'}}</b></span>
+                    </div>
+                </div>
+                <div *ngIf="operacion.mostrarDetalle" class="flex flex-column align-items-center w-full gap-2 detalle-cuota">
+                    <div class="flex flex-row justify-content-between w-full gap-1">
+                        <span class="span-body-desc">Fecha de registro</span>
+                        <span class="span-body-desc"><b>{{operacion.fechaCreacion}}</b></span>
+                    </div>
+                    <div class="flex flex-row justify-content-between w-full gap-1">
+                        <span class="span-body-desc">cód. op.</span>
+                        <span class="span-body-desc"><b>SSV-{{operacion.codOperacion}}</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <div style="height: 60px;"></div>
+
+    <button pButton *ngIf="invDetail.estadoDeuda==='P'"
+        pRipple label="Cerrar inversión" (click)="cerrarInversion()" class="btn-float" severity="danger"></button>
+     
+</div>
+
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>
+
+<p-confirmDialog #close_inv key="close_inv">
+    <ng-template pTemplate="headless" let-message>
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                <i class="pi pi-ban"></i>
+            </div>
+            <span class="font-bold block mb-3 mt-4 txt-red">
+                {{ message.header }}
+            </span>
+            <span class="flex flex-column gap-2 block mb-3 txt-label">
+                <strong>{{ message.message }}</strong>
+                <span>Con esta acción ya no podra agregar más cuotas de pagos.</span>
+            </span>
+            <div class="flex align-items-center gap-2 mt-4">
+                <button 
+                    pButton 
+                    label="Cancelar" 
+                    (click)="close_inv.reject()" 
+                    class="p-button-outlined w-8rem ">
+                </button>
+                <button 
+                severity="danger"
+                    pButton 
+                    label="Cerrar" 
+                    (click)="close_inv.accept()" 
+                    class=" w-8rem">
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #add_cuota key="add_cuota">
+    <ng-template pTemplate="headless" let-message>
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                <img src="assets/images/dashboard/money.png" width="110" height="110">
+            </div>
+            <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
+                {{ message.header }}
+            </span>
+            <!-- <p class="mb-2">{{ message.message }}</p> -->
+             <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i> Esta es la cuota a agregar</span>
+             <div class="flex flex-row align-items-center gap-4 mb-3">
+                <div class="position">
+                    {{ invDetail.ultimaCuota + 1 | number:'2.0-0' }}
+                </div>
+             </div>
+             <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto de la cuota</span>
+             <div class="flex flex-column w-8 align-items-center justify-content-center mb-3">
+                <p-inputNumber
+                [(ngModel)]="montoPago"
+                 id="monto" 
+                 [minFractionDigits]="2" [maxFractionDigits]="2"  
+                 mode="decimal" autocomplete="off" 
+                 placeholder="Ingrese monto" class="w-full"
+                 [min]="1" [max]="100000"
+                 prefix="S/. "
+                 />
+                 <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | number:'1.2-2'}}.</span>
+                 <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a S/ {{100000 | number:'1.0-0'}}.</span>
+             </div>
+
+             <!-- Fecha inicio y fin -->
+             <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Fecha de pago</span>
+            <div class="flex flex-row w-8 gap-2 justify-content-center align-items-center mb-3">
+                    <!-- <label for="fecha1" class="txt-left">Fecha inicio</label> -->
+                    <p-calendar 
+                    [(ngModel)]="fechaPago" 
+                    [showIcon]="true" 
+                    [showOnFocus]="true" 
+                    [touchUI]="true"
+                    [dateFormat]="'dd/mm/yy'"
+                    [showTime]="false"
+                    inputId="fecha1" 
+                    />
+            </div>
+
+            <div class="flex align-items-center gap-2 mt-2">
+                <button 
+                    pButton 
+                    label="Cancelar" 
+                    (click)="add_cuota.reject()" 
+                    class="p-button-outlined w-8rem ">
+                </button>
+                <button 
+                    [ngClass]="{
+                    'btn-disabled': !isFormValid() }"
+                    [disabled]="!isFormValid()"
+                    pButton 
+                    label="Siguiente" 
+                    (click)="add_cuota.accept()" 
+                    class="w-8rem">
+                </button>
+                
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<!-- Confirmar cuota a pagar -->
+<p-confirmDialog #add_cuota_ok key="add_cuota_ok">
+    <ng-template pTemplate="headless" let-message>
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                <i class="pi pi-check-square"></i>
+            </div>
+            <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
+                {{ message.header }}
+            </span>
+            
+            <div class="w-full">
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
+                    <div class="w-6 txt-label mb-2">Número de cuota</div>
+                    <div class="w-6 dataConfirm">
+                        {{ invDetail.ultimaCuota + 1 | number:'2.0-0' }}
+                    </div>
+                </div>
+
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
+                    <div class="w-6 txt-label mb-2">Monto de la cuota</div>
+                    <div class="w-6 dataConfirm">
+                        S/. {{montoPago | number:'1.2-2'}}
+                    </div>
+                </div>
+    
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
+                    <div class="txt-label w-6 mb-2">Fecha de pago</div>
+                    <div class="w-6 dataConfirm fechas">
+                        {{fechaPago | date: 'dd MMM yyyy'}}
+                    </div>
+                </div>
+    
+            </div>
+    
+            <div class="flex align-items-center gap-2 mt-4">
+                <button 
+                    pButton 
+                    label="Volver" 
+                    (click)="add_cuota_ok.reject()" 
+                    class="p-button-outlined w-8rem ">
+                </button>
+                <button 
+                    pButton 
+                    label="Confirmar" 
+                    (click)="add_cuota_ok.accept()" 
+                    class="w-8rem">
+                </button>
+                
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<app-loading></app-loading> 

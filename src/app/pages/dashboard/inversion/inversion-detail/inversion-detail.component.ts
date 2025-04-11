@@ -1,25 +1,24 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { ToastModule } from 'primeng/toast';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { CalendarModule  } from 'primeng/calendar';
-import { FormsModule } from '@angular/forms';
-import { Location } from '@angular/common';
-import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { Constantes } from '../../../../core/constant/Constantes';
-import { DialogService } from 'primeng/dynamicdialog';
-import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
-import { catchError, finalize, of } from 'rxjs';
-import { LoadingComponent } from '../../../modal/loading/loading.component';
-import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { CalendarModule } from 'primeng/calendar';
 import { CarouselModule } from 'primeng/carousel';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { CheckboxModule } from 'primeng/checkbox';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { ToastModule } from 'primeng/toast';
+import { catchError, delay, finalize, of } from 'rxjs';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 
 @Component({
   selector: 'app-inversion-detail',
@@ -63,7 +62,6 @@ export default class InversionDetailComponent {
     private route: ActivatedRoute,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private location: Location,
     private getInversionService: GetInversionService,
     public dialogService: DialogService,
     private router: Router,
@@ -104,7 +102,6 @@ export default class InversionDetailComponent {
       }),
         // Manejamos errores de respuesta HTTP con catchError
         catchError((error) => {
-        console.error('Error capturado:', error);
         // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
         if (error.status === 403) {
           this.show('Acceso denegado', Constantes.MSG_GLOBAL); // Mensaje para 403
@@ -154,11 +151,6 @@ export default class InversionDetailComponent {
     });
 }
 
-
-  volver() {
-    this.location.back();
-  }
-
   mostrarContrasena(){
     this.mostrar = !this.mostrar;
   }
@@ -170,7 +162,6 @@ export default class InversionDetailComponent {
 
   pagarCuota(cuota: number){
     if(this.codPerfil==='CLI') return;
-    if(!this.confirmCuota(cuota)) return;
     this.confirmCuota(cuota).then((result) => {
       if (result) {
         const fecha = this.formatearFecha(this.date) ?? '';
@@ -178,7 +169,6 @@ export default class InversionDetailComponent {
         this.getInversionService.pagarCuota(this.idInversion===null?0:this.idInversion, cuota, fecha).pipe(
           // Manejamos errores de respuesta HTTP con catchError
           catchError((error) => {
-            console.error('Error capturado:', error);
             this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
             return of(null);
           }))
@@ -451,7 +441,6 @@ async copyText(correo: string, contra: string): Promise<void> {
       detail: 'Error al copiar al portapapeles.',
       life: 3000
     });
-    console.error('Error al copiar al portapapeles:', err);
   }
 }
 

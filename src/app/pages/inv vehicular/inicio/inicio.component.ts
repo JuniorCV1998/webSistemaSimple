@@ -8,11 +8,15 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { Router } from '@angular/router';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule,SkeletonModule,TabMenuModule],
+  imports: [CommonModule,SkeletonModule,TabMenuModule,ToastModule],
+  providers: [MessageService],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })
@@ -24,15 +28,26 @@ export default class InicioComponent {
 
   listInvVehiculares: any = [];
 
+  toast: any = null;
+
   constructor(
     private inversionVehService: InversionVehService,
     private router: Router,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
+    private messageService: MessageService,
+    private location: Location,
   ){}
 
   ngOnInit(): void{
-    //this.getInversionesVehiculares();
+    const toastTemp = this.tempDataService.hasItem('toastTemp');
+    if (toastTemp) {
+      const toast = this.tempDataService.getItem<any>('toastTemp');
+      setTimeout(() => {
+        this.messageService.add(toast);
+      }, 100); 
+    }
   }
+  
   ngAfterViewInit(): void {
     this.getInversionesVehiculares();
     this.tempDataService.clear();

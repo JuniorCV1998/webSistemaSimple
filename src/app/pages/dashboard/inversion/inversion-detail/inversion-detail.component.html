@@ -774,7 +774,10 @@
             </ng-template>
         </p-confirmDialog>
 
-        <p-confirmDialog #cdrenovacion key="cdrenovacion">
+        <p-confirmDialog #cdrenovacion key="cdrenovacion"
+        [blockScroll]="true"
+        [baseZIndex]="10000" 
+        >
             <ng-template pTemplate="headless" let-message>
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
@@ -869,7 +872,10 @@
             </ng-template>
         </p-confirmDialog>
 
-        <p-confirmDialog #cdrenovacion_ok key="cdrenovacion_ok">
+        <p-confirmDialog #cdrenovacion_ok key="cdrenovacion_ok"
+        [blockScroll]="true"
+        [baseZIndex]="10000" 
+        >
             <ng-template pTemplate="headless" let-message>
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
@@ -882,7 +888,7 @@
                     <div class="w-full">
                         <div  class="mb-2 txt-label">Nombres</div>
                         <div pInputText class="w-full mb-3 dataConfirm linea">
-                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaternoo}}
+                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}
                         </div>
             
                         <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
@@ -912,7 +918,8 @@
                             <div class="flex flex-column w-full">
                                 <div class="txt-label mb-2">Valor de cuota</div>
                                 <div pInputText class="w-full dataConfirm">
-                                {{valorCuota | number:'1.2-2'}}
+                                <span *ngIf="valorCuota!==0">{{valorCuota | number:'1.2-2'}}</span>
+                                <span *ngIf="valorCuota===0">Calculando...</span>
                                 </div>
                             </div>
                         </div>

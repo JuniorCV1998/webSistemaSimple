@@ -33,5 +33,24 @@ export class InversionVehService {
       return this.http.get(this.baseUrl+this.baseComponent+'getInversionVehRegistered', {params});
     }
 
+    getInversionVehDetail(idInversionVeh: number){
+      const params = new HttpParams()
+        .set('idInversionVeh', Number(idInversionVeh));
+      return this.http.get(this.baseUrl+this.baseComponent+'getInversionVehDetail', {params});
+    }
+
+    closeInvVehicular(idInversionVeh: number){
+      const params = new HttpParams()
+        .set('idInversionVeh', Number(idInversionVeh));
+      return this.http.patch(this.baseUrl+this.baseComponent+'closeInvVehicular',null, {params});
+    }
+
+    insertPayVehicular(idInversionVeh: number, fecha: string, montoCuota: number){
+      const params = new HttpParams()
+        .set('idInversionVeh', Number(idInversionVeh))
+        .set('fecha', fecha.toString())
+        .set('montoCuota', Number(montoCuota));
+        return this.http.post(this.baseUrl+this.baseComponent+'insertPayVehicular',null, {params});
+     }
     
 }
