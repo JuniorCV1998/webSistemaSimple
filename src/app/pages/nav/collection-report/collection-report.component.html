@@ -16,102 +16,103 @@
                     />
             </div>
         </div>
-        
-        <div class="flex flex-column align-items-center" *ngIf="data.reportDiario.lista.length > 0">
-            <table class="table-diario mb-3">
-                <thead>
-                    <tr>
-                        <th colspan="2">Cliente</th>
-                        <th *ngIf="value!='pago'">Cuota</th>
-                        <th *ngIf="value=='pago'">Pagó</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5); let i = index">
-                        <td class="item-txt">{{i + 1}}.</td>
-                        <td>{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></td>
-                        <td *ngIf="value!='pago'" style=" text-align: center; padding: 0;">{{item.valorCuota | number:'1.2-2'}}</td>
-                        <td *ngIf="value=='pago'" style=" text-align: center; padding: 0;">
-                            <span [ngClass]="item.actualizado==1?'txt-actualizado-v':'txt-actualizado'">
-                                #{{item.ctasPagadas}}
-                            </span>
-                        </td>
-                        <td style=" text-align: center; padding: 0;">
-                            <i *ngIf="value!='pago'"
-                            [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
-                             class="pi pi-window-maximize"></i>
-                             <div *ngIf="value=='pago' && item.nroCuotas!=item.ctasPagadas" (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota)">
-                                <img src="assets/images/dashboard/money.png" height="20">
-                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: right; font-weight: bold;">Total</td>
-                        <td colspan="2">{{data.reportDiario.totalCuotas | number:'1.2-2'}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Copiar reporte diario -->
-            <div class="flex justify-content-end w-full">
-                <div class="flex gap-1 mb-2" *ngIf="value=='pago'" (click)="onLongPress(1)">
-                    <div class="copy-txt">Copiar</div>
-                    <i class="pi pi-clone"></i>
-                </div>
+
+        <div class="flex flex-column align-items-center" *ngIf="data.reportDiario.lista.length > 0" class="mb-3">
+            <div *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5); let i = index"
+            (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota, item.nroInversion, item.nroCuotas)"
+            class="flex flex-column w-full align-items-center justify-content-center custom-banner-detail-body mb-1">
+               <div class="flex flex-row justify-content-center gap-1 align-items-center mb-1 w-full" style="height: 10px;">
+                   <div class="flex flex-column w-6">
+                       <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
+                   </div>
+                   <div class="line-right"></div>
+                   <div class="flex flex-column w-2 align-items-center">
+                       <span class="span-body-desc"
+                       [ngClass]="item.actualizado==1?'txt-actualizado-v':'txt-actualizado'"
+                       ># {{ item.ctasPagadas | number:'2.0-0' }}</span>
+                   </div>
+                   <div class="line-right"></div>
+                   <div class="flex flex-column w-3 align-items-center">
+                       <span class="span-body-desc">S/. {{item.valorCuota | number:'1.2-2'}}</span>
+                   </div>
+               </div>
+           </div>
+           <div class="flex flex-row w-full paddin-5 justify-content-between">
+            <div class="flex flex-row gap-2 w-6 justify-content-start w-full" (click)="onLongPress(1)">
+                <div class="copy-txt">Copiar</div>
+                <i class="pi pi-clone"></i>
             </div>
+            <div class="flex flex-row gap-3 justify-content-end w-full">
+                <span class="span-body-desc"><b>Total</b></span>
+                <span class="span-body-desc">{{data.reportDiario.totalCuotas | number:'1.2-2'}}</span>
+            </div>
+           </div>
+        </div>
+        <div *ngIf="data.reportDiario.lista.length == 0" class="mb-3">
+            <app-list-empty-none></app-list-empty-none>
+        </div>
+
+        
+        <div class="flex flex-column align-items-center mb-3" *ngIf="data.reportDiario.lista.length > 0">
             <!-- Mostrar el botón solo si hay más de 5 registros -->
             <button *ngIf="data.reportDiario.lista.length > 5" class="futuristic-button w-4 mb-3" (click)="toggleMostrar()">
                 {{ mostrarTodo ? 'Ver menos' : 'Ver más' }}
             </button>
             <div class="flex flex-row w-full justify-content-around align-items-center amount-rec">
-                <div class="flex w-fullalign-items-center gap-2 p-1">
-                    <i class="pi pi-wallet"></i><span>Monto recaudado:</span> 
+                <div class="flex w-8 align-items-center gap-3 p-1">
+                    <i class="pi pi-wallet"></i><span class="span-body-desc"><b>Monto recaudado</b></span> 
                 </div>
-                <div style="font-weight: bold;">{{data.amountCharged | number:'1.2-2'}}</div>
+                <div class="flex w-4 align-items-center" style="font-weight: bold;">S/. {{data.amountCharged | number:'1.2-2'}}</div>
             </div>
         </div>
-        <div *ngIf="data.reportDiario.lista.length == 0">
-            <app-list-empty-none></app-list-empty-none>
-        </div>
-        
     </div>
 
     <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
         <span class="block mb-2">Semanal</span>
         <div class="flex flex-column align-items-center" *ngIf="data.reportSemanal.length > 0">
-            <table class="table-semanal mb-3">
-                <thead>
-                    <tr>
-                        <th colspan="2" style="width: 70%;">Cliente</th>
-                        <th style="width: 2%;">Pagó</th>
-                        <th style="width: 2%;">Cuota</th>
-                        <th style="width: 2%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5); let i = index">
-                        <td class="item-txt">{{i + 1}}.</td>
-                        <td style="width: 80%;">
-                            <div>{{item.fullName}} <span class="nroInv">#{{item.nroInversion}}</span></div>
-                            <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
-                        </td>
-                        <td style="width: 5%;">{{ 4 - (item?.cuotasPendientes ?? 0) }}</td>
-                        <td style="width: 10%;">{{item.valorCuota | number:'1.2-2'}}</td>
-                        <td style="width: 5%; text-align: center">
-                            <i
+            <div *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5); let i = index"
+            class="flex flex-column w-full align-items-center justify-content-center custom-banner-detail-body mb-1">
+               <div class="flex flex-column justify-content-center gap-2 align-items-center mb-1 w-full" style="height: 22px;">
+                <div class="flex flex-row w-full align-items-center">
+                    <div class="flex flex-column w-8">
+                        <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
+                    </div>
+                    <div class="line-right"></div>
+                    <div class="flex flex-column w-3 align-items-center">
+                        <span class="span-body-desc">S/. {{item.valorCuota | number:'1.2-2'}}</span>
+                    </div>
+                </div>
+                <div class="flex flex-row w-full justify-content-between">
+                    <div class="w-6 proxima-fecha">Próximo: {{item.proximaFecha}} </div>
+                    <div class="flex flex-column w-2 align-items-center">
+                        <span class="span-body-desc"
+                        ># {{ 4 - (item?.cuotasPendientes ?? 0) | number:'2.0-0'}}</span>
+                    </div>
+                    <div class="flex flex-column w-4 align-items-center">
+                        <i
                             [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
                              class="pi pi-window-maximize"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                    </div>
+                </div>
+                   
+               </div>
+           </div>
             <!-- Copiar reporte semanal -->
-            <div class="flex justify-content-end w-full">
-                <div class="flex gap-1 mb-2" *ngIf="value=='pago'" (click)="onLongPress(2)">
+            <!-- <div class="flex justify-content-end w-full">
+                <div class="flex gap-1 mb-2" (click)="onLongPress(2)">
+                    <div class="copy-txt">Copiar</div>
+                    <i class="pi pi-clone"></i>
+                </div>
+            </div> -->
+
+            <div class="flex flex-row w-full paddin-5 justify-content-between">
+                <div class="flex flex-row gap-2 w-6 justify-content-start w-full" (click)="onLongPress(2)">
                     <div class="copy-txt">Copiar</div>
                     <i class="pi pi-clone"></i>
                 </div>
             </div>
+
+
             <button *ngIf="data.reportSemanal.length > 5" class="futuristic-button w-4" (click)="toggleMostrarS()">
                 {{ mostrarTodoS ? 'Ver menos' : 'Ver más' }}
             </button>
@@ -119,8 +120,9 @@
         <div *ngIf="data.reportSemanal.length == 0">
             <app-list-empty-none></app-list-empty-none>
         </div>
-        
     </div>
+
+    <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full mb-1"></button>
 </div>
 
 <app-loading></app-loading> 
@@ -138,17 +140,30 @@
             <span class="font-bold text-2xl block mb-3 mt-4">
                 {{ message.header }}
             </span>
-            <div class="flex flex-row w-full justify-content-start gap-2 user-confirm mb-2">
+            <div class="flex flex-row w-full justify-content-start gap-2 user-confirm mb-3">
                 <i class="pi pi-user icon-span"></i>
                 <span>&nbsp;&nbsp;{{clienteSeleccionado}}</span>
             </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2 user-confirm mb-2">
-                <img src="assets/images/dashboard/money.png" height="25">
-                <span>{{message.message}}</span>
+            <div class="flex flex-row w-full justify-content-center align-items-center gap-2 user-confirm mb-3">
+                <div class="flex flex-row w-full justify-content-start gap-2 user-confirm">
+                    <img src="assets/images/dashboard/money.png" height="25">
+                    <span>{{message.message}}</span>
+                </div>
+                <div class="flex flex-row w-full justify-content-start gap-2 user-confirm">
+                    <i class="pi pi-sort-numeric-up-alt icon-span"></i>
+                    <span>Inversión:</span>
+                    <span>&nbsp;&nbsp;{{nroInversion}}</span>
+                </div>
             </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2 user-confirm mb-3">
-                <i class="pi pi-money-bill"></i>
-                <span>&nbsp;&nbsp;Monto: {{valorCuota | number:'1.2-2'}}</span>
+            <div class="flex flex-row w-full justify-content-center align-items-center gap-2 user-confirm mb-5">
+                <div class="flex flex-row w-8 justify-content-start user-confirm">
+                    <i class="pi pi-money-bill"></i>
+                    <span>&nbsp;&nbsp;Monto: S/. {{valorCuota | number:'1.2-2'}}</span>
+                </div>
+                <div class="flex flex-row w-4 justify-content-end user-confirm">
+                    <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: IdInversion}"
+                             class="pi pi-window-maximize"></i>
+                </div>
             </div>
             
             <!-- <p class="mb-2 message-confirm">{{ message.message }}</p> -->
@@ -171,7 +186,7 @@
                 </button>
                 <button 
                     pButton 
-                    label="Guardar" 
+                    label="Pagar" 
                     (click)="cd.accept()" 
                     class="w-8rem">
                 </button>

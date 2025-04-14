@@ -57,6 +57,8 @@ export default class CollectionReportComponent {
 
     //confirm pagar
     valorCuota: number = 0;
+    nroInversion: number = 0;
+    IdInversion: number = 0;
 
   constructor(
     private getInversionService: GetInversionService,
@@ -89,11 +91,13 @@ export default class CollectionReportComponent {
     });
   }
 
-  pagarCuota(idInversion: number, cuotasPagadas: number, cliente: string, valorCuota: number){
+  pagarCuota(idInversion: number, cuotasPagadas: number, cliente: string, valorCuota: number, nroInversion: number, nroCuotas: number){
+    if(cuotasPagadas>=nroCuotas) return;
     this.clienteSeleccionado = cliente;
     var cuota = cuotasPagadas+1;
     this.valorCuota = valorCuota;
-    if(!this.confirm(cuota)) return;
+    this.nroInversion = nroInversion;
+    this.IdInversion = idInversion;
     this.confirm(cuota).then((result) => {
       if (result) {
         const fecha = this.formatearFecha(this.date);
