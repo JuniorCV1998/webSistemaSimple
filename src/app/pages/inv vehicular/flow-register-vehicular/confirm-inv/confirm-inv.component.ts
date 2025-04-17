@@ -58,7 +58,6 @@ export default class ConfirmInvComponent {
     if(this.tempDataService.hasItem('inversionVeh') && this.tempDataService.hasItem('response')) {
       this.requestRegisterInv = this.tempDataService.getItem<any>('inversionVeh');
       this.response = this.tempDataService.getItem<any>('response');
-      console.log("este es el valor: "+JSON.stringify(this.response));
     } else{
       setTimeout(() => {
         this.showInvVehicular("Será redirigido a la vista de Datos de la inversión.","Faltan datos de la inversión");

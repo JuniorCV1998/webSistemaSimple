@@ -26,7 +26,7 @@
     </div>
 
     <div *ngIf="listaClientesRecovery.length==0 && !isLoading" class="flex flex-row justify-content-center align-items-center w-full">
-        <span class="w-10 span-empty">Aún no tienes clientes registrados. <a [routerLink]="'/vehicular/registro/clientenuevo'">¡Agrega uno haciendo clic aquí!</a></span>
+        <span class="w-10 span-empty">Aún no tienes clientes registrados. <a [routerLink]="'/registro/clientenuevo'">¡Agrega uno haciendo clic aquí!</a></span>
     </div>
 
     <ng-template [ngIf]="isLoading">
@@ -59,6 +59,6 @@
     
     <div style="height: 60px;"></div>
     <button pButton
-        pRipple label="Nuevo cliente" [routerLink]="'/vehicular/registro/clientenuevo'" severity="info" class="btn-float" ><i class="pi pi-user-plus"></i></button>
+        pRipple label="Nuevo cliente" [routerLink]="'/registro/clientenuevo'" severity="info" class="btn-float" ><i class="pi pi-user-plus"></i></button>
 
 </div>

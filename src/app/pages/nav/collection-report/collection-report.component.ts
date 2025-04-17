@@ -46,11 +46,6 @@ export default class CollectionReportComponent {
     amountCharged: 0
   };
 
-  /* Seleccionar modo -vista */
-  stateOptions: any[] = [{ label: 'Pago', value: 'pago' }];
-
-  value: string = 'off';
-
     //Fecha a pagar
     date: Date = new Date();
     clienteSeleccionado = '';

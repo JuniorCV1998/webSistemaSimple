@@ -258,10 +258,7 @@ confirmCerrarInv(): Promise<boolean> {
 
 
   mostrarDetalle(i: number, o: number){ 
-    //if(this.invDetail.frecuencia==="SEMANAL") console.log("Entro: "+ this.invDetail.frecuencia);
     if(this.invDetail.frecuencia==='SEMANAL') {
-      console.log("Entro: "+ this.invDetail.frecuencia);
-      console.log("O: "+ o + " i: "+i);
       this.invDetail.body[o].pagosAgrupados[i].mostrarDetalle = !this.invDetail.body[o].pagosAgrupados[i].mostrarDetalle;
     }
     else if(this.invDetail.frecuencia==='MENSUAL') this.invDetail.body[i].mostrarDetalle = !this.invDetail.body[i].mostrarDetalle;

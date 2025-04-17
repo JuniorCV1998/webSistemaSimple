@@ -8,7 +8,7 @@
 
         <div class="flex flex-row w-full mb-3 custom-banner-present">
             <div class="flex flex-row w-7 paddin-5 gap-1">
-                <div class="flex align-items-center"><i class="pi pi-user icon-span i-present"></i></div>
+                <div class="flex align-items-center"><i class="pi pi-user icon-span pi-present"></i></div>
                 <div class="flex flex-column justify-content-center w-full">
                     <!-- <span class="params-txt mb-1">Cliente</span> -->
                     <span class="valor-txt">{{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
@@ -16,7 +16,7 @@
             </div>
             <div class="flex flex-row w-5 paddin-5 cont-banner gap-1">
                 <div class="flex flex-column justify-content-center align-items-center" style="padding-top: 5px;">
-                    <span class="icon-span i-present">S/.</span>
+                    <span class="icon-span pi-present">S/.</span>
                 </div>
                 <div class="flex flex-column justify-content-center w-full">
                     <!-- <span class="params-txt mb-1">Monto</span> -->
@@ -610,7 +610,7 @@
                     <div class="flex flex-column w-full">
                         <span class="mb-2 params-txt">Monto invertido</span>
                         <span class="valor-txt-detail">
-                            {{objInvDetail.monto | number:'1.2-2' }}
+                            S/. {{objInvDetail.monto | number:'1.2-2' }}
                         </span>
                     </div>
     
@@ -633,7 +633,7 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">valor de cuota</label>
                         <span class="valor-txt-detail">
-                        {{objInvDetail.valorCuota | number:'1.2-2'}}
+                        S/. {{objInvDetail.valorCuota | number:'1.2-2'}}
                         </span>
                     </div>
                 </div>
@@ -670,17 +670,17 @@
                     <span class="txt-detalles icon-span">DETALLES DEL CLIENTE</span>
                 </div>
     
-                <div class="flex flex-row gap-2 align-items-top justify-content-center mb-3">
-                    <div class="flex flex-column w-8">
+                <div class="flex flex-row gap-2 align-items-top justify-content-between mb-3">
+                    <div class="flex flex-column" [ngClass]="objInvDetail.persona.celular==''?'w-12':'w-7'">
                         <label class="mb-2 params-txt">Nombres</label>
                         <span class="valor-txt-detail">
                             {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}
                         </span>
                     </div>
-                    <div class="flex flex-column w-4">
+                    <div class="flex flex-column w-5" *ngIf="objInvDetail.persona.celular!=''">
                         <label class="mb-2 params-txt">Celular</label>
                         <span class="valor-txt-detail">
-                            {{objInvDetail.persona.celular}}
+                            {{formatNumberEspaciado(objInvDetail.persona.celular)}}
                         </span>
                     </div>
                 </div>
@@ -720,7 +720,6 @@
                     <div>
                         <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
                     </div>
-                    
                 </div>
                 
                 <div *ngIf="objInvDetail.comentario!=''" class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">

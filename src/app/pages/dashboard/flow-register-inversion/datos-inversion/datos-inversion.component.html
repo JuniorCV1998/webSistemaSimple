@@ -9,7 +9,7 @@
         <div>
             <!-- Monto a invertir -->
              <div class="classInputMonto mb-3">
-                <label for="monto" class="block text-900 font-medium mb-2">Monto</label>
+                <label for="monto" class="block text-600 font-medium mb-2">Monto</label>
                 <p-inputNumber
                 [(ngModel)]="valueMonto"
                  id="monto" 
@@ -24,7 +24,7 @@
             
             
              <!-- cantidad de cuotas -->
-             <label for="cuotas" class="block text-900 font-medium mb-2">Nro. de cuotas</label>
+             <label for="cuotas" class="block text-600 font-medium mb-2">Nro. de cuotas</label>
              <div class="button-container mb-3">
                 <!-- <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==1}" (click)="selectButton(1)">07</button>
                 <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==2}" (click)="selectButton(2)">24</button>
@@ -43,7 +43,7 @@
             </div>
 
             <!-- valor de interes a aplicar -->
-            <label for="interes" class="block text-900 font-medium mb-2">Interés</label>
+            <label for="interes" class="block text-600 font-medium mb-2">Interés</label>
             <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3">
                 <div class="flex flex-column w-full">
                     <div class="card flex flex-column align-items-center w-full">
@@ -121,18 +121,9 @@
 
             <!-- Fecha inicio y fin -->
             <div class="flex flex-column gap-2 justify-content-center">
-                <label for="interes" class="block text-900 font-medium mb-2">Establecer fecha inicio y fin</label>
-                <!-- <div class="flex align-items-center gap-1 mb-3">
-                    <p-checkbox 
-                        [(ngModel)]="statusFecha" 
-                        [binary]="true" 
-                        inputId="fif" 
-                        (onChange)="clicFechaInicioFin()"/>
-                    <label for="fif">Establecer fecha inicio y fin</label>
-                </div> -->
                 <div class="flex flex-row justify-content-between align-items-center gap-2 mb-4">
                     <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha1">Fecha inicio</label>
+                        <label for="fecha1" class="block text-600 font-medium mb-2">Fecha inicio</label>
                         <p-calendar 
                         [(ngModel)]="date1" 
                         [showIcon]="true" 
@@ -145,7 +136,7 @@
                         />
                     </div>
                     <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha2">Fecha fin</label>
+                        <label for="fecha2" class="block text-600 font-medium mb-2">Fecha fin</label>
                         <p-calendar 
                         [(ngModel)]="date2" 
                         [showIcon]="true" 
@@ -159,6 +150,21 @@
                     </div>
                     
                 </div>
+            </div>
+
+            <div class="card mb-2" style="padding: 5px;">
+                <p-floatLabel class="w-full">
+                    <textarea 
+                        class="w-full"
+                        id="float-comentario" 
+                        rows="3"
+                        cols="30" 
+                        [(ngModel)]="comentario"
+                        [maxLength]="180"
+                        pInputTextarea>
+                    </textarea>
+                    <label for="float-comentario">Agrega un comentario (opcional)</label>
+                </p-floatLabel>
             </div>
              
             <button

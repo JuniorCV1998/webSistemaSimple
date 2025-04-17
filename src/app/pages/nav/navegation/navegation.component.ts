@@ -150,7 +150,6 @@ export class NavegationComponent {
   }
 
   volver() {
-    //console.log("inicio: "+this.irInicio + " fromList: "+this.fromList);
     if(this.irInicio || (!this.fromList && this.fromList != null)) {
       if(this.registerVeh) this.router.navigate(['/vehicular/inicio']);
       else this.router.navigate(['/inicio']);

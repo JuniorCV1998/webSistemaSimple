@@ -466,4 +466,8 @@ copyToClipboard(text: string) {
   document.body.removeChild(el);
 }
 
+formatNumberEspaciado(numero: string): string {
+  return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
 }

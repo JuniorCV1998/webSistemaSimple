@@ -19,22 +19,12 @@ export default class ListAllComponent {
   ultimasInversiones: any[] = [];
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private location: Location
   ){}
 
   ngOnInit(): void {
-    /* this.route.queryParams.subscribe(params => {
-      if (params['lista']) {
-        this.skeletonShow = false;
-        this.ultimasInversiones = JSON.parse(params['lista']);
-        console.log(this.ultimasInversiones);
-      }
-    }); */
 
     this.getListAllInvSession();
-
   }
 
   getListAllInvSession(){

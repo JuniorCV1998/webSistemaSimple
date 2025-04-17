@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
 import { Constantes } from './core/constant/Constantes';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -39,12 +39,6 @@ export const routes: Routes = [
         path: 'registrar/datosinversion',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/dashboard/flow-register-inversion/datos-inversion/datos-inversion.component'),
-        data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_ADM] }
-    },
-    {
-        path: 'registrar/datoscliente',
-        canActivate: [authGuard],
-        loadComponent:() => import ('././pages/dashboard/flow-register-inversion/datos-cliente/datos-cliente.component'),
         data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_ADM] }
     },
     {
@@ -99,16 +93,16 @@ export const routes: Routes = [
     },
 
     {
-        path: 'vehicular/registro/datoscliente',
+        path: 'registro/datoscliente',
         canActivate: [authGuard],
-        loadComponent:() => import ('././pages/inv vehicular/flow-register-vehicular/cliente/cliente.component'),
+        loadComponent:() => import ('./pages/resource/cliente/cliente.component'),
         data: { profiles: [Constantes.PERFIL_INV], animation: 'slideRight' }
     },
 
     {
-        path: 'vehicular/registro/clientenuevo',
+        path: 'registro/clientenuevo',
         canActivate: [authGuard],
-        loadComponent:() => import ('././pages/inv vehicular/flow-register-vehicular/cliente-nuevo/cliente-nuevo.component'),
+        loadComponent:() => import ('././pages/resource/cliente-nuevo/cliente-nuevo.component'),
         data: { profiles: [Constantes.PERFIL_INV], animation: 'fade' }
     },
 

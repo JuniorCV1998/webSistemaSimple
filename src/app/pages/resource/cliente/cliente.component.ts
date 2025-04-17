@@ -8,9 +8,9 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { TabViewModule } from 'primeng/tabview';
 import { catchError, finalize, of } from 'rxjs';
-import { Constantes } from '../../../../core/constant/Constantes';
-import { InversoresService } from '../../../../core/services/inversores/inversores.service';
-import { TempDataService } from '../../../../core/services/temp-data.service';
+import { Constantes } from '../../../core/constant/Constantes';
+import { InversoresService } from '../../../core/services/inversores/inversores.service';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 
 @Component({
@@ -63,8 +63,15 @@ ngOnInit(): void{
     // esta seleccionando al siguiente usuario
     this.persona.idUsuario = idUsuario;
     this.tempDataService.setItem('persona',this.persona);
-    if(this.persona!=null) this.router.navigate(['vehicular/registro/datosinversion']);
+    //if(this.persona!=null) this.router.navigate(['vehicular/registro/datosinversion']);
     
+    if(this.tempDataService.hasItem('flow')) {
+      let temp = this.tempDataService.getItem<any>('flow');
+      console.log("session: "+temp);
+      if(temp==='vehicular') this.router.navigate(['vehicular/registro/datosinversion']);
+      else if(temp==='prestamo') this.router.navigate(['registrar/confirmar']);
+      else this.router.navigate(['inicio']);
+    } else this.router.navigate(['inicio']);
   }
 
   filtrarCliente(){

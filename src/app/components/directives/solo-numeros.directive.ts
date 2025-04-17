@@ -14,7 +14,6 @@ export class SoloNumerosDirective {
   onchangeInput(event: Event):void{  //captura el elemento en el DOM
     const numero = /[^0-9]*/g ;
     const initVaule = this.elRef.nativeElement.value;
-    //console.log("valor input: "+initVaule);
     
     this.elRef.nativeElement.value = initVaule.replace(numero,'');
     if(initVaule !== this.elRef.nativeElement.value) event.stopPropagation();

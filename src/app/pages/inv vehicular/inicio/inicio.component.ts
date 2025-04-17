@@ -35,7 +35,6 @@ export default class InicioComponent {
     private router: Router,
     private tempDataService: TempDataService,
     private messageService: MessageService,
-    private location: Location,
   ){}
 
   ngOnInit(): void{
@@ -73,7 +72,6 @@ export default class InicioComponent {
         }),
           // Manejamos errores de respuesta HTTP con catchError
           catchError((error) => {
-          console.error('Error capturado:', error);
           // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
           if (error.status === 403) {
             //this.show('Acceso denegado', Constantes.MSG_GLOBAL); // Mensaje para 403
@@ -93,5 +91,10 @@ export default class InicioComponent {
       }
     
     );}
+
+    selectClient(){
+      this.tempDataService.setItem('flow','vehicular');
+      this.router.navigate(['registro/datoscliente']);
+    }
 
 }

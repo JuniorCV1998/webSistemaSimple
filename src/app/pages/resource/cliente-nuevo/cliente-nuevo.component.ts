@@ -5,9 +5,9 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { NroCelularDirective } from '../../../../components/directives/nro-celular.directive';
-import { SoloLetrasDirective } from '../../../../components/directives/solo-letras.directive';
-import { TempDataService } from '../../../../core/services/temp-data.service';
+import { NroCelularDirective } from '../../../components/directives/nro-celular.directive';
+import { SoloLetrasDirective } from '../../../components/directives/solo-letras.directive';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-cliente-nuevo',
@@ -31,7 +31,7 @@ export default class ClienteNuevoComponent {
 
   constructor(
     private router: Router,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
   ){
     if(this.tempDataService.hasItem('persona')) {
       let temp = this.tempDataService.getItem<any>('persona');
@@ -47,7 +47,17 @@ export default class ClienteNuevoComponent {
 
   irDatosInversion(){
     this.tempDataService.setItem('persona',this.persona);
-    this.router.navigate(['vehicular/registro/datosinversion']);
+
+    if(this.tempDataService.hasItem('flow')) {
+      let temp = this.tempDataService.getItem<any>('flow');
+      console.log("session: "+temp);
+      if(temp==='vehicular') this.router.navigate(['vehicular/registro/datosinversion']);
+      else if(temp==='prestamo') this.router.navigate(['registrar/confirmar']);
+      else this.router.navigate(['inicio']);
+    } else this.router.navigate(['inicio']);
+
+    
+    
   }
 
   // Método para verificar si todos los campos obligatorios están llenos

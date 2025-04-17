@@ -17,6 +17,9 @@ import { GetInversionService } from '../../../../core/services/inversion/get-inv
 import { catchError, finalize, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { TempDataService } from '../../../../core/services/temp-data.service';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 
 @Component({
@@ -24,7 +27,7 @@ import { LoadingComponent } from '../../../modal/loading/loading.component';
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,InputOtpModule,FormsModule
             ,CardModule,BreadcrumbModule,InputNumberModule,CalendarModule,
-           CommonModule,KnobModule,LoadingComponent
+           CommonModule,KnobModule,LoadingComponent,InputTextareaModule,FloatLabelModule
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'
@@ -50,22 +53,26 @@ export default class DatosInversionComponent {
   date1: Date = new Date();
   date2: Date | null = null;
 
+  //comentario
+  comentario: string = '';
+
   constructor(
     private router: Router,
     private location: Location,
     private getInversionService: GetInversionService,
     private messageService: MessageService,
+    private tempDataService: TempDataService
   ){}
 
   ngOnInit() {
-    const obj = sessionStorage.getItem('objInversion');
-    if(obj) {
-      const objnew = JSON.parse(obj);
+    if(this.tempDataService.hasItem('objInversion')) {
+      const objnew = this.tempDataService.getItem<any>('objInversion');
       this.valueMonto = objnew.monto;
       this.valueInteres = !objnew.statusPersonalizado?objnew.interes:20;
       this.valueInteresPerso = objnew.statusPersonalizado?objnew.interesPerso:null;
       this.statusPersonalizado = objnew.statusPersonalizado,
       this.date1 = new Date(objnew.fechaInicio);
+      this.comentario = objnew.comentario;
       this.selectButton(objnew.selected, objnew.nroCuotas); //actualiza cuota
     }
   }  
@@ -79,15 +86,17 @@ export default class DatosInversionComponent {
     const request = {
       monto: this.valueMonto,
       nroCuotas: this.nroCuota,
-      interes: !this.statusPersonalizado?this.valueInteres:null,
+      interes: this.statusPersonalizado?this.valueInteresPerso:this.valueInteres,
       interesPerso: this.statusPersonalizado?this.valueInteresPerso:null,
       statusPersonalizado: this.statusPersonalizado,
       fechaInicio: this.getFormattedDate(this.date1),
       fechaFin: this.getFormattedDate(this.date2),
-      selected: this.selected
+      selected: this.selected,
+      comentario: this.comentario
     }
-    sessionStorage.setItem('objInversion',JSON.stringify(request));
-    this.router.navigate(['registrar/datoscliente']);
+    this.tempDataService.setItem('objInversion',request);
+    this.tempDataService.setItem('flow','prestamo');
+    this.router.navigate(['registro/datoscliente']);
 }
 
 getValidationValues() {

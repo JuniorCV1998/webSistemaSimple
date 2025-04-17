@@ -6,7 +6,7 @@
 
     <div class="flex flex-row w-full justify-content-between mb-5">
         <span class="text-500 font-medium line-height-3 text-left w-10">Tus inversiones vehiculares</span>
-        <i class="pi pi-plus-circle icon-span w-2 text-center" [routerLink]="['/vehicular/registro/datoscliente']"></i>
+        <i class="pi pi-plus-circle icon-span w-2 text-center" (click)="selectClient()"></i>
     </div>
 
     <div class="flex flex-row w-full justify-content-center gap-2 align-items-center" [ngClass]="listInvVehiculares.length==0?'mb-8':'mb-5'">
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div *ngIf="listInvVehiculares.length==0" class="flex flex-row justify-content-center align-items-center w-full">
-            <span class="w-8 span-empty" *ngIf="pendiente">Aún no tienes inversiones activas. <a [routerLink]="['/vehicular/registro/datoscliente']">¡Agrega una haciendo clic aquí!</a></span>
+            <span class="w-8 span-empty" *ngIf="pendiente">Aún no tienes inversiones activas. <a (click)="selectClient()">¡Agrega una haciendo clic aquí!</a></span>
             <span class="w-8 span-empty" *ngIf="!pendiente">Aún no tienes inversiones cerradas.</span>
         </div>
     </ng-template>
