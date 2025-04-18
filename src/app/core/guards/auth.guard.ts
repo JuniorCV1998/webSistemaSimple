@@ -18,13 +18,23 @@ export const authGuard: CanActivateFn = (route, state) => {
       return false;
     } //else return true;
 
-        // Decodifica el token
+        // Decodifica el perfil desde el token
         const userProfiles = decodedToken.codPerfil;
-        // Verifica si el usuario tiene el perfil requerido para acceder a la ruta
-        const requiredProfiles = route.data['profiles'] || []; // Obtén los perfiles requeridos desde las rutas
+        // Decodifica los permisos desde el token
+        const permisosUsuario = decodedToken.permisos;
+
+        // ✅ Validación de perfiles (ya existente)
+        const requiredProfiles = route.data['profiles'] || [];
         if (requiredProfiles.length && !requiredProfiles.some((profile: any) => userProfiles.includes(profile))) {
-          // Si el usuario no tiene el perfil requerido, redirige o deniega el acceso
-          router.navigate(['/inicio']); // Cambia a la ruta que desees
+          router.navigate(['/inicio']);
+          return false;
+        }
+
+        // ✅ Validación de permisos
+        const requiredPermisos = route.data['permisos'] || [];
+        if (requiredPermisos.length && !requiredPermisos.some((permisoRequerido: string) => 
+          permisosUsuario.some((permisoUsuario: any) => permisoUsuario.codigo === permisoRequerido))) {
+          router.navigate(['/inicio']);
           return false;
         }
     

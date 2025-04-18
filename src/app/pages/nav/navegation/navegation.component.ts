@@ -10,6 +10,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { Subscription } from 'rxjs';
 import { LoginService } from '../../../core/services/auth/login/login.service';
 import { slideInAnimation } from '../animation/slideInAnimation ';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-navegation',
@@ -46,19 +47,26 @@ export class NavegationComponent {
   /* Datos del usuario */
   codPefil: any = null;
 
+  /* Permisos del usuario */
+  permisos: any = null;
+  permisoVehicular: boolean = false; // permiso vehicular
+
   constructor(
     private location: Location,
     private router: Router,
     private loginService: LoginService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private tempDataService: TempDataService
   ){
-    /* if (decodedToken) {
+    /* const decodedToken = this.loginService.getDecodedToken();
+    if (decodedToken) {
       console.log('Nombre:', decodedToken.nombre);
       console.log('Código Único:', decodedToken.codigoUnico);
       console.log('codPerfil:', decodedToken.codPerfil);
       console.log('Correo:', decodedToken.usuario);
       console.log('inversor',decodedToken.inversor);
       console.log('idUsuario:', decodedToken.idUsuario);
+      console.log('permisos:', decodedToken.permisos);
     } */
   }
 
@@ -78,7 +86,18 @@ export class NavegationComponent {
     this.routerSubscription = this.router.events.subscribe((event) => {
       /* Definir el perfil de usuario */
       const decodedToken = this.loginService.getDecodedToken();
-      if(decodedToken) this.codPefil = decodedToken.codPerfil; 
+
+
+      if(decodedToken) {
+        this.codPefil = decodedToken.codPerfil;
+        this.tempDataService.setConstant("codPerfil", this.codPefil);
+        this.permisos = decodedToken.permisos;
+        if(decodedToken.permisos.length!=0) {
+          this.tempDataService.setConstant("permisos", this.permisos);
+          this.permisoVehicular = this.permisos.some((p:any) => p.codigo === 'INV_VEHICULAR');
+        }
+
+      }
       //Definir valor de confetti
       this.setValueConfetti();
       if (event instanceof NavigationEnd) {
@@ -139,7 +158,6 @@ export class NavegationComponent {
 /*   closeNav() {
     this.sidebarOpened = false;
   } */
-
 
 
   ngOnDestroy() {

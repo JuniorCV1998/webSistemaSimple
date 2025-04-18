@@ -46,5 +46,9 @@ export const Constantes = {
     PERFIL_ADM: 'ADM',
 
 
+    /* PERMISOS DE USUARIOS */
+
+    INV_VEHICULAR: 'INV_VEHICULAR',
+
 
 }

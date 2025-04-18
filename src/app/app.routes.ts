@@ -82,14 +82,14 @@ export const routes: Routes = [
         path: 'vehicular/inicio',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/inv vehicular/inicio/inicio.component'),
-        data: { profiles: [Constantes.PERFIL_INV], animation: 'fade' }
+        data: { permisos: [Constantes.INV_VEHICULAR], animation: 'fade'}
     },
 
     {
         path: 'vehicular/inversiondetalle',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/inv vehicular/detalle/detalle.component'),
-        data: { profiles: [Constantes.PERFIL_INV] }
+        data: { permisos: [Constantes.INV_VEHICULAR] }
     },
 
     {
@@ -110,21 +110,21 @@ export const routes: Routes = [
         path: 'vehicular/registro/datosinversion',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/inv vehicular/flow-register-vehicular/datos-inversion/datos-inversion.component'),
-        data: { profiles: [Constantes.PERFIL_INV]}
+        data: { permisos: [Constantes.INV_VEHICULAR], profiles: [Constantes.PERFIL_INV]}
     },
 
     {
         path: 'vehicular/registro/confirmar',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/inv vehicular/flow-register-vehicular/confirm-inv/confirm-inv.component'),
-        data: { profiles: [Constantes.PERFIL_INV], animation: 'slideRight'}
+        data: { permisos: [Constantes.INV_VEHICULAR], profiles: [Constantes.PERFIL_INV], animation: 'slideRight'}
     },
 
     {
         path: 'vehicular/registro/inversiondetalle',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/inv vehicular/flow-register-vehicular/registered-inv/registered-inv.component'),
-        data: { profiles: [Constantes.PERFIL_INV], animation: 'fade'}
+        data: { permisos: [Constantes.INV_VEHICULAR], profiles: [Constantes.PERFIL_INV], animation: 'fade'}
     },
 
 

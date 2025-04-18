@@ -41,6 +41,7 @@ export default class DetalleComponent {
   /* parametros agregar cuota */
   fechaPago: Date = new Date();
   montoPago: any = null;
+  perfil: string = '';
   
   constructor(
     private inversionVehService: InversionVehService,
@@ -51,7 +52,9 @@ export default class DetalleComponent {
     private messageService: MessageService,
     public tempDataService: TempDataService,
     private confirmationService: ConfirmationService,
-  ){}
+  ){
+    if(this.tempDataService.hasConstant("codPerfil")) this.perfil = this.tempDataService.getConstant("codPerfil") ?? '';
+  }
 
   ngOnInit(): void{
     // Recuperar el parámetro de consulta `idInversionVeh`

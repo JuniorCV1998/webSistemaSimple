@@ -5,24 +5,50 @@ import { Injectable } from '@angular/core';
 })
 export class TempDataService {
   private data: any = {};
-  /* setea el dato a guarda */
+  private constantData: any = {};
+
+  // Set temporal
   setItem(key: string, value: any): void {
     this.data[key] = value;
   }
-  /* Obtiene el dato guardado */
+
+  // Get temporal
   getItem<T>(key: string): T | null {
     return this.data[key] ?? null;
   }
-  /* eliminar objeto unico */
+
+  // Set constante
+  setConstant(key: string, value: any): void {
+    this.constantData[key] = value;
+  }
+
+  // Get constante
+  getConstant<T>(key: string): T | null {
+    return this.constantData[key] ?? null;
+  }
+
+  // Remove temporal
   removeItem(key: string): void {
     delete this.data[key];
   }
-  /* Elimina todo */
+
+  // Remove constante
+  removeConstant(key: string): void {
+    delete this.constantData[key];
+  }
+
+  // Clear solo temporal
   clear(): void {
     this.data = {};
   }
-  /* Valida si el dato existe */
+
+  // Valida si existe en temporal
   hasItem(key: string): boolean {
     return this.data.hasOwnProperty(key);
+  }
+
+  // Valida si existe en constante
+  hasConstant(key: string): boolean {
+    return this.constantData.hasOwnProperty(key);
   }
 }

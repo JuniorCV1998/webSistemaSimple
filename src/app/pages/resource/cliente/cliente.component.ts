@@ -39,6 +39,7 @@ constructor(
 persona: any = { idUsuario: null }
   
 ngOnInit(): void{
+  if(!this.tempDataService.hasItem('flow')) this.router.navigate(['inicio']);
   this.obtenerListaClientes();
 }
 
@@ -67,7 +68,6 @@ ngOnInit(): void{
     
     if(this.tempDataService.hasItem('flow')) {
       let temp = this.tempDataService.getItem<any>('flow');
-      console.log("session: "+temp);
       if(temp==='vehicular') this.router.navigate(['vehicular/registro/datosinversion']);
       else if(temp==='prestamo') this.router.navigate(['registrar/confirmar']);
       else this.router.navigate(['inicio']);
@@ -91,7 +91,8 @@ ngOnInit(): void{
   }
 
   formatNumberEspaciado(numero: string): string {
-    return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    if(numero!=null) return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    else return ""
   }
 
   cleanFiltroFunct() {

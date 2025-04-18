@@ -55,14 +55,17 @@ export default class ConfirmInvComponent {
   ){}
 
   ngOnInit(): void{
-    if(this.tempDataService.hasItem('inversionVeh') && this.tempDataService.hasItem('response')) {
-      this.requestRegisterInv = this.tempDataService.getItem<any>('inversionVeh');
-      this.response = this.tempDataService.getItem<any>('response');
-    } else{
-      setTimeout(() => {
-        this.showInvVehicular("Será redirigido a la vista de Datos de la inversión.","Faltan datos de la inversión");
-      }, 100); 
-      
+    if(!this.tempDataService.hasItem('flow')) this.router.navigate(['inicio']);
+    else {
+      if(this.tempDataService.hasItem('inversionVeh') && this.tempDataService.hasItem('response')) {
+        this.requestRegisterInv = this.tempDataService.getItem<any>('inversionVeh');
+        this.response = this.tempDataService.getItem<any>('response');
+      } else{
+        setTimeout(() => {
+          this.showInvVehicular("Será redirigido a la vista de Datos de la inversión.","Faltan datos de la inversión");
+        }, 100); 
+        
+      }
     }
     
   }
@@ -110,10 +113,14 @@ export default class ConfirmInvComponent {
 
   ngAfterViewInit(): void{
     this.mostrarMensaje();
-    if (Object.keys(this.requestRegisterInv).length === 0) this.showInvVehicular("Será redirigido a la vista de Datos de la inversión.","Faltan datos de la inversión");
+    if(this.tempDataService.hasItem('flow')) 
+     {
+      if (Object.keys(this.requestRegisterInv).length === 0) this.showInvVehicular("Será redirigido a la vista de Datos de la inversión.","Faltan datos de la inversión");
+    }
+    
   }
 
-      showInvVehicular(message: string, header: string) {
+  showInvVehicular(message: string, header: string) {
         const ref = this.dialogService.open(MessagePopUpComponent, {
           data: {
             message: message

@@ -41,7 +41,7 @@ export default class ClienteNuevoComponent {
   }
 
   ngOnInit(): void{
-    
+    if(!this.tempDataService.hasItem('flow')) this.router.navigate(['inicio']);
     }
 
 
@@ -50,7 +50,6 @@ export default class ClienteNuevoComponent {
 
     if(this.tempDataService.hasItem('flow')) {
       let temp = this.tempDataService.getItem<any>('flow');
-      console.log("session: "+temp);
       if(temp==='vehicular') this.router.navigate(['vehicular/registro/datosinversion']);
       else if(temp==='prestamo') this.router.navigate(['registrar/confirmar']);
       else this.router.navigate(['inicio']);

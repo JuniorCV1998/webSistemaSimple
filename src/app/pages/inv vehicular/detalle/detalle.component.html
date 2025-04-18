@@ -86,8 +86,8 @@
                 <span class="span-1-header">{{ invDetail.ultimaCuota | number:'2.0-0' }}</span>
             </div>
         </div>
-        <div *ngIf="invDetail.estadoDeuda==='P'" class="line-right"></div>
-        <div *ngIf="invDetail.estadoDeuda==='P'" class="flex flex-column w-2 justify-content-center align-items-center" >
+        <div *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" class="line-right"></div>
+        <div *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" class="flex flex-column w-2 justify-content-center align-items-center" >
             <div class="flex flex-row justify-content-center w-full">
                 <i class="pi pi-plus-circle icon-span" (click)="agregarCuota()"></i>
             </div>
@@ -166,7 +166,7 @@
 
     <div style="height: 60px;"></div>
 
-    <button pButton *ngIf="invDetail.estadoDeuda==='P'"
+    <button pButton *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'"
         pRipple label="Cerrar inversión" (click)="cerrarInversion()" class="btn-float" severity="danger"></button>
      
 </div>

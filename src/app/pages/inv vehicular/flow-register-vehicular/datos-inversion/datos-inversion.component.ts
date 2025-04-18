@@ -93,12 +93,15 @@ export default class DatosInversionComponent {
     }
 
     /* Datos del cliente */
-    if (Object.keys(this.persona).length === 0) {
-      setTimeout(() => {
-        this.showPersona("Será redirigido a la vista de Datos del Cliente.","Faltan datos del cliente");
-      }, 100); 
+    if(!this.tempDataService.hasItem('flow')) this.router.navigate(['inicio']);
+    else {
+      if (Object.keys(this.persona).length === 0) {
+        setTimeout(() => {
+          this.showPersona("Será redirigido a la vista de Datos del Cliente.","Faltan datos del cliente");
+        }, 100); 
+      }
     }
-      
+    
   }
   
   functStatusClient(n: number){

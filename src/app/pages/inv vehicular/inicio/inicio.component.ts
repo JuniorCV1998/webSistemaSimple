@@ -1,16 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { InversionVehService } from '../../../core/services/inversion-veh/inversion-veh.service';
-import { catchError, delay, finalize, of } from 'rxjs';
-import { Constantes } from '../../../core/constant/Constantes';
-import { SkeletonModule } from 'primeng/skeleton';
 import { Router } from '@angular/router';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { TempDataService } from '../../../core/services/temp-data.service';
 import { MessageService } from 'primeng/api';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-import { Location } from '@angular/common';
+import { catchError, finalize, of } from 'rxjs';
+import { InversionVehService } from '../../../core/services/inversion-veh/inversion-veh.service';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-inicio',
@@ -30,12 +27,18 @@ export default class InicioComponent {
 
   toast: any = null;
 
+  /* Datos del usuario */
+  perfil: string = '';
+
   constructor(
     private inversionVehService: InversionVehService,
     private router: Router,
     private tempDataService: TempDataService,
     private messageService: MessageService,
-  ){}
+  ){
+    //const perfil = this.tempDataService.getItem('codPerfil');
+    if(this.tempDataService.hasConstant("codPerfil")) this.perfil = this.tempDataService.getConstant("codPerfil") ?? '';
+  }
 
   ngOnInit(): void{
     const toastTemp = this.tempDataService.hasItem('toastTemp');
@@ -85,9 +88,8 @@ export default class InicioComponent {
           })
       ).
       subscribe((resp: any)=> { 
-        if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord>=1) {
-          this.listInvVehiculares = resp.data;
-        }
+        if(resp==null) this.listInvVehiculares = [];
+        else this.listInvVehiculares = resp.data;
       }
     
     );}
