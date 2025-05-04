@@ -6,7 +6,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ListEmptyNoneComponent } from '../../../components/resources/list-empty-none/list-empty-none.component';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { LoadingComponent } from '../../modal/loading/loading.component';
-import { catchError, finalize, of } from 'rxjs';
+import { catchError, delay, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CalendarModule } from 'primeng/calendar';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-collection-report',
@@ -63,6 +62,9 @@ export default class CollectionReportComponent {
   ){}
 
   ngOnInit(): void{
+    /* setTimeout(() => {
+      this.loadingComponent.show();
+    }, 100);  */
   }
 
   ngAfterViewInit(): void{

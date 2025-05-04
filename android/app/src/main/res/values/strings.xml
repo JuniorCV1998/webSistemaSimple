@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">web-sistema-simple</string>
-    <string name="title_activity_main">web-sistema-simple</string>
+    <string name="app_name">ssimple pay</string>
+    <string name="title_activity_main">ssimple pay</string>
     <string name="package_name">com.ssimple.app</string>
     <string name="custom_url_scheme">com.ssimple.app</string>
 </resources>

@@ -671,13 +671,13 @@
                 </div>
     
                 <div class="flex flex-row gap-2 align-items-top justify-content-between mb-3">
-                    <div class="flex flex-column" [ngClass]="objInvDetail.persona.celular==''?'w-12':'w-7'">
+                    <div class="flex flex-column" [ngClass]="objInvDetail.persona.celular=='' || objInvDetail.persona.celular==null?'w-12':'w-7'">
                         <label class="mb-2 params-txt">Nombres</label>
                         <span class="valor-txt-detail">
                             {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}
                         </span>
                     </div>
-                    <div class="flex flex-column w-5" *ngIf="objInvDetail.persona.celular!=''">
+                    <div class="flex flex-column w-5" *ngIf="objInvDetail.persona.celular!='' && objInvDetail.persona.celular!=null">
                         <label class="mb-2 params-txt">Celular</label>
                         <span class="valor-txt-detail">
                             {{formatNumberEspaciado(objInvDetail.persona.celular)}}
@@ -992,7 +992,7 @@
         </p-confirmDialog>
         
 
-        <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full"></button>
+        <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full mb-1"></button>
     </div>
 </div>
 

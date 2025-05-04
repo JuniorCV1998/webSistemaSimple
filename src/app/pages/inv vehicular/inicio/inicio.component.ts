@@ -48,10 +48,11 @@ export default class InicioComponent {
         this.messageService.add(toast);
       }, 100); 
     }
+    this.getInversionesVehiculares();
   }
   
   ngAfterViewInit(): void {
-    this.getInversionesVehiculares();
+    
     this.tempDataService.clear();
   }
 

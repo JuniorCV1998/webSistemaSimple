@@ -1,4 +1,4 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
 
     <div class="text-center mb-4">
         <div class="text-700 text-2xl mb-3 label-title">Confirmar inversión</div>
@@ -119,9 +119,10 @@
     <button pButton
     pRipple label="Confirmar" (click)="generateRequestService(true)" class="btn-float"></button>
 
-    <app-loading></app-loading>
+</div>
+
+<app-loading></app-loading>
     <div>
         <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
     </div>
-</div>
 

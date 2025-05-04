@@ -75,19 +75,31 @@ ngOnInit(): void{
   }
 
   filtrarCliente(){
-    const filtro = this.busqueda.toLowerCase();
-    if(filtro==''){
-      this.listaClientes = this.listaClientesRecovery;
-      this.filtroVacio = false;
-      return;
-    }
-    const personasFiltradas = this.listaClientesRecovery.filter((item: any) =>
-      item.persona.nombres.toLowerCase().includes(filtro) || item.persona.apellidoPaterno.toLowerCase().includes(filtro) ||
-      item.persona.apellidoMaterno.toLowerCase().includes(filtro) || item.persona.celular.toLowerCase().includes(filtro)
-    );
-    this.listaClientes = personasFiltradas; 
-    if(personasFiltradas.length==0) this.filtroVacio = true;
-    else this.filtroVacio = false;
+    const filtro = this.busqueda.trim().toLowerCase();
+  
+  if (filtro === '') {
+    this.listaClientes = this.listaClientesRecovery;
+    this.filtroVacio = false;
+    return;
+  }
+
+  this.listaClientes = this.listaClientesRecovery.filter((item: any) => {
+    const persona = item.persona;
+    const textoBuscado = `
+      ${persona.nombres} 
+      ${persona.apellidoPaterno} 
+      ${persona.apellidoMaterno} 
+      ${persona.nombres} ${persona.apellidoPaterno} 
+      ${persona.nombres} ${persona.apellidoMaterno} 
+      ${persona.apellidoPaterno} ${persona.apellidoMaterno} 
+      ${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno} 
+      ${persona.celular}
+    `.toLowerCase();
+
+    return textoBuscado.includes(filtro);
+  });
+
+  this.filtroVacio = this.listaClientes.length === 0;
   }
 
   formatNumberEspaciado(numero: string): string {

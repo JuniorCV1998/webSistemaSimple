@@ -47,7 +47,7 @@
         <div *ngFor="let cliente of listaClientes" class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
             <div class="flex flex-row w-full justify-content-center container-cliente gap-2" (click)="seleccionarCliente(cliente.idUsuario)">
                 <div class="flex flex-column w-10 gap-1">
-                    <span class="span-nombre">{{cliente.persona.nombres+' '+cliente.persona.apellidoPaterno}}</span>
+                    <span class="span-nombre">{{cliente.persona.nombres+' '+cliente.persona.apellidoPaterno+' '+cliente.persona.apellidoMaterno}}</span>
                     <span class="span-desc">{{ formatNumberEspaciado(cliente.persona.celular) }}</span>
                 </div>
                 <div class="flex flex-row justify-content-end align-items-center w-2 gap-1">

@@ -6,12 +6,11 @@ import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { Location } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, delay, finalize, of } from 'rxjs';
+import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -32,14 +31,16 @@ export default class ConfirmInversionComponent {
   objNuevaInv: any = {};
   fechasInv: any = {};
 
+  isLoading: boolean = true;
+
   // response validado, servicio anterior
   response: any = {
     idUsuario: null,
-    monto: 5000.0,
-    interes: 20.0,
+    monto: null,
+    interes: null,
     comentario: "",
-    nroCuotas: 24,
-    valorCuota: 250.0,
+    nroCuotas: null,
+    valorCuota: null,
     fechaInicio: "",
     fechaFin: "",
     nombres: "",
@@ -168,9 +169,13 @@ generateRequestService(isValidado: boolean){
  */
 
 serviceRegisterInversion(requestBody: any){
+  this.isLoading = true;
   this.loadingComponent.show();
   this.getInversionService.registerInversion(requestBody).pipe(
-    finalize(() => this.loadingComponent.hide()),
+    finalize(() => {
+      this.loadingComponent.hide();
+      this.isLoading = false;}
+  ),
     catchError((error) => {
       if (error.status === 400) {
         this.show(error.error.descripcion, Constantes.MSG_H_400); // Mensaje para 400

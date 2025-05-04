@@ -26,16 +26,16 @@
 
     <div class="flex flex-row w-full gap-2 justify-content-center mb-3">
         <div class="flex flex-column w-6">
-            <label for="montoDiario" class="block text-600 font-medium mb-2">Monto diario</label>
+            <label for="montoDiario" class="block text-600 font-medium mb-2">Monto diario (S/.)</label>
             <p-inputNumber
                 [(ngModel)]="inversion.montoDiario"
                  id="monto" 
-                 [minFractionDigits]="2" [maxFractionDigits]="2"  
+                [maxFractionDigits]="2"  
                  mode="decimal" autocomplete="off" 
                  placeholder="Ingrese monto" class="w-full mb-1"
                  [min]="1" [max]="999"
-                 prefix="S/. "
                  />
+                 <!-- prefix="S/. " -->
                  <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | number:'1.2-2'}}.</span>
                  <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario > 999" class="input-fail">El monto no puede ser mayor a S/ {{999 | number:'1.0-0'}}.</span>
             <!-- <input [(ngModel)]="inversion.montoDiario" [maxlength]="20" id="montoDiario" type="text" placeholder="S/40.00" pInputText appSoloLetras class="w-full mb-3"> -->
@@ -49,12 +49,13 @@
                 placeholder="Nro. de meses" class="w-full mb-1"
                 [min]="1" [max]="99"
                 mode="decimal" autocomplete="off" 
+                [minFractionDigits]="0" [maxFractionDigits]="0"
                 suffix=" meses"
                 (ngModelChange)="updateDate2()"
                 />
                 
             <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago < 1" class="input-fail">El nro. de meses no puede ser menor a {{1 | number:'1.0-0'}}.</span>
-            <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago > 99" class="input-fail">El nro. de meses no puede ser mayor a {{999 | number:'1.0-0'}}.</span>
+            <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago > 99" class="input-fail">El nro. de meses no puede ser mayor a {{99 | number:'1.0-0'}}.</span>
         </div>
     </div>
 

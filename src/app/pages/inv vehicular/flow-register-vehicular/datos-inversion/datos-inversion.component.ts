@@ -20,13 +20,15 @@ import { InversionVehService } from '../../../../core/services/inversion-veh/inv
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'app-datos-inversion',
   standalone: true,
   imports: [CommonModule, TabMenuModule, FormsModule, ButtonModule, InputTextModule,
     DropdownModule, NroPlacaDirective, InputNumberModule, CalendarModule, FloatLabelModule,
-    InputTextareaModule, ColorPickerModule, LoadingComponent, ToastModule
+    InputTextareaModule, ColorPickerModule, LoadingComponent, ToastModule, InputGroupModule, InputGroupAddonModule
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'
@@ -251,6 +253,7 @@ export default class DatosInversionComponent {
     
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
+  
 
 inversion: any = {
   idUsuario: null,

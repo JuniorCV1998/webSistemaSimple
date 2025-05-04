@@ -35,6 +35,10 @@ Run: Android studio
 /* Ejecutar desde visual */
 npx cap run android
 
+/* Correr sin test previos en Android studio */
+./gradlew assembleDebug
+
+
 /* POSIBLES SOLUCIONES */
 -- cambiar de version
 compileOptions {

@@ -26,11 +26,11 @@
                         <div class="flex w-5 color2" [ngStyle]="{'background-color': inversion.color2}"></div>
                     </div>
                 </div>
-                <div class="flex flex-column w-6 gap-1">
+                <div class="flex flex-column gap-1" [ngClass]="perfil=='INV'?'w-6':'w-10'">
                     <span class="span-nombre">{{inversion.fullName}}</span>
                     <span class="span-desc">{{inversion.descripcion}}</span>
                 </div>
-                <div class="flex flex-column w-4 align-items-center gap-1">
+                <div *ngIf="perfil=='INV'" class="flex flex-column w-full align-items-center gap-1">
                     <span class="span-monto">S/{{inversion.totalPagado | number:'1.2-2'}}</span>
                     <span class="span-desc">Recaudado</span>
                 </div>
