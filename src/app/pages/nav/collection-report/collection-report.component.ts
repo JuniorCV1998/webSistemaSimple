@@ -62,17 +62,19 @@ export default class CollectionReportComponent {
   ){}
 
   ngOnInit(): void{
-    /* setTimeout(() => {
+    setTimeout(() => {
       this.loadingComponent.show();
-    }, 100);  */
+    }, 100); 
   }
 
   ngAfterViewInit(): void{
-    this.getReportCollection();
+    setTimeout(() => {
+      this.getReportCollection();
+    }, 150); 
   }
 
   getReportCollection(){
-    this.loadingComponent.show();
+    /* this.loadingComponent.show(); */
     this.getInversionService.getReportCollection().pipe(
       finalize(() => {
         this.loadingComponent.hide();
