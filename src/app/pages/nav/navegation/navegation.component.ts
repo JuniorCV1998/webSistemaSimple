@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { LoginService } from '../../../core/services/auth/login/login.service';
 import { slideInAnimation } from '../animation/slideInAnimation ';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { Constantes } from '../../../core/constant/Constantes';
 
 @Component({
   selector: 'app-navegation',
@@ -91,11 +92,12 @@ export class NavegationComponent {
       if(decodedToken) {
         this.codPefil = decodedToken.codPerfil;
         this.tempDataService.setConstant("codPerfil", this.codPefil);
-        this.permisos = decodedToken.permisos;
-        if(decodedToken.permisos.length!=0) {
-          this.tempDataService.setConstant("permisos", this.permisos);
-          this.permisoVehicular = this.permisos.some((p:any) => p.codigo === 'INV_VEHICULAR');
-        }
+        this.permisos = decodedToken.permisos ?? [];
+        this.tempDataService.setConstant('permisos', this.permisos);
+        // Validaciones de permisos
+        this.permisoVehicular = this.permisos.some(
+          (p: any) => p.codigo === Constantes.INV_VEHICULAR
+        );
 
       }
       //Definir valor de confetti
