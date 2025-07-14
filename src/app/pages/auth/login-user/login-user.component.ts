@@ -14,6 +14,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../core/constant/Constantes';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { finalize } from 'rxjs';
+import { App } from '@capacitor/app';
 
 @Component({
   selector: 'app-login-user',
@@ -34,6 +35,7 @@ export default class LoginUserComponent {
 
     /* LOGIN USER */
     correo: string = '';
+    appVersion = '';
 
     constructor(
       private router: Router,
@@ -46,8 +48,10 @@ export default class LoginUserComponent {
     }
   
     ngOnInit(): void{
-
-
+      console.log("Afuera de logica.");
+      App.getInfo().then(info => {
+          this.appVersion = info.version;
+        });
     }
   
       credenciales = {
