@@ -50,6 +50,14 @@
   }
 .span-desc{
     color: var(--gray-500);
+    font-size: 14px;
+    text-align: left;
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+  }
+  .span-fecha{
+    color: rgb(67, 67, 67);
     font-size: 12px;
     text-align: left;
     white-space: nowrap; /* Evita el salto de línea */

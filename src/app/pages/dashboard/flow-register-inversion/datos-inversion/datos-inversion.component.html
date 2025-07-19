@@ -25,22 +25,35 @@
             
              <!-- cantidad de cuotas -->
              <label for="cuotas" class="block text-600 font-medium mb-2">Nro. de cuotas</label>
-             <div class="button-container mb-3">
-                <!-- <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==1}" (click)="selectButton(1)">07</button>
-                <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==2}" (click)="selectButton(2)">24</button>
-                <button pButton pRipple class="p-button-rounded" [ngClass]="{'active-button': selected==3}" (click)="selectButton(3)">30</button> -->
-                <div *ngFor="let cuota of objValidationValues.cuotas; let i = index"  class="flex flex-column justify-content-between gap-2">
+             <div class="button-container mb-3 slider-container">
+                <div class="flex flex-row justify-content-between slide">
+                    <div *ngFor="let cuota of cuotasDiarias; let i = index"  class="flex flex-column justify-content-center gap-2">
                     <button 
                         class="p-button-rounded" 
                         [ngClass]="{'active-button': selected == i + 1}" 
-                        (click)="selectButton(i + 1, cuota.valor)">
+                        (click)="selectButton(i + 1, cuota.valor, cuota.codigo)">
                         {{ ('0' + cuota.valor).slice(-2) }}
                     </button>
                     <span class="desc-cuota"
                     [ngClass]="{'desc-cuota-active': selected == i + 1}" 
-                    >{{cuota.valor==4?"semanas":"días"}}</span>
+                    >días</span>
+                </div>
+                </div>
+                <div class="flex flex-row justify-content-between slide">
+                    <div *ngFor="let cuota of cuotasMensuales; let i = index"  class="flex flex-column justify-content-between gap-2">
+                    <button 
+                        class="p-button-rounded" 
+                        [ngClass]="{'active-button': selected == i + 4}" 
+                        (click)="selectButton(i + 4, cuota.valor, cuota.codigo)">
+                        {{ ('0' + cuota.valor).slice(-2) }}
+                    </button>
+                    <span class="desc-cuota"
+                    [ngClass]="{'desc-cuota-active': selected == i + 4}" 
+                    >{{cuota.valor==1?"semana":"semanas"}}</span>
+                </div>
                 </div>
             </div>
+
 
             <!-- valor de interes a aplicar -->
             <label for="interes" class="block text-600 font-medium mb-2">Interés</label>

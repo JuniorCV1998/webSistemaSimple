@@ -13,7 +13,7 @@
             <div *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5); let i = index"
             (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota, item.nroInversion, item.nroCuotas)"
             class="flex flex-column w-full align-items-center justify-content-center custom-banner-detail-body mb-1">
-               <div class="flex flex-row justify-content-center gap-1 align-items-center mb-1 w-full" style="height: 10px;">
+               <div class="flex flex-row justify-content-center gap-1 align-items-center mb-1 w-full" style="height: 12px;">
                    <div class="flex flex-column w-6">
                        <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
                    </div>
@@ -26,6 +26,12 @@
                    <div class="line-right"></div>
                    <div class="flex flex-column w-3 align-items-center">
                        <span class="span-body-desc">S/. {{item.valorCuota | number:'1.2-2'}}</span>
+                   </div>
+                   <div class="flex w-1 align-items-center message_atraso">
+                    <div *ngIf="item.ctasAtrasadas!==0" class="flex">
+                        <img *ngIf="item.ctasAtrasadas>=3" src="assets/gifs/point/pointRed.gif" width="25" height="25">
+                        <img *ngIf="item.ctasAtrasadas<3" src="assets/gifs/point/pointOrange.gif" width="25" height="25">
+                   </div>
                    </div>
                </div>
            </div>
@@ -62,40 +68,39 @@
     <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
         <span class="block mb-2">Semanal</span>
         <div class="flex flex-column align-items-center" *ngIf="data.reportSemanal.length > 0">
+            
             <div *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5); let i = index"
             class="flex flex-column w-full align-items-center justify-content-center custom-banner-detail-body mb-1">
-               <div class="flex flex-column justify-content-center gap-2 align-items-center mb-1 w-full" style="height: 22px;">
-                <div class="flex flex-row w-full align-items-center">
-                    <div class="flex flex-column w-8">
+               <div class="flex flex-row w-full justify-content-center gap-1 align-items-center mb-1" style="height: 25px;">
+                <div class="flex flex-column gap-2 w-8 align-items-center">
+                    <div class="flex w-full">
                         <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
                     </div>
-                    <div class="line-right"></div>
-                    <div class="flex flex-column w-3 align-items-center">
+                     <div class="flex w-full align-items-center gap-1">
+                        <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
+                        <span class="span-body-desc"
+                        ># {{ item.cuotasPagadas | number:'2.0-0'}}</span>
+                     </div>
+                </div>
+                <div class="line-right"></div>
+                <div class="flex flex-column gap-2 w-3 align-items-center">
+                    <div class="flex w-full justify-content-center">
                         <span class="span-body-desc">S/. {{item.valorCuota | number:'1.2-2'}}</span>
                     </div>
-                </div>
-                <div class="flex flex-row w-full justify-content-between">
-                    <div class="w-6 proxima-fecha">Próximo: {{item.proximaFecha}} </div>
-                    <div class="flex flex-column w-2 align-items-center">
-                        <span class="span-body-desc"
-                        ># {{ 4 - (item?.cuotasPendientes ?? 0) | number:'2.0-0'}}</span>
-                    </div>
-                    <div class="flex flex-column w-4 align-items-center">
-                        <i
-                            [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
+                    <div class="flex justify-content-center w-full">
+                        <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
                              class="pi pi-window-maximize"></i>
                     </div>
                 </div>
+                <div class="flex flex-column w-1 align-items-center">
+                    <div *ngIf="item.ctasAtrasadas!==0" class="flex justify-content-center">
+                        <img *ngIf="item.ctasAtrasadas>=3" src="assets/gifs/point/pointRed.gif" width="35" height="35">
+                        <img *ngIf="item.ctasAtrasadas<3" src="assets/gifs/point/pointOrange.gif" width="35" height="35">
+                    </div>
+                   </div>
                    
                </div>
            </div>
-            <!-- Copiar reporte semanal -->
-            <!-- <div class="flex justify-content-end w-full">
-                <div class="flex gap-1 mb-2" (click)="onLongPress(2)">
-                    <div class="copy-txt">Copiar</div>
-                    <i class="pi pi-clone"></i>
-                </div>
-            </div> -->
 
             <div class="flex flex-row w-full paddin-5 justify-content-between">
                 <div class="flex flex-row gap-2 w-6 justify-content-start w-full" (click)="onLongPress(2)">

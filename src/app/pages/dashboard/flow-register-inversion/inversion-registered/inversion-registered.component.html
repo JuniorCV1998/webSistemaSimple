@@ -3,7 +3,9 @@
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
         <div class="text-center mb-1">
-            <div id="div_line_bootom" class="text-700 label-title-green">¡INVERSION <br>REGISTRADA!</div>
+            <img *ngIf="confetti" src="assets/gifs/confirm/success.gif" width="110" height="110">
+            <div *ngIf="!confetti" id="div_line_bootom" class="text-700 label-title-green">¡INVERSION <br>REGISTRADA!</div>
+            <div *ngIf="confetti" id="div_line_bootom" class="text-700 label-title-green diezpx">¡INVERSION REGISTRADA!</div>
         </div>
 
         <div class="flex flex-column w-full">

@@ -29,6 +29,7 @@
                 <div class="flex flex-column gap-1" [ngClass]="perfil=='INV'?'w-6':'w-10'">
                     <span class="span-nombre">{{inversion.fullName}}</span>
                     <span class="span-desc">{{inversion.descripcion}}</span>
+                    <span class="span-fecha">{{inversion.fechaActualizado}}</span>
                 </div>
                 <div *ngIf="perfil=='INV'" class="flex flex-column w-full align-items-center gap-1">
                     <span class="span-monto">S/{{inversion.totalPagado | number:'1.2-2'}}</span>

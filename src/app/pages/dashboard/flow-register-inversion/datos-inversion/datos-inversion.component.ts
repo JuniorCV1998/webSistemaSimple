@@ -46,6 +46,7 @@ export default class DatosInversionComponent {
 
   //Cuota
   nroCuota: number = 0;
+  frecuencia: string = '';
   valorCuota: number = 0; // get simulacion
   cuotaCargada: boolean = true;
 
@@ -73,7 +74,7 @@ export default class DatosInversionComponent {
       this.statusPersonalizado = objnew.statusPersonalizado,
       this.date1 = new Date(objnew.fechaInicio);
       this.comentario = objnew.comentario;
-      this.selectButton(objnew.selected, objnew.nroCuotas); //actualiza cuota
+      this.selectButton(objnew.selected, objnew.nroCuotas, objnew.codigo); //actualiza cuota
     }
   }  
 
@@ -92,7 +93,8 @@ export default class DatosInversionComponent {
       fechaInicio: this.getFormattedDate(this.date1),
       fechaFin: this.getFormattedDate(this.date2),
       selected: this.selected,
-      comentario: this.comentario
+      comentario: this.comentario,
+      codigo: this.frecuencia
     }
     this.tempDataService.setItem('objInversion',request);
     this.tempDataService.setItem('flow','prestamo');
@@ -118,6 +120,7 @@ getValidationValues() {
 private handleCuotaSelection() {
   if(this.selected != 0) return;
   const cuota24 = this.objValidationValues?.cuotas?.find((cuota: any) => cuota.valor === 24);
+  this.frecuencia = 'D';
   if (cuota24) {
     this.nroCuota = cuota24.valor;
     this.selected = this.objValidationValues.cuotas.indexOf(cuota24) + 1; // Asegúrate de que el índice sea correcto
@@ -157,9 +160,10 @@ simularCuota(){
     this.valueInteresPerso = null;
   }
 
-  selectButton(buttonNumber: number, cuota:number): void {
+  selectButton(buttonNumber: number, cuota:number, frecuencia: string): void {
     this.selected = buttonNumber; // Actualiza el botón seleccionado
     this.nroCuota = cuota;
+    this.frecuencia = frecuencia;
     this.setearFechaInicio();
     this.updateDate2();
   }
@@ -167,8 +171,8 @@ simularCuota(){
   setearFechaInicio(){
     if (this.date1) {
       const newFecha = new Date(); 
-      if(this.nroCuota==4) newFecha.setDate(newFecha.getDate() + 7);
-      else newFecha.setDate(newFecha.getDate() + 1); 
+      if(this.frecuencia=='D') newFecha.setDate(newFecha.getDate() + 1); 
+      else if(this.frecuencia=='S') newFecha.setDate(newFecha.getDate() + 7);
       this.date1 = newFecha;
     }
   }
@@ -176,7 +180,11 @@ simularCuota(){
   updateDate2() {
     if (this.date1) {
       const newFecha2 = new Date(this.date1); 
-      newFecha2.setDate(newFecha2.getDate() + (this.nroCuota==4 ? 21 : this.nroCuota - 1 ) );
+      if(this.frecuencia=='D') newFecha2.setDate(newFecha2.getDate() + (this.nroCuota - 1 ) );
+      else if(this.frecuencia=='S') newFecha2.setDate(newFecha2.getDate() + (
+        this.nroCuota==1 ? 0 : ( this.nroCuota==4 ? 21 : (this.nroCuota==8 ? 49: 0 ) ) ) 
+      );
+      //newFecha2.setDate(newFecha2.getDate() + (this.nroCuota==4 ? 21 : this.nroCuota - 1 ) );
       this.date2 = newFecha2;
     } else {
       this.date2 = null; // Limpiar date2 si date1 no está definido
@@ -207,6 +215,14 @@ simularCuota(){
           return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
+    get cuotasDiarias(): any[] {
+    return this.objValidationValues?.cuotas?.filter((c : any) => c.codigo === 'D') || [];
+    }
+
+    get cuotasMensuales(): any[] {
+    return this.objValidationValues?.cuotas?.filter((c : any) => c.codigo === 'S') || [];
+    }
+
 objValidationValues: any = {
   "montoLimit": {
       "codMonto": "MON3",
@@ -221,15 +237,18 @@ objValidationValues: any = {
   "cuotas": [
       {
           "codCuota": "CUO1",
-          "valor": 4
+          "valor": 18,
+          "codigo": "D"
       },
       {
           "codCuota": "CUO2",
-          "valor": 24
+          "valor": 24,
+          "codigo": "D"
       },
       {
           "codCuota": "CUO3",
-          "valor": 30
+          "valor": 30,
+          "codigo": "D"
       }
   ]
 }

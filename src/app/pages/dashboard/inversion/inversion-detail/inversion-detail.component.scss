@@ -218,3 +218,66 @@ td{
 .pi-question{
     font-size: 20px;
 }
+.fechasPagos{
+    min-height:40px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    /* white-space: nowrap; */
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.bgRed{
+ background-color: rgb(255, 95, 95);
+}
+
+/* STYLE ADVERTENCIA - MESSAGE */
+.message-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .message {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      min-width: 160px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+
+    .success {
+      background-color: #e6f5ea;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    .info {
+      background-color: #e3f2fd;
+      color: #1976d2;
+      border: 1px solid #90caf9;
+    }
+
+    .warn {
+      background-color: #fff8e1;
+      color: #f9a825;
+      border: 1px solid #ffe082;
+    }
+
+    .error {
+      background-color: #ffebee;
+      color: #d32f2f;
+      border: 1px solid #ef9a9a;
+    }
+
+    .icon {
+      font-weight: bold;
+      font-size: 18px;
+    }

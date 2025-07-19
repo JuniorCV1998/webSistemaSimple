@@ -19,12 +19,13 @@ import { LoginService } from '../../../../core/services/auth/login/login.service
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
-    LoadingComponent,CarouselModule,FloatLabelModule,InputTextareaModule,CheckboxModule
+    LoadingComponent,CarouselModule,FloatLabelModule,InputTextareaModule,CheckboxModule,MessageModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
@@ -86,11 +87,15 @@ export default class InversionDetailComponent {
     setTimeout(() => {
       this.loadingComponent.show();
       this.getInversionesDetail();
+      
     });
   }
   
   ngAfterViewInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
+    /* const totalCuotas = this.nroCuotas; // Puedes poner 18, 30, etc.
+    this.cuotas = Array.from({ length: totalCuotas }, (_, i) => i + 1);
+    this.cuotasEnFilas = this.chunkArray(this.cuotas, 4); */
   }
 
   getInversionesDetail(){
@@ -118,7 +123,6 @@ export default class InversionDetailComponent {
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==1) {
         this.objInvDetail = resp.data;
         this.nroCuotas = resp.data.nroCuotas;
-        this.calcularCuotasPendientes();
       }
       else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){
         this.show(resp.message, Constantes.MSG_SIN_REGISTROS,);
@@ -186,12 +190,6 @@ export default class InversionDetailComponent {
     });
   }
   
-  calcularCuotasPendientes(){
-    const countNonNullFP = Object.keys(this.objInvDetail)
-    .filter(key => key.startsWith('fp') && this.objInvDetail[key] !== null).length;
-    this.nroCuotasPendientes = this.nroCuotas - countNonNullFP;
-  }
-
   confirmCuota(nroCuota: number): Promise<boolean> {
     this.date = new Date();
     return new Promise((resolve) => {
@@ -391,36 +389,7 @@ objInvDetail: any = {
         "contrasena": ""
     },
     "comentario": "",
-    "fp1": null,
-    "fp2": null,
-    "fp3": null,
-    "fp4": null,
-    "fp5": null,
-    "fp6": null,
-    "fp7": null,
-    "fp8": null,
-    "fp9": null,
-    "fp10": null,
-    "fp11": null,
-    "fp12": null,
-    "fp13": null,
-    "fp14": null,
-    "fp15": null,
-    "fp16": null,
-    "fp17": null,
-    "fp18": null,
-    "fp19": null,
-    "fp20": null,
-    "fp21": null,
-    "fp22": null,
-    "fp23": null,
-    "fp24": null,
-    "fp25": null,
-    "fp26": null,
-    "fp27": null,
-    "fp28": null,
-    "fp29": null,
-    "fp30": null,
+    "frecuenciaPago":"",
     "renovacion": 'N',
     "ctasPagadas": 0,
     "idUsuario": null
@@ -469,5 +438,31 @@ copyToClipboard(text: string) {
 formatNumberEspaciado(numero: string): string {
   return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
+
+getFechaSinAnio(fechaStr: string): string {
+  if (!fechaStr) return '';
+  return fechaStr.split(' ')[0] + ' ' + fechaStr.split(' ')[2]; // "24 de abr. 2025" → "24 abr."
+}
+
+/* nueva tabla dinamica*/
+getCuotasEnFilas(): any[][] {
+  const cuotas = this.objInvDetail.frecuenciaPago.fechasPagos;
+  const filas = [];
+  for (let i = 0; i < cuotas.length; i += 4) {
+    const fila = [];
+    for (let j = i; j < i + 4 && j < cuotas.length; j++) {
+      fila.push({ ...cuotas[j], globalIndex: j }); // ← Agregamos el índice real
+    }
+    filas.push(fila);
+  }
+  return filas;
+}
+
+/* toast */
+mostrarFechaPagar(fecha: string){
+  this.messageService.add({ severity: 'contrast', summary: 'Fecha a pagar', detail: fecha });
+}
+
+
 
 }
