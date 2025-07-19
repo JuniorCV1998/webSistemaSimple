@@ -17,7 +17,9 @@
         </div>
     </header>
 
-    <div [ngStyle]="{ 'margin-top.px': session ? 50 : 0 }" style="position: relative; min-height: 100%;">
+    <div [ngStyle]="{ 
+        'margin-top.px': (!outSession && session) ? 50 : 0 
+        }" style="position: relative; min-height: 100%;">
         <div
           [@routeAnimations]="prepareRoute(outlet)"
           style="position: absolute; width: 100%; top: 0; left: 0;"

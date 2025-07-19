@@ -80,7 +80,7 @@ export class NavegationComponent {
       '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
     ];
     const flowOutSession = [
-      '/login','/registrar','/registrar/personal'
+      '/login','/registrar','/registrar/personal','/login-user'
     ];
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
