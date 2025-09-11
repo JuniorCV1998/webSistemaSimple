@@ -80,6 +80,7 @@ export default class RegisterComponent {
 validarDatos(){
   this.loadingComponent.show();
   this.objUser.codigoUnico = "SS-" + this.codigoUnico;
+  console.log(JSON.stringify(this.objUser));
   this.registerService.validateRegister(this.objUser).pipe(
     finalize(() => this.loadingComponent.hide()),
     catchError((error) => {
@@ -94,8 +95,9 @@ validarDatos(){
     })
   ).subscribe((resp: any) => {
     if (resp?.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
-      this.objUser.codRegisterValidate = resp.data;
+      this.objUser.codRegisterValidate = resp.data.codRegisterValidate;
       sessionStorage.setItem('objUser',JSON.stringify(this.objUser));
+      sessionStorage.setItem('dataCliente',JSON.stringify(resp.data));
       this.router.navigate(['registrar/personal']);
     }
   });

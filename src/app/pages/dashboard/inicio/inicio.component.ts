@@ -37,9 +37,15 @@ export class InicioComponent {
   ){
     const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
-      const fullName = decodedToken.nombre.split(" ");
-      this.nombreUsuario = fullName[0];
+      
+      if (sessionStorage.getItem('codTipoDoc') === "01") {
+        const fullName = decodedToken.nombre.split(" ");
+        this.nombreUsuario = fullName[0];
+      }else if (sessionStorage.getItem('codTipoDoc') === "06") {
+        this.nombreUsuario = sessionStorage.getItem('nombreComercial') ?? sessionStorage.getItem('razonSocial') ?? "";
+      }
     }
+    
   }
 
   items: MenuItem[] | undefined;
@@ -54,7 +60,7 @@ export class InicioComponent {
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
-    this.clearSessionStorageExcept(['token', '']);
+    this.clearSessionStorageExcept(['token', 'codTipoDoc', 'nombreComercial', 'razonSocial']);
 
   }
 

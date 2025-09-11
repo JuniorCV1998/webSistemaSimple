@@ -46,12 +46,25 @@ export default class RegisterPersonalComponent {
   userEmail = 'generalservicesjyr@gmail.com';
 
   objPersona: any = {
+    codTipoDoc: "",
+    nroDocumento: "",
     nombres: "",
     apellidoPaterno: "",
     apellidoMaterno: "",
     celular: "",
     direccion: ""
   }
+
+  objPersonaJuridica: any = {
+    codTipoDoc: "",
+    nroDocumento: "",
+    razonSocial: "",
+    nombreComercial: "",
+    celular: "",
+    direccion: ""
+  }
+
+  isClienteNatural: Boolean = true;
   
   constructor(
     private router: Router,
@@ -62,10 +75,25 @@ export default class RegisterPersonalComponent {
   ) {
     // recuperando el codigo de registro
     const obj = sessionStorage.getItem('objUser');
-    if(obj) {
+    const cliente = sessionStorage.getItem('dataCliente');
+    if(obj && cliente) {
       const reqObj = JSON.parse(obj);
       this.codRegisterValidate = reqObj.codRegisterValidate;
       this.correo = reqObj.correo;
+      const reqCliente = JSON.parse(cliente);
+      if(reqCliente.codTipoDoc=='01') {
+        this.objPersona.codTipoDoc = reqCliente.codTipoDoc;
+        this.objPersona.nombres = reqCliente.nombres;
+        this.objPersona.apellidoPaterno = reqCliente.apellidoPaterno;
+        this.objPersona.apellidoMaterno = reqCliente.apellidoMaterno;
+        this.objPersona.nroDocumento = reqCliente.nroDocumento;
+      } else if(reqCliente.codTipoDoc=='06'){
+        this.objPersonaJuridica.codTipoDoc = reqCliente.codTipoDoc;
+        this.objPersonaJuridica.razonSocial = reqCliente.razonSocial;
+        this.objPersonaJuridica.direccion = reqCliente.direccion;
+        this.objPersonaJuridica.nroDocumento = reqCliente.nroDocumento;
+        this.isClienteNatural = false;
+      }
     }
   }
   
@@ -152,6 +180,7 @@ export default class RegisterPersonalComponent {
 
     // Método para verificar si todos los campos obligatorios están llenos
     isFormValid(): boolean {
+      console.log("persona: " + JSON.stringify(this.objPersona));
       return (
         this.objPersona.nombres.trim() !== '' &&
         this.objPersona.apellidoPaterno.trim() !== '' &&

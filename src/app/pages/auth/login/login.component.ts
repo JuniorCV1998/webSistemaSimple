@@ -64,7 +64,10 @@ export default class LoginComponent {
       this.loginService.iniciarSesion(this.credenciales).subscribe({
         next: response => { 
           this.loadingComponent.hide();
-          localStorage.setItem('correo', this.credenciales.correo)
+          localStorage.setItem('correo', this.credenciales.correo);
+          sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
+          sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
+          sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
           this.router.navigate(['inicio']);
         },
         error: err => {

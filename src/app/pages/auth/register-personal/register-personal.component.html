@@ -6,24 +6,51 @@
             <!-- <a href="/registrar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
             <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
         </div>
-        <div class="text-center mb-5">
+        <div class="text-center mb-4">
             <img src="assets/images/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
             <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3">¡Estamos en la recta final!</div>
         </div>
 
-        <div>
-            <label for="nombres" class="block text-900 font-medium mb-2">Nombres</label>
-            <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3">
-
-            <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                <div class="flex flex-column w-full">
-                    <label for="apellidop" class="block text-900 font-medium mb-2">Apellido paterno</label>
-                    <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3">
+        <div class="mb-4">
+                <div class="flex flex-row align-items-center justify-content-center mb-4">
+                    <div class="flex flex-row justify-content-center align-items-center gap-4 w-full">
+                        <!-- <label for="apellidop" class="block text-900 font-medium mb-2">Núm. de Documento</label> -->
+                        <i class="pi pi-id-card icon-span"></i>
+                        <span *ngIf="isClienteNatural" class="nro-document">{{objPersona.nroDocumento}}</span>
+                        <span *ngIf="!isClienteNatural" class="nro-document">{{objPersonaJuridica.nroDocumento}}</span>
+                    </div>
                 </div>
 
-                <div class="flex flex-column w-full">
-                    <label for="apellidom" class="block text-900 font-medium mb-2">Apellido materno</label>
-                    <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3">
+            <!-- Persona natural -->
+            <div *ngIf="isClienteNatural">
+                <label for="nombres" class="block text-900 font-medium mb-2">Nombres</label>
+                <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+
+                <div class="flex flex-row gap-2 align-items-center justify-content-center">
+                    <div class="flex flex-column w-full">
+                        <label for="apellidop" class="block text-900 font-medium mb-2">Apellido paterno</label>
+                        <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+                    </div>
+
+                    <div class="flex flex-column w-full">
+                        <label for="apellidom" class="block text-900 font-medium mb-2">Apellido materno</label>
+                        <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Persona juridica -->
+
+            <div *ngIf="!isClienteNatural">
+
+                <label for="nombres" class="block text-900 font-medium mb-2">Razón Social</label>
+                <input id="nombres" [(ngModel)]="objPersonaJuridica.razonSocial" [maxlength]="25" type="text" autocomplete="off" placeholder="Razón Social" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+
+                <div class="flex flex-row gap-2 align-items-center justify-content-center">
+                    <div class="flex flex-column w-full">
+                        <label for="apellidop" class="block text-900 font-medium mb-2">Nombre Comercial</label>
+                        <input id="apellidop" [(ngModel)]="objPersonaJuridica.nombreComercial" [maxlength]="20" type="text" autocomplete="off" placeholder="Nombre Comercial" pInputText appSoloLetras class="w-full mb-3">
+                    </div>
                 </div>
             </div>
 
@@ -33,9 +60,15 @@
                     <input id="celular" [(ngModel)]="objPersona.celular" type="text" placeholder="Celular" autocomplete="off" pInputText appNroCelular class="w-full mb-3">
                 </div>
 
-                <div class="flex flex-column w-full">
+                <div *ngIf="isClienteNatural" class="flex flex-column w-full">
                     <label for="direccion" class="block text-900 font-medium mb-2">Dirección</label>
-                    <input id="direccion" [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3">
+                    <input id="direccion"
+                     [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3">
+                </div>
+                <div *ngIf="!isClienteNatural" class="flex flex-column w-full">
+                    <label for="direccion" class="block text-900 font-medium mb-2">Dirección</label>
+                    <input id="direccion"
+                     [(ngModel)]="objPersonaJuridica.direccion" [maxlength]="60" type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3 btn-disabled">
                 </div>
             </div>
 
@@ -46,17 +79,17 @@
                  y confirmo que soy mayor de 18 años de edad.</p>
             </div>
 
-<!--             <div class="card flex justify-content-center">
-                
-                <p-card>
-                    <i id="i_image" class="pi pi-image"></i>
-                    <div class="flex flex-column w-9">
-                        <p id="p_body" class="m-0"><i id="i_info" class="pi pi-info-circle"></i> Puedes añadir o editar una imagen de tu negocio para que los clientes lo visualicen después de iniciar sesión en la aplicación.</p>
-                        <p id="p_pie" class="w-full">Inicio > Mi cuenta > Imagen de Inversor.</p>
-                    </div>
+                <!-- <div class="card flex justify-content-center">
                     
-                </p-card>
-            </div> -->
+                    <p-card>
+                        <i id="i_image" class="pi pi-image"></i>
+                        <div class="flex flex-column w-9">
+                            <p id="p_body" class="m-0"><i id="i_info" class="pi pi-info-circle"></i> Puedes añadir o editar una imagen de tu negocio para que los clientes lo visualicen después de iniciar sesión en la aplicación.</p>
+                            <p id="p_pie" class="w-full">Inicio > Mi cuenta > Imagen de Inversor.</p>
+                        </div>
+                        
+                    </p-card>
+                </div> -->
             <br>
 
             <button [ngClass]="{

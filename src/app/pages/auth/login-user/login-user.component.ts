@@ -72,6 +72,9 @@ export default class LoginUserComponent {
             finalize(() => this.enteredCode = [])).subscribe({
           next: response => { 
             this.loadingComponent.hide();
+            sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
+            sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
+            sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
             this.router.navigate(['inicio']);
           },
           error: err => {

@@ -78,20 +78,21 @@ export default class InversionesListComponent {
           this.loadingComponent.hide();
           this.isLoading = false; // Cambia a falso cuando termine
         }),
-      ).
-      subscribe((resp: any)=> {
-        if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
-          this.listaInv = resp.data;
-          if(this.listaInv.length != 0){
+      ).subscribe((resp: any)=> {
+        if(resp.codigoMessage == Constantes.STATUS_SUCCESS_RI) {
+          // Ordenar por nroInversion (descendente)
+          this.listaInv = resp.data.sort((a: any, b: any) => b.nroInversion - a.nroInversion);
+
+          if(this.listaInv.length !== 0){
             this.renderizarTablaData();
             this.calcularPaginas();
           }
-        }
-        else {
+        } else {
           this.listaInv = [];
         }
       });
     }
+
 
     clearFilter(){
       this.value = "";

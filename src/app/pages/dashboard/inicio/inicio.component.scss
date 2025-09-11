@@ -9,6 +9,9 @@
   background-clip: text; /* Aplicar el fondo degradado al texto */
   -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
   font-weight: 700;
+  white-space: nowrap; /* Evita el salto de línea */
+  overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+  text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
 }
 
 /* Estilo para el menú inferior */
