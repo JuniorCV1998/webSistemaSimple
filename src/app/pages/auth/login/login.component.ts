@@ -66,8 +66,10 @@ export default class LoginComponent {
           this.loadingComponent.hide();
           localStorage.setItem('correo', this.credenciales.correo);
           sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
-          sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
-          sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
+          if(response.data.person.codTipoDoc==="06"){
+            sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
+            sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
+          }
           this.router.navigate(['inicio']);
         },
         error: err => {
