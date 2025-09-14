@@ -119,7 +119,7 @@ export default class RegisterPersonalComponent {
         this.registerService.confirmRegister(reqBody).pipe(
           finalize(() => this.loadingComponent.hide()),
           catchError((error) => {
-            if (error.status === 400) {
+            if (error.status === 422) {
               if(error.error.descripcion!=undefined) this.show(error.error.descripcion, Constantes.MSG_H_400, false);
               else this.show(error.error.message, Constantes.MSG_H_400, true);
             } else {

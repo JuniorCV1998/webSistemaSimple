@@ -48,7 +48,6 @@ export default class LoginUserComponent {
     }
   
     ngOnInit(): void{
-      console.log("Afuera de logica.");
       App.getInfo().then(info => {
           this.appVersion = info.version;
         });

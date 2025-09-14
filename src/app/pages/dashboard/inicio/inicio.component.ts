@@ -38,7 +38,8 @@ export class InicioComponent {
     const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
       
-      if (sessionStorage.getItem('codTipoDoc') === "01") {
+      const codTipoDoc = sessionStorage.getItem('codTipoDoc');
+      if (codTipoDoc === "01" || codTipoDoc === null || codTipoDoc === "" || codTipoDoc === "null") {
         const fullName = decodedToken.nombre.split(" ");
         this.nombreUsuario = fullName[0];
       }else if (sessionStorage.getItem('codTipoDoc') === "06") {
