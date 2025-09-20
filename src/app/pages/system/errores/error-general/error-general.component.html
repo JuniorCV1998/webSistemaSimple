@@ -1,0 +1,15 @@
+<div class="flex flex-column justify-content-center align-items-center min-h-[60vh] rounded-xl p-4 shadow-md">
+    <h2 class="text-1xl font-bold text-red-600 mb-2">{{ header }}</h2>
+    <div class="flex flex-column justify-content-center align-items-center mb-2">
+        <lottie-player src="/public/system/error-general.json" background="transparent" speed="1" loop autoplay
+            style="width: 220px; cursor: pointer; transition: transform 0.2s;"
+            onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        </lottie-player>
+    </div>
+  <div class="flex flex-column justify-content-center align-items-center mb-2">
+    <p class="text-gray-700 text-1xl">{{ body }}</p>
+  </div>
+  
+  <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="mb-1 btn-float"></button>
+
+</div>

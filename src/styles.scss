@@ -186,7 +186,37 @@ small{
   max-width: 550px;
 }
 
-
+/* Estilo de los label's */
+.block{
+    color: var(--gray-500);
+    font-weight: bold;
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+}
+/* Estilos de Span info */
+.span-info-red{
+  background: #ffe7e6b3;
+  border: solid #ff5757;
+  border-width: 0px;
+  color: #ff5757;
+  font-weight: 600;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 10px;
+}
+.span-info-orange{
+  background: #fff1e0b3;
+  border: solid #FFA500;
+  border-width: 0px;
+  color: #FFA500;
+  font-weight: 600;
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 10px;
+}
 /* Diseño degradante de los iconos */
 .icon-span{
   font-size: 28px;
@@ -216,6 +246,10 @@ small{
 /*  Asegura que las palabras largas se dividan */
 .txt-break{
   word-break: break-word;
+}
+.txt-red{
+  color: red;
+  border-bottom: 1px solid red;
 }
 
 /* ESTILO PARA WEB */

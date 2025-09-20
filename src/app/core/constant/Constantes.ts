@@ -22,6 +22,7 @@ export const Constantes = {
     
     /* CODIGOS DE EXITO */
     STATUS_SUCCESS_RI:'SS00RI00',
+    STATUS_SUCCESS_SV:'SS000200',
     CODIGO_STATUS_202: 'SS000001',
 
 

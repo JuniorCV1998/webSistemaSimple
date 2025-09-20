@@ -39,13 +39,13 @@ export const routes: Routes = [
         path: 'registrar/datosinversion',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/dashboard/flow-register-inversion/datos-inversion/datos-inversion.component'),
-        data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_ADM] }
+        data: { profiles: [Constantes.PERFIL_INV/* , Constantes.PERFIL_ADM */] }
     },
     {
         path: 'registrar/confirmar',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/dashboard/flow-register-inversion/confirm-inversion/confirm-inversion.component'),
-        data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_ADM] }
+        data: { profiles: [Constantes.PERFIL_INV/* , Constantes.PERFIL_ADM */] }
     },
     {
         path: 'registrar/inversiondetalle',
@@ -59,7 +59,7 @@ export const routes: Routes = [
         path: 'inversion/cartilla',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/dashboard/inversion/inversion-detail/inversion-detail.component'),
-        data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_CLI] }
+        data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_CLI, Constantes.PERFIL_ADM] }
     },
     {
         path: 'inversion/lista',
@@ -125,6 +125,14 @@ export const routes: Routes = [
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/inv vehicular/flow-register-vehicular/registered-inv/registered-inv.component'),
         data: { permisos: [Constantes.INV_VEHICULAR], profiles: [Constantes.PERFIL_INV], animation: 'fade'}
+    },
+    
+    /* Pantallas para ADM */
+    {
+        path: 'adm/inversores',
+        canActivate: [authGuard],
+        loadComponent:() => import ('././pages/dashboard/admin-flow/inversores-inversiones/inversores-inversiones.component'),
+        data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}
     },
 
 

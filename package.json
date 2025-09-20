@@ -23,6 +23,7 @@
     "@capacitor/core": "^7.0.1",
     "@capacitor/ios": "^7.0.1",
     "@capacitor/keyboard": "^7.0.0",
+    "@lottiefiles/lottie-player": "^2.0.12",
     "canvas-confetti": "^1.9.3",
     "jwt-decode": "^4.0.0",
     "primeflex": "^3.3.1",

@@ -1,7 +1,3 @@
-.pi-filter{
-    color: var(--gray-400);
-    font-size: 1.7rem;
-}
 .sin-estilo{
     background-color: transparent;
     color: red;
@@ -13,8 +9,10 @@
 table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed; /* evita que las celdas crezcan con el texto */
 }
-th, td {
+
+tr {
     border-bottom: 1px solid #ddd;
     text-align: left;
 }
@@ -33,16 +31,26 @@ tr:hover{
 
 /* Estilo tabla */
 .nombre-txt{
-    font-weight: 600;
-    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-500);
+    font-size: 15px;
+    text-align: left;
+    display: block;
+    white-space: nowrap; /* Evita el salto de línea */
+    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+    margin-bottom: 5px;
 }
+
 .fecha-txt{
-    font-size: 11px;
-    margin-top: 5px;
+    color: var(--gray-500);
+    font-size: 14px;
+    text-align: left;
 }
 .nroInversion-txt{
-    font-size: 11px;
+    font-size: 12px;
     color: var(--blue-500);
+    font-weight: 600;
     margin-top: 5px;
 }
 .cuota-sem{
@@ -50,8 +58,8 @@ tr:hover{
     -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
     background-clip: text; /* Aplicar el fondo degradado al texto */
     -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
-    font-size: 11px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
 }
 .pi-window-maximize{
     color: var(--primary-500);
@@ -62,18 +70,20 @@ tr:hover{
     color: var(--gray-500);
 }
 
-/* tag filter */
-.tag{
+  /* Estilo del filtro */
+  .tag{
     background-color: var(--gray-200);
     color: var(--gray-500);
-    border-radius: 50px;
-    font-size: 10px;
-    padding: 5px;
+    font-weight: 600;
+    border-radius: 5px;
+    font-size: 13px;
+    padding: 10px;
     text-align: center;
 }
 .success{
-    background-color: var(--primary-100);
-    color: var(--primary-500);
+    background-color: #0ea5e9;
+    color: white;
+    border: #0ea5e9;
 }
 /* PAGINADOR */
 .pagination{

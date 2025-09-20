@@ -12,12 +12,14 @@ import { SoloLetrasDirective } from '../../../../components/directives/solo-letr
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ListEmptyComponent } from '../../../../components/resources/list-empty/list-empty.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { finalize } from 'rxjs';
+import { AdminService } from '../../../../core/services/admin/admin.service';
+import { LoginService } from '../../../../core/services/auth/login/login.service';
 
 @Component({
   selector: 'app-inversiones-list',
@@ -37,6 +39,7 @@ export default class InversionesListComponent {
     selectedInversion!: any;
 
     isLoading: boolean = true;
+    descripcion: string = '';
 
     /* Filtro */
     value: string = '';
@@ -53,26 +56,44 @@ export default class InversionesListComponent {
     temporalFilter: Array<any> = [];
     totalListCount: number = 0;
 
+    /* Perfil del usuario en session */
+    codPerfil: string = 'INV';
+    idInversor: number = 0;
+
     constructor(
       private router: Router,
       private location: Location,
       private getInversionService: GetInversionService,
+      private adminService: AdminService,
+      private route: ActivatedRoute,
+      private loginService: LoginService,
       private viewportScroller: ViewportScroller
-    ){}
+    ){
+      const decodedToken = this.loginService.getDecodedToken();
+      if (decodedToken) {
+        this.codPerfil = decodedToken.codPerfil;
+        if(this.codPerfil===Constantes.PERFIL_ADM) {
+          // Recuperar el parámetro de consulta `idInversor`
+            this.route.queryParamMap.subscribe(params => {
+            this.idInversor = Number(params.get('idInversor') ?? 0);
+          });
+        }
+      }
+    }
     
     ngOnInit(): void{
-      /* this.listarInversiones(); */
       setTimeout(() => {
         this.loadingComponent.show();
-        this.listarInversiones();
-    });
+      });
+      
     }
 
     ngAfterViewInit(): void {
+      if(this.codPerfil===Constantes.PERFIL_INV) this.listarInversiones();
+      else this.listarInversionesAdm(this.idInversor);   
     }
 
     listarInversiones(){
-      this.loadingComponent.show();
       this.getInversionService.getInversionesList().pipe(
         finalize(() => {
           this.loadingComponent.hide();
@@ -80,6 +101,29 @@ export default class InversionesListComponent {
         }),
       ).subscribe((resp: any)=> {
         if(resp.codigoMessage == Constantes.STATUS_SUCCESS_RI) {
+          this.descripcion = resp.informacion;
+          // Ordenar por nroInversion (descendente)
+          this.listaInv = resp.data.sort((a: any, b: any) => b.nroInversion - a.nroInversion);
+
+          if(this.listaInv.length !== 0){
+            this.renderizarTablaData();
+            this.calcularPaginas();
+          }
+        } else {
+          this.listaInv = [];
+        }
+      });
+    }
+
+    listarInversionesAdm(idInversor: number){
+      this.adminService.getInversionesList(idInversor).pipe(
+        finalize(() => {
+          this.loadingComponent.hide();
+          this.isLoading = false; // Cambia a falso cuando termine
+        }),
+      ).subscribe((resp: any)=> {
+        if(resp.codigoMessage == Constantes.STATUS_SUCCESS_RI) {
+          this.descripcion = resp.informacion;
           // Ordenar por nroInversion (descendente)
           this.listaInv = resp.data.sort((a: any, b: any) => b.nroInversion - a.nroInversion);
 

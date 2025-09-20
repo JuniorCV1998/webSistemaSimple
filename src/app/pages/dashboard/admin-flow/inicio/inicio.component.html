@@ -1,0 +1,59 @@
+
+<div>
+    <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+        <div class="text-center mb-5">
+            <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola, {{'nombreUsuario'}}</label></div>
+            <span class="text-600 font-medium line-height-3">¿Qué hacemos hoy?</span>
+        </div>
+
+        <div class="flex flex-row gap-2 align-items-center justify-content-center">
+            <div class="flex flex-column w-full justify-content-center custom-banner-codigo-unico" routerLink="/reporte/reporte-cobranza">
+                <div class="flex flex-row justify-content-between align-items-center gap-3">
+                    <i class="pi pi-id-card icon-span"></i>
+                    <span class="block">DNI / RUC</span>
+                </div>
+                <span class="txt-span">Crear Código Único</span>
+            </div>
+        </div>
+
+        <div class="flex flex-row gap-2 align-items-center justify-content-center mb-1">
+            <div class="flex flex-column w-full custom-banner-1" routerLink="/adm/inversores">
+                <div class="flex flex-row w-full justify-content-between align-items-center gap-2">
+                    <i class="pi pi-users icon-span w-4"></i>
+                    <span class="block w-8">1200</span>
+                </div>
+                <span class="txt-span">Inversores</span> 
+            </div>
+
+            <div class="flex flex-column w-full custom-banner-2" routerLink="/adm/inversores">
+                <div class="flex flex-row w-full justify-content-between align-items-center gap-2">
+                    <i class="pi pi-chart-line icon-span w-4"></i>
+                    <span class="block w-8">120000</span>
+                </div>
+                <span class="txt-span">Inversiones</span>
+            </div>
+        </div>
+
+        
+
+        <!-- <div class="flex flex-row gap-2 div-monto" >
+            <div class="flex-row w-full custom-banner-3">
+                <div class="flex w-1 justify-content-center">
+                    <i *ngIf="mostrar" class="pi pi-eye"></i>
+                    <i *ngIf="!mostrar" class="pi pi-eye-slash"></i>
+                </div>
+                <div class="flex w-6 justify-content-center">
+                    <span class="txt-span">Saldo por cobrar</span>
+                </div>
+                <div class="flex w-5 justify-content-center">
+                    <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">{{ monto | number:'1.2-2' }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
+                    <span *ngIf="!mostrar" class="txt-span">********</span>
+                </div>
+
+                
+            </div>
+        </div> -->
+
+        
+    <app-loading></app-loading>
+</div>

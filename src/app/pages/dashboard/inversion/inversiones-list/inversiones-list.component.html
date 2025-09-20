@@ -3,61 +3,63 @@
     <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
-        <div class="text-center mb-4">
-            <div id="div_line_bootom" class="text-700 text-2xl font-medium mb-3 label-title">Lista de inversiones</div>
+        <div class="text-center mb-4"> <!-- text-700 text-2xl mb-3 label-title -->
+            <div id="div_line_bootom" class="text-700 text-2xl mb-3 label-title">Lista de inversiones</div>
         </div>
 
 
-        <div class="w-full mb-3">
-            <span>Lista de inversiones registradas y su detalle.</span>
+        <div class="flex flex-row w-full justify-content-between mb-3">
+            <span class="text-500 font-medium line-height-3 w-full">{{descripcion}}</span>
         </div>
 
-        <div class="flex flex-row w-full justify-content-center gap-2 mb-3 align-items-center">
+        <div class="flex flex-column w-full justify-content-center gap-4 mb-2 align-items-center">
             <!-- <i class="pi pi-filter w-1"></i> -->
             <p-inputGroup>
                 <input class="w-6" type="text" placeholder="Buscar..." pInputText appSoloLetras [(ngModel)]="value" (input)="filtrarInversiones()" />
                 <p-inputGroupAddon (click)="clearFilter()" class="sin-estilo">
-                    <i class="pi pi-trash"></i>
+                    <i class="pi pi-eraser"></i>
                 </p-inputGroupAddon>
             </p-inputGroup>
-            <span class="w-2 tag" (click)="changeOpen(true)" [ngClass]="open?'success':''">Abierto</span>
-            <span class="w-2 tag" (click)="changeOpen(false)" [ngClass]="!open?'success':''">Cerrado</span>
+
+            <div class="flex flex-row w-full justify-content-center items-center gap-2 mb-4">
+                <span class="w-3 tag" (click)="changeOpen(true)" [ngClass]="open?'success':''">Abierto</span>
+                <span class="w-3 tag" (click)="changeOpen(false)" [ngClass]="!open?'success':''">Cerrado</span>
+            </div>
         </div>
+
         <!-- Tabla de lista de ivnersioens -->
         <div class="flex flex-column justify-content-between" [ngClass]="{'card': listaInv.length >= 8}">
             <ng-template [ngIf]="totalListCount==0">
                 <app-list-empty></app-list-empty>
             </ng-template>
             <ng-template [ngIf]="totalListCount!=0">
+
                 <table>
-                    <thead>
-                        <tr>
-                            <th colspan="2" style="padding: 8px">Cliente</th>
-                            <th style="padding: 8px; padding-left: 20px;">Ir</th>
-                        </tr>
-                    </thead>
-                
-                <tbody id="object">
+                    <tbody id="object">
                     <tr *ngFor="let object of listPaginador; let i = index">
-                        <td style="width: 8%; text-align: center; padding: 5px;">
-                            <p-avatar 
-                            label="{{object.avatar}}" 
-                            [style]="getAvatarStyle()" 
-                            styleClass="mr-2"
-                            shape="circle"/>
-                        </td>    
-                        <td style="width: 90%; padding: 8px;">
-                            <span class="nombre-txt">{{object.nombres + ' '+object.apellidoPaterno + ' ' + object.apellidoMaterno}}</span><br>
-                            <div class="flex flex-row justify-content-between gap-1"><span class="fecha-txt">{{object.fechaModificacion}}</span>
-                                <span class="nroInversion-txt">#{{object.nroInversion}}<span class="cuota-sem" *ngIf="object.nroCuota==4"> S</span></span>
-                            </div>
-                        </td>
-                        <td style="width: 2%; text-align: center; padding: 2px;" (click)="abrirCartilla(object.idInversion)">
-                            <i class="pi pi-window-maximize" [ngClass]="object.estadoDeuda=='P'?'pi pi-window-maximize':'pi pi-window-maximize-gray'"></i>
-                        </td>
+                            <td class="w-2 text-center p-1">
+                              <p-avatar 
+                                        label="{{object.avatar}}" 
+                                        [style]="getAvatarStyle()" 
+                                        styleClass="mr-2"
+                                        shape="circle"/>
+                            </td> 
+
+                            <td class="w-9 p-2">
+                                <span class="nombre-txt">{{object.nombres + ' '+object.apellidoPaterno + ' ' + object.apellidoMaterno}}</span>
+                                <div class="flex flex-row justify-content-between gap-2">
+                                    <span class="fecha-txt">{{object.fechaModificacion}}</span>
+                                    <span class="nroInversion-txt">#{{object.nroInversion}}<span class="cuota-sem" *ngIf="object.nroCuota==4"> S</span></span>
+                                </div>
+                            </td>
+
+                            <td class="w-1 text-center cursor-pointer" (click)="abrirCartilla(object.idInversion)">
+                                <i class="pi pi-window-maximize" [ngClass]="object.estadoDeuda=='P'?'pi pi-window-maximize':'pi pi-window-maximize-gray'"></i>
+                            </td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            
             </ng-template>
             
             <ng-template [ngIf]="totalListCount!=0">
@@ -72,6 +74,7 @@
             </ng-template>
         </div>
     </div>
+    <div style="height: 60px;"></div>
 </div>
 
 <app-loading *ngIf="isLoading"></app-loading> 

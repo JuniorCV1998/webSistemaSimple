@@ -6,4 +6,5 @@ export const appsettings = {
     API_COMP_INVERSION_VEH: "api/inversionveh/",       //inversion vehicular
     API_COMP_INVERSORES: "api/inversionista/",  //inversiones
     API_COMP_REGISTER: "register/",  //inversiones
+    API_COMP_ADMIN: "api/admin/"
 }

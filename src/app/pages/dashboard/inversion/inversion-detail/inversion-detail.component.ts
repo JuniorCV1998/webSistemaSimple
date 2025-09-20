@@ -109,9 +109,7 @@ export default class InversionDetailComponent {
         catchError((error) => {
         // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
         if (error.status === 403) {
-          this.show('Acceso denegado', Constantes.MSG_GLOBAL); // Mensaje para 403
-        } else if (error.status === 500) {
-          this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para 500
+          this.show(Constantes.MSG_H_403, 'Sin privilegios para esta acción.'); // Mensaje para 403
         } else {
           this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
         }
@@ -124,17 +122,11 @@ export default class InversionDetailComponent {
         this.objInvDetail = resp.data;
         this.nroCuotas = resp.data.nroCuotas;
       }
-      else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){
-        this.show(resp.message, Constantes.MSG_SIN_REGISTROS,);
-      }
-      else if (resp.codigo==Constantes.CODIGO_ERROR_403){
-        this.show(resp.descripcion, Constantes.MSG_GLOBAL);
-      }
     }
   
   );}
   
-  show(message: string, header: string) {
+  show(header: string, message: string) {
     const ref = this.dialogService.open(MessagePopUpComponent, {
       data: {
         message: message
@@ -165,7 +157,8 @@ export default class InversionDetailComponent {
   }
 
   pagarCuota(cuota: number){
-    if(this.codPerfil==='CLI') return;
+    if(this.codPerfil===Constantes.PERFIL_CLI) return;
+    else if(this.codPerfil===Constantes.PERFIL_ADM) return;
     this.confirmCuota(cuota).then((result) => {
       if (result) {
         const fecha = this.formatearFecha(this.date) ?? '';
@@ -173,8 +166,14 @@ export default class InversionDetailComponent {
         this.getInversionService.pagarCuota(this.idInversion===null?0:this.idInversion, cuota, fecha).pipe(
           // Manejamos errores de respuesta HTTP con catchError
           catchError((error) => {
-            this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
-            return of(null);
+            // Aquí manejamos los diferentes errores HTTP (400, 403, 500, etc.)
+            if (error.status === 403) {
+              this.show(Constantes.MSG_H_403, 'Sin privilegios para esta acción.'); // Mensaje para 403
+            }  else {
+              this.show(Constantes.MSG_500, 'ERROR EN EL SERVIDOR'); // Mensaje para otros errores
+            }
+              // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+              return of(null);
           }))
         .subscribe((resp: any)=> { 
           if(resp.codigo==Constantes.STATUS_SUCCESS_RI) {

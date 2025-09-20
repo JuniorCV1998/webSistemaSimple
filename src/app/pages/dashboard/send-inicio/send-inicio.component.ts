@@ -30,6 +30,9 @@ export default class SendInicioComponent implements AfterViewInit {
     } else if (userDecode.codPerfil === Constantes.PERFIL_INV) {
       const { InicioComponent } = await import('../inicio/inicio.component');
       componentToLoad = InicioComponent;
+    } else if (userDecode.codPerfil === Constantes.PERFIL_ADM) {
+      const { InicioComponent } = await import('../admin-flow/inicio/inicio.component');
+      componentToLoad = InicioComponent;
     }
 
     if (componentToLoad) {

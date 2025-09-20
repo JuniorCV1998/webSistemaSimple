@@ -1,0 +1,105 @@
+
+<div *ngIf="mostrarError; else listaNormal">
+  <app-error-general [body]="errorBody"></app-error-general>
+</div>
+
+<ng-template #listaNormal>
+  <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+        
+    <div class="text-center mb-4">
+        <div class="text-700 text-2xl mb-3 label-title">Lista de inversores</div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-between mb-3">
+        <span class="text-500 font-medium line-height-3 w-full">{{descripcion}}</span>
+    </div>
+
+    <div class="relative w-full mb-2">
+        <input (input)="filtrarInversor()" id="email1" name="usuario" [(ngModel)]="busqueda" [maxlength]="30" type="text" placeholder="Buscar por nombre o celular" pInputText class="w-full mb-3">
+            <i class="pi" [ngClass]="busqueda ? 'pi-times-circle' : ''" 
+            (click)="cleanFiltroFunct()" 
+            style="position: absolute; top: 40%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+            </i>
+    </div>
+
+    <div *ngIf="filtroVacio && listaInversoresRecovery.length!=0 && busqueda!==''" class="flex flex-column w-full justify-content-center align-items-center gap-3">
+        <i class="pi pi-search-minus"></i>
+        <span class="span-empty">Parece que no tienes un inversor con esta información <b>"{{busqueda}}"</b></span>
+    </div>
+
+    <div *ngIf="listaInversoresRecovery.length==0 && !isLoading" class="flex flex-row justify-content-center align-items-center w-full">
+        <span class="w-10 span-empty">Aún no tienes inversores registrados.</span>
+    </div>
+
+    <ng-template [ngIf]="isLoading">
+        <div class="flex flex-row w-full" style="min-width: 278px;">
+            <div class="w-full p-2">
+                <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-3 gap-2 row-skeleton">
+                    <div class="flex flex-column w-full gap-1">
+                        <p-skeleton class="w-10" height="1rem" />
+                        <p-skeleton class="w-4" height="1rem" />
+                    </div>
+                    <p-skeleton class="w-2" height="2rem" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- Filtrar inversor por caracteristicas -->
+    <div *ngIf="busqueda==='' && !isLoading && listaInversores.length!==0">
+        <div class="flex flex-row w-full mb-3">
+            <span class="flex flex-row justify-content-center align-items-center text-500 font-medium line-height-3 text-center w-full gap-1"><i class="pi pi-filter"></i>Filtros</span>
+        </div>
+
+        <div class="flex flex-row justify-content-center items-center gap-2 mb-4">
+            <span class="tag w-3" (click)="UsingFilter('N')" [ngClass]="open==='N'?'success':''">BLO</span>
+            <span class="tag w-3" (click)="UsingFilter('P')" [ngClass]="open==='P'?'success':''">PEX</span>
+            <span class="tag w-3" (click)="UsingFilter('V')" [ngClass]="open==='V'?'success':''">VEN</span>
+        </div>
+    </div>
+
+    <div *ngIf="busqueda==='' && !isLoading && listaInversores.length===0 && open!==''" class="flex flex-column w-full justify-content-center align-items-center gap-3">
+        <i class="pi pi-search-minus"></i>
+        <span class="span-empty">Sin registros para este filtro.</span>
+    </div>
+    
+    
+    <ng-template [ngIf]="!isLoading">
+        <div *ngFor="let inversor of listaInversores" class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
+            <div class="flex flex-row w-full justify-content-center container-cliente gap-2" (click)="seleccionarCliente(inversor.idUsuario)">
+                <div class="flex flex-column w-9 gap-1 div_line_right">
+                    <span class="span-nombre">{{inversor.persona.nombres+' '+inversor.persona.apellidoPaterno+' '+inversor.persona.apellidoMaterno}}</span>
+                    <div class="flex flex-row align-items-center">
+                        <span class="span-desc w-6">{{ formatNumberEspaciado(inversor.persona.celular) }}</span>
+                        <span *ngIf="inversor.acceso==='N'" class="span-info-red w-6">Acceso bloqueado</span>
+                        <span *ngIf="inversor.acceso!=='N' && inversor.diasRestantes == 0" class="span-info-red w-6">Memb. vencida</span>
+                        <span *ngIf="inversor.acceso!=='N' && (inversor.diasRestantes > 0 && inversor.diasRestantes <= 3)" class="span-info-orange w-6">Memb. por vencer</span>
+                    </div>
+                </div>
+                <div class="flex flex-row w-3 gap-1" [routerLink]="['/inversion/lista']" [queryParams]="{ idInversor: inversor.idInversor}">
+                    <div class="flex flex-column justify-content-center align-items-center gap-1" >
+                        <span class="span-nombre">{{inversor.cantidadInversiones}}</span>
+                        <span class="span-desc">Inversiones</span>
+                    </div>
+                    <!-- <div class="flex flex-column w-full custom-banner-1" routerLink="/inversion/lista">
+                        <i class="pi pi-chart-bar icon-span"></i>
+                        <span class="txt-span">Inversiones</span>
+                    </div> -->
+                    <div class="flex flex-column justify-content-center">
+                        <i class="pi pi-angle-right"></i>
+                    </div>
+                </div>
+                
+                <!-- <div class="flex flex-row justify-content-end align-items-center w-6 gap-1">
+                    <i class="pi pi-angle-right"></i>
+                </div> -->
+            </div>
+        </div>
+    </ng-template>
+    
+    <div style="height: 60px;"></div>
+    <!-- <button pButton
+        pRipple label="Nuevo cliente" [routerLink]="'/registro/clientenuevo'" severity="info" class="btn-float" ><i class="pi pi-user-plus"></i></button>
+     -->
+    </div>
+</ng-template>

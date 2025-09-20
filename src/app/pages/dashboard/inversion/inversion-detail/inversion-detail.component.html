@@ -7,20 +7,18 @@
         </div>
 
         <div class="flex flex-row w-full mb-3 custom-banner-present">
-            <div class="flex flex-row w-7 paddin-5 gap-1">
+            <div class="flex flex-row w-7 paddin-5 gap-2">
                 <div class="flex align-items-center"><i class="pi pi-user icon-span pi-present"></i></div>
                 <div class="flex flex-column justify-content-center w-full">
-                    <!-- <span class="params-txt mb-1">Cliente</span> -->
-                    <span class="valor-txt">{{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
+                    <span class="text-500 font-medium line-height-3 w-full">{{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
                 </div>
             </div>
-            <div class="flex flex-row w-5 paddin-5 cont-banner gap-1">
+            <div class="flex flex-row w-5 paddin-5 cont-banner gap-2">
                 <div class="flex flex-column justify-content-center align-items-center" style="padding-top: 5px;">
                     <span class="icon-span pi-present">S/.</span>
                 </div>
                 <div class="flex flex-column justify-content-center w-full">
-                    <!-- <span class="params-txt mb-1">Monto</span> -->
-                    <span class="valor-txt">{{objInvDetail.monto | number:'1.2-2'}}</span>
+                    <span class="text-500 font-medium line-height-3 w-full">{{objInvDetail.monto | number:'1.2-2'}}</span>
                 </div>
             </div>
         </div>
@@ -246,6 +244,13 @@
             </div>
 
         </div>
+
+        <!-- Eliminar inversion -->
+         <div class="flex align-items-center justify-content-center mb-4">
+            <span class="font-bold txt-red">Eliminar inversión</span>
+         </div>
+
+         <!-- <div style="height: 40px;"></div> -->
 
         <p-confirmDialog #cdpago key="cdpago">
             <ng-template pTemplate="headless" let-message>
