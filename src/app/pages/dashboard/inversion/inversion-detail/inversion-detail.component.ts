@@ -20,6 +20,8 @@ import { GetInversionService } from '../../../../core/services/inversion/get-inv
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { MessageModule } from 'primeng/message';
+import { AdminService } from '../../../../core/services/admin/admin.service';
+import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-inversion-detail',
@@ -35,6 +37,9 @@ export default class InversionDetailComponent {
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
   isLoading: boolean = true;
+
+  //cod de Operacion
+  messageCopiarCodOperacion: string = "Toca para copiar";
   
   idInversion: number | null = null;
   //Mostrar clave usuario
@@ -67,7 +72,9 @@ export default class InversionDetailComponent {
     public dialogService: DialogService,
     private router: Router,
     private viewportScroller: ViewportScroller,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private adminService: AdminService,
+    private tempDataService: TempDataService,
   ){
     const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
@@ -311,18 +318,67 @@ export default class InversionDetailComponent {
     });
   }
 
-/*   renovacion_cli(): Promise<boolean> {
+  eliminarInversion(){
+    if(this.codPerfil===Constantes.PERFIL_ADM) return;
+      this.confirmEliminarInv().then((result) => {
+          if(result){
+              this.loadingComponent.show();
+              this.adminService.deleteInversion(this.objInvDetail.codOperacion).pipe(
+                  finalize(() => {
+                  this.loadingComponent.hide();
+                  }),
+                  // Manejamos errores de respuesta HTTP con catchError
+                  catchError((error) => {
+                  // Aquí manejamos los diferentes errores HTTP (400, 500, etc.)
+                  if (error.status === 400) this.show(Constantes.MSG_400, Constantes.MSG_H_400); // Mensaje para 400
+                  else if (error.status === 403) this.show(error.error.descripcion, Constantes.MSG_H_403);
+                  else this.show(Constantes.MSG_500, Constantes.MSG_H_500); // Mensaje para otros errores
+                      // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+                      return of(null);
+                  })
+              ).
+              subscribe((resp: any)=> { 
+
+                this.tempDataService.setItem('delete_inversion', true);
+                window.history.back();
+              }
+              );
+          }
+      });
+      
+  }
+
+  confirmEliminarInv(): Promise<boolean> {
     return new Promise((resolve) => {
         this.confirmationService.confirm({
-            key: "reno_cli",
-            header: 'Confirmar renovación',
-            message: 'Confirme la fecha de pago de la cuota número '  + '.',
+            key: 'delete_inv',
+            header: 'Eliminar inversión',
+            message: '¿Está seguro que desea eliminar esta inversión?',
             accept: () => {
                 resolve(true);  // Resuelve la promesa con "true" si acepta
+            },
+            reject: () => {
+                resolve(false); // Resuelve la promesa con "false" si rechaza
             }
         });
     });
-  } */
+  }
+
+    confirmEliminarInvAdm(): Promise<boolean> {
+    return new Promise((resolve) => {
+        this.confirmationService.confirm({
+            key: 'delete_inv_adm',
+            header: 'Eliminar inversión',
+            message: '¿Está seguro que desea eliminar esta inversión?',
+            accept: () => {
+                resolve(true);  // Resuelve la promesa con "true" si acepta
+            },
+            reject: () => {
+                resolve(false); // Resuelve la promesa con "false" si rechaza
+            }
+        });
+    });
+  }
 
     confirm_cli() {
       this.confirmationService.confirm({
@@ -392,6 +448,27 @@ objInvDetail: any = {
     "renovacion": 'N',
     "ctasPagadas": 0,
     "idUsuario": null
+}
+
+async copyCodigoOperacion(codAprobacion: string): Promise<void> {
+  try {
+
+    // Uso de la función
+    var texto = "Se solicita la eliminación de la inversión con código de aprobación "+codAprobacion+". Favor de proceder."
+    this.messageCopiarCodOperacion = "¡Copiado!";
+    setTimeout(() => {
+      this.messageCopiarCodOperacion = "Toca para copiar";     // vuelve al original
+    }, 3000); // 3 segundos
+    this.copyToClipboard(texto);
+  } catch (err) {
+    // Manejar el error si la operación de copia falla
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Copiar',
+      detail: 'Error al copiar al portapapeles.',
+      life: 3000
+    });
+  }
 }
 
 async copyText(correo: string, contra: string): Promise<void> {

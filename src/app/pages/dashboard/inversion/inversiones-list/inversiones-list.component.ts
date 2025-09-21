@@ -20,13 +20,17 @@ import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { finalize } from 'rxjs';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { TempDataService } from '../../../../core/services/temp-data.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { LetrasNumerosGuionesDirective } from '../../../../components/directives/letras-numeros-guiones.directive';
 
 @Component({
   selector: 'app-inversiones-list',
   standalone: true,
   imports: [TableModule, InputTextModule, TagModule, IconFieldModule, InputIconModule,AvatarModule,
-    CommonModule,PaginatorModule,SoloLetrasDirective,InputGroupModule,InputGroupAddonModule,ListEmptyComponent,
-    LoadingComponent
+    CommonModule,PaginatorModule,LetrasNumerosGuionesDirective,InputGroupModule,InputGroupAddonModule,ListEmptyComponent,
+    LoadingComponent,ToastModule
   ],
   templateUrl: './inversiones-list.component.html',
   styleUrl: './inversiones-list.component.scss'
@@ -67,7 +71,9 @@ export default class InversionesListComponent {
       private adminService: AdminService,
       private route: ActivatedRoute,
       private loginService: LoginService,
-      private viewportScroller: ViewportScroller
+      private viewportScroller: ViewportScroller,
+      private tempDataService: TempDataService,
+      private messageService: MessageService,
     ){
       const decodedToken = this.loginService.getDecodedToken();
       if (decodedToken) {
@@ -91,6 +97,19 @@ export default class InversionesListComponent {
     ngAfterViewInit(): void {
       if(this.codPerfil===Constantes.PERFIL_INV) this.listarInversiones();
       else this.listarInversionesAdm(this.idInversor);   
+
+      /* Mostrar msg inversion eliminada */
+      if(this.tempDataService.hasItem('delete_inversion')){
+        const messageData = {
+          severity: 'success',
+          summary: '!INVERSIÓN ELIMINADA¡',
+          detail: 'Se eliminó correctamente.',
+          life: 3000
+          };
+               
+          this.messageService.add(messageData);
+          this.tempDataService.removeItem('delete_inversion');
+      }
     }
 
     listarInversiones(){
@@ -150,7 +169,7 @@ export default class InversionesListComponent {
       // Filtrar según el valor del input
       this.temporalFilter = this.listaInv.filter(item => {
         // Combinar los nombres y apellidos en una sola cadena
-        const fullName = `${item.nombres} ${item.apellidoPaterno} ${item.apellidoMaterno}`.toLowerCase().trim();
+        const fullName = `${item.nombres} ${item.apellidoPaterno} ${item.apellidoMaterno} ${item.codOperacion}`.toLowerCase().trim();
         // Retornar verdadero si la cadena combinada incluye el valor del filtro
         return fullName.includes(filterValue);
         });

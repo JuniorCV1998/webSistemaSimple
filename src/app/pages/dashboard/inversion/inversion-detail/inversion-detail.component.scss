@@ -177,6 +177,11 @@ td{
     cursor: pointer;
 }
 
+.pi-trash{
+  font-size: 60px;
+  font-weight: 700;
+  color: red;
+}
 .txt-primary{
     color: var(--primary-500);
 }
@@ -275,3 +280,12 @@ td{
       font-weight: bold;
       font-size: 18px;
     }
+
+.cod-operacion{
+  background: linear-gradient(to right, var(--primary-500), var(--blue-500));
+  color: white;
+  font-weight: 700;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+}

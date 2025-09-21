@@ -11,12 +11,6 @@
 small {
     color: var(--gray-500);
 }
-.labelCodUnico{
-    background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-    -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-    background-clip: text; /* Aplicar el fondo degradado al texto */
-    -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
-}
 #terminos_condiciones{
     margin-left: 10px;
 }

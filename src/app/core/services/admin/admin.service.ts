@@ -22,6 +22,12 @@ export class AdminService {
         .set('idInversor', Number(idInversor));
     return this.http.get(this.baseUrl+this.baseComponent+'getInversionesList', {params});
   }
+
+  deleteInversion(codOperacion: string){
+    let data = codOperacion.replace("SS-","");
+    return this.http.delete(this.baseUrl+this.baseComponent+'inversion/'+data);
+  }
+
   
 
 }

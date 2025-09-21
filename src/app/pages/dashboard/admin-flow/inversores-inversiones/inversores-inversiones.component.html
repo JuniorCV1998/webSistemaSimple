@@ -67,7 +67,7 @@
     <ng-template [ngIf]="!isLoading">
         <div *ngFor="let inversor of listaInversores" class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
             <div class="flex flex-row w-full justify-content-center container-cliente gap-2" (click)="seleccionarCliente(inversor.idUsuario)">
-                <div class="flex flex-column w-9 gap-1 div_line_right">
+                <div class="flex flex-column w-9 gap-1 div_line_right" [routerLink]="['/adm/perfil-inversor']" [queryParams]="{ idInversor: inversor.idInversor}">
                     <span class="span-nombre">{{inversor.persona.nombres+' '+inversor.persona.apellidoPaterno+' '+inversor.persona.apellidoMaterno}}</span>
                     <div class="flex flex-row align-items-center">
                         <span class="span-desc w-6">{{ formatNumberEspaciado(inversor.persona.celular) }}</span>

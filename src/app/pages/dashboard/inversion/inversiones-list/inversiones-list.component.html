@@ -15,7 +15,7 @@
         <div class="flex flex-column w-full justify-content-center gap-4 mb-2 align-items-center">
             <!-- <i class="pi pi-filter w-1"></i> -->
             <p-inputGroup>
-                <input class="w-6" type="text" placeholder="Buscar..." pInputText appSoloLetras [(ngModel)]="value" (input)="filtrarInversiones()" />
+                <input class="w-6" type="text" placeholder="Buscar por nombre o cód. op." pInputText appLetrasNumerosGuiones [(ngModel)]="value" (input)="filtrarInversiones()" />
                 <p-inputGroupAddon (click)="clearFilter()" class="sin-estilo">
                     <i class="pi pi-eraser"></i>
                 </p-inputGroupAddon>
@@ -78,3 +78,7 @@
 </div>
 
 <app-loading *ngIf="isLoading"></app-loading> 
+
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>

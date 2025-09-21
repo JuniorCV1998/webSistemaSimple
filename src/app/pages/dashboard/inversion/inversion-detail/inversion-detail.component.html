@@ -173,6 +173,15 @@
                         </span>
                     </div>
                 </div>
+
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
+                    <div class="flex flex-column w-full">
+                        <label class="mb-2 params-txt">Código de Operación</label>
+                        <span class="valor-txt-detail">
+                            {{objInvDetail.codOperacion}}
+                        </span>
+                    </div>
+                </div>
                 
             </div>
             
@@ -246,9 +255,82 @@
         </div>
 
         <!-- Eliminar inversion -->
-         <div class="flex align-items-center justify-content-center mb-4">
-            <span class="font-bold txt-red">Eliminar inversión</span>
+         <div *ngIf="codPerfil==='INV' && !(objInvDetail.ctasPagadas===objInvDetail.nroCuotas)" class="flex align-items-center justify-content-center mb-4">
+            <span class="font-bold txt-red-link" (click)="eliminarInversion()">Eliminar inversión</span>
          </div>
+
+         <p-confirmDialog #delete_inv key="delete_inv">
+            <ng-template pTemplate="headless" let-message>
+                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                        <i class="pi pi-trash"></i>
+                    </div>
+                    <span class="font-bold mb-3 mt-4 txt-red" style="font-size: 20px;">
+                        {{ message.header }}
+                    </span>
+                    <span class="flex flex-column gap-3 mb-3 txt-label">
+                        <strong class="text-center w-full">{{ message.message }}</strong>
+                        <ul>
+                            <li class="mb-1">Ya no se podrán registrar más cuotas de pago.</li>
+                            <li class="mb-1">La inversión no será considerada en el cálculo de rentabilidad.</li>
+                            <li class="mb-1">El historial asociado a esta inversión se perderá.</li>
+                        </ul>
+                        <strong class="text-center w-full">¿Desea continuar?</strong>
+                    </span>
+                    <div class="flex align-items-center gap-2 mt-4">
+                        <button 
+                            pButton 
+                            label="Cancelar" 
+                            (click)="delete_inv.reject()" 
+                            class="p-button-outlined w-8rem ">
+                        </button>
+                        <button 
+                        severity="danger"
+                            pButton 
+                            label="Eliminar" 
+                            (click)="delete_inv.accept()" 
+                            class=" w-8rem">
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </p-confirmDialog>
+
+         <!-- <p-confirmDialog #delete_inv key="delete_inv">
+            <ng-template pTemplate="headless" let-message>
+                <div class="flex flex-column align-items-center p-4 surface-overlay border-round">
+                    <div class="border-circle inline-flex justify-content-center align-items-center">
+                        <i class="pi pi-trash"></i>
+                    </div>
+                    <span class="font-bold mb-3 mt-4 txt-red">
+                        {{ message.header }}
+                    </span>
+                    <span class="flex w-full flex-column gap-3 mb-3 txt-label" (click)="copyCodigoOperacion(objInvDetail.codOperacion)">
+                        <span>Para solicitar la eliminación contacte al administrador y proporcione el siguiente código de operación:</span>
+                        <div class="flex flex-column cod-operacion">
+                            <div>{{objInvDetail.codOperacion}}</div>
+                            <span style="font-size: 12px;">{{messageCopiarCodOperacion}}</span>
+                        </div>
+                        
+                    </span>
+                    <div class="flex align-items-center gap-2 mt-4">
+                        <button 
+                            pButton 
+                            label="Cancelar" 
+                            (click)="delete_inv.reject()" 
+                            class="p-button-outlined w-8rem ">
+                        </button>
+                        <button 
+                        severity="danger"
+                            pButton 
+                            label="Eliminar" 
+                            (click)="delete_inv.accept()" 
+                            class=" w-8rem">
+                        </button>
+                    </div>
+                </div>
+            </ng-template>
+        </p-confirmDialog> -->
 
          <!-- <div style="height: 40px;"></div> -->
 

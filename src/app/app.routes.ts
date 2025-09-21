@@ -134,6 +134,12 @@ export const routes: Routes = [
         loadComponent:() => import ('././pages/dashboard/admin-flow/inversores-inversiones/inversores-inversiones.component'),
         data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}
     },
+    {
+        path: 'adm/perfil-inversor',
+        canActivate: [authGuard],
+        loadComponent:() => import ('././pages/dashboard/admin-flow/profile-inversor/profile-inversor.component'),
+        data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}
+    },
 
 
     {

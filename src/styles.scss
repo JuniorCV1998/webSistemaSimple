@@ -168,6 +168,15 @@ small{
   font-weight: 700;
   font-size: 30px;
 }
+.txt-green{
+  color: var(--green-500);
+}
+.txt-red{
+  color: var(--red-500);
+}
+.txt-orange{
+  color: var(--orange-500);
+}
 
 //Btn Continuar
 .btn-disabled{
@@ -225,6 +234,29 @@ small{
   background-clip: text; /* Aplicar el fondo degradado al texto */
   -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
 }
+/* diseño para codigo unico text */
+.labelCodUnico{
+    background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
+    -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+    background-clip: text; /* Aplicar el fondo degradado al texto */
+    -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+}
+.icon-span-gray{
+  padding: 3px;
+  font-size: 20px;
+  background: linear-gradient(to right, var(--gray-500), var(--gray-500)); /* Degradado de colores */
+  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text; /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+}
+.icon-span-blue{
+  padding: 3px;
+  font-size: 20px;
+  background: linear-gradient(to right, var(--blue-500), var(--blue-500)); /* Degradado de colores */
+  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text; /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+}
 
 /* elemento sin decoracion */
 .no-decoracion {
@@ -247,7 +279,7 @@ small{
 .txt-break{
   word-break: break-word;
 }
-.txt-red{
+.txt-red-link{
   color: red;
   border-bottom: 1px solid red;
 }
