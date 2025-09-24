@@ -1,5 +1,5 @@
-  <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+
     <div class="text-center mb-4">
         <div class="text-700 text-2xl mb-3 label-title">Datos del Inversor</div>
     </div>
@@ -11,22 +11,32 @@
         </div>
         <div class="user-header">
             <div class="user-avatar">
-                <img src="https://i.pravatar.cc/100?img=12" alt="Avatar">
+                <i class='pi pi-user'></i>
             </div>
             <div>
-            <h2 class="user-name">Jose Octavio Cerron Vicente</h2>
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-id-card icon-span"></i>
-                <p class="user-subtitle">DNI • <strong>70778382</strong></p>
-            </div>
-            
+                <h2 *ngIf="inversorData?.persona?.codTipoDoc==='01' || inversorData?.persona?.codTipoDoc===null"
+                    class="user-name">{{inversorData?.persona?.nombres+' '+inversorData?.persona?.apellidoPaterno+'
+                    '+inversorData?.persona?.apellidoMaterno}}</h2>
+                <h2 *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-name">
+                    {{inversorData?.persona?.nombres+' '+inversorData?.persona?.apellidoPaterno+'
+                    '+inversorData?.persona?.apellidoMaterno}}</h2>
+                <div class="flex flex-row justify-content-start align-items-center gap-2">
+                    <i class="pi pi-id-card icon-span"></i>
+                    <p *ngIf="inversorData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
+                        <strong>{{inversorData?.persona?.nroDocumento}}</strong></p>
+                    <p *ngIf="inversorData?.persona?.codTipoDoc===null" class="user-subtitle">- • <strong>-</strong></p>
+                    <p *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
+                        <strong>{{inversorData?.persona?.nroDocumento}}</strong></p>
+                </div>
+
             </div>
         </div>
 
         <div class="flex flex-column gap-2 user-info ">
             <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-phone icon-span-gray"></i>
-                <span class="text-500 font-medium line-height-3 w-full">921 754 924</span>
+                <span
+                    class="text-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(inversorData?.persona?.celular)}}</span>
             </div>
             <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-at icon-span-gray"></i>
@@ -34,13 +44,13 @@
             </div> -->
             <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-map-marker icon-span-gray"></i>
-                <span class="text-500 font-medium line-height-3 w-full">Av. Principal 123, Lima - Perú</span>
+                <span class="text-500 font-medium line-height-3 w-full">{{inversorData.persona.direccion}}</span>
             </div>
         </div>
     </div>
 
     <!-- Datos de la Cuenta -->
-     <div class="user-card mb-2">
+    <div class="user-card mb-2">
         <div class="flex flex-row w-full mb-2">
             <span class="block mb-2">Datos de la Cuenta</span>
         </div>
@@ -49,28 +59,30 @@
             <div class="flex flex-row justify-content-between align-items-center gap-2">
                 <!-- <i class="pi pi-phone icon-span-gray"></i> -->
                 <label class="w-6  text-500 font-medium line-height-3 w-full">Código Único</label>
-                <span class="flex w-6 labelCodUnico justify-content-end"><b>SS-000001</b></span>
+                <span class="flex w-6 labelCodUnico justify-content-end"><b>{{inversorData.codUnico}}</b></span>
             </div>
             <div class="flex flex-row justify-content-between align-items-center gap-2">
                 <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-500 font-medium line-height-3 justify-content-end">{{'jose@oexample.com'}}</span>
+                <span class="text-500 font-medium line-height-3 justify-content-end">{{inversorData.correo}}</span>
             </div>
             <div class="flex flex-row justify-content-between align-items-center gap-2">
                 <label class="w-5  text-500 font-medium line-height-3 w-full">Acceso</label>
                 <div class="toggle">
-                    <input type="checkbox" [ngModel]="statusActivo" id="customToggle" class="toggle-input">
+                    <input type="checkbox" [checked]="statusActivo" (change)="onToggleChange($event)" id="customToggle"
+                        class="toggle-input">
                     <label for="customToggle" class="toggle-label">
                         <span class="toggle-handle">
-                        <i class="pi pi-times"></i>
+                            <i class="pi pi-times"></i>
                         </span>
                     </label>
                 </div>
+
             </div>
         </div>
     </div>
 
     <!-- Datos de la Membresia -->
-     <div class="user-card mb-5">
+    <div class="user-card mb-5">
         <div class="flex flex-row justify-content-between w-full mb-3">
             <span class="block w-10 line-height-3">Datos de la Membresía</span>
             <div class="w-2 text-center" (click)="updateMembresiaService()">
@@ -82,67 +94,82 @@
             <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
                 <!-- <i class="pi pi-calendar icon-span-gray"></i> -->
                 <label class="w-8  text-500 font-medium line-height-3 w-full">Tipo de Membresía</label>
-                <span class="w-7 labelCodUnico"><b>Plan Gratuito</b></span>
+                <span class="w-7 labelCodUnico"><b>{{inversorData.membresia.descTipoMembresia}}</b></span>
             </div>
             <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
                 <label class="w-8 text-500 font-medium line-height-3 w-full">Estado de Membresía</label>
-                <span class="w-4 txt-orange"><b>Por Expirar</b></span>
+                <span class="w-4" [ngClass]="{
+                    'txt-green': inversorData.membresia.codMembresia === 'ACT',
+                    'txt-orange': inversorData.membresia.codMembresia === 'PEX',
+                    'txt-red': inversorData.membresia.codMembresia === 'VEN'
+                }"><b>{{inversorData.membresia.descCodMembresia}}</b></span>
             </div>
             <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
                 <label class="w-8 text-500 font-medium line-height-3 w-full">Días restantes</label>
-                <span class="w-4 txt-orange"><b>2</b></span>
+                <span class="w-4" [ngClass]="{
+                    'txt-green': inversorData.membresia.codMembresia === 'ACT',
+                    'txt-orange': inversorData.membresia.codMembresia === 'PEX',
+                    'txt-red': inversorData.membresia.codMembresia === 'VEN'
+                }"><b>{{inversorData.membresia.diasRestantes}}</b></span>
             </div>
             <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
                 <div class="w-6 text-500 font-medium line-height-3">
                     <i class="pi pi-calendar icon-span-gray"></i>
                     <label>Vencimiento</label>
                 </div>
-                <span class="w-6 text-center txt-orange"><b>18 de may. 2024</b></span>
+                <span class="w-6 text-center" [ngClass]="{
+                    'txt-green': inversorData.membresia.codMembresia === 'ACT',
+                    'txt-orange': inversorData.membresia.codMembresia === 'PEX',
+                    'txt-red': inversorData.membresia.codMembresia === 'VEN'
+                }"><b>{{inversorData.membresia.fechaVencimiento}}</b></span>
             </div>
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
+            <div *ngIf="inversorData.membresia.fechaActualizacion!==''"
+                class="flex flex-row w-full justify-content-between align-items-center gap-1">
                 <div class="w-6 text-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i> 
+                    <i class="pi pi-calendar icon-span-gray"></i>
                     <label>Actualización</label>
                 </div>
-                <span class="w-6 text-center text-500 font-medium line-height-3 w-full">20 de dic. 2025</span>
+                <span
+                    class="w-6 text-center text-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActualizacion}}</span>
             </div>
             <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
                 <div class="w-6 text-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i> 
+                    <i class="pi pi-calendar icon-span-gray"></i>
                     <label>Activación</label>
                 </div>
-                <span class="w-6 text-center text-500 font-medium line-height-3 w-full">20 de dic. 2025</span>
+                <span
+                    class="w-6 text-center text-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActivacion}}</span>
             </div>
         </div>
     </div>
 
     <p-confirmDialog #update_membresia key="update_membresia">
-            <ng-template pTemplate="headless" let-message>
-                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <!-- <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
+        <ng-template pTemplate="headless" let-message>
+            <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+                <!-- <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <i class="pi pi-sync icon-span font-bold" style="font-size: 20px;"></i>
                     </div> -->
-                    <span class="font-bold mb-1 mt-4 labelCodUnico" style="font-size: 20px;">
-                        {{ message.header }}
-                    </span>
-                    
-                    <div class="card flex flex-column items-center gap-2 p-2 rounded shadow-md bg-white w-80">
-                        <h3 class="text-lg font-semibold text-gray-700">Extender Membresía</h3>
-                        <!-- Slider -->
-                        <input type="range" min="1" max="3" step="1" [(ngModel)]="meses" class="slider">
-                        <!-- Meses seleccionados -->
-                        <p class="text-gray-600 text-center">
-                            <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
-                        </p>
-                        <!-- Fecha calculada -->
-                        <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">
-                            <span class="text-sm text-gray-500">Nueva fecha de vencimiento</span><br>
-                            <strong class="labelCodUnico">{{ nuevaFecha | date:'dd/MM/yyyy' }}</strong>
-                        </div>
+                <span class="font-bold mb-1 mt-4 labelCodUnico" style="font-size: 20px;">
+                    {{ message.header }}
+                </span>
+
+                <div class="card flex flex-column items-center gap-2 p-2 rounded shadow-md bg-white w-80">
+                    <h3 class="text-lg font-semibold text-gray-700">Extender Membresía</h3>
+                    <!-- Slider -->
+                    <input type="range" min="1" max="3" step="1" [(ngModel)]="meses" class="slider">
+                    <!-- Meses seleccionados -->
+                    <p class="text-gray-600 text-center">
+                        <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
+                    </p>
+                    <!-- Fecha calculada -->
+                    <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">
+                        <span class="text-sm text-gray-500">Nueva fecha de vencimiento</span><br>
+                        <strong class="labelCodUnico">{{ nuevaFecha | date:'dd/MM/yyyy' }}</strong>
                     </div>
+                </div>
 
 
-                    <!-- <span class="flex flex-column gap-3 mb-3 txt-label">
+                <!-- <span class="flex flex-column gap-3 mb-3 txt-label">
                         <strong class="text-center w-full">{{ message.message }}</strong>
                         <ul>
                             <li class="mb-1">Ya no se podrán registrar más cuotas de pago.</li>
@@ -151,26 +178,22 @@
                         </ul>
                         <strong class="text-center w-full">¿Desea continuar?</strong>
                     </span> -->
-                    <div class="flex align-items-center gap-2 mt-4">
-                        <button 
-                            pButton 
-                            label="Cancelar" 
-                            (click)="update_membresia.reject()" 
-                            class="p-button-outlined w-8rem ">
-                        </button>
-                        <button 
-                            severity="success"
-                            pButton 
-                            label="Actualizar" 
-                            (click)="update_membresia.accept()" 
-                            class=" w-8rem">
-                        </button>
-                    </div>
+                <div class="flex align-items-center gap-2 mt-4">
+                    <button pButton label="Cancelar" (click)="update_membresia.reject()"
+                        class="p-button-outlined w-8rem ">
+                    </button>
+                    <button severity="success" pButton label="Actualizar" (click)="update_membresia.accept()"
+                        class=" w-8rem">
+                    </button>
                 </div>
-            </ng-template>
+            </div>
+        </ng-template>
     </p-confirmDialog>
 
+</div>
 
-  </div>
+<app-loading></app-loading>
 
-
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>

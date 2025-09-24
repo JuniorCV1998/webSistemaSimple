@@ -28,6 +28,17 @@ export class AdminService {
     return this.http.delete(this.baseUrl+this.baseComponent+'inversion/'+data);
   }
 
+  getInversorDetail(idInversor: number){
+    const params = new HttpParams()
+        .set('idInversor', Number(idInversor));
+    return this.http.get(this.baseUrl+this.baseComponent+'getInversorDetail', {params});
+  }
+
+
+  updateAccesoUsuario(idUsuario: number, acceso: boolean){
+      const request = {acceso: acceso};
+      return this.http.patch(this.baseUrl+this.baseComponent+idUsuario+'/usuario-acceso', request);
+  }
   
 
 }

@@ -1,5 +1,9 @@
 export const Constantes = {
 
+    /* ACCESOS USUARIOS */
+    ACCES_S: "S",
+    ACCES_N: "N",
+
     MSG_GLOBAL: 'Acceso denegado',
     MSG_EXPIRED_SESSION: 'Sesión Expirada',
     MSG_SIN_REGISTROS: 'SIN REGISTROS',
@@ -19,6 +23,10 @@ export const Constantes = {
     MSG_H_403: 'ACCESO DENEGADO',
     MSG_H_404: 'RECURSO NO ENCONTRADO',
     MSG_H_500: 'ERROR EN EL SERVIDOR',
+
+    /* MENSAJES PARA MESSAGE SERVICE */
+    MSG_SERVICE_ERROR: '¡ERROR!',
+    MSG_SERVICE_UPDATE: '¡ACTUALIZADO!',
     
     /* CODIGOS DE EXITO */
     STATUS_SUCCESS_RI:'SS00RI00',

@@ -14,12 +14,27 @@
   margin-bottom: 20px;
 }
 .user-avatar {
+  display: flex;
   width: 70px;
   height: 70px;
   border-radius: 50%;
   overflow: hidden;
-  background: #ddd;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  
+}
+.pi-user{
+  font-size: 40px;
+  font-weight: 600;
+  color: white;
+}
+span {
+  display: block;
+  max-width: 100%;
+  word-break: break-word;  /* Rompe palabras largas */
+  white-space: normal;     /* Permite saltos de línea */
 }
 
 .user-avatar img {
