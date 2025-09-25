@@ -59,5 +59,11 @@ export const Constantes = {
 
     INV_VEHICULAR: 'INV_VEHICULAR',
 
+    // Mensajes generales
+    MSG_ERROR_GENERAL: "Ocurrió un error inesperado. Intente nuevamente.",
+    // Mensajes de servicio
+    MSG_ERROR_SERVICIO: "El servicio no se encuentra disponible en este momento. Intente más tarde.",
+    MSG_ERROR_TIMEOUT: "El servicio está tardando demasiado en responder. Intente más tarde.",
+
 
 }

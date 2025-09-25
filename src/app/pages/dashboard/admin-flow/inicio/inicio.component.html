@@ -2,12 +2,12 @@
 <div>
     <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
         <div class="text-center mb-5">
-            <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola, {{'nombreUsuario'}}</label></div>
+            <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola, {{nombreUsuario}}</label></div>
             <span class="text-600 font-medium line-height-3">¿Qué hacemos hoy?</span>
         </div>
 
-        <div class="flex flex-row gap-2 align-items-center justify-content-center">
-            <div class="flex flex-column w-full justify-content-center custom-banner-codigo-unico" routerLink="/reporte/reporte-cobranza">
+        <div class="flex flex-row align-items-center justify-content-center">
+            <div class="flex flex-column w-full justify-content-center custom-banner-codigo-unico gap-2" routerLink="/adm/codigo-unico">
                 <div class="flex flex-row justify-content-between align-items-center gap-3">
                     <i class="pi pi-id-card icon-span"></i>
                     <span class="block">DNI / RUC</span>
@@ -16,7 +16,40 @@
             </div>
         </div>
 
-        <div class="flex flex-row gap-2 align-items-center justify-content-center mb-1">
+        <div class="flex flex-column gap-2 align-items-center custom-banner-1 justify-content-center mb-1">
+            <div class="flex flex-row w-full justify-content-end align-items-center mb-3">
+                <div class="flex w-6 p-1 justify-content-center align-items-center gap-1 mostrar-datos" (click)="mostrarDatosFunct()">
+                    <i *ngIf="mostrarDatos" class="pi pi-eye"></i>
+                    <i *ngIf="!mostrarDatos" class="pi pi-eye-slash"></i>
+                    <span class="txt-span">Mostrar datos</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-row w-full " routerLink="/adm/inversores">
+                <div class="flex flex-column w-full justify-content-center align-items-center">
+                    <div class="flex flex-row w-full justify-content-center align-items-center gap-2">
+                        <i class="pi pi-users icon-span"></i>
+                        <i *ngIf="loading" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem; font-weight: bold;"></i>
+                        <span class="block " *ngIf="mostrarDatos && !loading">{{data.totalInversores}}</span>
+                    </div>
+                    <span class="txt-span">Inversores</span> 
+                </div>
+                <div class="flex flex-column w-full justify-content-center align-items-center">
+                    <div class="flex flex-row w-full justify-content-center align-items-center gap-2">
+                        <i class="pi pi-chart-line icon-span"></i>
+                        <i *ngIf="loading" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem; font-weight: bold;"></i>
+                        <span class="block" *ngIf="mostrarDatos && !loading">{{data.totalInversiones}}</span>
+                    </div>
+                    <span class="txt-span">Inversiones</span>
+                </div>
+            </div>
+
+            <!-- <div class="flex flex-column w-full custom-banner-2" routerLink="/adm/inversores">
+                
+            </div> -->
+        </div>
+
+        <!-- <div class="flex flex-row gap-2 align-items-center justify-content-center mb-1">
             <div class="flex flex-column w-full custom-banner-1" routerLink="/adm/inversores">
                 <div class="flex flex-row w-full justify-content-between align-items-center gap-2">
                     <i class="pi pi-users icon-span w-4"></i>
@@ -32,7 +65,7 @@
                 </div>
                 <span class="txt-span">Inversiones</span>
             </div>
-        </div>
+        </div> -->
 
         
 

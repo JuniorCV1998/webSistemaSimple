@@ -46,7 +46,7 @@
     </ng-template>
 
     <!-- Filtrar inversor por caracteristicas -->
-    <div *ngIf="busqueda==='' && !isLoading && listaInversores.length!==0">
+    <div *ngIf="busqueda==='' && !isLoading && datosServicio">
         <div class="flex flex-row w-full mb-3">
             <span class="flex flex-row justify-content-center align-items-center text-500 font-medium line-height-3 text-center w-full gap-1"><i class="pi pi-filter"></i>Filtros</span>
         </div>

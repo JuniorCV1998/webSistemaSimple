@@ -35,6 +35,7 @@ export default class InversoresInversionesComponent {
 
   /* Filtros */
   open: string = "";
+  datosServicio: boolean = false; // si hay datos, mostrar filtro
 
   constructor(
     private adminService: AdminService,
@@ -47,6 +48,8 @@ ngOnInit(): void{
 /* Mensaje de error */
 errorBody: string = '';
 mostrarError: boolean = false;
+
+
 
 obtenerListaInversores() {
   this.isLoading = true;
@@ -68,6 +71,7 @@ obtenerListaInversores() {
       this.listaInversores = resp.data;
       this.listaInversoresRecovery = resp.data;
       this.mostrarError = false;
+      if(resp?.data.length > 0) this.datosServicio = true; // representa que hay datos, mostrar filtro
     }
   });
 }

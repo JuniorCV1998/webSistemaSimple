@@ -1,22 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { KnobModule } from 'primeng/knob';
-import { AdminService } from '../../../../core/services/admin/admin.service';
-import { catchError, delay, finalize, of, throwError } from 'rxjs';
-import { LoadingComponent } from '../../../modal/loading/loading.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Constantes } from '../../../../core/constant/Constantes';
 import { DialogService } from 'primeng/dynamicdialog';
-import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { KnobModule } from 'primeng/knob';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
+import { catchError, finalize, of } from 'rxjs';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { AdminService } from '../../../../core/services/admin/admin.service';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 
 @Component({
   selector: 'app-profile-inversor',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule],
+  imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
+    TabMenuModule
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './profile-inversor.component.html',
   styleUrl: './profile-inversor.component.scss'
@@ -65,7 +69,8 @@ export default class ProfileInversorComponent {
   /* Numero de meses */
   meses: number = 1;
   fechaActual: Date = new Date();
-  nuevaFecha: Date = new Date();
+  nuevaFechaStr: string = "";
+  montoPago: any = null;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -82,15 +87,16 @@ export default class ProfileInversorComponent {
       this.idInversor = id ? +id : null; // Convertir a número si existe
     });
 
-    this.calcularNuevaFecha();
+
     setTimeout(() => {
       this.loadingComponent.show();
       this.getInversorData();
     });
+
   }
 
   getInversorData() {
-    this.adminService.getInversorDetail(this.idInversor===null?0:this.idInversor).pipe(
+    this.adminService.getInversorDetail(this.idInversor === null ? 0 : this.idInversor).pipe(
       finalize(() => {
         this.loadingComponent.hide();
         this.isLoading = false; // Cambia a falso cuando termine
@@ -179,20 +185,82 @@ export default class ProfileInversorComponent {
     });
   }
 
+  private parseFecha(fechaStr: string): Date {
+    // Mapear meses abreviados en español
+    const meses: Record<string, number> = {
+      'ene.': 0, 'feb.': 1, 'mar.': 2, 'abr.': 3,
+      'may.': 4, 'jun.': 5, 'jul.': 6, 'ago.': 7,
+      'set.': 8, 'sept.': 8, 'oct.': 9, 'nov.': 10, 'dic.': 11
+    };
 
-  ngOnChanges() {
-    this.calcularNuevaFecha();
+    const partes = fechaStr.split(" ");
+    const dia = parseInt(partes[0], 10);
+    const mes = meses[partes[2]];
+    const anio = parseInt(partes[3], 10);
+
+    return new Date(anio, mes, dia);
   }
 
-  calcularNuevaFecha() {
-    const nueva = new Date(this.fechaActual);
-    nueva.setMonth(nueva.getMonth() + this.meses);
-    this.nuevaFecha = nueva;
+  actualizarNuevaFecha() {
+    let codMembresia = this.inversorData.membresia.codMembresia;
+    let fechaVencimiento = this.parseFecha(this.inversorData.membresia.fechaVencimiento);
+    let mesesAdicionales = this.meses;
+
+    //console.log("parametros: ", codMembresia+" | "+fechaVencimiento+" | "+mesesAdicionales);
+
+    let nuevaFecha: Date;
+
+    if (codMembresia === 'ACT' || codMembresia === 'PEX') {
+      nuevaFecha = new Date(fechaVencimiento);
+      nuevaFecha.setMonth(nuevaFecha.getMonth() + mesesAdicionales);
+    } else if (codMembresia === 'VEN') {
+      nuevaFecha = new Date();
+      nuevaFecha.setMonth(nuevaFecha.getMonth() + mesesAdicionales);
+    } else {
+      nuevaFecha = new Date(fechaVencimiento);
+    }
+
+    this.nuevaFechaStr = nuevaFecha.toLocaleDateString("es-PE", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
   }
+
 
   updateMembresiaService() {
+    if (this.nuevaFechaStr === "") this.actualizarNuevaFecha();
     this.updateMembresia().then((result) => {
+      if (result) {
+        this.loadingComponent.show();
+        let requestBody: any = {
+          "meses": this.meses,
+          "montoPagado": this.montoPago
+        }
+        this.adminService.updateMembresia(this.inversorData.membresia.idMembresia, requestBody).pipe(
+          finalize(() => this.loadingComponent.hide()),
+          catchError((error) => {
+            const messageData = {
+              severity: 'error',
+              summary: Constantes.MSG_SERVICE_ERROR,
+              detail: error.error.descripcion,
+              life: 3000
+            };
+            this.messageService.add(messageData);
 
+            return of(null);
+          })
+        ).subscribe((resp: any) => {
+          const messageData = {
+            severity: 'success',
+            summary: Constantes.MSG_SERVICE_UPDATE,
+            detail: resp.descripcion,
+            life: 3000
+          };
+          this.messageService.add(messageData);
+          this.getInversorData();
+        });
+      }
     });
   }
 
@@ -226,6 +294,14 @@ export default class ProfileInversorComponent {
 
   formatNumberEspaciado(numero: string): string {
     return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  // Método para verificar si todos los campos obligatorios están llenos
+  isFormValid(): boolean {
+    return (
+      this.meses !== null && this.meses !== 0 &&
+      this.montoPago !== null && this.montoPago >= 1 && this.montoPago <= 100000
+    );
   }
 
 }

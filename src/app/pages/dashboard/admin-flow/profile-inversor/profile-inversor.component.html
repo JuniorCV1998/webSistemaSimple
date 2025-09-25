@@ -153,18 +153,32 @@
                     {{ message.header }}
                 </span>
 
-                <div class="card flex flex-column items-center gap-2 p-2 rounded shadow-md bg-white w-80">
+                <div class="card flex flex-column align-items-center gap-2 p-2 rounded shadow-md bg-white w-80">
                     <h3 class="text-lg font-semibold text-gray-700">Extender Membresía</h3>
                     <!-- Slider -->
-                    <input type="range" min="1" max="3" step="1" [(ngModel)]="meses" class="slider">
+                    <input type="range" min="1" max="3" (ngModelChange)="actualizarNuevaFecha()" step="1" [(ngModel)]="meses" class="slider">
                     <!-- Meses seleccionados -->
                     <p class="text-gray-600 text-center">
                         <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
                     </p>
+                    <!-- Monto a pagar -->
+                     <h3 class="text-lg font-semibold text-gray-700">Monto a recaudar (S/.)</h3>
+                        <div class="flex w-full flex-column align-items-center justify-content-center mb-3 gap-2">
+                            <p-inputNumber
+                            [(ngModel)]="montoPago"
+                            id="monto" 
+                            [minFractionDigits]="2" [maxFractionDigits]="2"  
+                            mode="decimal" autocomplete="off" 
+                            placeholder="Ingrese monto" class="w-full w-8"
+                            [min]="1" [max]="100000"
+                            />
+                            <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | number:'1.2-2'}}.</span>
+                            <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a S/ {{100000 | number:'1.0-0'}}.</span>
+                        </div>
                     <!-- Fecha calculada -->
                     <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">
                         <span class="text-sm text-gray-500">Nueva fecha de vencimiento</span><br>
-                        <strong class="labelCodUnico">{{ nuevaFecha | date:'dd/MM/yyyy' }}</strong>
+                        <strong class="labelCodUnico">{{ nuevaFechaStr }}</strong>
                     </div>
                 </div>
 
@@ -182,13 +196,19 @@
                     <button pButton label="Cancelar" (click)="update_membresia.reject()"
                         class="p-button-outlined w-8rem ">
                     </button>
-                    <button severity="success" pButton label="Actualizar" (click)="update_membresia.accept()"
+                    <button
+                    [ngClass]="{
+                    'btn-disabled': !isFormValid() }"
+                    [disabled]="!isFormValid()"
+                     severity="success" pButton label="Actualizar" (click)="update_membresia.accept()"
                         class=" w-8rem">
                     </button>
                 </div>
             </div>
         </ng-template>
     </p-confirmDialog>
+    <div style="height: 60px;"></div>
+    <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
 
 </div>
 

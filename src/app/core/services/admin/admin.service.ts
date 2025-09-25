@@ -39,6 +39,30 @@ export class AdminService {
       const request = {acceso: acceso};
       return this.http.patch(this.baseUrl+this.baseComponent+idUsuario+'/usuario-acceso', request);
   }
+
+  updateMembresia(idMembresia: number, request: boolean){
+      return this.http.put(this.baseUrl+this.baseComponent+idMembresia+'/update-membresia', request);
+  }
+
+  dashboard(){
+      return this.http.get(this.baseUrl+this.baseComponent+'dashboard');
+  }
   
+  /* CREAR CODIGO UNICO */
+    buscarCliente(tipoDocumento: string, nroDocumento: string){
+    const params = new HttpParams()
+			.set('tipoDocumento', tipoDocumento).set('nroDocumento', nroDocumento);
+    return this.http.get(this.baseUrl+this.baseComponent+'buscar-cliente', {params});
+  }
+
+  correoExistente(correo: string){
+    const params = new HttpParams()
+			.set('correo', correo);
+    return this.http.get(this.baseUrl+this.baseComponent+'consultar-correo', {params});
+  }
+
+  crearCodigoUnico(obj: any){
+      return this.http.post(this.baseUrl+this.baseComponent+'crear-codigo-unico',obj);
+  }
 
 }
