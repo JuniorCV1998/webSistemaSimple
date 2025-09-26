@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Location } from '@angular/common';
 import { TabMenuModule } from 'primeng/tabmenu';
@@ -8,7 +8,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 @Component({
   selector: 'app-list-all',
   standalone: true,
-  imports: [SkeletonModule,CommonModule,TabMenuModule],
+  imports: [SkeletonModule,CommonModule,TabMenuModule,RouterModule],
   templateUrl: './list-all.component.html',
   styleUrl: './list-all.component.scss'
 })

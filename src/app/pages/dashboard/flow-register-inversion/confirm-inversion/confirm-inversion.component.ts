@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
@@ -19,7 +18,7 @@ import { TempDataService } from '../../../../core/services/temp-data.service';
 @Component({
   selector: 'app-confirm-inversion',
   standalone: true,
-  imports: [InputTextareaModule,FloatLabelModule,InputTextModule,FormsModule,CommonModule,ButtonModule,
+  imports: [InputTextModule,FloatLabelModule,InputTextModule,FormsModule,CommonModule,ButtonModule,
     ToastModule,LoadingComponent],
   templateUrl: './confirm-inversion.component.html',
   styleUrl: './confirm-inversion.component.scss'

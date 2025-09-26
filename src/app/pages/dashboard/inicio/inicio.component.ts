@@ -3,7 +3,7 @@ import { MenuItem } from 'primeng/api';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { CommonModule, ViewportScroller } from '@angular/common'; // Importa CommonModule
 import { TableModule } from 'primeng/table';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
@@ -15,7 +15,7 @@ import { TempDataService } from '../../../core/services/temp-data.service';
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [TabMenuModule,CommonModule,TableModule,LoadingComponent,SkeletonModule],
+  imports: [TabMenuModule,CommonModule,TableModule,LoadingComponent,SkeletonModule,RouterModule],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })

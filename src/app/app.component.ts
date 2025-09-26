@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+
 import { Keyboard } from '@capacitor/keyboard';
 import { App as CapacitorApp } from '@capacitor/app';
 import { NavegationComponent } from './pages/nav/navegation/navegation.component';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
 
 
 @Component({

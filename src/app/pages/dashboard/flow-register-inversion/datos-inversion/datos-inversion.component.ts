@@ -18,7 +18,6 @@ import { catchError, finalize, of } from 'rxjs';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { TempDataService } from '../../../../core/services/temp-data.service';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FloatLabelModule } from 'primeng/floatlabel';
 
 
@@ -27,7 +26,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,InputOtpModule,FormsModule
             ,CardModule,BreadcrumbModule,InputNumberModule,CalendarModule,
-           CommonModule,KnobModule,LoadingComponent,InputTextareaModule,FloatLabelModule
+           CommonModule,KnobModule,LoadingComponent,InputTextModule,FloatLabelModule
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'

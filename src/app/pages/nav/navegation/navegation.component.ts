@@ -1,22 +1,23 @@
 import { CommonModule, Location } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { AvatarModule } from 'primeng/avatar';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { Sidebar, SidebarModule } from 'primeng/sidebar';
-import { StyleClassModule } from 'primeng/styleclass';
-import { TabMenuModule } from 'primeng/tabmenu';
 import { Subscription } from 'rxjs';
 import { LoginService } from '../../../core/services/auth/login/login.service';
 import { slideInAnimation } from '../animation/slideInAnimation ';
 import { TempDataService } from '../../../core/services/temp-data.service';
 import { Constantes } from '../../../core/constant/Constantes';
+import { Component, ViewChild } from '@angular/core';
+import { RouterOutlet, Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
+import { AvatarModule } from 'primeng/avatar';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { SidebarModule, Sidebar } from 'primeng/sidebar';
+import { StyleClassModule } from 'primeng/styleclass';
+import { TabMenuModule } from 'primeng/tabmenu';
 
 @Component({
   selector: 'app-navegation',
   standalone: true,
-  imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,AvatarModule,TabMenuModule],
+  imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,
+    AvatarModule,TabMenuModule,RouterModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss',
   animations: [slideInAnimation]

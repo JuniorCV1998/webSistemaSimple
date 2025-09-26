@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { catchError, finalize, of } from 'rxjs';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { AdminService } from '../../../../core/services/admin/admin.service';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { KnobModule } from 'primeng/knob';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-import { catchError, finalize, of } from 'rxjs';
-import { Constantes } from '../../../../core/constant/Constantes';
-import { AdminService } from '../../../../core/services/admin/admin.service';
-import { LoadingComponent } from '../../../modal/loading/loading.component';
-import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 
 @Component({
   selector: 'app-profile-inversor',
@@ -82,7 +82,7 @@ export default class ProfileInversorComponent {
   ) { }
 
   ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params: any) => {
       const id = params.get('idInversor');
       this.idInversor = id ? +id : null; // Convertir a número si existe
     });

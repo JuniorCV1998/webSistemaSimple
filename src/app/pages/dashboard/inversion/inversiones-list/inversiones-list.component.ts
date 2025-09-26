@@ -24,13 +24,14 @@ import { TempDataService } from '../../../../core/services/temp-data.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { LetrasNumerosGuionesDirective } from '../../../../components/directives/letras-numeros-guiones.directive';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-inversiones-list',
   standalone: true,
   imports: [TableModule, InputTextModule, TagModule, IconFieldModule, InputIconModule,AvatarModule,
     CommonModule,PaginatorModule,LetrasNumerosGuionesDirective,InputGroupModule,InputGroupAddonModule,ListEmptyComponent,
-    LoadingComponent,ToastModule
+    LoadingComponent,ToastModule, FormsModule
   ],
   templateUrl: './inversiones-list.component.html',
   styleUrl: './inversiones-list.component.scss'

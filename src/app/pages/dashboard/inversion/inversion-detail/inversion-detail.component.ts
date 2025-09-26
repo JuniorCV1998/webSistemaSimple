@@ -1,8 +1,16 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { catchError, delay, finalize, of } from 'rxjs';
+import { Constantes } from '../../../../core/constant/Constantes';
+import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { AdminService } from '../../../../core/services/admin/admin.service';
+import { TempDataService } from '../../../../core/services/temp-data.service';
+import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CarouselModule } from 'primeng/carousel';
@@ -10,24 +18,16 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MessageModule } from 'primeng/message';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-import { catchError, delay, finalize, of } from 'rxjs';
-import { Constantes } from '../../../../core/constant/Constantes';
-import { LoginService } from '../../../../core/services/auth/login/login.service';
-import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { LoadingComponent } from '../../../modal/loading/loading.component';
-import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
-import { MessageModule } from 'primeng/message';
-import { AdminService } from '../../../../core/services/admin/admin.service';
-import { TempDataService } from '../../../../core/services/temp-data.service';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
-    LoadingComponent,CarouselModule,FloatLabelModule,InputTextareaModule,CheckboxModule,MessageModule
+    LoadingComponent,CarouselModule,FloatLabelModule,TextareaModule,CheckboxModule,MessageModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',

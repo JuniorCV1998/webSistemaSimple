@@ -10,7 +10,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { catchError, finalize, of } from 'rxjs';
@@ -22,13 +21,14 @@ import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'app-datos-inversion',
   standalone: true,
   imports: [CommonModule, TabMenuModule, FormsModule, ButtonModule, InputTextModule,
     DropdownModule, NroPlacaDirective, InputNumberModule, CalendarModule, FloatLabelModule,
-    InputTextareaModule, ColorPickerModule, LoadingComponent, ToastModule, InputGroupModule, InputGroupAddonModule
+    TextareaModule, ColorPickerModule, LoadingComponent, ToastModule, InputGroupModule, InputGroupAddonModule
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'

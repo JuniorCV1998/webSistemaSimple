@@ -1,0 +1,317 @@
+<div *ngIf="statusRegister" class="card"> <!--  -->
+  <div *ngIf="cargando" class="loading-bar"></div> <!--  -->
+  <div class="flex items-center justify-content-center w-full h-full">
+    <div class="w-full max-w-3xl p-6 bg-white rounded-2xl shadow-lg">
+      <p-stepper [(value)]="activeStep" class="w-full">
+        <p-step-list>
+          <p-step [value]="1">
+            <ng-template #content let-activateCallback="activateCallback" let-value="value">
+              <p-button icon="pi pi-user" [rounded]="true"
+                [severity]="value <= activeStep ? 'success' : 'secondary'" /><!-- (click)="activateCallback()" -->
+            </ng-template>
+          </p-step>
+
+          <p-step [value]="2">
+            <ng-template #content let-activateCallback="activateCallback" let-value="value">
+              <p-button icon="pi pi-at" [rounded]="true"
+                [severity]="value <= activeStep ? 'success' : 'secondary'" /><!-- (click)="activateCallback()" -->
+            </ng-template>
+          </p-step>
+
+          <p-step [value]="3">
+            <ng-template #content let-activateCallback="activateCallback" let-value="value">
+              <p-button icon="pi pi-verified" [rounded]="true" (click)="activateCallback()"
+                [severity]="value <= activeStep ? 'success' : 'secondary'" /><!-- (click)="activateCallback()" -->
+            </ng-template>
+          </p-step>
+        </p-step-list>
+
+        <p-step-panels>
+          <p-step-panel [value]="1">
+            <ng-template #content let-activateCallback="activateCallback">
+              <div class="flex flex-column align-items-center gap-2 mx-auto text-center mb-4" style="max-width: 20rem;">
+                <h2 class="text-xl font-semibold">Ingrese su tipo y número de documento</h2>
+                <p-dropdown [options]="tipoDocs" [(ngModel)]="selectedTipoDoc" optionLabel="descripcionAbrev"
+                  (onChange)="onTipoDocChange()" placeholder="Selecciona Tipo de Documento" class="w-full " />
+                <input appSoloNumeros (ngModelChange)="showMessage=false" *ngIf="selectedTipoDoc!=null"
+                  [(ngModel)]="nroDocumento" pInputText placeholder="Número de Documento" class="w-full" />
+                <span *ngIf="selectedTipoDoc?.codigo === '01' && nroDocumento.length > 8" class="input-fail">El DNI
+                  ingresado supera los 8 dígitos.</span>
+                <span *ngIf="selectedTipoDoc?.codigo === '06' && nroDocumento.length > 11" class="input-fail">El RUC
+                  ingresado supera los 11 dígitos.</span>
+              </div>
+              <div class="flex flex-column align-items-center gap-2 mx-auto text-center">
+                <p-message *ngIf="showMessage" [severity]="severity" size="small">{{message}}</p-message>
+              </div>
+              <div class="flex pt-6 justify-content-end">
+                <p-button (onClick)="buscarCliente(selectedTipoDoc.codigo, nroDocumento, activateCallback)"
+                  label="Siguiente" icon="pi pi-arrow-right" iconPos="right" [disabled]="!isDocumentoValido()"
+                  [ngClass]="{
+                    'btn-disabled': !isDocumentoValido() }" />
+              </div>
+            </ng-template>
+          </p-step-panel>
+
+          <p-step-panel [value]="2">
+            <ng-template #content let-activateCallback="activateCallback">
+              <div class="flex flex-column gap-4 mx-auto text-center" style="max-width: 24rem; min-height: 16rem;">
+                <h2 class="text-xl font-semibold">Hola
+                  <span *ngIf="cliente.codTipoDoc==='01'" class="name">{{cliente.nombres}}</span>
+                  <span *ngIf="cliente.codTipoDoc==='06'" class="name">{{cliente.razonSocial}}</span>
+                  , ingresa tu correo y te crearemos tu código único para que disfrutes del sistema
+                </h2>
+                <div class="flex flex-wrap justify-center gap-3">
+                  <label for="email" class="font-semibold">Correo electrónico</label>
+                  <input id="email" [(ngModel)]="correo" (ngModelChange)="showMessage=false" maxlength="70" pInputText
+                    placeholder="ejemplo@gmail.com" class="w-full" />
+                </div>
+                <div class="flex flex-column align-items-center gap-2 mx-auto text-center">
+                  <p-message *ngIf="showMessage" [severity]="severity" size="small">{{message}}</p-message>
+                </div>
+              </div>
+              <div class="flex pt-6 justify-content-between">
+                <p-button (onClick)="onBack(activateCallback, 1)" label="Atrás" severity="secondary"
+                  icon="pi pi-arrow-left" />
+                <!-- <p-button (onClick)="activateCallback(3)" label="Siguiente" icon="pi pi-arrow-right" iconPos="right" />
+ -->
+                <p-button (onClick)="validarCorreoExistente(correo, activateCallback)" label="Siguiente"
+                  icon="pi pi-arrow-right" iconPos="right" [disabled]="!isCorreoValido()" [ngClass]="{
+                    'btn-disabled': !isCorreoValido() }" />
+              </div>
+            </ng-template>
+          </p-step-panel>
+
+          <p-step-panel [value]="3">
+            <ng-template #content let-activateCallback="activateCallback">
+
+              <div class="flex flex-column align-items-center gap-1 mx-auto text-center"
+                style="max-width: 24rem; min-height: 18rem;">
+
+                <div class="flex flex-column gap-4 align-items-center mode-responsive mb-5">
+                  <span class="font-bold labelCodUnico">{{headerMessage}}</span>
+                  <span [innerHTML]="bodyMessage" class="font-semibold text-gray-500">{{bodyMessage}}</span>
+                  <!-- <span class="font-semibold text-blue-500 cursor-pointer">Ver flujo completo</span> -->
+                </div>
+
+                <!-- SOLO SI YA SE REGISTRO EN EL APP -->
+                <div *ngIf="data?.data?.estado==='I'" class="flex flex-column custom-banner-active mode-responsive mb-3">
+                  <div class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
+                    <h5 class="text-sm font-bold text-green-600 m-0">INICIA SESIÓN</h5>
+                    <h3 class="font-bold text-gray-600 m-0">Descargar APP</h3>
+                  </div>
+                  <div class="flex flex-column justify-content-between align-items-center mb-2">
+                    <p class="font-semibold text-gray-500">Descarga nuestra app desde:</p>
+                    <a href="https://play.google.com/store/apps/details?id=com.ssimple.app&pcampaignid=web_share"
+                      target="_blank">
+                      <lottie-player src="gifs/store/play_store.json" background="transparent" speed="1" loop autoplay
+                        style="width: 150px; cursor: pointer; transition: transform 0.2s;"
+                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                      </lottie-player>
+                    </a>
+                  </div>
+                  <div class="flex flex-column justify-content-between align-items-center mb-2">
+                    <p class="font-semibold text-gray-500">ó</p>
+                    <div class="qr-model">
+                      
+                      <!-- Logo en el centro -->
+                      <img src="logo/logo_ssimple_png.png" alt="Logo" class="logo-center">
+                    </div>
+                    <p class="font-semibold text-gray-500">
+                      Escanea este código con la cámara de tu celular y accede directamente a la app.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- PASOS PARA IR A APP SSIMPLE -->
+                <div *ngIf="data?.data?.estado==='A' || data?.codigo==='SS00RI00'" class="card flex justify-center mode-responsive">
+                  <p-stepper [value]="1" class="w-full">
+                    <p-step-list class="p-step-list">
+                      <p-step [value]="1">Código único</p-step>
+                      <p-step [value]="2">Descargar APP</p-step>
+                      <p-step [value]="3">Activar Cuenta</p-step>
+                    </p-step-list>
+                    <p-step-panels>
+                      <p-step-panel [value]="1">
+                        <ng-template #content let-activateCallback="activateCallback">
+                          <div class="flex flex-column h-48">
+                            <div>
+                              <div class="flex flex-column custom-banner-active mode-responsive mb-3">
+                                <div
+                                  class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
+                                  <h5 class="text-sm font-bold text-green-600 m-0">PASO 1</h5>
+                                  <h3 class="font-bold text-gray-600 m-0">Código único</h3>
+                                </div>
+                                <p class="font-semibold text-gray-500">
+                                  Tu código único es: <br><br>
+                                  <span class="font-bold labelCodUnico">{{ data?.data?.codigo }}</span>
+                                  <!-- <span class="font-bold labelCodUnico">{{ codigoUnico }}</span> -->
+                                </p>
+                                <p class="font-semibold text-gray-500">
+                                  Correo afiliado: <br><br>
+                                  <span class="font-bold labelCodUnico">{{ data?.data?.descripcion }}</span>
+                                  <!-- <span class="font-bold labelCodUnico">{{ 'c******0@gmail.com' }}</span> -->
+                                </p>
+                              </div>
+                            </div>
+                            <div class="flex pt-3 justify-content-end">
+                              <p-button label="Paso 2" icon="pi pi-arrow-right" iconPos="right"
+                                (onClick)="activateCallback(2)" />
+                            </div>
+                          </div>
+                        </ng-template>
+                      </p-step-panel>
+
+                      <p-step-panel [value]="2">
+                        <ng-template #content let-activateCallback="activateCallback">
+                          <div class="flex flex-column h-48">
+                            <div>
+                              <div class="flex flex-column custom-banner-active mode-responsive mb-3">
+                                <div
+                                  class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
+                                  <h5 class="text-sm font-bold text-green-600 m-0">PASO 2</h5>
+                                  <h3 class="font-bold text-gray-600 m-0">Descargar APP</h3>
+                                </div>
+                                <div class="flex flex-column justify-content-between align-items-center mb-2">
+                                  <p class="font-semibold text-gray-500">Descarga nuestra app desde:</p>
+                                  <a href="https://play.google.com/store/apps/details?id=com.ssimple.app&pcampaignid=web_share"
+                                    target="_blank">
+                                    <lottie-player src="gifs/store/play_store.json" background="transparent" speed="1"
+                                      loop autoplay style="width: 150px; cursor: pointer; transition: transform 0.2s;"
+                                      onmouseover="this.style.transform='scale(1.05)'"
+                                      onmouseout="this.style.transform='scale(1)'">
+                                    </lottie-player>
+                                  </a>
+                                </div>
+                                <div class="flex flex-column justify-content-between align-items-center mb-2">
+                                  <p class="font-semibold text-gray-500">ó</p>
+                                  <div class="qr-model">
+                                    
+                                    <!-- Logo en el centro -->
+                                    <img src="logo/logo_ssimple_png.png" alt="Logo" class="logo-center">
+                                  </div>
+                                  <p class="font-semibold text-gray-500">
+                                    Escanea este código con la cámara de tu celular y accede directamente a la app.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex pt-3 justify-content-between">
+                            <p-button label="Paso 1" severity="secondary" icon="pi pi-arrow-left"
+                              (onClick)="activateCallback(1)" />
+                            <p-button label="Paso 3" icon="pi pi-arrow-right" iconPos="right"
+                              (onClick)="activateCallback(3)" />
+                          </div>
+                        </ng-template>
+                      </p-step-panel>
+
+                      <p-step-panel [value]="3">
+                        <ng-template #content let-activateCallback="activateCallback">
+                          <div class="flex flex-column h-48">
+                            <div>
+                              <div class="flex flex-column custom-banner-active mode-responsive">
+                                <div
+                                  class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
+                                  <h5 class="text-sm font-bold text-green-600 m-0">PASO 3</h5>
+                                  <h3 class="font-bold text-gray-600 m-0">Activar Cuenta</h3>
+                                </div>
+
+                                <p *ngIf="nroPantalla==1" class="font-semibold text-gray-500">
+                                  1. Abre la aplicación y toca el botón “<span class="font-bold text-blue-400">¡Crea hoy!</span>”.
+                                </p>
+                                <p *ngIf="nroPantalla==2" class="font-semibold text-gray-500">
+                                  2. Ingresa tu <span class="font-bold text-green-400">correo electrónico</span>, crea
+                                  tu <span class="font-bold text-green-400">contraseña</span> e ingresa el <span
+                                    class="font-bold text-green-400">código único</span> que acabas de crear.
+                                </p>
+
+                                <div class="flex flex-row justify-content-center align-items-center mb-2">
+                                  <div class="flex w-3 flex-column justify-content-between align-items-center">
+                                    <p-button *ngIf="nroPantalla==2" (onClick)="updatePantalla(1)"
+                                      icon="pi pi-chevron-left" [rounded]="true" [text]="true" [raised]="true"
+                                      severity="info" />
+                                  </div>
+                                  <div class="flex w-6 image-container mb-2">
+                                    <img [class.active]="nroPantalla==1" src="images/registrar/crearhoy.png"
+                                      alt="crear-hoy-ssimple" (click)="openLightbox('images/registrar/crearhoy.png')">
+                                    <img [class.active]="nroPantalla==2" src="images/registrar/unete.png"
+                                      alt="unete-ssimple" (click)="openLightbox('images/registrar/unete.png')">
+                                  </div>
+                                  <!-- Lightbox -->
+                                  <div class="lightbox" *ngIf="lightboxImage" (click)="closeLightbox()">
+                                    <img [src]="lightboxImage" alt="Imagen grande" style="background-color: no;">
+                                  </div>
+                                  <div class="flex w-3 flex-column justify-content-between align-items-center">
+                                    <p-button *ngIf="nroPantalla==1" (onClick)="updatePantalla(2)"
+                                      icon="pi pi-chevron-right" [rounded]="true" [text]="true" [raised]="true"
+                                      severity="info" />
+                                  </div>
+                                </div>
+                                <div *ngIf="nroPantalla==2" class="flex flex-column gap-3 align-items-center">
+                                  <!-- *ngIf="nroPantalla==2" -->
+                                  <span class="font-bold labelCodUnico">{{ '¡Listo!' }}</span>
+                                  <span class="font-semibold text-gray-500">Completa el registro y empieza a disfrutar
+                                    de la aplicación.</span>
+                                  <span class="font-semibold text-blue-500 cursor-pointer">Ver flujo completo</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex pt-3 justify-content-start">
+                            <p-button label="Paso 2" icon="pi pi-arrow-left" iconPos="right"
+                              (onClick)="activateCallback(2)" />
+                          </div>
+                        </ng-template>
+                      </p-step-panel>
+                    </p-step-panels>
+                  </p-stepper>
+                </div>
+
+              </div>
+
+              <div class="flex pt-6 justify-start">
+                <p-button (onClick)="onBack(activateCallback, 2)" label="Atrás" severity="secondary"
+                  icon="pi pi-arrow-left" />
+              </div>
+            </ng-template>
+          </p-step-panel>
+
+        </p-step-panels>
+      </p-stepper>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!statusRegister" class="flex flex-column gap-1 justify-content-center align-items-center text-center"
+  style="padding-top: 40px;">
+  <p-message severity="info" icon="pi pi-send" text="Por ahora no es posible generar un código único."
+    styleClass="h-full" />
+  <!-- <h2 class="text-base font-semibold text-gray-600">Muy pronto habilitaremos nuevamente el servicio para que puedas
+    crear más.</h2> -->
+  <lottie-player src="gifs/response/working.json" background="transparent" speed="1"
+    style="width: 90%; height: 30%; max-width: 500px; margin-bottom: 20px;" loop autoplay>
+  </lottie-player>
+  
+
+  <h2 class="text-base font-semibold text-gray-600">Si deseas una atención preferencial y generar tu código directamente, contáctanos:</h2>
+  <div class="flex flex-row gap-3 justify-content-center mt-3">
+    <!-- Botón correo -->
+    <a href="mailto:generalservicesjyr@gmail.com">
+      <p-button 
+        label="Correo" 
+        icon="pi pi-envelope" 
+        severity="info" 
+        [raised]="true" />
+    </a>
+
+  <!-- Botón WhatsApp -->
+  <a href="https://wa.me/51920605673?text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20generar%20mi%20c%C3%B3digo%20%C3%BAnico%20de%20manera%20preferencial." target="_blank">
+    <p-button 
+      label="WhatsApp" 
+      icon="pi pi-whatsapp" 
+      severity="success" 
+      [raised]="true" />
+  </a>
+</div>
+
+</div>

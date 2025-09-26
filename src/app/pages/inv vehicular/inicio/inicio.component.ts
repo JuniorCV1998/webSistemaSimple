@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TabMenuModule } from 'primeng/tabmenu';
@@ -12,7 +12,7 @@ import { TempDataService } from '../../../core/services/temp-data.service';
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule,SkeletonModule,TabMenuModule,ToastModule],
+  imports: [CommonModule,SkeletonModule,TabMenuModule,ToastModule,RouterModule],
   providers: [MessageService],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -16,7 +16,9 @@ import { TempDataService } from '../../../core/services/temp-data.service';
 @Component({
   selector: 'app-cliente',
   standalone: true,
-  imports: [CommonModule,TabMenuModule, TabViewModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule],
+  imports: [CommonModule,TabMenuModule, TabViewModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule,
+    RouterModule
+  ],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'
 })

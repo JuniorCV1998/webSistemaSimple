@@ -1,27 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputTextModule } from 'primeng/inputtext';
-import { MessageModule } from 'primeng/message';
-import { PasswordModule } from 'primeng/password';
-import { Stepper, StepperModule, StepperPanel } from 'primeng/stepper';
-import { ToggleButtonModule } from 'primeng/togglebutton';
+
 import { catchError, finalize, of, throwError } from 'rxjs';
 import { SoloNumerosDirective } from '../../../../components/directives/solo-numeros.directive';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { ClienteJuridico, ClienteNatural } from '../../../../interfaces/cliente/objeto-cliente';
+import { SelectModule } from 'primeng/select';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { PasswordModule } from 'primeng/password';
+import { StepperModule } from 'primeng/stepper';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+
 
 @Component({
   selector: 'app-codigo-unico',
   standalone: true,
-  imports: [ButtonModule, StepperModule],
+  imports: [StepperModule,
+      ButtonModule,
+      InputTextModule,
+      ToggleButtonModule,
+      PasswordModule,
+      CommonModule,FormsModule, SelectModule,
+      MessageModule, SoloNumerosDirective],
   /* providers: [Stepper, StepperModule], */
   templateUrl: './codigo-unico.component.html',
   styleUrl: './codigo-unico.component.scss',
-  schemas: []
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
   
 })
 export default class CodigoUnicoComponent {

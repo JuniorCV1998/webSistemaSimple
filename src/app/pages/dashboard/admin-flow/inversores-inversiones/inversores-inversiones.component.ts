@@ -12,12 +12,13 @@ import { AdminService } from '../../../../core/services/admin/admin.service';
 import { catchError, finalize, of, throwError } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { ErrorGeneralComponent } from '../../../system/errores/error-general/error-general.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-inversores-inversiones',
   standalone: true,
   imports: [CommonModule,TabMenuModule, TabViewModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule,MessageModule,
-            FormsModule, SelectButtonModule, ErrorGeneralComponent     
+            FormsModule, SelectButtonModule, ErrorGeneralComponent, RouterModule     
   ],
   templateUrl: './inversores-inversiones.component.html',
   styleUrl: './inversores-inversiones.component.scss'

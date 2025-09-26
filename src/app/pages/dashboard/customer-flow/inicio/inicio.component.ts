@@ -5,13 +5,13 @@ import { GetInversionService } from '../../../../core/services/inversion/get-inv
 import { finalize } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TabMenuModule } from 'primeng/tabmenu';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule,SkeletonModule,TabMenuModule],
+  imports: [CommonModule,SkeletonModule,TabMenuModule,RouterModule],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })

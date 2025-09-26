@@ -1,27 +1,29 @@
-import { Component, ViewChild } from '@angular/core';
+
 import { CollectionReport } from '../../../interfaces/collection-report/collection-report';
-import { TableModule } from 'primeng/table';
-import { CommonModule } from '@angular/common';
-import { TabMenuModule } from 'primeng/tabmenu';
 import { ListEmptyNoneComponent } from '../../../components/resources/list-empty-none/list-empty-none.component';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { catchError, delay, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { FormsModule } from '@angular/forms';
-import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService } from 'primeng/dynamicdialog';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TableModule } from 'primeng/table';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { ToastModule } from 'primeng/toast';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-collection-report',
   standalone: true,
   imports: [TableModule, CommonModule, TabMenuModule, ListEmptyNoneComponent, LoadingComponent,SelectButtonModule,
-    FormsModule,ToastModule,ConfirmDialogModule,CalendarModule],
+    FormsModule,ToastModule,ConfirmDialogModule,CalendarModule,RouterModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './collection-report.component.html',
   styleUrl: './collection-report.component.scss'
@@ -58,6 +60,7 @@ export default class CollectionReportComponent {
     private getInversionService: GetInversionService,
     public dialogService: DialogService,
     private messageService: MessageService,
+    private router: Router,
     private confirmationService: ConfirmationService,
   ){}
 

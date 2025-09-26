@@ -1,26 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { InputOtpModule } from 'primeng/inputotp';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { NroCelularDirective } from '../../../components/directives/nro-celular.directive';
 import { SoloLetrasDirective } from '../../../components/directives/solo-letras.directive';
-import { CardModule } from 'primeng/card';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
-import { DialogService } from 'primeng/dynamicdialog';
 import { RegisterService } from '../../../core/services/auth/register/register.service';
 import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { ConfirmationService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService } from 'primeng/dynamicdialog';
+import { InputOtpModule } from 'primeng/inputotp';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-register-personal',

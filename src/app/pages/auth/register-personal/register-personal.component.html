@@ -165,7 +165,7 @@
     <!-- FIN TERMINOS Y CONDICIONES -->
 
     <p-confirmDialog #cd>
-        <ng-template pTemplate="headless" let-message>
+        <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
             <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                 <div *ngIf="!confirmCase" class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
                     <img src="assets/images/logos/sello_ssimple.png" width="100" height="100">
@@ -203,13 +203,13 @@
                     <button 
                         pButton 
                         label="Cancelar" 
-                        (click)="cd.reject()" 
+                        (onClick)="onReject()"
                         class="p-button-outlined w-8rem ">
                     </button>
                     <button 
                         pButton 
                         label="Confirmar" 
-                        (click)="cd.accept()" 
+                        (onClick)="onAccept()" 
                         class="w-8rem">
                     </button>
                 </div>
@@ -217,7 +217,7 @@
                     <button 
                         pButton 
                         label="Aceptar" 
-                        (click)="cd.accept()" 
+                        (onClick)="onAccept()" 
                         class="w-8rem">
                     </button>
                 </div>

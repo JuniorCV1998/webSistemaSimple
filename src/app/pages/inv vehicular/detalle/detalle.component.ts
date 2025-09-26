@@ -1,23 +1,24 @@
-import { Component, ViewChild } from '@angular/core';
+
 import { InversionVehService } from '../../../core/services/inversion-veh/inversion-veh.service';
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { SkeletonModule } from 'primeng/skeleton';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, delay, finalize, of } from 'rxjs';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { Constantes } from '../../../core/constant/Constantes';
-import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
-import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { TempDataService } from '../../../core/services/temp-data.service';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-detalle',

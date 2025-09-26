@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import confetti from 'canvas-confetti';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -14,7 +14,7 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 @Component({
   selector: 'app-registered-inv',
   standalone: true,
-  imports: [LoadingComponent, LoadingComponent, CommonModule, TabMenuModule, ButtonModule],
+  imports: [LoadingComponent, LoadingComponent, CommonModule, TabMenuModule, ButtonModule,RouterModule],
   templateUrl: './registered-inv.component.html',
   styleUrl: './registered-inv.component.scss'
 })

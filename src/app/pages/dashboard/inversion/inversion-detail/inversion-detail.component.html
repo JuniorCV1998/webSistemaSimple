@@ -260,7 +260,7 @@
          </div>
 
          <p-confirmDialog #delete_inv key="delete_inv">
-            <ng-template pTemplate="headless" let-message>
+            <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <i class="pi pi-trash"></i>
@@ -281,14 +281,14 @@
                         <button 
                             pButton 
                             label="Cancelar" 
-                            (click)="delete_inv.reject()" 
+                            (onClick)="onReject()" 
                             class="p-button-outlined w-8rem ">
                         </button>
                         <button 
                         severity="danger"
                             pButton 
                             label="Eliminar" 
-                            (click)="delete_inv.accept()" 
+                            (onClick)="onAccept()" 
                             class=" w-8rem">
                         </button>
                     </div>
@@ -335,7 +335,7 @@
          <!-- <div style="height: 40px;"></div> -->
 
         <p-confirmDialog #cdpago key="cdpago">
-            <ng-template pTemplate="headless" let-message>
+            <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <img src="assets/images/logos/sello_ssimple.png" width="110" height="110">
@@ -358,13 +358,13 @@
                         <button 
                             pButton 
                             label="Cancelar" 
-                            (click)="cdpago.reject()" 
+                            (onClick)="onReject()" 
                             class="p-button-outlined w-8rem ">
                         </button>
                         <button 
                             pButton 
                             label="Guardar" 
-                            (click)="cdpago.accept()" 
+                            (onClick)="onAccept()" 
                             class="w-8rem">
                         </button>
                         
@@ -377,7 +377,7 @@
         [blockScroll]="true"
         [baseZIndex]="10000" 
         >
-            <ng-template pTemplate="headless" let-message>
+            <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <img src="assets/images/logos/renovacion.png" width="110" height="110">
@@ -456,13 +456,13 @@
                         <button 
                             pButton 
                             label="Cancelar" 
-                            (click)="cdrenovacion.reject()" 
+                            (onClick)="onReject()"
                             class="p-button-outlined w-8rem ">
                         </button>
                         <button 
                             pButton 
                             label="Siguiente" 
-                            (click)="cdrenovacion.accept()" 
+                            (onClick)="onAccept()"
                             class="w-8rem">
                         </button>
                         
@@ -475,7 +475,7 @@
         [blockScroll]="true"
         [baseZIndex]="10000" 
         >
-            <ng-template pTemplate="headless" let-message>
+            <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <img src="assets/images/logos/renovacion.png" width="110" height="110">
@@ -551,13 +551,13 @@
                         <button 
                             pButton 
                             label="Volver" 
-                            (click)="cdrenovacion_ok.reject()" 
+                            (onClick)="onReject()"
                             class="p-button-outlined w-8rem ">
                         </button>
                         <button 
                             pButton 
                             label="Registrar" 
-                            (click)="cdrenovacion_ok.accept()" 
+                            (onClick)="onAccept()"
                             class="w-8rem">
                         </button>
                         
@@ -567,7 +567,7 @@
         </p-confirmDialog>
 
         <p-confirmDialog #reno_cli key="reno_cli">
-            <ng-template pTemplate="headless" let-message>
+            <ng-template pTemplate="headless" let-message let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <img src="assets/images/logos/renovacion.png" width="110" height="110">
@@ -582,7 +582,7 @@
                         <button 
                             pButton 
                             label="Aceptar" 
-                            (click)="reno_cli.reject()" 
+                            (onClick)="onReject()"
                             class="p-button-outlined w-16rem ">
                         </button>
                         
