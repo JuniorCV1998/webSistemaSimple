@@ -19,12 +19,16 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
+import { TwoDigitsPipe } from '../../../core/pipes/two-digits.pipe';
+import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
+import { DatePicker } from 'primeng/datepicker';
+import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-detalle',
   standalone: true,
   imports: [CommonModule,SkeletonModule,TabMenuModule,LoadingComponent,ButtonModule,ToastModule,ConfirmDialogModule,
-    CalendarModule,FormsModule,  FloatLabelModule, InputNumberModule],
+    CalendarModule,FormsModule,  FloatLabelModule, InputNumberModule,FormatNumberPipe, TwoDigitsPipe,DatePicker,FormatDatePipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './detalle.component.html',
   styleUrl: './detalle.component.scss'

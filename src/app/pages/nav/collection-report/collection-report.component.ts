@@ -8,7 +8,7 @@ import { Constantes } from '../../../core/constant/Constantes';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -18,15 +18,22 @@ import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { Router, RouterModule } from '@angular/router';
+import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
+import { DatePicker } from 'primeng/datepicker';
+import { ButtonModule } from 'primeng/button';
+import { TwoDigitsPipe } from '../../../core/pipes/two-digits.pipe';
 
 @Component({
   selector: 'app-collection-report',
   standalone: true,
   imports: [TableModule, CommonModule, TabMenuModule, ListEmptyNoneComponent, LoadingComponent,SelectButtonModule,
-    FormsModule,ToastModule,ConfirmDialogModule,CalendarModule,RouterModule],
+    FormsModule,ToastModule,ConfirmDialogModule,CalendarModule,RouterModule,FormatNumberPipe,DatePicker, ButtonModule,
+    TwoDigitsPipe
+  ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './collection-report.component.html',
-  styleUrl: './collection-report.component.scss'
+  styleUrl: './collection-report.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export default class CollectionReportComponent {
 

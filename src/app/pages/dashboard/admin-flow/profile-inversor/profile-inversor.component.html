@@ -1,7 +1,7 @@
 <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
 
     <div class="text-center mb-4">
-        <div class="text-700 text-2xl mb-3 label-title">Datos del Inversor</div>
+        <div class=" text-2xl mb-3 label-title">Datos del Inversor</div>
     </div>
 
     <!-- Datos Personales -->
@@ -36,15 +36,15 @@
             <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-phone icon-span-gray"></i>
                 <span
-                    class="text-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(inversorData?.persona?.celular)}}</span>
+                    class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(inversorData?.persona?.celular)}}</span>
             </div>
             <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-500 font-medium line-height-3 w-full">{{'jose@oexample.com'}}</span>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{'jose@oexample.com'}}</span>
             </div> -->
             <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-map-marker icon-span-gray"></i>
-                <span class="text-500 font-medium line-height-3 w-full">{{inversorData.persona.direccion}}</span>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{inversorData.persona.direccion}}</span>
             </div>
         </div>
     </div>
@@ -58,15 +58,15 @@
         <div class="flex flex-column gap-2 user-info ">
             <div class="flex flex-row justify-content-between align-items-center gap-2">
                 <!-- <i class="pi pi-phone icon-span-gray"></i> -->
-                <label class="w-6  text-500 font-medium line-height-3 w-full">Código Único</label>
+                <label class="w-6  text-gray-500 font-medium line-height-3 w-full">Código Único</label>
                 <span class="flex w-6 labelCodUnico justify-content-end"><b>{{inversorData.codUnico}}</b></span>
             </div>
             <div class="flex flex-row justify-content-between align-items-center gap-2">
                 <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-500 font-medium line-height-3 justify-content-end">{{inversorData.correo}}</span>
+                <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{inversorData.correo}}</span>
             </div>
             <div class="flex flex-row justify-content-between align-items-center gap-2">
-                <label class="w-5  text-500 font-medium line-height-3 w-full">Acceso</label>
+                <label class="w-5  text-gray-500 font-medium line-height-3 w-full">Acceso</label>
                 <div class="toggle">
                     <input type="checkbox" [checked]="statusActivo" (change)="onToggleChange($event)" id="customToggle"
                         class="toggle-input">
@@ -93,11 +93,11 @@
         <div class="flex flex-column gap-2 user-info">
             <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
                 <!-- <i class="pi pi-calendar icon-span-gray"></i> -->
-                <label class="w-8  text-500 font-medium line-height-3 w-full">Tipo de Membresía</label>
+                <label class="w-8  text-gray-500 font-medium line-height-3 w-full">Tipo de Membresía</label>
                 <span class="w-7 labelCodUnico"><b>{{inversorData.membresia.descTipoMembresia}}</b></span>
             </div>
             <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <label class="w-8 text-500 font-medium line-height-3 w-full">Estado de Membresía</label>
+                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Estado de Membresía</label>
                 <span class="w-4" [ngClass]="{
                     'txt-green': inversorData.membresia.codMembresia === 'ACT',
                     'txt-orange': inversorData.membresia.codMembresia === 'PEX',
@@ -105,7 +105,7 @@
                 }"><b>{{inversorData.membresia.descCodMembresia}}</b></span>
             </div>
             <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <label class="w-8 text-500 font-medium line-height-3 w-full">Días restantes</label>
+                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Días restantes</label>
                 <span class="w-4" [ngClass]="{
                     'txt-green': inversorData.membresia.codMembresia === 'ACT',
                     'txt-orange': inversorData.membresia.codMembresia === 'PEX',
@@ -113,7 +113,7 @@
                 }"><b>{{inversorData.membresia.diasRestantes}}</b></span>
             </div>
             <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-500 font-medium line-height-3">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
                     <i class="pi pi-calendar icon-span-gray"></i>
                     <label>Vencimiento</label>
                 </div>
@@ -125,20 +125,20 @@
             </div>
             <div *ngIf="inversorData.membresia.fechaActualizacion!==''"
                 class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-500 font-medium line-height-3">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
                     <i class="pi pi-calendar icon-span-gray"></i>
                     <label>Actualización</label>
                 </div>
                 <span
-                    class="w-6 text-center text-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActualizacion}}</span>
+                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActualizacion}}</span>
             </div>
             <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-500 font-medium line-height-3">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
                     <i class="pi pi-calendar icon-span-gray"></i>
                     <label>Activación</label>
                 </div>
                 <span
-                    class="w-6 text-center text-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActivacion}}</span>
+                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActivacion}}</span>
             </div>
         </div>
     </div>
@@ -154,15 +154,15 @@
                 </span>
 
                 <div class="card flex flex-column align-items-center gap-2 p-2 rounded shadow-md bg-white w-80">
-                    <h3 class="text-lg font-semibold text-gray-700">Extender Membresía</h3>
+                    <h3 class="text-lg font-semibold text-gray-500">Extender Membresía</h3>
                     <!-- Slider -->
                     <input type="range" min="1" max="3" (ngModelChange)="actualizarNuevaFecha()" step="1" [(ngModel)]="meses" class="slider">
                     <!-- Meses seleccionados -->
-                    <p class="text-gray-600 text-center">
+                    <p class="text-gray-500 text-center">
                         <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
                     </p>
                     <!-- Monto a pagar -->
-                     <h3 class="text-lg font-semibold text-gray-700">Monto a recaudar (S/.)</h3>
+                     <h3 class="text-lg font-semibold text-gray-500">Monto a recaudar (S/.)</h3>
                         <div class="flex w-full flex-column align-items-center justify-content-center mb-3 gap-2">
                             <p-inputNumber
                             [(ngModel)]="montoPago"

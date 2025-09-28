@@ -11,11 +11,12 @@ import { Constantes } from '../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
 import { LoginService } from '../../../core/services/auth/login/login.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [TabMenuModule,CommonModule,TableModule,LoadingComponent,SkeletonModule,RouterModule],
+  imports: [TabMenuModule,CommonModule,TableModule,LoadingComponent,SkeletonModule,RouterModule,FormatNumberPipe],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })

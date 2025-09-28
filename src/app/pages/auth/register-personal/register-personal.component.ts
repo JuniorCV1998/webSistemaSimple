@@ -131,7 +131,7 @@ export default class RegisterPersonalComponent {
           if (resp?.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord == 1) {
             sessionStorage.setItem('emailCreate',resp.data);
             this.confirmCase = false;
-            this.confirm(resp.message, Constantes.CD_BODY_MSG_BNV).then((result) => {
+            this.confirm("¡Bienvenido!", Constantes.CD_BODY_MSG_BNV).then((result) => {
                 this.router.navigate(['login']);
             });
           } else this.show(Constantes.MSG_500, Constantes.MSG_H_500, true);
@@ -146,6 +146,7 @@ export default class RegisterPersonalComponent {
       setTimeout(() => {
         this.loadingComponent.hide();
         this.confirmationService.confirm({
+            key: 'cd',
             header: header,
             message: body,
             accept: () => {

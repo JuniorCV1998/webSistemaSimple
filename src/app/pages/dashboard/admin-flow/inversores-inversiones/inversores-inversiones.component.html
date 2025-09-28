@@ -7,11 +7,11 @@
   <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
     <div class="text-center mb-4">
-        <div class="text-700 text-2xl mb-3 label-title">Lista de inversores</div>
+        <div class="text-2xl mb-3 label-title">Lista de inversores</div>
     </div>
 
     <div class="flex flex-row w-full justify-content-between mb-3">
-        <span class="text-500 font-medium line-height-3 w-full">{{descripcion}}</span>
+        <span class="text-gray-500 font-medium line-height-3 w-full">{{descripcion}}</span>
     </div>
 
     <div class="relative w-full mb-2">
@@ -48,7 +48,7 @@
     <!-- Filtrar inversor por caracteristicas -->
     <div *ngIf="busqueda==='' && !isLoading && datosServicio">
         <div class="flex flex-row w-full mb-3">
-            <span class="flex flex-row justify-content-center align-items-center text-500 font-medium line-height-3 text-center w-full gap-1"><i class="pi pi-filter"></i>Filtros</span>
+            <span class="flex flex-row justify-content-center align-items-center text-gray-500 font-medium line-height-3 text-center w-full gap-1"><i class="pi pi-filter"></i>Filtros</span>
         </div>
 
         <div class="flex flex-row justify-content-center items-center gap-2 mb-4">

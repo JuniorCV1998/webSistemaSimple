@@ -1,11 +1,11 @@
 <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
     <div class="text-center mb-4">
-        <div class="text-700 text-2xl mb-3 label-title">Crédito Vehicular</div>
+        <div class=" text-2xl mb-3 label-title">Crédito Vehicular</div>
     </div>
 
     <div class="flex flex-row w-full justify-content-between mb-5">
-        <span class="text-500 font-medium line-height-3 text-left w-10">Tus inversiones vehiculares</span>
+        <span class="text-gray-500 font-medium line-height-3 text-left w-10">Tus inversiones vehiculares</span>
         <i *ngIf="perfil=='INV'" class="pi pi-plus-circle icon-span w-2 text-center" (click)="selectClient()"></i>
     </div>
 
@@ -26,13 +26,13 @@
                         <div class="flex w-5 color2" [ngStyle]="{'background-color': inversion.color2}"></div>
                     </div>
                 </div>
-                <div class="flex flex-column gap-1" [ngClass]="perfil=='INV'?'w-6':'w-10'">
+                <div class="flex w-7 flex-column gap-1" [ngClass]="perfil=='INV'?'w-6':'w-10'">
                     <span class="span-nombre">{{inversion.fullName}}</span>
                     <span class="span-desc">{{inversion.descripcion}}</span>
                     <span class="span-fecha">{{inversion.fechaActualizado}}</span>
                 </div>
-                <div *ngIf="perfil=='INV'" class="flex flex-column w-full align-items-center gap-1">
-                    <span class="span-monto">S/{{inversion.totalPagado | number:'1.2-2'}}</span>
+                <div *ngIf="perfil=='INV'" class="flex flex-column w-3 align-items-center gap-1">
+                    <span class="span-monto">S/{{inversion.totalPagado | formatNumber}}</span>
                     <span class="span-desc">Recaudado</span>
                 </div>
             </div>

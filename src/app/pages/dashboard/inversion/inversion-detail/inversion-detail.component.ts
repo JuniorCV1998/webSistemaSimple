@@ -10,7 +10,7 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CarouselModule } from 'primeng/carousel';
@@ -18,16 +18,20 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { MessageModule } from 'primeng/message';
+import { Message, MessageModule } from 'primeng/message';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { TextareaModule } from 'primeng/textarea';
+import { TwoDigitsPipe } from '../../../../core/pipes/two-digits.pipe';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { DatePicker } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,ConfirmDialogModule,CalendarModule,FormsModule,
-    LoadingComponent,CarouselModule,FloatLabelModule,TextareaModule,CheckboxModule,MessageModule
+    LoadingComponent,CarouselModule,FloatLabelModule,TextareaModule,CheckboxModule,FormatNumberPipe,
+    TwoDigitsPipe,DatePicker,Message,RouterLink
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
@@ -59,7 +63,9 @@ export default class InversionDetailComponent {
   //Renovacion
   //fecha inicio y fin
   date1: Date = new Date();
+  date1Show: string = ''; 
   date2: Date | null = null;
+  date2Show: string = '';
   showComent: number | null = null;
   txtComentario: string = "";
   valorCuota: number = 0;
@@ -273,6 +279,8 @@ export default class InversionDetailComponent {
     .subscribe((resp: any)=> { 
       if(resp.codigo===Constantes.CODIGO_STATUS_202 || resp.codigo===Constantes.STATUS_SUCCESS_RI ) {
         this.valorCuota = resp.data.valorCuota;
+        this.date1Show = resp.data.fechaInicio;
+        this.date2Show = resp.data.fechaFin;
         this.messageService.add({severity: 'success', summary: 'Renovar préstamo', detail: resp.descripcion, life: 3000
         });
         if(validado) {

@@ -11,11 +11,12 @@ import { InversionVehService } from '../../../../core/services/inversion-veh/inv
 import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { ButtonModule } from 'primeng/button';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-confirm-inv',
   standalone: true,
-  imports: [LoadingComponent, ToastModule, CommonModule, ButtonModule],
+  imports: [LoadingComponent, ToastModule, CommonModule, ButtonModule,FormatNumberPipe],
   templateUrl: './confirm-inv.component.html',
   styleUrl: './confirm-inv.component.scss'
 })

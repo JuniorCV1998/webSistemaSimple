@@ -22,13 +22,17 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { TextareaModule } from 'primeng/textarea';
+import { DatePicker } from 'primeng/datepicker';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-datos-inversion',
   standalone: true,
   imports: [CommonModule, TabMenuModule, FormsModule, ButtonModule, InputTextModule,
     DropdownModule, NroPlacaDirective, InputNumberModule, CalendarModule, FloatLabelModule,
-    TextareaModule, ColorPickerModule, LoadingComponent, ToastModule, InputGroupModule, InputGroupAddonModule
+    TextareaModule, ColorPickerModule, LoadingComponent, ToastModule, InputGroupModule, InputGroupAddonModule,
+    DatePicker, FormatNumberPipe,Select
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'

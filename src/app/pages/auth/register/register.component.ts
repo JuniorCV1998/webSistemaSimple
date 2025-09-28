@@ -6,7 +6,7 @@ import { PasswordModule } from 'primeng/password';
 import { CommonModule } from '@angular/common';
 import { InputOtpModule } from 'primeng/inputotp';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { RegisterService } from '../../../core/services/auth/register/register.service';
 import { LoadingComponent } from '../../modal/loading/loading.component';
@@ -20,7 +20,7 @@ import { SoloNumerosDirective } from '../../../components/directives/solo-numero
   selector: 'app-register',
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,CommonModule,InputOtpModule,FormsModule,
-    LoadingComponent,SoloNumerosDirective
+    LoadingComponent,SoloNumerosDirective,RouterModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'

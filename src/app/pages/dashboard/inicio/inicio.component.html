@@ -3,7 +3,7 @@
     <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
         <div class="text-center mb-5">
             <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola, {{nombreUsuario}}</label></div>
-            <span class="text-600 font-medium line-height-3">¿Qué hacemos hoy?</span>
+            <span class="text-gray-500 font-medium line-height-3">¿Qué hacemos hoy?</span>
         </div>
 
         <div class="flex flex-row gap-2 align-items-center justify-content-center mb-1">
@@ -35,7 +35,7 @@
                     <span class="txt-span">Saldo por cobrar</span>
                 </div>
                 <div class="flex w-5 justify-content-center">
-                    <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">{{ monto | number:'1.2-2' }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
+                    <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">S/ {{ monto | formatNumber }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
                     <span *ngIf="!mostrar" class="txt-span">********</span>
                 </div>
 
@@ -68,7 +68,7 @@
                                                 <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
                                             </div>
                                             <div class="flex flex-column justify-content-center w-5 ">
-                                                <span class="flex justify-content-end span-monto" >{{ inversion.monto | number:'1.2-2' }}</span>
+                                                <span class="flex justify-content-end span-monto" >S/ {{ inversion.monto | formatNumber }}</span>
                                             </div>
                                         </div>
                                     </div>

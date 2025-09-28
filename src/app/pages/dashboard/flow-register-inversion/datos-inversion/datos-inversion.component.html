@@ -3,13 +3,13 @@
     <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         <div class="text-center mb-5">
-            <div id="div_line_bootom" class="text-700 text-2xl mb-3 label-title">Datos de la inversión</div>
+            <div id="div_line_bootom" class=" text-2xl mb-3 label-title">Datos de la inversión</div>
         </div>
         
         <div>
             <!-- Monto a invertir -->
              <div class="classInputMonto mb-3">
-                <label for="monto" class="block text-600 font-medium mb-2">Monto</label>
+                <label for="monto" class="block text-600 font-medium mb-2 title-input">Monto</label>
                 <p-inputNumber
                 [(ngModel)]="valueMonto"
                  id="monto" 
@@ -18,13 +18,13 @@
                  placeholder="Ingrese monto..." class="w-full mb-1"
                  [min]="objValidationValues.montoLimit.montoMin" [max]="objValidationValues.montoLimit.montoMax"
                  />
-                <span *ngIf="valueMonto !== null && valueMonto < objValidationValues.montoLimit.montoMin" class="input-fail">El monto no puede ser menor a S/ {{objValidationValues.montoLimit.montoMin | number:'1.2-2'}}.</span>
-                <span *ngIf="valueMonto !== null && valueMonto > objValidationValues.montoLimit.montoMax" class="input-fail">El monto no puede ser mayor a S/ {{objValidationValues.montoLimit.montoMax | number:'1.0-0'}}.</span>
+                <span *ngIf="valueMonto !== null && valueMonto < objValidationValues.montoLimit.montoMin" class="input-fail">El monto no puede ser menor a S/ {{objValidationValues.montoLimit.montoMin | formatNumber}}.</span>
+                <span *ngIf="valueMonto !== null && valueMonto > objValidationValues.montoLimit.montoMax" class="input-fail">El monto no puede ser mayor a S/ {{objValidationValues.montoLimit.montoMax | formatNumber}}.</span>
              </div>
             
             
              <!-- cantidad de cuotas -->
-             <label for="cuotas" class="block text-600 font-medium mb-2">Nro. de cuotas</label>
+             <label for="cuotas" class="block text-600 font-medium mb-2 title-input">Nro. de cuotas</label>
              <div class="button-container mb-3 slider-container">
                 <div class="flex flex-row justify-content-between slide">
                     <div *ngFor="let cuota of cuotasDiarias; let i = index"  class="flex flex-column justify-content-center gap-2">
@@ -56,7 +56,7 @@
 
 
             <!-- valor de interes a aplicar -->
-            <label for="interes" class="block text-600 font-medium mb-2">Interés</label>
+            <label for="interes" class="block text-600 font-medium mb-2 title-input">Interés</label>
             <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3">
                 <div class="flex flex-column w-full">
                     <div class="card flex flex-column align-items-center w-full">
@@ -92,8 +92,8 @@
                         [min]="objValidationValues.interesLimit.interesMin" [max]="objValidationValues.interesLimit.interesMax"
                         [disabled]="!statusPersonalizado"
                         />
-                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso < objValidationValues.interesLimit.interesMin" class="input-fail">El interés no puede ser menor a S/ {{objValidationValues.interesLimit.interesMin | number:'1.2-2'}}.</span>
-                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso > objValidationValues.interesLimit.interesMax" class="input-fail">El interés no puede ser mayor a S/ {{objValidationValues.interesLimit.interesMax | number:'1.0-0'}}.</span>
+                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso < objValidationValues.interesLimit.interesMin" class="input-fail">El interés no puede ser menor a {{objValidationValues.interesLimit.interesMin}}%.</span>
+                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso > objValidationValues.interesLimit.interesMax" class="input-fail">El interés no puede ser mayor a {{objValidationValues.interesLimit.interesMax}}%.</span>
                 </div>
             </div>
 
@@ -117,11 +117,11 @@
                 <div class="flex flex-column w-full">
                     <div class="flex flex-row gap-2 align-items-center justify-content-center">
                         <div class="flex flex-column justify-content-center w-full custom-banner">
-                            <span class="text-center mb-1 text-500 font-medium">Valor de la cuota</span>
+                            <span class="text-center mb-1 text-gray-500 font-medium">Valor de la cuota</span>
                             <div class="flex flex-column justify-content-between align-items-center w-full">
                                 <span class="w-8">S/</span>
                                 <span class="text-4xl font-medium" style="word-break: break-all;">
-                                    <div *ngIf="cuotaCargada">{{ valorCuota | number:'1.2-2' }}</div>
+                                    <div *ngIf="cuotaCargada">{{ valorCuota | formatNumber  }}</div>
                                     <i *ngIf="!cuotaCargada" class="pi pi-spinner pi-spin" style="color: var(--gray-400); font-size: 1.8rem;"></i>
                                 </span>
                             </div>
@@ -136,12 +136,11 @@
             <div class="flex flex-column gap-2 justify-content-center">
                 <div class="flex flex-row justify-content-between align-items-center gap-2 mb-4">
                     <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha1" class="block text-600 font-medium mb-2">Fecha inicio</label>
-                        <p-calendar 
+                        <label for="fecha1" class="block text-600 font-medium mb-2 title-input">Fecha inicio</label>
+                        <p-datepicker 
                         [(ngModel)]="date1" 
                         [showIcon]="true" 
                         [showOnFocus]="true" 
-                        [touchUI]="true"
                         [dateFormat]="'dd/mm/yy'"
                         [showTime]="false"
                         inputId="fecha1" 
@@ -149,8 +148,8 @@
                         />
                     </div>
                     <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha2" class="block text-600 font-medium mb-2">Fecha fin</label>
-                        <p-calendar 
+                        <label for="fecha2" class="block text-600 font-medium mb-2 title-input">Fecha fin</label>
+                        <p-datepicker 
                         [(ngModel)]="date2" 
                         [showIcon]="true" 
                         [showOnFocus]="true" 
@@ -168,6 +167,7 @@
             <div class="card mb-2" style="padding: 5px;">
                 <p-floatLabel class="w-full">
                     <textarea 
+                    pTextarea
                         class="w-full"
                         id="float-comentario" 
                         rows="3"

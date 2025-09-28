@@ -11,7 +11,7 @@
         <div>
             <form #form="ngForm">
 
-                <div id="div_line_bootom" class="text-500 text-2xl font-medium">Ingresa tu clave</div>
+                <div id="div_line_bootom" class="text-gray-500 text-2xl font-medium">Ingresa tu clave</div>
                 <div class="login-container">
                     <div *ngIf="passwordFieldType === 'password'" class="flex flex-row gap-5 justify-content-center mb-3 div-pass">
                         <i class="pi pi-circle-fill" [ngClass]="enteredCode.length >= 1 ? 'passCheck':'passNoCheck'"></i>

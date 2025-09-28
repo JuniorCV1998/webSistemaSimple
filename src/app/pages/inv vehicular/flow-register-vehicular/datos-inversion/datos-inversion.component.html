@@ -1,15 +1,13 @@
 <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
     <div class="text-center mb-5">
-        <div class="text-700 text-2xl mb-3 label-title">Datos de la inversión</div>
+        <div class=" text-2xl mb-3 label-title">Datos de la inversión</div>
     </div>
-
-    
 
     <div class="flex flex-row w-full gap-2 align-items-center justify-content-center mb-3">
         <div class="flex flex-column w-6">
-            <label for="modalidad" class="block text-600 font-medium mb-2">Modalidad</label>
-            <p-dropdown 
+            <label for="modalidad" class="block text-gray-500 font-medium mb-2">Modalidad</label>
+            <p-select 
             id="modalidad"
             [options]="modalidad" 
             [(ngModel)]="selectedModalidad" 
@@ -19,14 +17,14 @@
         </div>
 
         <div class="flex flex-column w-6">
-            <label for="placa" class="block text-600 font-medium mb-2">Placa del vehículo</label>
+            <label for="placa" class="block text-gray-500 font-medium mb-2">Placa del vehículo</label>
             <input [(ngModel)]="inversion.placa" [maxlength]="10" id="placa" type="text" placeholder="ABC-123" appNroPlaca pInputText class="w-full">
         </div>
     </div>
 
     <div class="flex flex-row w-full gap-2 justify-content-center mb-3">
         <div class="flex flex-column w-6">
-            <label for="montoDiario" class="block text-600 font-medium mb-2">Monto diario (S/.)</label>
+            <label for="montoDiario" class="block text-gray-500 font-medium mb-2">Monto diario (S/.)</label>
             <p-inputNumber
                 [(ngModel)]="inversion.montoDiario"
                  id="monto" 
@@ -36,13 +34,13 @@
                  [min]="1" [max]="999"
                  />
                  <!-- prefix="S/. " -->
-                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | number:'1.2-2'}}.</span>
-                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario > 999" class="input-fail">El monto no puede ser mayor a S/ {{999 | number:'1.0-0'}}.</span>
+                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | formatNumber}}.</span>
+                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario > 999" class="input-fail">El monto no puede ser mayor a S/ {{999 | formatNumber}}.</span>
             <!-- <input [(ngModel)]="inversion.montoDiario" [maxlength]="20" id="montoDiario" type="text" placeholder="S/40.00" pInputText appSoloLetras class="w-full mb-3"> -->
         </div>
 
         <div class="flex flex-column w-6">
-            <label for="duracionPago" class="block text-600 font-medium mb-2">Duración de pago</label>
+            <label for="duracionPago" class="block text-gray-500 font-medium mb-2">Duración de pago</label>
             <p-inputNumber
                 [(ngModel)]="inversion.duracionPago"
                 id="duracionPago" 
@@ -54,8 +52,8 @@
                 (ngModelChange)="updateDate2()"
                 />
                 
-            <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago < 1" class="input-fail">El nro. de meses no puede ser menor a {{1 | number:'1.0-0'}}.</span>
-            <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago > 99" class="input-fail">El nro. de meses no puede ser mayor a {{99 | number:'1.0-0'}}.</span>
+            <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago < 1" class="input-fail">El nro. de meses no puede ser menor a {{1}}.</span>
+            <span *ngIf="inversion.duracionPago !== null && inversion.duracionPago > 99" class="input-fail">El nro. de meses no puede ser mayor a {{99}}.</span>
         </div>
     </div>
 
@@ -63,12 +61,12 @@
     <div class="flex flex-row gap-2 justify-content-center">
         <div class="flex flex-row justify-content-between align-items-center gap-2 mb-3">
             <div class="flex flex-column w-6 mb-2">
-                <label for="fecha1" class="block text-600 font-medium mb-2">Fecha inicio</label>
-                <p-calendar 
+                <label for="fecha1" class="block text-gray-500 font-medium mb-2">Fecha inicio</label>
+                <p-datepicker 
                 [(ngModel)]="date1" 
                 [showIcon]="true" 
                 [showOnFocus]="true" 
-                [touchUI]="true"
+                [touchUI]="false"
                 [dateFormat]="'dd/mm/yy'"
                 [showTime]="false"
                 inputId="fecha1" 
@@ -76,12 +74,12 @@
                 />
             </div>
             <div class="flex flex-column w-6 mb-2">
-                <label for="fecha2" class="block text-600 font-medium mb-2">Fecha fin</label>
-                <p-calendar 
+                <label for="fecha2" class="block text-gray-500 font-medium mb-2">Fecha fin</label>
+                <p-datepicker 
                 [(ngModel)]="date2" 
                 [showIcon]="true" 
                 [showOnFocus]="true" 
-                [touchUI]="true"
+                [touchUI]="false"
                 [dateFormat]="'dd/mm/yy'"
                 [showTime]="false"
                 inputId="fecha2" 
@@ -100,7 +98,7 @@
                 cols="30" 
                 [(ngModel)]="descripcion"
                 [maxLength]="80"
-                pInputTextarea>
+                pTextarea>
             </textarea>
             <label for="float-comentario">Descripción breve del vehículo</label>
         </p-floatLabel>
@@ -108,19 +106,19 @@
 
     <div class="flex flex-column w-full gap-2 align-items-center justify-content-center mb-3">
         <div class="flex flex-row justify-content-center w-6">
-            <label class="block text-700 font-bold mb-2 label-title">Colores del vehículo</label>
+            <label class="block  font-bold mb-2 label-title">Colores del vehículo</label>
         </div>
 
         <div class="flex flex-row w-full gap-2 justify-content-center mb-3">
             <div class="flex w-6 flex-column align-items-center">
-                <div class="flex flex-row text-center"><label for="color1" class="block text-500 font-medium mb-2">Color principal</label></div>
+                <div class="flex flex-row text-center"><label for="color1" class="block text-gray-500 font-medium mb-2">Color principal</label></div>
                 <div class="flex flex-row text-center paleta-color1" style="position: relative;"><p-colorPicker [(ngModel)]="color1" inputId="color1" class="mb-1"></p-colorPicker></div>
-                <div class="flex flex-row text-center"><span class="block text-500 font-medium mb-2">{{ color1 }}</span></div>
+                <div class="flex flex-row text-center"><span class="block text-gray-500 font-medium mb-2">{{ color1 }}</span></div>
             </div>
             <div class="flex w-6 flex-column align-items-center">
-                <div class="flex flex-row text-center"><label for="color1" class="block text-500 font-medium mb-2">Color secundario</label></div>
+                <div class="flex flex-row text-center"><label for="color1" class="block text-gray-500 font-medium mb-2">Color secundario</label></div>
                 <div class="flex flex-row text-center paleta-color2" style="position: relative;"><p-colorPicker [(ngModel)]="color2" inputId="color2" class="mb-1"></p-colorPicker></div>
-                <div class="flex flex-row text-center"><span class="block text-500 font-medium mb-2">{{ color2 }}</span></div>
+                <div class="flex flex-row text-center"><span class="block text-gray-500 font-medium mb-2">{{ color2 }}</span></div>
             </div>     
         </div>
     </div>

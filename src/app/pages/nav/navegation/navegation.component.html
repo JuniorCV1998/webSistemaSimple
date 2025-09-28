@@ -8,7 +8,7 @@
               <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i></a>
             </ng-template>
             <ng-template [ngIf]="!showVolverButton">
-              <a *ngIf="!showAux"><i id="volver-icon" (click)="sidebarVisible = true" class="pi pi-bars icon-span"></i></a>
+              <a *ngIf="!showAux"><i id="volver-icon" (click)="visible = true" class="pi pi-bars icon-span"></i></a>
             </ng-template>
             
           </div>
@@ -31,15 +31,16 @@
 </div>
 
 
-<p-sidebar #sidebarRef [(visible)]="sidebarVisible">
-  <ng-template pTemplate="headless">
+<p-drawer #drawerRef [(visible)]="visible">
+  <ng-template #headless>
       <div class="flex flex-column h-full">
           <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0" style="height: 10%;">
-              <span class="inline-flex align-items-center gap-2">
-                  <span class="font-semibold text-2xl text-primary">Menú</span>
+              <span class="inline-flex align-items-center">
+                <span class="header text-gray-1000">SISTEMA</span>
+                <span class="header txt-green">SIMPLE</span>
               </span>
               <span>
-                  <p-button type="button" (onClick)="closeCallback($event)" icon="pi pi-times" rounded="true" outlined="true" styleClass="h-2rem w-2rem"></p-button>
+                  <p-button type="button" (click)="closeCallback($event)" icon="pi pi-times" rounded="true" outlined="true" styleClass="h-2rem w-2rem"></p-button>
               </span>
           </div>
           
@@ -49,7 +50,7 @@
                       
                       <ul class="list-none p-0 m-0 overflow-hidden">
                           <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                               [routerLink]="['/inicio']"
                               (click)="closeCallback($event)"
                               >
@@ -60,12 +61,13 @@
                           <li *ngIf="codPefil=='INV'">
                               <a
                                   pRipple
-                                  pStyleClass="@next"
-                                  enterFromClass="hidden"
-                                  enterActiveClass="slidedown"
-                                  leaveToClass="hidden"
-                                  leaveActiveClass="slideup"
-                                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                    pStyleClass="@next"
+                                    enterFromClass="hidden"
+                                    enterActiveClass="animate-slidedown"
+                                    toggleClass="hidden"
+                                    leaveToClass="hidden"
+                                    leaveActiveClass="animate-slideup"
+                                  class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                                   >
                                   <i class="pi pi-chart-line mr-2"></i>
                                   <span class="font-medium">Reportes</span>
@@ -73,7 +75,7 @@
                               </a>
                               <ul class="list-none py-0 pl-3 pr-0 m-0 hidden overflow-y-hidden transition-all transition-duration-400 transition-ease-in-out">
                                   <li>
-                                      <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                      <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                                       [routerLink]="['/reporte/reporte-cobranza']"
                                       (click)="closeCallback($event)"
                                       >
@@ -84,7 +86,7 @@
                               </ul>
                           </li>
                           <li *ngIf="permisoVehicular">
-                            <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                            <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                             [routerLink]="['/vehicular/inicio']"
                             (click)="closeCallback($event)"
                             >
@@ -93,20 +95,20 @@
                             </a>
                         </li>
                           <!-- <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-comments mr-2"></i>
                                   <span class="font-medium">Messages</span>
                                   <span class="inline-flex align-items-center justify-content-center ml-auto bg-primary border-circle" style="min-width: 1.5rem; height: 1.5rem">3</span>
                               </a>
                           </li>
                           <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-calendar mr-2"></i>
                                   <span class="font-medium">Calendar</span>
                               </a>
                           </li>
                           <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-cog mr-2"></i>
                                   <span class="font-medium">Settings</span>
                               </a>
@@ -122,26 +124,26 @@
                           enterActiveClass="slidedown"
                           leaveToClass="hidden"
                           leaveActiveClass="slideup"
-                          class="p-3 flex align-items-center justify-content-between text-600 cursor-pointer p-ripple"
+                          class="p-3 flex align-items-center justify-content-between text-gray-500 cursor-pointer p-ripple"
                       >
                           <span class="font-medium">APPLICATION</span>
                           <i class="pi pi-chevron-down"></i>
                       </div>
                       <ul class="list-none p-0 m-0 overflow-hidden">
                           <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-folder mr-2"></i>
                                   <span class="font-medium">Projects</span>
                               </a>
                           </li>
                           <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-chart-bar mr-2"></i>
                                   <span class="font-medium">Performance</span>
                               </a>
                           </li>
                           <li>
-                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-cog mr-2"></i>
                                   <span class="font-medium">Settings</span>
                               </a>
@@ -153,7 +155,7 @@
           
           <div class="div_cerrarsesion">
               <hr class="mb-1 mx-3 border-top-1 border-none surface-border" />
-              <a (click)="sessionClear()" class="flex flex-row align-items-center cursor-pointer mb-3 p-3 gap-2 text-700 closeSession">
+              <a (click)="sessionClear()" class="flex flex-row align-items-center cursor-pointer mb-3 p-3 gap-2  closeSession">
                   <i class="pi pi-sign-out"></i>
                   <span class="font-bold">Cerrar sesión</span>
               </a>
@@ -161,4 +163,4 @@
 
       </div>
   </ng-template>
-</p-sidebar>
+</p-drawer>

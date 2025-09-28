@@ -1,7 +1,7 @@
 <div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
 
     <div class="text-center mb-4">
-        <div class="text-700 text-2xl mb-3 label-title">Confirmar inversión</div>
+        <div class=" text-2xl mb-3 label-title">Confirmar inversión</div>
     </div>
 
     <!-- DATOS DEL CLIENTE  -->
@@ -58,7 +58,7 @@
             <span class="span-2">Monto a invertir</span>
         </div>
         <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">S/. {{response.monto | number:'1.2-2'}}</span>
+            <span class="span-1">S/. {{response.monto | formatNumber}}</span>
         </div>
     </div>
 
@@ -85,7 +85,7 @@
             <span class="span-2">Valor de cuota</span>
         </div>
         <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">S/. {{response.valorCuota | number:'1.2-2'}}</span>
+            <span class="span-1">S/. {{response.valorCuota | formatNumber}}</span>
         </div>
     </div>
 

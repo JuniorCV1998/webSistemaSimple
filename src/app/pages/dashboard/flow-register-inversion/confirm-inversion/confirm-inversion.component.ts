@@ -14,12 +14,13 @@ import { Constantes } from '../../../../core/constant/Constantes';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { TempDataService } from '../../../../core/services/temp-data.service';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-confirm-inversion',
   standalone: true,
   imports: [InputTextModule,FloatLabelModule,InputTextModule,FormsModule,CommonModule,ButtonModule,
-    ToastModule,LoadingComponent],
+    ToastModule,LoadingComponent,FormatNumberPipe],
   templateUrl: './confirm-inversion.component.html',
   styleUrl: './confirm-inversion.component.scss'
 })
@@ -34,12 +35,12 @@ export default class ConfirmInversionComponent {
 
   // response validado, servicio anterior
   response: any = {
-    idUsuario: null,
-    monto: null,
-    interes: null,
+    idUsuario: 0,
+    monto: 0,
+    interes: 0,
     comentario: "",
-    nroCuotas: null,
-    valorCuota: null,
+    nroCuotas: 0,
+    valorCuota: 0,
     fechaInicio: "",
     fechaFin: "",
     nombres: "",
@@ -177,9 +178,9 @@ serviceRegisterInversion(requestBody: any){
   ),
     catchError((error) => {
       if (error.status === 400) {
-        this.show(error.error.descripcion, Constantes.MSG_H_400); // Mensaje para 400
+        this.show(error.error.descripcion, Constantes.MSG_H_400, false); // Mensaje para 400
       } else {
-        this.show(Constantes.MSG_H_500, Constantes.MSG_500); // Mensaje para otros errores
+        this.show(Constantes.MSG_H_500, Constantes.MSG_500, true); // Mensaje para otros errores
       }
       // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
       return of(null);
@@ -218,7 +219,7 @@ mostrarMensaje(){
     }
   }
 
-  show(message: string, header: string) {
+  show(message: string, header: string, irInicio: boolean) {
     const ref = this.dialogService.open(MessagePopUpComponent, {
       data: {
         message: message
@@ -233,7 +234,8 @@ mostrarMensaje(){
     // Suscribirse al evento de cierre del diálogo
     ref.onClose.subscribe((result: any) => {
       if (result === 'aceptar') {
-        this.router.navigate(['/inicio']);
+        if(irInicio) this.router.navigate(['/inicio']);
+        else this.router.navigate(['registro/clientenuevo']);
       }
     });
 }

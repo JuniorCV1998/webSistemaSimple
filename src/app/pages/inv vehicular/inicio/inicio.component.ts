@@ -8,11 +8,12 @@ import { ToastModule } from 'primeng/toast';
 import { catchError, finalize, of } from 'rxjs';
 import { InversionVehService } from '../../../core/services/inversion-veh/inversion-veh.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule,SkeletonModule,TabMenuModule,ToastModule,RouterModule],
+  imports: [CommonModule,SkeletonModule,TabMenuModule,ToastModule,RouterModule,FormatNumberPipe],
   providers: [MessageService],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'

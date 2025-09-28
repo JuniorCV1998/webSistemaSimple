@@ -12,12 +12,13 @@ import { RippleModule } from 'primeng/ripple';
 import { SidebarModule, Sidebar } from 'primeng/sidebar';
 import { StyleClassModule } from 'primeng/styleclass';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { Drawer, DrawerModule } from 'primeng/drawer';
 
 @Component({
   selector: 'app-navegation',
   standalone: true,
   imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,
-    AvatarModule,TabMenuModule,RouterModule],
+    AvatarModule,TabMenuModule,RouterModule, DrawerModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss',
   animations: [slideInAnimation]
@@ -27,9 +28,8 @@ export class NavegationComponent {
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData?.['animation'];
   }
-  
 
-  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+  @ViewChild('drawerRef') drawerRef!: Drawer;
 
   showVolverButton: boolean = true;
   showIconHome: boolean = false;
@@ -146,10 +146,10 @@ export class NavegationComponent {
 
   //Slider Module
   closeCallback(e: Event): void {
-      this.sidebarRef.close(e);
-  }
+        this.drawerRef.close(e);
+    }
 
-  sidebarVisible: boolean = false;
+  visible: boolean = false;
   sidebarOpened: boolean = false;
 
   openNav() {

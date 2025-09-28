@@ -10,7 +10,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { Router } from '@angular/router';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule  } from 'primeng/calendar';
-import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
+import { CommonModule, DecimalPipe } from '@angular/common'; // Asegúrate de importar CommonModule
 import { KnobModule } from 'primeng/knob';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
@@ -19,6 +19,9 @@ import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { DatePicker } from 'primeng/datepicker';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { TextareaModule } from 'primeng/textarea';
 
 
 @Component({
@@ -26,7 +29,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
   standalone: true,
   imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,InputOtpModule,FormsModule
             ,CardModule,BreadcrumbModule,InputNumberModule,CalendarModule,
-           CommonModule,KnobModule,LoadingComponent,InputTextModule,FloatLabelModule
+          KnobModule,LoadingComponent,FloatLabelModule,DatePicker, CommonModule, FormatNumberPipe,TextareaModule
   ],
   templateUrl: './datos-inversion.component.html',
   styleUrl: './datos-inversion.component.scss'

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import confetti from 'canvas-confetti';
 import { MessageService } from 'primeng/api';
@@ -13,13 +13,15 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-inversion-registered',
   standalone: true,
-  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,LoadingComponent,RouterModule],
+  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,LoadingComponent,RouterModule,FormatNumberPipe],
   templateUrl: './inversion-registered.component.html',
-  styleUrl: './inversion-registered.component.scss'
+  styleUrl: './inversion-registered.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export default class InversionRegisteredComponent {
 
