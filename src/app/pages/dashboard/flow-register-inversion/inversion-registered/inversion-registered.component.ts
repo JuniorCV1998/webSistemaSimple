@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import confetti from 'canvas-confetti';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -18,7 +18,9 @@ import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 @Component({
   selector: 'app-inversion-registered',
   standalone: true,
-  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,LoadingComponent,RouterModule,FormatNumberPipe],
+  imports: [ButtonModule,CommonModule,ToastModule,TabMenuModule,LoadingComponent,RouterModule,FormatNumberPipe,
+    RouterLink
+  ],
   templateUrl: './inversion-registered.component.html',
   styleUrl: './inversion-registered.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

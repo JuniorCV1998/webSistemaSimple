@@ -45,3 +45,13 @@ compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+/* CUANDO HAY ACTUALIZACIONES (PRIMENG, ETC) */
+// limpiar node_modules
+Remove-Item -Recurse -Force node_modules, package-lock.json
+// reinstalar librerias
+npm install
+// correr proyecto
+ng s
+
+--font-family: "Inter var", sans-serif;

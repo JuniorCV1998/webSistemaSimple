@@ -7,19 +7,21 @@ import { AdminService } from '../../../../core/services/admin/admin.service';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { KnobModule } from 'primeng/knob';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-profile-inversor',
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
-    TabMenuModule
+    TabMenuModule,FormatNumberPipe, ButtonModule, RouterModule, RouterLink
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './profile-inversor.component.html',

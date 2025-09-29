@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Location } from '@angular/common';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-list-all',
   standalone: true,
-  imports: [SkeletonModule,CommonModule,TabMenuModule,RouterModule],
+  imports: [SkeletonModule,CommonModule,TabMenuModule,RouterModule,FormatNumberPipe],
   templateUrl: './list-all.component.html',
   styleUrl: './list-all.component.scss'
 })

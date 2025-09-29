@@ -17,7 +17,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
 import { DatePicker } from 'primeng/datepicker';
 import { ButtonModule } from 'primeng/button';
@@ -28,7 +28,7 @@ import { TwoDigitsPipe } from '../../../core/pipes/two-digits.pipe';
   standalone: true,
   imports: [TableModule, CommonModule, TabMenuModule, ListEmptyNoneComponent, LoadingComponent,SelectButtonModule,
     FormsModule,ToastModule,ConfirmDialogModule,CalendarModule,RouterModule,FormatNumberPipe,DatePicker, ButtonModule,
-    TwoDigitsPipe
+    TwoDigitsPipe,RouterLink
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './collection-report.component.html',

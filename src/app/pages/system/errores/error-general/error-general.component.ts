@@ -1,11 +1,12 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TabMenuModule } from 'primeng/tabmenu';
 
 @Component({
   selector: 'app-error-general',
   standalone: true,
-  imports: [ConfirmDialogModule, TabMenuModule],
+  imports: [ConfirmDialogModule, TabMenuModule,RouterLink],
   templateUrl: './error-general.component.html',
   styleUrl: './error-general.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

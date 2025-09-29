@@ -24,7 +24,7 @@
                     <i class="pi pi-id-card icon-span"></i>
                     <p *ngIf="inversorData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
                         <strong>{{inversorData?.persona?.nroDocumento}}</strong></p>
-                    <p *ngIf="inversorData?.persona?.codTipoDoc===null" class="user-subtitle">- • <strong>-</strong></p>
+                    <p *ngIf="inversorData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
                     <p *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
                         <strong>{{inversorData?.persona?.nroDocumento}}</strong></p>
                 </div>
@@ -172,8 +172,8 @@
                             placeholder="Ingrese monto" class="w-full w-8"
                             [min]="1" [max]="100000"
                             />
-                            <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | number:'1.2-2'}}.</span>
-                            <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a S/ {{100000 | number:'1.0-0'}}.</span>
+                            <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | formatNumber}}.</span>
+                            <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a S/ {{100000 | formatNumber}}.</span>
                         </div>
                     <!-- Fecha calculada -->
                     <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">
@@ -193,14 +193,14 @@
                         <strong class="text-center w-full">¿Desea continuar?</strong>
                     </span> -->
                 <div class="flex align-items-center gap-2 mt-4">
-                    <button pButton label="Cancelar" (onClick)="onReject()"
+                    <button pButton label="Cancelar" (click)="onReject()"
                         class="p-button-outlined w-8rem ">
                     </button>
                     <button
                     [ngClass]="{
                     'btn-disabled': !isFormValid() }"
                     [disabled]="!isFormValid()"
-                     severity="success" pButton label="Actualizar" (onClick)="onAccept()"
+                     severity="success" pButton label="Actualizar" (click)="onAccept()"
                         class=" w-8rem">
                     </button>
                 </div>

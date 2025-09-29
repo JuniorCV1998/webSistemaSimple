@@ -7,11 +7,12 @@ import { Constantes } from '../../../../core/constant/Constantes';
 import { SkeletonModule } from 'primeng/skeleton';
 import { Router, RouterModule } from '@angular/router';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule,SkeletonModule,TabMenuModule,RouterModule],
+  imports: [CommonModule,SkeletonModule,TabMenuModule,RouterModule,FormatNumberPipe],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })

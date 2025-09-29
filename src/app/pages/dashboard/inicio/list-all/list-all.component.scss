@@ -4,12 +4,15 @@
     table .span-monto{
       margin-right: 5px;
       font-size: 15px;
+      color: var(--primary-500);
     }
     table .span-nombre{
       font-weight: 500;
       color: black;
       font-size: 15px;
       margin-bottom: 4px;
+      color: var(--gray-700);
+
     }
     table .span-fecha{
       color: var(--gray-500);

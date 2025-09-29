@@ -29,7 +29,7 @@
                         <div class="flex flex-column w-full gap-1">
                             <div class="flex flex-row w-full gap-5 mb-1">
                                 <span [ngClass]="inversion.estadoDeuda === 'P' ? 'span-nro-inv' : 'span-nro-inv-culm'">Inversión #{{inversion.nroInversion}}</span>
-                                <span class="span-monto">S/ {{inversion.monto | number:'1.2-2'}}</span>
+                                <span class="span-monto">S/ {{inversion.monto | formatNumber}}</span>
                             </div>
                             <div class="linea-bottom mb-1"></div>
                             <div *ngIf="inversion.estadoDeuda === 'P'" class="flex flex-row w-full gap-2 mb-1"> <!--  -->
@@ -41,7 +41,7 @@
                                 </div>
                                 <div class="flex flex-column w-6 gap-1">
                                     <span class="span-cuotas"><b>De</b></span>
-                                    <span class="span-cuotas">S/ {{inversion.valorCuota | number:'1.2-2'}}</span>
+                                    <span class="span-cuotas">S/ {{inversion.valorCuota | formatNumber}}</span>
                                 </div>
                             </div>
                             <div *ngIf="inversion.estadoDeuda === 'C'" class="flex flex-row w-full gap-2 mb-1"> <!--  -->
