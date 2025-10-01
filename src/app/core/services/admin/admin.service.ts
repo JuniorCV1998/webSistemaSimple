@@ -49,10 +49,10 @@ export class AdminService {
   }
   
   /* CREAR CODIGO UNICO */
-    buscarCliente(tipoDocumento: string, nroDocumento: string){
+    buscarCliente(value: boolean, requestBody: any){
     const params = new HttpParams()
-			.set('tipoDocumento', tipoDocumento).set('nroDocumento', nroDocumento);
-    return this.http.get(this.baseUrl+this.baseComponent+'buscar-cliente', {params});
+			.set('manual', value);
+    return this.http.post(this.baseUrl+this.baseComponent+'buscar-cliente', requestBody, {params});
   }
 
   correoExistente(correo: string){

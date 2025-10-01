@@ -23,17 +23,17 @@
 
             <!-- Persona natural -->
             <div *ngIf="isClienteNatural">
-                <label for="nombres" class="block  font-medium mb-2">Nombres</label>
+                <label for="nombres" class="block font-medium mb-2">Nombres</label>
                 <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
 
                 <div class="flex flex-row gap-2 align-items-center justify-content-center">
                     <div class="flex flex-column w-full">
-                        <label for="apellidop" class="block  font-medium mb-2">Apellido paterno</label>
+                        <label for="apellidop" class="block font-medium mb-2">Apellido paterno</label>
                         <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
                     </div>
 
                     <div class="flex flex-column w-full">
-                        <label for="apellidom" class="block  font-medium mb-2">Apellido materno</label>
+                        <label for="apellidom" class="block font-medium mb-2">Apellido materno</label>
                         <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
                     </div>
                 </div>

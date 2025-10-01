@@ -4,17 +4,9 @@
   background-clip: text;          /* Para navegadores modernos */
   -webkit-text-fill-color: transparent; /* Hace transparente el relleno */
   font-weight: bold; /* opcional: se ve más elegante */
-  font-size: 1.6rem;
+  font-size: 1.2rem;
 }
 
-.qr-model {
-  background: linear-gradient(135deg, #03d9ff, #02ca55);
-  border-radius: 12px;
-  padding: 8px;
-  display: inline-block;
-  position: relative; /* 🔑 necesario para el logo centrado */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* toque moderno */
-}
 
 .logo-center {
   position: absolute;
@@ -46,42 +38,23 @@
     border-radius: 8px;             /* Bordes redondeados */
   }
 
-  .custom-banner-passive {
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 0px;                   /* Espacio alrededor de cada banner */
-    padding: 10px;                  /* Espacio dentro de cada banner */
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2); 
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 300px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  }
 
-
-.image-container {
-  position: relative;
-  width: 100%;
-   /* altura fija para que las imágenes no se salgan */
-  overflow: hidden; /* evita que sobresalgan */
+  /* Estilo Reniec Sunat */
+.tag{
+    background-color: var(--gray-200);
+    color: var(--gray-500);
+    font-weight: 600;
+    border-radius: 5px;
+    font-size: 13px;
+    padding: 10px;
+    text-align: center;
+}
+.success{
+    background-color: #0ea5e9;
+    color: white;
+    border: #0ea5e9;
 }
 
-.image-container img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* ocupa toda la altura del contenedor */
-  object-fit: contain; /* mantiene proporción sin recortar */
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.image-container img.active {
-  opacity: 1;
-  z-index: 1;
+.txt-label{
+    color: var(--gray-500);
 }

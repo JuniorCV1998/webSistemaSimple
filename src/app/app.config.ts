@@ -7,7 +7,7 @@ import { providePrimeNG } from 'primeng/config';
 
 /* import Aura from '@primeuix/themes/aura'; */
 import Aura from '@primeng/themes/aura';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialog } from 'primeng/dynamicdialog';
@@ -21,13 +21,14 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimationsAsync(),
     provideHttpClient(
+      withFetch(),  
       withInterceptors([
         authInterceptor,
         loggingInterceptor
       ])
     ),
 
-    // ✅ Animaciones y PrimeNG
+    // Animaciones y PrimeNG
     importProvidersFrom([BrowserAnimationsModule, DynamicDialog]),
     MessageService,
     DialogService,

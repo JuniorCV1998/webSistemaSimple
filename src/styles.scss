@@ -146,6 +146,31 @@ body {
     /* margin-top: 1.4rem; */
 }
 
+/* Pantallas Grandes */
+@media (min-width: 700px) {
+  .mode-responsive{
+    min-width: 500px;
+  }
+  .image-container{
+    height: 450px;
+  }
+}
+
+/* Pantallas pequeñas*/
+@media (max-width: 699px) {
+  .image-container{
+    height: 300px;
+  }
+  .mode-responsive{
+    min-width: 300px;
+  }
+  .p-step-list{
+    display: flex !important;          /* activa flexbox */
+    flex-direction: column; /* coloca los hijos en columna */
+    align-items: flex-start !important;/* alinea los hijos a la izquierda */
+  }
+}
+
 #volver-icon{
   font-size: 1.5em;
   color: var(--blue-400);
@@ -267,6 +292,9 @@ small{
     overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
     text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
 }
+
+// Estilo para los puntos ... class="text-overflow-ellipsis"
+
 /* Estilos de Span info */
 .span-info-red{
   background: #ffe7e6b3;
@@ -367,4 +395,34 @@ small{
 }
 .paddin-20{
   padding: 20px;
+}
+
+
+/* NUEVOS ESTILOS TRAS LA IMPLEMENTACION DE LA PANTALLA CODIGO UNICO */
+/*  */
+.input-fail{
+  color: red;
+  font-size: 12px;
+}
+
+
+/* Efecto loading horizontal */
+.loading-bar {
+  position: fixed;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #ffffff, #ffffff, #02ca55);
+  background-size: 200% 100%;
+  animation: moveBar 2.0s linear infinite;
+  z-index: 1000;
+}
+
+@keyframes moveBar {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
