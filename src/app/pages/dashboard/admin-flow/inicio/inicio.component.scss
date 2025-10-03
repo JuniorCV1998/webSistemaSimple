@@ -1,7 +1,5 @@
 
-.icon-span{
-  margin-bottom: 8px;
-}
+
 /* Estilo para el nombre y presentacion del usuario*/
 .label-nombre{
   background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
@@ -78,3 +76,134 @@
     color: var(--primary-500);
   } */
 
+
+  /* Estilo para la tabla de CODIGO UNICO */
+  /* Estilos para la tabla */
+  .custom-banner-4 {
+    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
+    margin: 5px;                   /* Espacio alrededor de cada banner */
+    padding: 15px;                  /* Espacio dentro de cada banner */
+    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+    color: var(--primary-500);                 /* Color del texto del banner */
+    text-align: center;             /* Centra el texto dentro del banner */
+    border-radius: 8px;             /* Bordes redondeados */
+    min-width: 30px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: auto;
+  }
+  .class-name-date{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  table .span-monto{
+    margin-right: 5px;
+    font-size: 15px;
+  }
+  table .span-nombre{
+    font-weight: 500;
+    color: var(--gray-700);
+    font-size: 15px;
+    margin-top: 5px;
+    text-align: left;
+  }
+  table .span-fecha{
+    color: var(--gray-500);
+    font-size: 12px;
+    text-align: left;
+  }
+  table .tr-registros{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 8px; */
+    border-bottom: 1px solid var(--gray-300);
+  }
+  table .tr-registros-s{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  table .tr-registros:hover{
+    background-color: var(--gray-100);
+  }
+  .table-container{
+    overflow-y: auto;
+    max-height: 500px; 
+    -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+    scrollbar-width: none;  /* Para Firefox */
+  }
+
+  .table-container::-webkit-scrollbar {
+    display: none;  /* Para Chrome, Safari y Opera */
+  }
+
+  table .tr-cabecera{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 10px; */
+    border-bottom: 1px solid var(--gray-300);
+    
+  }
+  .span-1 span{
+    color: var(--primary-500);
+    font-size: 16px;
+  }
+  .span-2 span{
+    color: var(--blue-400);
+    font-size: 16px;
+  }
+  .span-1 i{
+    font-size: 16px;
+    color: var(--primary-500);
+  }
+
+  table .tr-cabecera .span-1{
+    border-right: 1px solid var(--gray-300);
+    padding-right: 10px;
+  }
+  .row-skeleton{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 8px; */
+    border-bottom: 1px solid var(--gray-300);
+  }
+
+
+  .tag-transparent-red{
+    border: 1px solid var(--red-500);
+    color: var(--red-500);
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+  }
+    .tag-transparent-primary{
+    border: 1px solid var(--primary-500);
+    color: var(--primary-500);
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+  }
+
+  
+  /* Estilo para comp update correo */
+.update-correo {
+  border-radius: 8px;
+  padding: 10px;
+  border: 2px solid transparent; /* importante: transparente */
+  background: 
+    linear-gradient(white, white) padding-box, /* fondo interior */
+    linear-gradient(to right, var(--primary-500), var(--blue-400)) border-box; /* borde degradado */
+}

@@ -109,6 +109,28 @@ primeng/resources/themes/rhea/theme.css
   color: var(--p-gray-700) !important;
 }
 
+  .tag-transparent-red{
+    border: 1px solid var(--red-500);
+    color: var(--red-500);
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+  }
+    .tag-transparent-primary{
+    border: 1px solid var(--primary-500);
+    color: var(--primary-500);
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+  }
+
+
 /* //icons
 @import "primeicons/icons/primeicons.css";
 
@@ -424,5 +446,39 @@ small{
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+/*  */
+/* CODIGO UNICO */
+  .shiny-text {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.shiny-text::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
   }
 }

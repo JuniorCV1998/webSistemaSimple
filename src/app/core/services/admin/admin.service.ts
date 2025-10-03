@@ -65,4 +65,16 @@ export class AdminService {
       return this.http.post(this.baseUrl+this.baseComponent+'crear-codigo-unico',obj);
   }
 
+  getCodigosUnicos(tipo: string){
+    const params = new HttpParams()
+			.set('tipo', tipo);
+    return this.http.get(this.baseUrl+this.baseComponent+'codigos', {params});
+  }
+
+    updateCorreoDeCodigoUnico(codigo: string, correo: string){
+      const params = new HttpParams()
+			.set('correo', correo);
+      return this.http.put(this.baseUrl+this.baseComponent+codigo+'/update-correo', null, {params});
+  }
+
 }

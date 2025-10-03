@@ -1,0 +1,112 @@
+/* Estilo para la tabla de CODIGO UNICO */
+  .custom-banner-4 {
+    margin: 5px;                   /* Espacio alrededor de cada banner */
+    color: var(--primary-500);                 /* Color del texto del banner */
+    text-align: center;             /* Centra el texto dentro del banner */
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: auto;
+  }
+  .class-name-date{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  table .span-monto{
+    margin-right: 5px;
+    font-size: 15px;
+  }
+  table .span-nombre{
+    font-weight: 500;
+    color: var(--gray-700);
+    font-size: 15px;
+    margin-top: 5px;
+    text-align: left;
+  }
+  table .span-fecha{
+    color: var(--gray-500);
+    font-size: 12px;
+    text-align: left;
+  }
+  table .tr-registros{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 8px; */
+    border-bottom: 1px solid var(--gray-300);
+  }
+  table .tr-registros-s{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  table .tr-registros:hover{
+    background-color: var(--gray-100);
+  }
+  .table-container{
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
+    scrollbar-width: none;  /* Para Firefox */
+  }
+
+  .table-container::-webkit-scrollbar {
+    display: none;  /* Para Chrome, Safari y Opera */
+  }
+
+  table .tr-cabecera{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 10px; */
+    border-bottom: 1px solid var(--gray-300);
+    
+  }
+  .span-1 span{
+    color: var(--primary-500);
+    font-size: 16px;
+  }
+  .span-2 span{
+    color: var(--blue-400);
+    font-size: 16px;
+  }
+  .span-1 i{
+    font-size: 16px;
+    color: var(--primary-500);
+  }
+
+  table .tr-cabecera .span-1{
+    border-right: 1px solid var(--gray-300);
+    padding-right: 10px;
+  }
+  .row-skeleton{
+    padding: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* margin-bottom: 8px; */
+    border-bottom: 1px solid var(--gray-300);
+  }
+
+
+  .tag-transparent-red{
+    border: 1px solid var(--red-500);
+    color: var(--red-500);
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+  }
+    .tag-transparent-primary{
+    border: 1px solid var(--primary-500);
+    color: var(--primary-500);
+    border-radius: 5px;
+    background-color: transparent;
+    padding: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    width: auto;
+  }
+
+  

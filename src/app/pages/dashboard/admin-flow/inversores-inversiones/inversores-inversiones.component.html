@@ -15,7 +15,7 @@
     </div>
 
     <div class="relative w-full mb-2">
-        <input (input)="filtrarInversor()" id="email1" name="usuario" [(ngModel)]="busqueda" [maxlength]="30" type="text" placeholder="Buscar por nombre o celular" pInputText class="w-full mb-3">
+        <input (input)="filtrarInversor()" id="email1" name="usuario" [(ngModel)]="busqueda" [maxlength]="30" type="text" placeholder="Buscar por nombre, documento o celular" pInputText class="w-full mb-3">
             <i class="pi" [ngClass]="busqueda ? 'pi-times-circle' : ''" 
             (click)="cleanFiltroFunct()" 
             style="position: absolute; top: 40%; right: 10px; transform: translateY(-50%); cursor: pointer;">

@@ -152,6 +152,7 @@ obtenerListaInversores() {
           ${persona.apellidoPaterno} ${persona.apellidoMaterno} 
           ${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno} 
           ${persona.celular}
+          ${persona.nroDocumento}
         `.toLowerCase();
 
         return textoBuscado.includes(filtro);

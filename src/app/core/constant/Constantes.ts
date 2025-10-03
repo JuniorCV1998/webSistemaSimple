@@ -26,6 +26,7 @@ export const Constantes = {
 
     /* MENSAJES PARA MESSAGE SERVICE */
     MSG_SERVICE_ERROR: '¡ERROR!',
+    MSG_SERVICE_UPS: '¡UPS!',
     MSG_SERVICE_UPDATE: '¡ACTUALIZADO!',
     
     /* CODIGOS DE EXITO */

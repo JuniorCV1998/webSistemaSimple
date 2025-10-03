@@ -1,13 +1,14 @@
-
 <div>
     <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
         <div class="text-center mb-5">
-            <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola, {{nombreUsuario}}</label></div>
+            <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola,
+                    {{nombreUsuario}}</label></div>
             <span class="text-gray-500 font-medium line-height-3">¿Qué hacemos hoy?</span>
         </div>
 
         <div class="flex flex-row align-items-center justify-content-center">
-            <div class="flex flex-column w-full justify-content-center custom-banner-codigo-unico gap-2" routerLink="/adm/codigo-unico">
+            <div class="flex flex-column w-full justify-content-center custom-banner-codigo-unico gap-2"
+                routerLink="/adm/codigo-unico">
                 <div class="flex flex-row justify-content-between align-items-center gap-3">
                     <i class="pi pi-id-card icon-span"></i>
                     <span class="block">DNI / RUC</span>
@@ -18,35 +19,106 @@
 
         <div class="flex flex-column gap-2 align-items-center custom-banner-1 justify-content-center mb-1">
             <div class="flex flex-row w-full justify-content-end align-items-center mb-3">
-                <div class="flex w-6 p-1 justify-content-center align-items-center gap-1 mostrar-datos" (click)="mostrarDatosFunct()">
+                <div class="flex w-6 p-1 justify-content-center align-items-center gap-1 mostrar-datos"
+                    (click)="mostrarDatosFunct()">
                     <i *ngIf="mostrarDatos" class="pi pi-eye"></i>
                     <i *ngIf="!mostrarDatos" class="pi pi-eye-slash"></i>
                     <span class="txt-span">Mostrar datos</span>
                 </div>
             </div>
-            
+
             <div class="flex flex-row w-full " routerLink="/adm/inversores">
                 <div class="flex flex-column w-full justify-content-center align-items-center">
                     <div class="flex flex-row w-full justify-content-center align-items-center gap-2">
-                        <i class="pi pi-users icon-span"></i>
-                        <i *ngIf="loading" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem; font-weight: bold;"></i>
+                        <i class="pi pi-users icon-span mb-2"></i>
+                        <i *ngIf="loading" class="pi pi-spinner pi-spin"
+                            style="color: var(--gray-500); font-size: .9rem; font-weight: bold;"></i>
                         <span class="block " *ngIf="mostrarDatos && !loading">{{data.totalInversores}}</span>
                     </div>
-                    <span class="txt-span">Inversores</span> 
+                    <span class="txt-span">Inversores</span>
                 </div>
                 <div class="flex flex-column w-full justify-content-center align-items-center">
                     <div class="flex flex-row w-full justify-content-center align-items-center gap-2">
-                        <i class="pi pi-chart-line icon-span"></i>
-                        <i *ngIf="loading" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem; font-weight: bold;"></i>
+                        <i class="pi pi-chart-line icon-span mb-2"></i>
+                        <i *ngIf="loading" class="pi pi-spinner pi-spin"
+                            style="color: var(--gray-500); font-size: .9rem; font-weight: bold;"></i>
                         <span class="block" *ngIf="mostrarDatos && !loading">{{data.totalInversiones}}</span>
                     </div>
                     <span class="txt-span">Inversiones</span>
                 </div>
             </div>
+        </div>
 
-            <!-- <div class="flex flex-column w-full custom-banner-2" routerLink="/adm/inversores">
-                
-            </div> -->
+        <!-- CODIGO UNICO -->
+        <div class="table-container">
+            <!-- [ngIf]="!skeletonShow" -->
+            <div class="flex flex-column gap-2 div-monto custom-banner-4">
+                <div class="flex flex-row justify-content-between w-full">
+                    <div (click)="mostrarCodUnico()"
+                        class="flex flex-row w-full justify-content-center align-items-center gap-2 label-title shiny-text">
+                        <i class="pi pi-qrcode"></i> Código Único
+                    </div>
+                </div>
+                <ng-template [ngIf]="mostrarCodUnicos">
+                    <ng-template [ngIf]="!skeletonShow">
+                        <div class="w-full">
+                            <table class="w-full">
+                                <tbody>
+                                    <div class="tr-registros" *ngFor="let cod of codigosUnicos"> <!--  -->
+                                        <div class="flex flex-column gap-1" (click)="updateCorreoService(cod)">
+                                            <div
+                                                class="flex flex-row justify-content-between align-items-center w-full">
+                                                <span class="span-nombre">{{ cod.nroDocumento }}</span>
+                                                <span class="flex justify-content-end label-title">{{ cod.codigo
+                                                    }}</span>
+                                            </div>
+                                            <div class="flex flex-row justify-content-center align-items-center w-full">
+                                                <!-- <span class="span-fecha">{{ 'jcerronvicente@gmail.com' }}</span> -->
+                                                <span class="span-fecha w-9">{{ cod.fechaCreacion }}</span>
+                                                <div *ngIf="cod.estado==='A'" class="tag-transparent-primary w-3">
+                                                    Pendiente</div>
+                                                <div *ngIf="cod.estado==='I'" class="tag-transparent-red w-3">Usado
+                                                </div>
+                                                <!-- Pendiente | Usado -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="codigosUnicos.length === 30 || codigosUnicos.length === 0"
+                                        class="tr-registros-s"> <!--  -->
+                                        <div class="flex justify-content-center flex-row span-2">
+                                            <span *ngIf="codigosUnicos.length === 30"
+                                                [routerLink]="['/adm/codigo-unico-list']">Ver todos</span>
+                                            <!-- (click)="verRegistros()" -->
+                                            <span *ngIf="codigosUnicos.length === 0">Aún no hay registros.</span>
+                                            <!--  -->
+                                        </div>
+                                    </div>
+                                </tbody>
+                            </table>
+                        </div>
+                    </ng-template>
+
+                    <ng-template [ngIf]="skeletonShow">
+                        <div class="flex flex-row w-full" style="min-width: 278px;">
+                            <div class="w-full p-2">
+                                <div *ngFor="let item of [].constructor(forSkeleton); let i = index"
+                                    class="flex flex-row justify-content-between mb-1 gap-2 row-skeleton w-full">
+                                    <div class="flex flex-column w-7 gap-1">
+                                        <p-skeleton class="w-12" height="1rem" />
+                                        <p-skeleton class="w-12" height="1rem" />
+                                    </div>
+                                    <div class="flex flex-column align-items-end w-5 gap-1">
+                                        <p-skeleton class="w-10" height="1rem" />
+                                        <p-skeleton class="w-10" height="1rem" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ng-template>
+
+
+            </div>
         </div>
 
         <!-- <div class="flex flex-row gap-2 align-items-center justify-content-center mb-1">
@@ -67,7 +139,7 @@
             </div>
         </div> -->
 
-        
+
 
         <!-- <div class="flex flex-row gap-2 div-monto" >
             <div class="flex-row w-full custom-banner-3">
@@ -87,6 +159,79 @@
             </div>
         </div> -->
 
-        
-    <app-loading></app-loading>
-</div>
+
+        <app-loading></app-loading>
+    </div>
+
+    <p-confirmDialog #update_correo key="update_correo" (onHide)="actualizarCorreo = false">
+        <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+            <div class="flex flex-column align-items-center p-5 surface-overlay border-round" style="min-width: 330px;">
+
+                <span class="font-bold mb-3 mt-4 labelCodUnico" style="font-size: 20px;">
+                    {{ message.header }}
+                </span>
+
+                <div class="card flex w-full flex-column align-items-center rounded shadow-md bg-white">
+
+                    <div class="flex w-full flex-row justify-content-center p-0 align-items-center gap-2">
+                        <i class="pi pi-qrcode w-3 icon-span-gray"></i>
+                        <span class="text-lg w-9 font-semibold text-gray-500 align-items-start">{{ codSelect.codigo
+                            }}</span>
+                    </div>
+                    <div class="flex w-full flex-row justify-content-center align-items-center gap-2 mb-3">
+                        <i class="pi pi-id-card w-3 icon-span-gray"></i>
+                        <span class="text-lg w-9 font-semibold text-gray-500 align-items-start">{{
+                            codSelect.nroDocumento }}</span>
+                    </div>
+                    <div *ngIf="codSelect.estado==='I'" class="flex flex-column w-full ">
+                        <div class="flex w-full flex-row justify-content-start align-items-start gap-2">
+                            <i class="pi pi-at w-2 icon-span-gray"></i>
+                            <span
+                                style="max-width: 220px; display: inline-block; white-space: normal; overflow-wrap: break-word;"
+                                class="text-lg w-10 font-semibold text-gray-500 white-space-normal break-word">{{
+                                codSelect.correo }}</span>
+                        </div>
+                        <span class="text-sm text-gray-500 text-center">{{ codSelect.fechaActualizacion }}</span>
+                    </div>
+                    <div *ngIf="codSelect.estado==='A' && !actualizarCorreo" class="flex flex-column w-full update-correo"
+                            appLongPress
+                            (longPress)="pressOn(codSelect.correo)">
+                        <div class="flex w-full flex-row justify-content-start align-items-start gap-2">
+                            <i class="pi pi-at w-2 icon-span-gray"></i>
+                            <span
+                                style="max-width: 220px; display: inline-block; white-space: normal; overflow-wrap: break-word;"
+                                class="text-lg w-10 font-semibold text-gray-500 white-space-normal break-word shiny-text">{{
+                                codSelect.correo }}</span>
+                        </div>
+                        <span class="text-sm text-gray-500 text-center">Mantén pulsado para actualizar</span>
+                    </div>
+                    <div *ngIf="actualizarCorreo" class="flex flex-column w-full gap-3">
+                        <span class="text-sm text-gray-500 text-center">Ingrese el nuevo correo</span>
+                        <div class="flex w-full flex-row justify-content-center align-items-center gap-2">
+                            <p-floatlabel class="w-10" variant="on">
+                                <input pInputText id="on_label" [maxlength]="180" [(ngModel)]="codSelect.correo" autocomplete="off" />
+                                <label for="on_label">Nuevo correo</label>
+                            </p-floatlabel>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="flex align-items-center gap-2 mt-4">
+                    <button *ngIf="codSelect.estado==='A' && actualizarCorreo" pButton label="Cancelar" (click)="onReject()"
+                        class="p-button-outlined w-8rem ">
+                    </button>
+                    <button *ngIf="codSelect.estado==='A' && actualizarCorreo" [ngClass]="{
+                    'btn-disabled': !isFormValid() }" [disabled]="!isFormValid()" severity="success" pButton
+                        label="Actualizar" (click)="onAccept()" class="w-8rem">
+                    </button>
+                    <button *ngIf="!actualizarCorreo" pButton label="Cerrar" (click)="onReject()"
+                        severity="success" class="p-button-outlined w-8rem ">
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </p-confirmDialog>
+
+    <div>
+        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+    </div>
