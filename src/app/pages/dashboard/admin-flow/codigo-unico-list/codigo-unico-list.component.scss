@@ -109,4 +109,14 @@
     width: auto;
   }
 
+    /* Estilo para comp update correo */
+.update-correo {
+  border-radius: 8px;
+  padding: 10px;
+  border: 2px solid transparent; /* importante: transparente */
+  background: 
+    linear-gradient(white, white) padding-box, /* fondo interior */
+    linear-gradient(to right, var(--primary-500), var(--blue-400)) border-box; /* borde degradado */
+}
+
   

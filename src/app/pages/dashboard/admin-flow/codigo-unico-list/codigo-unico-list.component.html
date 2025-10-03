@@ -13,7 +13,7 @@
                     <table class="w-full">
                         <tbody>
                             <div class="tr-registros" *ngFor="let cod of codigosUnicos"> <!--  -->
-                                <div class="flex flex-column gap-1" appLongPress (longPress)="detailCodigoUnico()">
+                                <div class="flex flex-column gap-1" (click)="updateCorreoService(cod)">
                                     <div class="flex flex-row justify-content-between align-items-center w-full">
                                         <span class="span-nombre">{{ cod.nroDocumento }}</span>
                                         <span class="flex justify-content-end label-title">{{ cod.codigo }}</span>
@@ -21,10 +21,9 @@
                                     <div class="flex flex-row justify-content-center align-items-center w-full">
                                         <!-- <span class="span-fecha">{{ 'jcerronvicente@gmail.com' }}</span> -->
                                         <span class="span-fecha w-9">{{ cod.fechaCreacion }}</span>
-                                        <div *ngIf="cod.estado==='A'" class="tag-transparent-primary w-3">Disponible
+                                        <div *ngIf="cod.estado==='A'" class="tag-transparent-primary w-3">Pendiente
                                         </div>
                                         <div *ngIf="cod.estado==='I'" class="tag-transparent-red w-3">Usado</div>
-                                        <!-- Disponible | Usado -->
                                     </div>
                                 </div>
                             </div>
@@ -61,3 +60,78 @@
         <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
     </div>
 </div>
+
+<app-loading></app-loading>
+
+<p-confirmDialog #update_correo key="update_correo" (onHide)="actualizarCorreo = false">
+        <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+            <div class="flex flex-column align-items-center p-5 surface-overlay border-round" style="min-width: 330px;">
+
+                <span class="font-bold mb-3 mt-4 labelCodUnico" style="font-size: 20px;">
+                    {{ message.header }}
+                </span>
+
+                <div class="card flex w-full flex-column align-items-center rounded shadow-md bg-white">
+
+                    <div class="flex w-full flex-row justify-content-center p-0 align-items-center gap-2">
+                        <i class="pi pi-qrcode w-3 icon-span-gray"></i>
+                        <span class="text-lg w-9 font-semibold text-gray-500 align-items-start">{{ codSelect.codigo
+                            }}</span>
+                    </div>
+                    <div class="flex w-full flex-row justify-content-center align-items-center gap-2 mb-3">
+                        <i class="pi pi-id-card w-3 icon-span-gray"></i>
+                        <span class="text-lg w-9 font-semibold text-gray-500 align-items-start">{{
+                            codSelect.nroDocumento }}</span>
+                    </div>
+                    <div *ngIf="codSelect.estado==='I'" class="flex flex-column w-full ">
+                        <div class="flex w-full flex-row justify-content-start align-items-start gap-2">
+                            <i class="pi pi-at w-2 icon-span-gray"></i>
+                            <span
+                                style="max-width: 220px; display: inline-block; white-space: normal; overflow-wrap: break-word;"
+                                class="text-lg w-10 font-semibold text-gray-500 white-space-normal break-word">{{
+                                codSelect.correo }}</span>
+                        </div>
+                        <span class="text-sm text-gray-500 text-center">{{ codSelect.fechaActualizacion }}</span>
+                    </div>
+                    <div *ngIf="codSelect.estado==='A' && !actualizarCorreo" class="flex flex-column w-full update-correo"
+                            appLongPress
+                            (longPress)="pressOn(codSelect.correo)">
+                        <div class="flex w-full flex-row justify-content-start align-items-start gap-2">
+                            <i class="pi pi-at w-2 icon-span-gray"></i>
+                            <span
+                                style="max-width: 220px; display: inline-block; white-space: normal; overflow-wrap: break-word;"
+                                class="text-lg w-10 font-semibold text-gray-500 white-space-normal break-word shiny-text">{{
+                                codSelect.correo }}</span>
+                        </div>
+                        <span class="text-sm text-gray-500 text-center">Mantén pulsado para actualizar</span>
+                    </div>
+                    <div *ngIf="actualizarCorreo" class="flex flex-column w-full gap-3">
+                        <span class="text-sm text-gray-500 text-center">Ingrese el nuevo correo</span>
+                        <div class="flex w-full flex-row justify-content-center align-items-center gap-2">
+                            <p-floatlabel class="w-10" variant="on">
+                                <input pInputText id="on_label" [maxlength]="180" [(ngModel)]="codSelect.correo" autocomplete="off" />
+                                <label for="on_label">Nuevo correo</label>
+                            </p-floatlabel>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="flex align-items-center gap-2 mt-4">
+                    <button *ngIf="codSelect.estado==='A' && actualizarCorreo" pButton label="Cancelar" (click)="onReject()"
+                        class="p-button-outlined w-8rem ">
+                    </button>
+                    <button *ngIf="codSelect.estado==='A' && actualizarCorreo" [ngClass]="{
+                    'btn-disabled': !isFormValid() }" [disabled]="!isFormValid()" severity="success" pButton
+                        label="Actualizar" (click)="onAccept()" class="w-8rem">
+                    </button>
+                    <button *ngIf="!actualizarCorreo" pButton label="Cerrar" (click)="onReject()"
+                        severity="success" class="p-button-outlined w-8rem ">
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+    </p-confirmDialog>
+    
+    <div>
+        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+    </div>
