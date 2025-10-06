@@ -1,0 +1,29 @@
+  .custom-banner-codigo-unico {
+      flex: 1;
+      /* Permite que cada banner tome el mismo espacio disponible */
+      margin: 5px;
+      /* Espacio alrededor de cada banner */
+      padding: 10px;
+      background: #fff;
+      box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+      color: var(--gray-500);
+      /* Color del texto del banner */
+      text-align: center;
+      /* Centra el texto dentro del banner */
+      border-radius: 8px;
+      /* Bordes redondeados */
+      min-width: 30px;
+      align-items: center;
+  }
+
+  .icon-span {
+      font-size: 20px;
+  }
+
+  .txt-span {
+      font-size: 13px;
+      text-align: left;
+  }
+
+  /* ACCESO, ACTIVO - INACTIVO */
+  

@@ -77,4 +77,14 @@ export class AdminService {
       return this.http.put(this.baseUrl+this.baseComponent+codigo+'/update-correo', null, {params});
   }
 
+  /* CONFIGURACION ADMIN */
+
+  getConfiguracionAdmin(){
+    return this.http.get(this.baseUrl+this.baseComponent+'configuration-admin');
+  }
+
+  updateConfiguracionAdmin(request: any){
+      return this.http.post(this.baseUrl+this.baseComponent+'update-config-admin', request);
+  }
+  
 }

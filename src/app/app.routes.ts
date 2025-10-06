@@ -152,6 +152,12 @@ export const routes: Routes = [
         loadComponent:() => import ('././pages/dashboard/admin-flow/codigo-unico-list/codigo-unico-list.component'),
         data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}
     },
+    {
+        path: 'adm/configuracion-admin',
+        canActivate: [authGuard],
+        loadComponent:() => import ('././pages/dashboard/admin-flow/configuracion-admin/configuracion-admin.component'),
+        data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}
+    },
 
 
     {

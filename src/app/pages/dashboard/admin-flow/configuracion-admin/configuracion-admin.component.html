@@ -1,0 +1,87 @@
+<div *ngIf="mostrarError; else listaNormal">
+    <app-error-general [body]="errorBody"></app-error-general>
+</div>
+
+<ng-template #listaNormal>
+    <div>
+        <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+            <div class="text-center mb-4">
+                <div class="text-2xl mb-3 label-title">Configurar mi App</div>
+            </div>
+
+            <!-- <div class="text-center mb-5">
+            <span class="text-gray-500 font-medium line-height-3">¿Qué hacemos hoy?</span>
+        </div> -->
+
+            <div class="flex flex-row align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-1">
+                <div class="flex flex-column w-10 justify-content-center  gap-2">
+                    <div class="flex flex-row justify-content-start align-items-left gap-2">
+                        <i class="pi pi-globe icon-span"></i>
+                        <span class="block">Web pública</span>
+                    </div>
+                    <span class="txt-span" [ngClass]="webPublic.value==null?'txt-red':''">{{webPublic.descripcion}}</span>
+                </div>
+                <div class="flex flex-column w-2 justify-content-center gap-2 toggle">
+                    <p-toggleswitch [(ngModel)]="webPublic.value" (ngModelChange)="onValueChange('SITE_WEB', webPublic.value)" [ngModelOptions]="{standalone: true}" [trueValue]="1"
+                        [falseValue]="0">
+                        <ng-template #handle let-checked="checked">
+                            <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                        </ng-template>
+                    </p-toggleswitch>
+                </div>
+            </div>
+
+            <div class="flex flex-row align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-1">
+                <div class="flex flex-column w-10 justify-content-center  gap-2">
+                    <div class="flex flex-row justify-content-start align-items-left gap-2">
+                        <i class="pi pi-sparkles icon-span"></i>
+                        <span class="block">Periodo de prueba</span>
+                    </div>
+                    <span class="txt-span" [ngClass]="periodTest.value==null?'txt-red':''">{{periodTest.descripcion}}</span>
+                </div>
+                <div class="flex flex-column w-2 justify-content-center gap-2">
+                    <p-inputnumber [(ngModel)]="periodTest.value" (ngModelChange)="onValueChange('MES_FREE', periodTest.value)" [min]="1" [max]="3" [showButtons]="true"
+                        buttonLayout="vertical" spinnerMode="vertical" inputId="vertical"
+                        [inputStyle]="{ width: '3rem' }">
+                        <ng-template pTemplate="incrementbuttonicon">
+                            <span class="pi pi-plus"></span>
+                        </ng-template>
+                        <ng-template pTemplate="decrementbuttonicon">
+                            <span class="pi pi-minus"></span>
+                        </ng-template>
+                    </p-inputnumber>
+                </div>
+            </div>
+
+            <div class="flex flex-row align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-1">
+                <div class="flex flex-column w-10 justify-content-center  gap-2">
+                    <div class="flex flex-row justify-content-start align-items-left gap-2">
+                        <i class="pi pi-wrench icon-span"></i>
+                        <span class="block">Mantenimiento SSimple</span>
+                    </div>
+                    <span class="txt-span" [ngClass]="mantenimiento.value==null?'txt-red':''">{{mantenimiento.descripcion}}</span>
+                </div>
+                <div class="flex flex-column w-2 justify-content-center gap-2 toggle">
+                    <p-toggleswitch [(ngModel)]="mantenimiento.value" (ngModelChange)="onValueChange('MANT_MODE', mantenimiento.value)" [ngModelOptions]="{standalone: true}" [trueValue]="1"
+                        [falseValue]="0">
+                        <ng-template #handle let-checked="checked">
+                            <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                        </ng-template>
+                    </p-toggleswitch>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <button 
+    *ngIf="changedValues.length > 0 && webPublic.value !== null && periodTest.value !== null && mantenimiento.value !== null" 
+    (click)="updateConfigAdmin()" pButton pRipple label="Guardar cambios" class="btn-float"></button>
+</ng-template>
+
+<app-loading></app-loading>
+
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>

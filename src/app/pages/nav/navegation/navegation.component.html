@@ -57,8 +57,17 @@
                                   <i class="pi pi-home mr-2"></i>
                                   <span class="font-medium">Inicio</span>
                               </a>
-                          </li>
+                          </li> 
                           <li *ngIf="codPefil=='ADM'">
+                              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                              [routerLink]="['/adm/configuracion-admin']"
+                              (click)="closeCallback($event)"
+                              >
+                                  <i class="pi pi-cog mr-2"></i>
+                                  <span class="font-medium">Configuración</span>
+                              </a>
+                          </li> 
+                          <!-- <li *ngIf="codPefil=='ADM'">
                               <a
                                   pRipple
                                     pStyleClass="@next"
@@ -102,7 +111,7 @@
                                       </a>
                                   </li>
                               </ul>
-                          </li>
+                          </li> -->
                           <li *ngIf="codPefil=='INV'">
                               <a
                                   pRipple
