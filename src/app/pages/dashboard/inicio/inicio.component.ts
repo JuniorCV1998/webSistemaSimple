@@ -29,6 +29,8 @@ export class InicioComponent {
 
   nombreUsuario = '';
 
+  currency: string | null = null;
+
   constructor(
     private router: Router,
     private getInversionService: GetInversionService,
@@ -47,7 +49,7 @@ export class InicioComponent {
         this.nombreUsuario = sessionStorage.getItem('nombreComercial') ?? sessionStorage.getItem('razonSocial') ?? "";
       }
     }
-    
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
   items: MenuItem[] | undefined;
@@ -62,7 +64,7 @@ export class InicioComponent {
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
-    this.clearSessionStorageExcept(['token', 'codTipoDoc', 'nombreComercial', 'razonSocial']);
+    this.clearSessionStorageExcept(['token', 'codTipoDoc', 'nombreComercial', 'razonSocial', 'pathLogo', 'pathSello']);
 
   }
 

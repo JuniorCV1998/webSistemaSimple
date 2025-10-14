@@ -15,7 +15,7 @@
             </div>
             <div class="flex flex-row w-5 paddin-5 cont-banner gap-2">
                 <div class="flex flex-column justify-content-center align-items-center" style="padding-top: 5px;">
-                    <span class="icon-span pi-present">S/.</span>
+                    <span class="icon-span pi-present">{{currency}}</span>
                 </div>
                 <div class="flex flex-column justify-content-center w-full">
                     <span class="text-gray-500 font-medium line-height-3 w-full">{{objInvDetail.monto | formatNumber}}</span>
@@ -53,12 +53,12 @@
             <div class="w-full mb-2">
                 <table>
                     <tbody>
-                        <tr *ngFor="let fila of getCuotasEnFilas()" class="flex flex-row w-full">
-                            <td *ngFor="let obj of fila" class="w-full">
+                        <tr *ngFor="let fila of getCuotasEnFilas(); let i = index; trackBy: trackByFila" class="flex flex-row w-full">
+                            <td *ngFor="let obj of fila; let j = index; trackBy: trackByObj" class="w-full">
                                 <!-- Pagado -->
                                 <div *ngIf="obj.isPagado" class="flex flex-column align-items-center cont-pago"
                                 (click)="mostrarFechaPagar(obj.fechaPagar)">
-                                <img src="assets/images/logos/sello_ssimple.png" width="50" height="50">
+                                <img [src]="pathSello" loading="lazy" width="50" height="50">
                                 <span class="fecha">{{ obj.fechaPago }}</span>
                                 </div>
 
@@ -121,7 +121,7 @@
                     <div class="flex flex-column w-full">
                         <span class="mb-2 params-txt">Monto invertido</span>
                         <span class="valor-txt-detail">
-                            S/. {{objInvDetail.monto | formatNumber }}
+                            {{currency}} {{objInvDetail.monto | formatNumber }}
                         </span>
                     </div>
     
@@ -144,7 +144,7 @@
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">valor de cuota</label>
                         <span class="valor-txt-detail">
-                        S/. {{objInvDetail.valorCuota | formatNumber}}
+                        {{currency}} {{objInvDetail.valorCuota | formatNumber}}
                         </span>
                     </div>
                 </div>
@@ -338,7 +338,7 @@
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <img src="assets/images/logos/sello_ssimple.png" width="110" height="110">
+                        <img [src]="pathSello" loading="lazy" width="110" height="110">
                     </div>
                     <span class="font-bold text-2xl block mb-2 mt-4 txt-primary">
                         {{ message.header }}
@@ -394,7 +394,7 @@
                      </div>
                      <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto a renovar</span>
                      <div class="flex flex-row align-items-center gap-4 mb-3">
-                        <span class="monto-txt">S/. {{objInvDetail.monto | formatNumber}}</span>
+                        <span class="monto-txt">{{currency}} {{objInvDetail.monto | formatNumber}}</span>
                      </div>
 
                      <!-- Fecha inicio y fin -->

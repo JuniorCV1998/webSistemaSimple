@@ -8,7 +8,7 @@ import { LoginService } from '../../../core/services/auth/login/login.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
-import { ConfirmDialogModule } from 'primeng/confirmdialog'; 
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../core/constant/Constantes';
@@ -19,10 +19,10 @@ import { InputOtpModule } from 'primeng/inputotp';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,FormsModule,
-    ConfirmDialogModule,CommonModule,LoadingComponent,InputOtpModule],
+  imports: [ButtonModule, InputTextModule, CheckboxModule, PasswordModule, FormsModule,
+    ConfirmDialogModule, CommonModule, LoadingComponent, InputOtpModule],
   providers: [ConfirmationService],
-  templateUrl: './login.component.html', 
+  templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export default class LoginComponent {
@@ -32,81 +32,81 @@ export default class LoginComponent {
   /*Limpiar correo  */
   cleanCorreo: string = 'clean';
   codigoUnico: string = '';
-  
+
   constructor(
     private router: Router,
-    private loginService:LoginService,
+    private loginService: LoginService,
     public dialogService: DialogService,
   ) {
     const correo = localStorage.getItem('correo');
-      if(correo) router.navigate(['/login-user']);
+    if (correo) router.navigate(['/login-user']);
   }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     const emailCreate = sessionStorage.getItem('emailCreate');
-    if(emailCreate) {
+    if (emailCreate) {
       this.credenciales.correo = emailCreate;
       sessionStorage.clear();
     }
   }
 
-    credenciales = {
-      correo: '',
-      contrasena: ''
-    };
+  credenciales = {
+    correo: '',
+    contrasena: ''
+  };
 
-    creaHoy(){
-      this.router.navigate(['/registrar']);
-    }
-
-    login(form: NgForm) {
-      this.loadingComponent.show();
-      this.loginService.iniciarSesion(this.credenciales).subscribe({
-        next: response => { 
-          this.loadingComponent.hide();
-          localStorage.setItem('correo', this.credenciales.correo);
-          sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
-          if(response.data.person.codTipoDoc==="06"){
-            sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
-            sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
-          }
-          this.router.navigate(['inicio']);
-        },
-        error: err => {
-          this.loadingComponent.hide();
-          if (err.status === 401) {
-            this.show(Constantes.MSG_401);
-          } else {
-            this.show(Constantes.MSG_500);
-          }
-        }
-      });
-    }
-    
-    show(message: string) {
-      const ref = this.dialogService.open(MessagePopUpComponent, {
-        data: {
-          message: message
-        },
-        header: Constantes.MSG_GLOBAL,
-        closable: false,
-        modal: true,         
-        width: '90%'
-      });
+  creaHoy() {
+    this.router.navigate(['/registrar']);
   }
-  
-    // Método para verificar si todos los campos obligatorios están llenos
-    isFormValid(): boolean {
-        return (
-          this.credenciales.correo.trim() !== '' &&
-          this.credenciales.contrasena.length === 6
-        );
-    }
 
-    cleanCorreoFunct() {
-      this.cleanCorreo = this.cleanCorreo === 'clean' ? '' : 'clean';
-      this.credenciales.correo = '';
-    }
+  login(form: NgForm) {
+    this.loadingComponent.show();
+    this.loginService.iniciarSesion(this.credenciales).subscribe({
+      next: response => {
+        this.loadingComponent.hide();
+        localStorage.setItem('correo', this.credenciales.correo);
+        sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
+        if (response.data.person.codTipoDoc === "06") {
+          sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
+          sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
+        }
+        this.router.navigate(['inicio']);
+      },
+      error: err => {
+        this.loadingComponent.hide();
+        if (err.status === 401) {
+          this.show(Constantes.MSG_401);
+        } else {
+          this.show(Constantes.MSG_500);
+        }
+      }
+    });
+  }
+
+  show(message: string) {
+    const ref = this.dialogService.open(MessagePopUpComponent, {
+      data: {
+        message: message
+      },
+      header: Constantes.MSG_GLOBAL,
+      closable: false,
+      modal: true,
+      width: '90%'
+    });
+  }
+
+  // Método para verificar si todos los campos obligatorios están llenos
+  isFormValid(): boolean {
+    return (
+      this.credenciales.correo.trim() !== '' &&
+      this.credenciales.contrasena.length === 6
+    );
+  }
+
+  cleanCorreoFunct() {
+    this.cleanCorreo = this.cleanCorreo === 'clean' ? '' : 'clean';
+    this.credenciales.correo = '';
+  }
 
 }
 

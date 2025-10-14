@@ -76,6 +76,21 @@ export const routes: Routes = [
         data: { profiles: [Constantes.PERFIL_INV] }
     },
 
+    /* Clientes */
+    {
+        path: 'clientes',
+        canActivate: [authGuard],
+        loadComponent:() => import ('././pages/dashboard/inversor-flow/lista-clientes/lista-clientes.component'),
+        data: { profiles: [Constantes.PERFIL_INV] }
+    },
+    {
+        path: 'inv/configuracion',
+        canActivate: [authGuard],
+        loadComponent:() => import ('././pages/dashboard/inversor-flow/configuracion-inversor/configuracion-inversor.component'),
+        data: { profiles: [Constantes.PERFIL_INV] }
+    },
+
+
 
     /* Inversión Vehicular */ 
     {
@@ -153,7 +168,7 @@ export const routes: Routes = [
         data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}
     },
     {
-        path: 'adm/configuracion-admin',
+        path: 'adm/configuracion',
         canActivate: [authGuard],
         loadComponent:() => import ('././pages/dashboard/admin-flow/configuracion-admin/configuracion-admin.component'),
         data: { profiles: [Constantes.PERFIL_ADM], animation: 'fade'}

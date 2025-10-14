@@ -15,6 +15,7 @@ import { Constantes } from '../../../core/constant/Constantes';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { finalize } from 'rxjs';
 import { App } from '@capacitor/app';
+import { TempDataService } from '../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-login-user',
@@ -40,7 +41,8 @@ export default class LoginUserComponent {
     constructor(
       private router: Router,
       private loginService:LoginService,
-      public dialogService: DialogService,
+      private dialogService: DialogService,
+      private tempDataService: TempDataService
     ) {
       const correo = localStorage.getItem('correo');
       if(correo) this.correo = correo;
@@ -76,6 +78,11 @@ export default class LoginUserComponent {
               sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
               sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
             }
+            // Guardar temporalmente informacion de configuracion del usuario
+            this.tempDataService.setConstant('currency',response.data.config.moneda);
+            sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
+            sessionStorage.setItem('pathSello', response.data.config.pathSello);
+
             this.router.navigate(['inicio']);
           },
           error: err => {

@@ -13,8 +13,17 @@ export class InversoresService {
 
   constructor() { }
 
-  getMyClients(){
-    return this.http.get(this.baseUrl+this.baseComponent+'getMyClients');
+  getMyClients() {
+    return this.http.get(this.baseUrl + this.baseComponent + 'getMyClients');
+  }
+
+  /* Configuracion */
+  getConfiguracionInv() {
+    return this.http.get(this.baseUrl + this.baseComponent + 'configuration-inv');
+  }
+
+  updateConfiguracionInv(request: any) {
+    return this.http.post(this.baseUrl + this.baseComponent + 'configuration-inv', request);
   }
 
 

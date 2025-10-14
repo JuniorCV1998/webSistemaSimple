@@ -35,7 +35,7 @@
                     <span class="txt-span">Saldo por cobrar</span>
                 </div>
                 <div class="flex w-5 justify-content-center">
-                    <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">S/ {{ monto | formatNumber }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
+                    <span *ngIf="mostrar" class="txt-span"><div *ngIf="montoCargado">{{currency}} {{ monto | formatNumber }}</div><i *ngIf="!montoCargado" class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i></span>
                     <span *ngIf="!mostrar" class="txt-span">********</span>
                 </div>
 
@@ -68,7 +68,7 @@
                                                 <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
                                             </div>
                                             <div class="flex flex-column justify-content-center w-5">
-                                                <span class="flex justify-content-end span-monto">S/ {{ inversion.monto | formatNumber }}</span>
+                                                <span class="flex justify-content-end span-monto">{{currency}} {{ inversion.monto | formatNumber }}</span>
                                             </div>
                                         </div>
                                     </div>

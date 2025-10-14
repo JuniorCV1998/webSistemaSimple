@@ -20,14 +20,6 @@
     overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
     text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
   }
-  .line-right{
-    border-right: solid 1px var(--gray-200);
-    padding-right: 2px;
-    height: 80%;
-  }
-
-
-
 
 /* Estilo tabla diario */
 .table-diario, .table-semanal {

@@ -17,8 +17,8 @@ import { Drawer, DrawerModule } from 'primeng/drawer';
 @Component({
   selector: 'app-navegation',
   standalone: true,
-  imports: [RouterOutlet,CommonModule,SidebarModule,ButtonModule, RippleModule, StyleClassModule,
-    AvatarModule,TabMenuModule,RouterModule, DrawerModule],
+  imports: [RouterOutlet, CommonModule, SidebarModule, ButtonModule, RippleModule, StyleClassModule,
+    AvatarModule, TabMenuModule, RouterModule, DrawerModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss',
   animations: [slideInAnimation]
@@ -53,13 +53,15 @@ export class NavegationComponent {
   permisos: any = null;
   permisoVehicular: boolean = false; // permiso vehicular
 
+  pathLogo: string | null = null;
+
   constructor(
     private location: Location,
     private router: Router,
     private loginService: LoginService,
     private route: ActivatedRoute,
     private tempDataService: TempDataService
-  ){
+  ) {
     /* const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
       console.log('Nombre:', decodedToken.nombre);
@@ -75,13 +77,13 @@ export class NavegationComponent {
   ngOnInit() {
     /* Muestra las barras de Menu */
     const showMenu = [
-      '/inicio','/reporte/reporte-cobranza','/vehicular/inicio'
+      '/inicio', '/reporte/reporte-cobranza', '/vehicular/inicio'
     ];
     const sinInicio = [
       '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
     ];
     const flowOutSession = [
-      '/login','/registrar','/registrar/personal','/login-user'
+      '/login', '/registrar', '/registrar/personal', '/login-user'
     ];
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
@@ -90,7 +92,7 @@ export class NavegationComponent {
       const decodedToken = this.loginService.getDecodedToken();
 
 
-      if(decodedToken) {
+      if (decodedToken) {
         this.codPefil = decodedToken.codPerfil;
         this.tempDataService.setConstant("codPerfil", this.codPefil);
         this.permisos = decodedToken.permisos ?? [];
@@ -110,8 +112,8 @@ export class NavegationComponent {
           this.showVolverButton = false;
           this.showAux = false;
           /* this.showIconHome = true; */
-        } else if(sinInicio.includes(currentRoute)){
-          if(this.confetti) this.showVolverButton = false;
+        } else if (sinInicio.includes(currentRoute)) {
+          if (this.confetti) this.showVolverButton = false;
           else this.showVolverButton = true;
           this.showAux = true;
         } else {
@@ -121,33 +123,36 @@ export class NavegationComponent {
         }
 
         //CONTROLAR VISIBILIDAD DEL HEADER
-        if(this.loginService.getToken()!=null) {
-          this.session=true;
+        if (this.loginService.getToken() != null) {
+          this.session = true;
         }
-        else this.session=false; 
+        else this.session = false;
 
         if (flowOutSession.includes(currentRoute)) this.outSession = true;
         else this.outSession = false;
       }
-      
 
+      /* Cargar Logo y Sello */
+      const logoGuardado = sessionStorage.getItem('pathLogo');
+      this.pathLogo = logoGuardado && logoGuardado !== 'null' ? logoGuardado : 'public/logos/logo_ssimple.png';
     });
 
     //Definir de donde vengo
     this.definirFrom();
+
   }
 
-  setValueConfetti(){
+  setValueConfetti() {
     const obj = sessionStorage.getItem('confetti');
-    if(obj) {
+    if (obj) {
       this.confetti = JSON.parse(obj);
-    }else this.confetti = false;
+    } else this.confetti = false;
   }
 
   //Slider Module
   closeCallback(e: Event): void {
-        this.drawerRef.close(e);
-    }
+    this.drawerRef.close(e);
+  }
 
   visible: boolean = false;
   sidebarOpened: boolean = false;
@@ -158,9 +163,9 @@ export class NavegationComponent {
   }
 
   // Método para cerrar el sidebar
-/*   closeNav() {
-    this.sidebarOpened = false;
-  } */
+  /*   closeNav() {
+      this.sidebarOpened = false;
+    } */
 
 
   ngOnDestroy() {
@@ -171,23 +176,23 @@ export class NavegationComponent {
   }
 
   volver() {
-    if(this.irInicio || (!this.fromList && this.fromList != null)) {
-      if(this.registerVeh) this.router.navigate(['/vehicular/inicio']);
+    if (this.irInicio || (!this.fromList && this.fromList != null)) {
+      if (this.registerVeh) this.router.navigate(['/vehicular/inicio']);
       else this.router.navigate(['/inicio']);
     }
     else this.location.back();
   }
 
   fromList: boolean | null = null;
-  definirFrom(){
+  definirFrom() {
     // Recuperar el parámetro de consulta `from`
     this.route.queryParamMap.subscribe(params => {
       const fromView = params.get('from');
-      if(fromView == 'list') this.fromList = true;
-      else if(fromView == 'register') {
-        if(this.confetti) this.fromList = false;
+      if (fromView == 'list') this.fromList = true;
+      else if (fromView == 'register') {
+        if (this.confetti) this.fromList = false;
         else this.fromList = true;
-      } else if(fromView == 'registerVeh') {
+      } else if (fromView == 'registerVeh') {
         this.fromList = false;
         this.registerVeh = true;
       }
@@ -195,7 +200,7 @@ export class NavegationComponent {
     });
   }
 
-  sessionClear(){
+  sessionClear() {
     const event = new Event('');
     this.closeCallback(event);
     sessionStorage.clear();

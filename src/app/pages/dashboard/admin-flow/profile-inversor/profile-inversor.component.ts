@@ -16,6 +16,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { ButtonModule } from 'primeng/button';
+import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-profile-inversor',
@@ -74,6 +75,8 @@ export default class ProfileInversorComponent {
   nuevaFechaStr: string = "";
   montoPago: any = null;
 
+  currency: string | null = null;
+
   constructor(
     private confirmationService: ConfirmationService,
     private adminService: AdminService,
@@ -81,7 +84,10 @@ export default class ProfileInversorComponent {
     private router: Router,
     public dialogService: DialogService,
     private messageService: MessageService,
-  ) { }
+    private tempDataService: TempDataService
+  ) { 
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
+  }
 
   ngOnInit() {
     this.route.queryParamMap.subscribe((params: any) => {

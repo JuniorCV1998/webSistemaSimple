@@ -46,6 +46,8 @@ export default class ConfirmInvComponent {
     }
   }
 
+  currency: string | null = null;
+  
   constructor(
     private messageService: MessageService,
     private tempDataService: TempDataService,
@@ -53,7 +55,9 @@ export default class ConfirmInvComponent {
     private router: Router,
     private inversionVehService: InversionVehService
 
-  ){}
+  ){
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
+  }
 
   ngOnInit(): void{
     if(!this.tempDataService.hasItem('flow')) this.router.navigate(['inicio']);

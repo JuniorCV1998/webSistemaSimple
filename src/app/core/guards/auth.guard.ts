@@ -23,14 +23,14 @@ export const authGuard: CanActivateFn = (route, state) => {
         // Decodifica los permisos desde el token
         const permisosUsuario = decodedToken.permisos;
 
-        // ✅ Validación de perfiles (ya existente)
+        // Validación de perfiles (ya existente)
         const requiredProfiles = route.data['profiles'] || [];
         if (requiredProfiles.length && !requiredProfiles.some((profile: any) => userProfiles.includes(profile))) {
           router.navigate(['/inicio']);
           return false;
         }
 
-        // ✅ Validación de permisos
+        // Validación de permisos
         const requiredPermisos = route.data['permisos'] || [];
         if (requiredPermisos.length && !requiredPermisos.some((permisoRequerido: string) => 
           permisosUsuario.some((permisoUsuario: any) => permisoUsuario.codigo === permisoRequerido))) {

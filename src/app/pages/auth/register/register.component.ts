@@ -80,7 +80,6 @@ export default class RegisterComponent {
 validarDatos(){
   this.loadingComponent.show();
   this.objUser.codigoUnico = "SS-" + this.codigoUnico;
-  console.log(JSON.stringify(this.objUser));
   this.registerService.validateRegister(this.objUser).pipe(
     finalize(() => this.loadingComponent.hide()),
     catchError((error) => {

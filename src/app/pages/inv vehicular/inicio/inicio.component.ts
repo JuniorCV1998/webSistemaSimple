@@ -31,6 +31,8 @@ export default class InicioComponent {
   /* Datos del usuario */
   perfil: string = '';
 
+  currency: string | null = null;
+
   constructor(
     private inversionVehService: InversionVehService,
     private router: Router,
@@ -50,6 +52,8 @@ export default class InicioComponent {
       }, 100); 
     }
     this.getInversionesVehiculares();
+
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
   
   ngAfterViewInit(): void {

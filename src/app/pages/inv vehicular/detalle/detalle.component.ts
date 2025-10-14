@@ -47,6 +47,8 @@ export default class DetalleComponent {
   fechaPago: Date = new Date();
   montoPago: any = null;
   perfil: string = '';
+
+  currency: string | null = null;
   
   constructor(
     private inversionVehService: InversionVehService,
@@ -55,10 +57,11 @@ export default class DetalleComponent {
     public dialogService: DialogService,
     private viewportScroller: ViewportScroller,
     private messageService: MessageService,
-    public tempDataService: TempDataService,
+    private tempDataService: TempDataService,
     private confirmationService: ConfirmationService,
   ){
     if(this.tempDataService.hasConstant("codPerfil")) this.perfil = this.tempDataService.getConstant("codPerfil") ?? '';
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
   ngOnInit(): void{

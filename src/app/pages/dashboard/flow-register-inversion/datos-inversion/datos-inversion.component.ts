@@ -59,6 +59,8 @@ export default class DatosInversionComponent {
   //comentario
   comentario: string = '';
 
+  currency: string | null = null;
+  
   constructor(
     private router: Router,
     private location: Location,
@@ -78,6 +80,7 @@ export default class DatosInversionComponent {
       this.comentario = objnew.comentario;
       this.selectButton(objnew.selected, objnew.nroCuotas, objnew.codigo); //actualiza cuota
     }
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }  
 
   ngAfterViewInit(): void {

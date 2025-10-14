@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
-import { LoginService } from '../../../../core/services/auth/login/login.service';
 import { CommonModule } from '@angular/common';
-import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { finalize } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
-import { SkeletonModule } from 'primeng/skeleton';
-import { Router, RouterModule } from '@angular/router';
-import { TabMenuModule } from 'primeng/tabmenu';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { LoginService } from '../../../../core/services/auth/login/login.service';
+import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-inicio',
@@ -25,16 +26,19 @@ export class InicioClientComponent {
 
   data: any[] = [];
 
+  currency: string | null = null;
+
   constructor(
     private loginService: LoginService,
     private getInversionService: GetInversionService,
-    private router: Router,
+    private tempDataService: TempDataService
   ){
     const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
       const fullName = decodedToken.nombre.split(" ");
       this.nombreUsuario = fullName[0];
     }
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
   ngAfterViewInit() {

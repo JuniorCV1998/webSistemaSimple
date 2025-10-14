@@ -5,6 +5,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { Location } from '@angular/common';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-list-all',
@@ -19,9 +20,14 @@ export default class ListAllComponent {
   skeletonShow: boolean = true;
   ultimasInversiones: any[] = [];
 
+  currency: string | null = null;
+
   constructor(
-    private location: Location
-  ){}
+    private location: Location,
+    private tempDataService: TempDataService
+  ){
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
+  }
 
   ngOnInit(): void {
 

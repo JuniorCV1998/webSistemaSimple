@@ -7,6 +7,7 @@ export const Constantes = {
     MSG_GLOBAL: 'Acceso denegado',
     MSG_EXPIRED_SESSION: 'Sesión Expirada',
     MSG_SIN_REGISTROS: 'SIN REGISTROS',
+    MSG_IMAGEN_ERROR: 'Error al subir imagen',
 
     /* ERROR HTTP CODE 500 */
     MSG_500: 'Error en el servidor. Inténtelo más tarde.',

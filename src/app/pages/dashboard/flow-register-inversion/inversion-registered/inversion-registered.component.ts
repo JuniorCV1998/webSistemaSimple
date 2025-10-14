@@ -14,6 +14,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-inversion-registered',
@@ -31,8 +32,9 @@ export default class InversionRegisteredComponent {
 
   idInversion: number | null = null;
   confetti: boolean = false;
-
   isLoading: boolean = true;
+  
+  currency: string | null = null;
 
   constructor(
     private messageService: MessageService,
@@ -40,12 +42,14 @@ export default class InversionRegisteredComponent {
     private location: Location,
     private route: ActivatedRoute,
     private getInversionService: GetInversionService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private tempDataService: TempDataService
   ){
     const obj = sessionStorage.getItem('confetti');
     if(obj) {
       this.confetti = JSON.parse(obj);
     }
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
   //Mostrar clave usuario

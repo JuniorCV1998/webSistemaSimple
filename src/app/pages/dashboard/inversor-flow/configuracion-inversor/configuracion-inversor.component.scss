@@ -1,0 +1,94 @@
+  .custom-banner-codigo-unico {
+      flex: 1;
+      /* Permite que cada banner tome el mismo espacio disponible */
+      margin: 5px;
+      /* Espacio alrededor de cada banner */
+      padding: 10px;
+      background: #fff;
+      box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+      color: var(--gray-500);
+      /* Color del texto del banner */
+      text-align: center;
+      /* Centra el texto dentro del banner */
+      border-radius: 8px;
+      /* Bordes redondeados */
+      min-width: 30px;
+      align-items: center;
+  }
+
+  .icon-span {
+      font-size: 20px;
+  }
+
+  .txt-span {
+      font-size: 13px;
+      text-align: left;
+  }
+
+  /* LIMITES */
+  .slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #6366f1;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #4338ca;
+}
+
+/* IMAGENES LOGO */
+.upload-box {
+  width: 10rem;
+  height: 10rem;
+  border: 2px dashed #93c5fd; /* azul suave */
+  border-radius: 12px;
+  background-color: #eff6ff; /* azul claro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+
+  &:hover {
+    background-color: #dbeafe; /* azul más vivo */
+    border-color: #3b82f6;
+    transform: scale(1.02);
+  }
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.selected-file {
+  font-size: 0.85rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .p-dialog{
+    max-width: 520px;
+}

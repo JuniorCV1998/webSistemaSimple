@@ -58,7 +58,7 @@
             <span class="span-2">Monto a invertir</span>
         </div>
         <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">S/. {{response.monto | formatNumber}}</span>
+            <span class="span-1">{{currency}} {{response.monto | formatNumber}}</span>
         </div>
     </div>
 
@@ -85,7 +85,7 @@
             <span class="span-2">Valor de cuota</span>
         </div>
         <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">S/. {{response.valorCuota | formatNumber}}</span>
+            <span class="span-1">{{currency}} {{response.valorCuota | formatNumber}}</span>
         </div>
     </div>
 

@@ -65,7 +65,6 @@ export default class CodigoUnicoListComponent {
   updateCorreoService(codigoObj: any) {
     this.updateCorreo(codigoObj).then((result) => {
       if (result) {
-        console.log("Entro?")
         this.loadingComponent.show();
         this.adminService.updateCorreoDeCodigoUnico(codigoObj.codigo, codigoObj.correo).pipe(
           finalize(() => this.loadingComponent.hide()),

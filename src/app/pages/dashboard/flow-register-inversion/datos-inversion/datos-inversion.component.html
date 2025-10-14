@@ -18,8 +18,8 @@
                  placeholder="Ingrese monto..." class="w-full mb-1"
                  [min]="objValidationValues.montoLimit.montoMin" [max]="objValidationValues.montoLimit.montoMax"
                  />
-                <span *ngIf="valueMonto !== null && valueMonto < objValidationValues.montoLimit.montoMin" class="input-fail">El monto no puede ser menor a S/ {{objValidationValues.montoLimit.montoMin | formatNumber}}.</span>
-                <span *ngIf="valueMonto !== null && valueMonto > objValidationValues.montoLimit.montoMax" class="input-fail">El monto no puede ser mayor a S/ {{objValidationValues.montoLimit.montoMax | formatNumber}}.</span>
+                <span *ngIf="valueMonto !== null && valueMonto < objValidationValues.montoLimit.montoMin" class="input-fail">El monto no puede ser menor a {{currency}} {{objValidationValues.montoLimit.montoMin | formatNumber}}.</span>
+                <span *ngIf="valueMonto !== null && valueMonto > objValidationValues.montoLimit.montoMax" class="input-fail">El monto no puede ser mayor a {{currency}} {{objValidationValues.montoLimit.montoMax | formatNumber}}.</span>
              </div>
             
             
@@ -119,7 +119,7 @@
                         <div class="flex flex-column justify-content-center w-full custom-banner">
                             <span class="text-center mb-1 text-gray-500 font-medium">Valor de la cuota</span>
                             <div class="flex flex-column justify-content-between align-items-center w-full">
-                                <span class="w-8">S/</span>
+                                <span class="w-8">{{currency}}</span>
                                 <span class="text-4xl font-medium" style="word-break: break-all;">
                                     <div *ngIf="cuotaCargada">{{ valorCuota | formatNumber  }}</div>
                                     <i *ngIf="!cuotaCargada" class="pi pi-spinner pi-spin" style="color: var(--gray-400); font-size: 1.8rem;"></i>

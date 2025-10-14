@@ -66,6 +66,8 @@ export default class RegisterPersonalComponent {
 
   isClienteNatural: Boolean = true;
   
+  pathSello: string | null = null;
+  
   constructor(
     private router: Router,
     private location: Location,
@@ -99,6 +101,11 @@ export default class RegisterPersonalComponent {
   
   ngOnInit(): void{
     sessionStorage.removeItem('token');
+
+    /* Cargar Logo y Sello */
+    const selloGuardado = sessionStorage.getItem('pathSello');
+    this.pathSello = selloGuardado && selloGuardado !== 'null' ? selloGuardado : 'public/logos/sello_ssimple.png';
+
   }
 
   volver() {
@@ -181,7 +188,6 @@ export default class RegisterPersonalComponent {
 
     // Método para verificar si todos los campos obligatorios están llenos
     isFormValid(): boolean {
-      console.log("persona: " + JSON.stringify(this.objPersona));
       return (
         this.objPersona.nombres.trim() !== '' &&
         this.objPersona.apellidoPaterno.trim() !== '' &&

@@ -162,7 +162,7 @@
                         <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
                     </p>
                     <!-- Monto a pagar -->
-                     <h3 class="text-lg font-semibold text-gray-500">Monto a recaudar (S/.)</h3>
+                     <h3 class="text-lg font-semibold text-gray-500">Monto a recaudar ({{currency}})</h3>
                         <div class="flex w-full flex-column align-items-center justify-content-center mb-3 gap-2">
                             <p-inputNumber
                             [(ngModel)]="montoPago"
@@ -172,8 +172,8 @@
                             placeholder="Ingrese monto" class="w-full w-8"
                             [min]="1" [max]="100000"
                             />
-                            <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | formatNumber}}.</span>
-                            <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a S/ {{100000 | formatNumber}}.</span>
+                            <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a {{currency}} {{1 | formatNumber}}.</span>
+                            <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a {{currency}} {{100000 | formatNumber}}.</span>
                         </div>
                     <!-- Fecha calculada -->
                     <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">

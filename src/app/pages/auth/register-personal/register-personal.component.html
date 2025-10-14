@@ -7,7 +7,7 @@
             <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
         </div>
         <div class="text-center mb-4">
-            <img src="assets/images/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
+            <img src="public/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
             <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3">¡Estamos en la recta final!</div>
         </div>
 
@@ -168,7 +168,7 @@
         <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
             <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                 <div *ngIf="!confirmCase" class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                    <img src="assets/images/logos/sello_ssimple.png" width="100" height="100">
+                    <img [src]="pathSello" width="100" height="100">
                 </div>
                 <span class="font-bold text-2xl block mb-2 mt-4">
                     {{ message.header }}

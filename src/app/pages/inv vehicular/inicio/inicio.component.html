@@ -32,7 +32,7 @@
                     <span class="span-fecha">{{inversion.fechaActualizado}}</span>
                 </div>
                 <div *ngIf="perfil=='INV'" class="flex flex-column w-3 align-items-center gap-1">
-                    <span class="span-monto">S/{{inversion.totalPagado | formatNumber}}</span>
+                    <span class="span-monto">{{currency}} {{inversion.totalPagado | formatNumber}}</span>
                     <span class="span-desc">Recaudado</span>
                 </div>
             </div>

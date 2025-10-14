@@ -60,6 +60,8 @@ export default class DatosInversionComponent {
   // Datos de la persona
   persona: any = {}
 
+  currency: string | null = null;
+
   constructor(
     private tempDataService: TempDataService,
     private inversionVehService: InversionVehService,
@@ -69,7 +71,7 @@ export default class DatosInversionComponent {
     const cliente = this.tempDataService.hasItem('persona');
     if(cliente) this.persona = this.tempDataService.getItem<any>('persona');
     //this.tempDataService.removeItem('persona');
-    
+    this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
   ngOnInit(): void{

@@ -24,7 +24,7 @@
 
     <div class="flex flex-row w-full gap-2 justify-content-center mb-3">
         <div class="flex flex-column w-6">
-            <label for="montoDiario" class="block text-gray-500 font-medium mb-2">Monto diario (S/.)</label>
+            <label for="montoDiario" class="block text-gray-500 font-medium mb-2">Monto diario ({{currency}})</label>
             <p-inputNumber
                 [(ngModel)]="inversion.montoDiario"
                  id="monto" 
@@ -33,10 +33,8 @@
                  placeholder="Ingrese monto" class="w-full mb-1"
                  [min]="1" [max]="999"
                  />
-                 <!-- prefix="S/. " -->
-                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario < 1" class="input-fail">El monto no puede ser menor a S/ {{1 | formatNumber}}.</span>
-                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario > 999" class="input-fail">El monto no puede ser mayor a S/ {{999 | formatNumber}}.</span>
-            <!-- <input [(ngModel)]="inversion.montoDiario" [maxlength]="20" id="montoDiario" type="text" placeholder="S/40.00" pInputText appSoloLetras class="w-full mb-3"> -->
+                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario < 1" class="input-fail">El monto no puede ser menor a {{currency}} {{1 | formatNumber}}.</span>
+                 <span *ngIf="inversion.montoDiario !== null && inversion.montoDiario > 999" class="input-fail">El monto no puede ser mayor a {{currency}} {{999 | formatNumber}}.</span>
         </div>
 
         <div class="flex flex-column w-6">
