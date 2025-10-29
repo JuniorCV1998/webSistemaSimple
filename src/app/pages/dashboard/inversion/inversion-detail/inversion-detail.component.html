@@ -1,26 +1,28 @@
-
 <div *ngIf="!isLoading">
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
+
         <div class="text-center mb-3">
             <div id="div_line_bootom" class=" text-2xl font-medium label-title">Cartilla de inversión</div>
         </div>
 
         <div class="flex flex-row w-full mb-3 custom-banner-present">
-            <div class="flex flex-row w-7 paddin-5 gap-2">
-                <div class="flex align-items-center"><i class="pi pi-user icon-span pi-present"></i></div>
+            <div class="flex flex-row justify-content-center align-items-center w-full gap-2" [routerLink]="['/cliente']"
+                [queryParams]="{ idUsuario: objInvDetail.idUsuario}">
+                <div class="flex align-items-center div-icon-profile"><i class="pi pi-user icon-span pi-present"></i>
+                </div>
                 <div class="flex flex-column justify-content-center w-full">
-                    <span class="text-gray-500 font-medium line-height-3 w-full">{{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
+                    <span class="text-gray-500 font-medium line-height-3 w-full">{{objInvDetail.persona.nombres+'
+                        '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
                 </div>
             </div>
-            <div class="flex flex-row w-5 paddin-5 cont-banner gap-2">
+            <!-- <div class="flex flex-row w-5 paddin-5 cont-banner gap-2">
                 <div class="flex flex-column justify-content-center align-items-center" style="padding-top: 5px;">
                     <span class="icon-span pi-present">{{currency}}</span>
                 </div>
                 <div class="flex flex-column justify-content-center w-full">
                     <span class="text-gray-500 font-medium line-height-3 w-full">{{objInvDetail.monto | formatNumber}}</span>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <ng-template [ngIf]="objInvDetail.frecuenciaPago.frecuencia == 'S'">
@@ -29,85 +31,85 @@
                     <span class="mb-2 params-txt">Fechas de pago</span>
 
                     <div class="flex flex-row w-full timeline mb-1">
-                        <div *ngFor="let obj of objInvDetail.frecuenciaPago.fechasPagos; let i = index" class="flex w-full justify-content-center">
-                            <div class="flex align-items-center"
-                            [ngClass]="objInvDetail.nroCuotas == 1 ? 'w-9':'w-6'"
-                            ><div class="w-full space-timeline"
-                                [ngClass]="obj.isPagado ? 'done' : 'not-done'"
-                                ></div></div>
-                            <div class="flex flex-column text-center"
-                            [ngClass]="objInvDetail.nroCuotas == 1 ? 'w-3':'w-6'">
-                                <div class="fechasPagos flex flex-column justify-content-end" [ngClass]="{'nowrap': objInvDetail.nroCuotas == 4}"><span *ngIf="i % 2 === 0">{{getFechaSinAnio(obj.fechaPagar) }}</span></div>
-                                <i class="pi"
-                                [ngClass]="obj.isPagado ? 'pi-check-circle' : 'pi-stop-circle'" 
-                                ></i>
-                                <div class="fechasPagos flex flex-column justify-content-start" [ngClass]="{'nowrap': objInvDetail.nroCuotas == 4}"><span *ngIf="i % 2 !== 0">{{getFechaSinAnio(obj.fechaPagar) }}</span></div>
+                        <div *ngFor="let obj of objInvDetail.frecuenciaPago.fechasPagos; let i = index"
+                            class="flex w-full justify-content-center">
+                            <div class="flex align-items-center" [ngClass]="objInvDetail.nroCuotas == 1 ? 'w-9':'w-6'">
+                                <div class="w-full space-timeline" [ngClass]="obj.isPagado ? 'done' : 'not-done'"></div>
                             </div>
-                            
+                            <div class="flex flex-column text-center"
+                                [ngClass]="objInvDetail.nroCuotas == 1 ? 'w-3':'w-6'">
+                                <div class="fechasPagos flex flex-column justify-content-end"
+                                    [ngClass]="{'nowrap': objInvDetail.nroCuotas == 4}"><span
+                                        *ngIf="i % 2 === 0">{{getFechaSinAnio(obj.fechaPagar) }}</span></div>
+                                <i class="pi" [ngClass]="obj.isPagado ? 'pi-check-circle' : 'pi-stop-circle'"></i>
+                                <div class="fechasPagos flex flex-column justify-content-start"
+                                    [ngClass]="{'nowrap': objInvDetail.nroCuotas == 4}"><span
+                                        *ngIf="i % 2 !== 0">{{getFechaSinAnio(obj.fechaPagar) }}</span></div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </ng-template>
 
-            <div class="w-full mb-2">
-                <table>
-                    <tbody>
-                        <tr *ngFor="let fila of getCuotasEnFilas(); let i = index; trackBy: trackByFila" class="flex flex-row w-full">
-                            <td *ngFor="let obj of fila; let j = index; trackBy: trackByObj" class="w-full">
-                                <!-- Pagado -->
-                                <div *ngIf="obj.isPagado" class="flex flex-column align-items-center cont-pago"
+        <div class="w-full mb-2">
+            <table>
+                <tbody>
+                    <tr *ngFor="let fila of getCuotasEnFilas(); let i = index; trackBy: trackByFila"
+                        class="flex flex-row w-full">
+                        <td *ngFor="let obj of fila; let j = index; trackBy: trackByObj" class="w-full">
+                            <!-- Pagado -->
+                            <div *ngIf="obj.isPagado" class="flex flex-column align-items-center cont-pago"
                                 (click)="mostrarFechaPagar(obj.fechaPagar)">
                                 <img [src]="pathSello" loading="lazy" width="50" height="50">
                                 <span class="fecha">{{ obj.fechaPago }}</span>
-                                </div>
+                            </div>
 
-                                <!-- Habilitado -->
-                                <div *ngIf="!obj.isPagado && (obj.globalIndex === 0 || objInvDetail.frecuenciaPago.fechasPagos[obj.globalIndex - 1]?.isPagado)" 
-                                    class="position_pass" 
-                                    (click)="pagarCuota(obj.globalIndex + 1)">
+                            <!-- Habilitado -->
+                            <div *ngIf="!obj.isPagado && (obj.globalIndex === 0 || objInvDetail.frecuenciaPago.fechasPagos[obj.globalIndex - 1]?.isPagado)"
+                                class="position_pass" (click)="pagarCuota(obj.globalIndex + 1)">
                                 {{ obj.globalIndex + 1 }}
-                                </div>
+                            </div>
 
-                                <!-- Bloqueado -->
-                                <div *ngIf="!obj.isPagado && (obj.globalIndex !== 0 && !objInvDetail.frecuenciaPago.fechasPagos[obj.globalIndex - 1]?.isPagado)" 
-                                    class="position" (click)="mostrarFechaPagar(obj.fechaPagar)"
-                                    [ngClass]="{
+                            <!-- Bloqueado -->
+                            <div *ngIf="!obj.isPagado && (obj.globalIndex !== 0 && !objInvDetail.frecuenciaPago.fechasPagos[obj.globalIndex - 1]?.isPagado)"
+                                class="position" (click)="mostrarFechaPagar(obj.fechaPagar)" [ngClass]="{
                                         'bgRed': obj.isAtrasado
                                     }">
                                 {{ obj.globalIndex + 1 }}
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <div class="pendiente-txt mb-3"><b>{{objInvDetail.nroCuotas-objInvDetail.ctasPagadas}}</b> Cuotas pendientes.</div>
+        <div class="pendiente-txt mb-3"><b>{{objInvDetail.nroCuotas-objInvDetail.ctasPagadas}}</b> Cuotas pendientes.
+        </div>
 
         <!-- <div class="card mb-3">
             <p-message closable>Closable Message</p-message>
         </div> -->
 
         <div class="card flex justify-content-center mb-3">
-            <p-message 
-            severity="warn" icon="pi pi-exclamation-triangle"
-            *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas<3 && objInvDetail.frecuenciaPago.cuotasAtrasadas!==0"
-            [text]="'Inversión con ' + objInvDetail.frecuenciaPago.cuotasAtrasadas + 
+            <p-message severity="warn" icon="pi pi-exclamation-triangle"
+                *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas<3 && objInvDetail.frecuenciaPago.cuotasAtrasadas!==0"
+                [text]="'Inversión con ' + objInvDetail.frecuenciaPago.cuotasAtrasadas + 
                     (objInvDetail.frecuenciaPago.cuotasAtrasadas === 1 ? ' cuota vencida.' : ' cuotas vencidas.')">
             </p-message>
-            <p-message 
-            severity="error" icon="pi pi-times-circle"
-            *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas>=3"
-            [text]="'Inversión con ' + objInvDetail.frecuenciaPago.cuotasAtrasadas + 
+            <p-message severity="error" icon="pi pi-times-circle" *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas>=3"
+                [text]="'Inversión con ' + objInvDetail.frecuenciaPago.cuotasAtrasadas + 
                     (objInvDetail.frecuenciaPago.cuotasAtrasadas === 1 ? ' cuota vencida.' : ' cuotas vencidas.')">
             </p-message>
         </div>
 
         <ng-template [ngIf]="objInvDetail.renovacion == 'S'">
             <div class="flex flex-column align-items-center mb-3">
-                    <img *ngIf="codPerfil==='INV'" (click)="renovacion()" src="assets/images/gates/RENOVACION_INV.png" width="98%" class="promocion_cash">
-                    <img *ngIf="codPerfil==='CLI'" (click)="confirm_cli()" src="assets/images/gates/RENOVACION_CLI.png" width="98%" class="promocion_cash">
+                <img *ngIf="codPerfil==='INV'" (click)="renovacion()" src="assets/images/gates/RENOVACION_INV.png"
+                    width="98%" class="promocion_cash">
+                <img *ngIf="codPerfil==='CLI'" (click)="confirm_cli()" src="assets/images/gates/RENOVACION_CLI.png"
+                    width="98%" class="promocion_cash">
             </div>
         </ng-template>
 
@@ -116,7 +118,7 @@
                 <div class="mb-3">
                     <span class="txt-detalles icon-span">DETALLES DE LA INVERSION</span>
                 </div>
-    
+
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
                     <div class="flex flex-column w-full">
                         <span class="mb-2 params-txt">Monto invertido</span>
@@ -124,15 +126,15 @@
                             {{currency}} {{objInvDetail.monto | formatNumber }}
                         </span>
                     </div>
-    
+
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Número de cuotas</label>
                         <span class="valor-txt-detail">
-                        {{objInvDetail.nroCuotas}}
+                            {{objInvDetail.nroCuotas}}
                         </span>
                     </div>
                 </div>
-    
+
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Interés</label>
@@ -140,15 +142,15 @@
                             {{objInvDetail.interes | twoDigits }} %
                         </span>
                     </div>
-    
+
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">valor de cuota</label>
                         <span class="valor-txt-detail">
-                        {{currency}} {{objInvDetail.valorCuota | formatNumber}}
+                            {{currency}} {{objInvDetail.valorCuota | formatNumber}}
                         </span>
                     </div>
                 </div>
-    
+
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Fecha de registro</label>
@@ -157,7 +159,7 @@
                         </span>
                     </div>
                 </div>
-    
+
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Fecha inicio</label>
@@ -165,11 +167,11 @@
                             {{objInvDetail.fechaInicio}}
                         </span>
                     </div>
-    
+
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Fecha fin</label>
                         <span class="valor-txt-detail">
-                        {{objInvDetail.fechaFin}}
+                            {{objInvDetail.fechaFin}}
                         </span>
                     </div>
                 </div>
@@ -182,71 +184,48 @@
                         </span>
                     </div>
                 </div>
-                
+
             </div>
-            
-            <div class="custom-banner-present mb-4">
+
+            <!-- <div class="custom-banner-present mb-4">
                 <div class="mb-3">
                     <span class="txt-detalles icon-span">DETALLES DEL CLIENTE</span>
                 </div>
-    
+
                 <div class="flex flex-row gap-2 align-items-top justify-content-between mb-3">
-                    <div class="flex flex-column" [ngClass]="objInvDetail.persona.celular=='' || objInvDetail.persona.celular==null?'w-12':'w-7'">
+                    <div class="flex flex-column"
+                        [ngClass]="objInvDetail.persona.celular=='' || objInvDetail.persona.celular==null?'w-12':'w-7'">
                         <label class="mb-2 params-txt">Nombres</label>
                         <span class="valor-txt-detail">
-                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}
+                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+'
+                            '+objInvDetail.persona.apellidoMaterno}}
                         </span>
                     </div>
-                    <div class="flex flex-column w-5" *ngIf="objInvDetail.persona.celular!='' && objInvDetail.persona.celular!=null">
+                    <div class="flex flex-column w-5"
+                        *ngIf="objInvDetail.persona.celular!='' && objInvDetail.persona.celular!=null">
                         <label class="mb-2 params-txt">Celular</label>
                         <span class="valor-txt-detail">
                             {{formatNumberEspaciado(objInvDetail.persona.celular)}}
                         </span>
                     </div>
                 </div>
-    
+
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Dirección</label>
                         <span class="valor-txt-detail">
-                        {{objInvDetail.persona.direccion}}
+                            {{objInvDetail.persona.direccion}}
                         </span>
                     </div>
                 </div>
-    
-                <div class="custom-banner-credentials mb-4">
-                    <div class="flex flex-row w-full justify-content-center mb-2">
-                        <span class="txt-span-bold">CORREO:</span>
-                        <span class="w-full txt-span-text">{{objInvDetail.credenciales.correo}}</span>
-                    </div><!--  -->
-                    <div class="flex flex-row w-full justify-content-around mb-3">
-                        <span class="txt-span-bold">PASS:</span>
-                        <div class="flex flex-row justify-content-between w-full txt-span-text">
-                            <div class="w-10">
-                                <span *ngIf="mostrar" >{{ objInvDetail.credenciales.contrasena }}</span> <!-- .txt-span -->
-                                <span *ngIf="!mostrar" >**********</span>
-                            </div>
-                            <div class="w-2">
-                                <i *ngIf="mostrar" class="pi pi-eye" (click)="mostrarContrasena()"></i>
-                                <i *ngIf="!mostrar" class="pi pi-eye-slash" (click)="mostrarContrasena()"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex flex-row w-full text-center">
-                        <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small" (onClick)="copyCredentials()"/>
-                        <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small" (onClick)="copyCredentials()"/>
-                    </div>
-                    
-                    <div>
-                        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
-                    </div>
-                </div>
-                
-                <div *ngIf="objInvDetail.comentario!=''" class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
+            </div> -->
+
+            <div *ngIf="objInvDetail.comentario!=''" class="custom-banner-present mb-4">
+                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
                     <div class="flex flex-column w-full">
                         <label class="mb-2 params-txt">Comentario</label>
                         <span class="valor-txt-detail">
-                        {{objInvDetail.comentario}}
+                            {{objInvDetail.comentario}}
                         </span>
                     </div>
                 </div>
@@ -255,11 +234,12 @@
         </div>
 
         <!-- Eliminar inversion -->
-         <div *ngIf="codPerfil==='INV' && !(objInvDetail.ctasPagadas===objInvDetail.nroCuotas)" class="flex align-items-center justify-content-center mb-4">
+        <div *ngIf="codPerfil==='INV' && !(objInvDetail.ctasPagadas===objInvDetail.nroCuotas)"
+            class="flex align-items-center justify-content-center mb-4">
             <span class="font-bold txt-red-link" (click)="eliminarInversion()">Eliminar inversión</span>
-         </div>
+        </div>
 
-         <p-confirmDialog #delete_inv key="delete_inv">
+        <p-confirmDialog #delete_inv key="delete_inv">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
@@ -278,66 +258,20 @@
                         <strong class="text-center w-full">¿Desea continuar?</strong>
                     </span>
                     <div class="flex align-items-center gap-2 mt-4">
-                        <button 
-                            pButton 
-                            label="Cancelar" 
-                            (click)="onReject()" 
-                            class="p-button-outlined w-8rem ">
+                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
                         </button>
-                        <button 
-                        severity="danger"
-                            pButton 
-                            label="Eliminar" 
-                            (click)="onAccept()" 
-                            class=" w-8rem">
+                        <button severity="danger" pButton label="Eliminar" (click)="onAccept()" class=" w-8rem">
                         </button>
                     </div>
                 </div>
             </ng-template>
         </p-confirmDialog>
 
-         <!-- <p-confirmDialog #delete_inv key="delete_inv">
-            <ng-template pTemplate="headless" let-message>
-                <div class="flex flex-column align-items-center p-4 surface-overlay border-round">
-                    <div class="border-circle inline-flex justify-content-center align-items-center">
-                        <i class="pi pi-trash"></i>
-                    </div>
-                    <span class="font-bold mb-3 mt-4 txt-red">
-                        {{ message.header }}
-                    </span>
-                    <span class="flex w-full flex-column gap-3 mb-3 txt-label" (click)="copyCodigoOperacion(objInvDetail.codOperacion)">
-                        <span>Para solicitar la eliminación contacte al administrador y proporcione el siguiente código de operación:</span>
-                        <div class="flex flex-column cod-operacion">
-                            <div>{{objInvDetail.codOperacion}}</div>
-                            <span style="font-size: 12px;">{{messageCopiarCodOperacion}}</span>
-                        </div>
-                        
-                    </span>
-                    <div class="flex align-items-center gap-2 mt-4">
-                        <button 
-                            pButton 
-                            label="Cancelar" 
-                            (click)="delete_inv.reject()" 
-                            class="p-button-outlined w-8rem ">
-                        </button>
-                        <button 
-                        severity="danger"
-                            pButton 
-                            label="Eliminar" 
-                            (click)="delete_inv.accept()" 
-                            class=" w-8rem">
-                        </button>
-                    </div>
-                </div>
-            </ng-template>
-        </p-confirmDialog> -->
-
-         <!-- <div style="height: 40px;"></div> -->
-
         <p-confirmDialog #cdpago key="cdpago">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                    <div
+                        class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
                         <img [src]="pathSello" loading="lazy" width="110" height="110">
                     </div>
                     <span class="font-bold text-2xl block mb-2 mt-4 txt-primary">
@@ -345,38 +279,21 @@
                     </span>
                     <p class="mb-2">{{ message.message }}</p>
                     <div class="flex flex-column">
-                        <p-datepicker 
-                        [(ngModel)]="date" 
-                        [showIcon]="true" 
-                        [showOnFocus]="true" 
-                        [touchUI]="false"
-                        [dateFormat]="'dd/mm/yy'"
-                        [showTime]="true"
-                        inputId="fecha" />
+                        <p-datepicker [(ngModel)]="date" [showIcon]="true" [showOnFocus]="true" [touchUI]="false"
+                            [dateFormat]="'dd/mm/yy'" [showTime]="true" inputId="fecha" />
                     </div>
                     <div class="flex align-items-center gap-2 mt-4">
-                        <button 
-                            pButton 
-                            label="Cancelar" 
-                            (click)="onReject()" 
-                            class="p-button-outlined w-8rem ">
+                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
                         </button>
-                        <button 
-                            pButton 
-                            label="Guardar" 
-                            (click)="onAccept()" 
-                            class="w-8rem">
+                        <button pButton label="Guardar" (click)="onAccept()" class="w-8rem">
                         </button>
-                        
+
                     </div>
                 </div>
             </ng-template>
         </p-confirmDialog>
 
-        <p-confirmDialog #cdrenovacion key="cdrenovacion"
-        [blockScroll]="true"
-        [baseZIndex]="10000" 
-        >
+        <p-confirmDialog #cdrenovacion key="cdrenovacion" [blockScroll]="true" [baseZIndex]="10000">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
@@ -386,95 +303,64 @@
                         {{ message.header }}
                     </span>
                     <!-- <p class="mb-2">{{ message.message }}</p> -->
-                     <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Estas son las cuotas a cancelar</span>
-                     <div class="flex flex-row align-items-center gap-4 mb-3">
-                        <div class="position" *ngFor="let num of getRango(objInvDetail.ctasPagadas + 1, objInvDetail.nroCuotas)">
+                    <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Estas son las cuotas a
+                        cancelar</span>
+                    <div class="flex flex-row align-items-center gap-4 mb-3">
+                        <div class="position"
+                            *ngFor="let num of getRango(objInvDetail.ctasPagadas + 1, objInvDetail.nroCuotas)">
                             {{ num }}
                         </div>
-                     </div>
-                     <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto a renovar</span>
-                     <div class="flex flex-row align-items-center gap-4 mb-3">
+                    </div>
+                    <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto a renovar</span>
+                    <div class="flex flex-row align-items-center gap-4 mb-3">
                         <span class="monto-txt">{{currency}} {{objInvDetail.monto | formatNumber}}</span>
-                     </div>
-
-                     <!-- Fecha inicio y fin -->
-            <div class="flex flex-column gap-2 justify-content-center">
-                <label for="interes" class="block txt-left mb-2"><i class="pi pi-chevron-circle-right mr-1"></i>Establecer fecha inicio y fin</label>
-                <div class="flex flex-row justify-content-between align-items-center gap-2 mb-3">
-                    <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha1" class="txt-left">Fecha inicio</label>
-                        <p-datepicker 
-                        [(ngModel)]="date1" 
-                        [showIcon]="true" 
-                        [showOnFocus]="true" 
-                        [touchUI]="false"
-                        [dateFormat]="'dd/mm/yy'"
-                        [showTime]="false"
-                        inputId="fecha1" 
-                        (ngModelChange)="updateDate2()"
-                        />
                     </div>
-                    <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha2" class="txt-left">Fecha fin</label>
-                        <p-datepicker 
-                        [(ngModel)]="date2" 
-                        [showIcon]="true" 
-                        [showOnFocus]="true" 
-                        [touchUI]="false"
-                        [dateFormat]="'dd/mm/yy'"
-                        [showTime]="false"
-                        inputId="fecha2" 
-                        [disabled]="true"
-                        />
+
+                    <!-- Fecha inicio y fin -->
+                    <div class="flex flex-column gap-2 justify-content-center">
+                        <label for="interes" class="block txt-left mb-2"><i
+                                class="pi pi-chevron-circle-right mr-1"></i>Establecer fecha inicio y fin</label>
+                        <div class="flex flex-row justify-content-between align-items-center gap-2 mb-3">
+                            <div class="flex flex-column w-6 mb-2">
+                                <label for="fecha1" class="txt-left">Fecha inicio</label>
+                                <p-datepicker [(ngModel)]="date1" [showIcon]="true" [showOnFocus]="true"
+                                    [touchUI]="false" [dateFormat]="'dd/mm/yy'" [showTime]="false" inputId="fecha1"
+                                    (ngModelChange)="updateDate2()" />
+                            </div>
+                            <div class="flex flex-column w-6 mb-2">
+                                <label for="fecha2" class="txt-left">Fecha fin</label>
+                                <p-datepicker [(ngModel)]="date2" [showIcon]="true" [showOnFocus]="true"
+                                    [touchUI]="false" [dateFormat]="'dd/mm/yy'" [showTime]="false" inputId="fecha2"
+                                    [disabled]="true" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="flex align-items-center gap-1 mb-4 txt-left">
-                <p-checkbox 
-                    inputId="ny" 
-                    [(ngModel)]="showComent" 
-                    [binary]="true" />
-                <label for="ny">Agregar comentario(opcional)</label>
-            </div>
+                    <div class="flex align-items-center gap-1 mb-4 txt-left">
+                        <p-checkbox inputId="ny" [(ngModel)]="showComent" [binary]="true" />
+                        <label for="ny">Agregar comentario(opcional)</label>
+                    </div>
 
-            <div *ngIf="showComent" class="card w-full mb-1">
-                <p-floatLabel class="w-full">
-                    <textarea (focus)="focusTextArea($event)"
-                        class="w-full"
-                        id="float-comentario" 
-                        rows="3"
-                        cols="30" 
-                        [(ngModel)]="txtComentario"
-                        [maxLength]="180"
-                        pTextarea>
+                    <div *ngIf="showComent" class="card w-full mb-1">
+                        <p-floatLabel class="w-full">
+                            <textarea (focus)="focusTextArea($event)" class="w-full" id="float-comentario" rows="3"
+                                cols="30" [(ngModel)]="txtComentario" [maxLength]="180" pTextarea>
                     </textarea>
-                    <label for="float-comentario">Comentario</label>
-                </p-floatLabel>
-            </div>
+                            <label for="float-comentario">Comentario</label>
+                        </p-floatLabel>
+                    </div>
                     <div class="flex align-items-center gap-2 mt-2">
-                        <button 
-                            pButton 
-                            label="Cancelar" 
-                            (click)="onReject()"
-                            class="p-button-outlined w-8rem ">
+                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
                         </button>
-                        <button 
-                            pButton 
-                            label="Siguiente" 
-                            (click)="onAccept()"
-                            class="w-8rem">
+                        <button pButton label="Siguiente" (click)="onAccept()" class="w-8rem">
                         </button>
-                        
+
                     </div>
                 </div>
             </ng-template>
         </p-confirmDialog>
 
-        <p-confirmDialog #cdrenovacion_ok key="cdrenovacion_ok"
-        [blockScroll]="true"
-        [baseZIndex]="10000" 
-        >
+        <p-confirmDialog #cdrenovacion_ok key="cdrenovacion_ok" [blockScroll]="true" [baseZIndex]="10000">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
                 <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
                     <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
@@ -483,13 +369,14 @@
                     <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
                         {{ message.header }}
                     </span>
-                    
+
                     <div class="w-full">
-                        <div  class="mb-2 txt-label">Nombres</div>
+                        <div class="mb-2 txt-label">Nombres</div>
                         <div pInputText class="w-full mb-3 dataConfirm linea">
-                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}
+                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+'
+                            '+objInvDetail.persona.apellidoMaterno}}
                         </div>
-            
+
                         <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
                             <div class="flex flex-column w-full">
                                 <div class="txt-label mb-2">Monto</div>
@@ -497,15 +384,15 @@
                                     {{objInvDetail.monto | formatNumber }}
                                 </div>
                             </div>
-            
+
                             <div class="flex flex-column w-full">
                                 <div for="cuotas" class="txt-label mb-2">Nro. Cuotas</div>
                                 <div id="cuotas" pInputText class="w-full dataConfirm">
-                                {{objInvDetail.nroCuotas}}
+                                    {{objInvDetail.nroCuotas}}
                                 </div>
                             </div>
                         </div>
-            
+
                         <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
                             <div class="flex flex-column w-full">
                                 <div for="interes" class="txt-label mb-2">Interés</div>
@@ -513,16 +400,16 @@
                                     {{objInvDetail.interes | twoDigits }} %
                                 </div>
                             </div>
-            
+
                             <div class="flex flex-column w-full">
                                 <div class="txt-label mb-2">Valor de cuota</div>
                                 <div pInputText class="w-full dataConfirm">
-                                <span *ngIf="valorCuota!==0">{{valorCuota | formatNumber}}</span>
-                                <span *ngIf="valorCuota===0">Calculando...</span>
+                                    <span *ngIf="valorCuota!==0">{{valorCuota | formatNumber}}</span>
+                                    <span *ngIf="valorCuota===0">Calculando...</span>
                                 </div>
                             </div>
                         </div>
-            
+
                         <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
                             <div class="flex flex-column w-full">
                                 <div for="fechai" class="txt-label mb-2">Fecha inicio</div>
@@ -530,15 +417,15 @@
                                     {{date1Show}}
                                 </div>
                             </div>
-            
+
                             <div class="flex flex-column w-full">
                                 <div class="txt-label mb-2">Fecha fin</div>
                                 <div pInputText class="w-full dataConfirm fechas">
-                                {{date2Show}}
+                                    {{date2Show}}
                                 </div>
                             </div>
                         </div>
-            
+
                         <div *ngIf="txtComentario!==''" class="w-full linea">
                             <div class="txt-label mb-2">Comentario</div>
                             <div pInputText class="w-full dataConfirm txt-break">
@@ -546,21 +433,13 @@
                             </div>
                         </div>
                     </div>
-            
+
                     <div class="flex align-items-center gap-2 mt-4">
-                        <button 
-                            pButton 
-                            label="Volver" 
-                            (click)="onReject()"
-                            class="p-button-outlined w-8rem ">
+                        <button pButton label="Volver" (click)="onReject()" class="p-button-outlined w-8rem ">
                         </button>
-                        <button 
-                            pButton 
-                            label="Registrar" 
-                            (click)="onAccept()"
-                            class="w-8rem">
+                        <button pButton label="Registrar" (click)="onAccept()" class="w-8rem">
                         </button>
-                        
+
                     </div>
                 </div>
             </ng-template>
@@ -576,24 +455,24 @@
                         {{ message.header }}
                     </span>
                     <span class="text-1xl block mb-3 txt-label">
-                        <strong>{{ message.message }}</strong>, Comunícate con tu socio(a) y accede a las mejores opciones para ti.
+                        <strong>{{ message.message }}</strong>, Comunícate con tu socio(a) y accede a las mejores
+                        opciones para ti.
                     </span>
                     <div class="flex align-items-center gap-2 mt-3">
-                        <button 
-                            pButton 
-                            label="Aceptar" 
-                            (click)="onReject()"
-                            class="p-button-outlined w-16rem ">
+                        <button pButton label="Aceptar" (click)="onReject()" class="p-button-outlined w-16rem ">
                         </button>
-                        
+
                     </div>
                 </div>
             </ng-template>
         </p-confirmDialog>
-        
+
 
         <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full mb-1"></button>
     </div>
 </div>
 
-<app-loading></app-loading> 
+<app-loading></app-loading>
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>

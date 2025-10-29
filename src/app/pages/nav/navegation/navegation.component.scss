@@ -130,3 +130,15 @@ li a{
   font-weight: 700;
   font-size: 1.3rem;
 }
+
+/* Para los ul */
+.p-ul {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+.pi-star-fill{
+  color: yellow !important;
+}
+.pi{
+  color: var(--primary-500);
+}

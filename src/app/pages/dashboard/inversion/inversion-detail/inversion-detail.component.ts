@@ -172,15 +172,6 @@ export default class InversionDetailComponent {
     });
   }
 
-  mostrarContrasena() {
-    this.mostrar = !this.mostrar;
-  }
-  copyCredentials() {
-    if (this.copy == false) this.copy = true;
-
-    this.copyText(this.objInvDetail.credenciales.correo, this.objInvDetail.credenciales.contrasena);
-  }
-
   pagarCuota(cuota: number) {
     if (this.codPerfil === Constantes.PERFIL_CLI) return;
     else if (this.codPerfil === Constantes.PERFIL_ADM) return;
@@ -495,24 +486,6 @@ export default class InversionDetailComponent {
     }
   }
 
-  async copyText(correo: string, contra: string): Promise<void> {
-    try {
-      var nombreCompleto = this.objInvDetail.persona.nombres;
-      var palabras = nombreCompleto.trim().split(' ');
-      // Uso de la función
-      var texto = palabras.length > 0 ? palabras[0] + ", usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra : "Hola, usa estas credenciales para iniciar sesión en el sistema:\n\n" + "Correo: " + correo + "\n" + "Contraseña: " + contra;
-      this.copyToClipboard(texto);
-    } catch (err) {
-      // Manejar el error si la operación de copia falla
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Copiar',
-        detail: 'Error al copiar al portapapeles.',
-        life: 3000
-      });
-    }
-  }
-
   // Método para formatear la fecha
   private formatearFecha(date: Date): string | null {
 
@@ -526,14 +499,14 @@ export default class InversionDetailComponent {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-  copyToClipboard(text: string) {
-    const el = document.createElement('textarea');
-    el.value = text;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
+  async copyToClipboard(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+    console.log('Texto copiado al portapapeles');
+  } catch (err) {
+    console.error('Error al copiar el texto: ', err);
   }
+}
 
   formatNumberEspaciado(numero: string): string {
     return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");

@@ -1,0 +1,279 @@
+.user-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.user-avatar {
+  display: flex;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.pi-user {
+  font-size: 40px;
+  font-weight: 600;
+  color: white;
+}
+
+span {
+  display: block;
+  max-width: 100%;
+  word-break: break-word;
+  /* Rompe palabras largas */
+  white-space: normal;
+  /* Permite saltos de línea */
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1a1f2c;
+  margin: 0;
+}
+
+.span-nombre {
+  font-weight: 700;
+  color: var(--gray-500);
+  font-size: 16px;
+  text-align: left;
+}
+
+.span-desc {
+  color: var(--gray-500);
+  font-size: 14px;
+  text-align: left;
+}
+
+.input-fail {
+  color: red;
+  font-size: 12px;
+}
+
+
+
+/* ACCESO, ACTIVO - INACTIVO */
+.toggle {
+  display: inline-block;
+}
+
+/* ocultamos el checkbox */
+.toggle-input {
+  display: none;
+}
+
+.toggle-label {
+  display: block;
+  width: 50px;
+  height: 26px;
+  background-color: #e53935;
+  /* rojo apagado */
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* handle (el círculo) */
+.toggle-handle {
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  left: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #e53935;
+  transition: all 0.3s ease;
+}
+
+/* cuando está activo (checked) */
+.toggle-input:checked+.toggle-label {
+  background-color: #4caf50;
+  /* verde */
+}
+
+.toggle-input:checked+.toggle-label .toggle-handle {
+  left: 26px;
+  color: #4caf50;
+}
+
+/* cambiar icono dinámicamente */
+.toggle-input:checked+.toggle-label .toggle-handle i::before {
+  content: "\e909";
+  /* código unicode pi-check */
+}
+
+.toggle-input:not(:checked)+.toggle-label .toggle-handle i::before {
+  content: "\e90b";
+  /* código unicode pi-times */
+}
+
+/* ACTUALZIAR MEMBRESIA */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #6366f1;
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: #4338ca;
+}
+
+/* Mostra inversiones del cliente */
+.custom-banner-4 {
+  flex: 1;
+  /* Permite que cada banner tome el mismo espacio disponible */
+  margin: 5px;
+  /* Espacio alrededor de cada banner */
+  padding: 15px;
+  /* Espacio dentro de cada banner */
+  /* background: linear-gradient(to right, var(--primary-500), white); */
+  /* Color de fondo del banner */
+  background: #fff;
+  box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+  /* color: var(--primary-500); */
+  /* Color del texto del banner */
+  text-align: center;
+  /* Centra el texto dentro del banner */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  min-width: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: auto;
+}
+
+.custom-banner-active {
+  flex: 1;
+  /* Permite que cada banner tome el mismo espacio disponible */
+  margin: 0px;
+  /* Espacio alrededor de cada banner */
+  padding: 10px;
+  /* Espacio dentro de cada banner */
+  background: var(--primary-500);
+  background: #fff;
+  box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+  color: var(--gray-500);
+  /* Color del texto del banner */
+  text-align: center;
+  /* Centra el texto dentro del banner */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  min-width: 300px;
+  align-items: center;
+}
+
+.custom-banner-passive {
+  flex: 1;
+  /* Permite que cada banner tome el mismo espacio disponible */
+  margin: 0px;
+  /* Espacio alrededor de cada banner */
+  padding: 10px;
+  /* Espacio dentro de cada banner */
+  background: var(--primary-500);
+  background: #fff;
+  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
+  color: var(--gray-500);
+  /* Color del texto del banner */
+  text-align: center;
+  /* Centra el texto dentro del banner */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  min-width: 300px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Estilo de los elementos */
+.span-nro-inv {
+  font-size: .8rem;
+  text-align: left;
+  color: var(--primary-500);
+}
+
+.span-nro-inv-culm {
+  font-size: .8rem;
+  text-align: left;
+  color: var(--gray-500);
+}
+
+.span-monto {
+  font-size: .8rem;
+  text-align: left;
+  font-weight: 800;
+}
+
+.span-fecha-creacion {
+  font-size: .8rem;
+  text-align: left;
+}
+
+.span-cuotas {
+  font-size: .8rem;
+  text-align: left;
+}
+
+.linea-bottom {
+  border-bottom: 1px solid var(--gray-400);
+  opacity: .4;
+}
+
+/* Estilo de los iconos */
+.pi-inv-off {
+  color: var(--primary-500);
+  font-weight: 500;
+}
+.pi-window-maximize{
+  font-size: .8rem;
+}
+.pi-inv-on {
+  color: var(--gray-400);
+  font-weight: 500;
+}

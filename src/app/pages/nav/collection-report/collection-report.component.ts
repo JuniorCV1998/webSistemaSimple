@@ -213,14 +213,15 @@ export default class CollectionReportComponent {
       lista.forEach((item, index) => {
         const primerNombre = item.fullName.split(' ')[0]; // Primer nombre
         const segundoNombre = item.fullName.split(' ')[1] || ''; // Segundo nombre (si existe)
-        let cuotaFormateado = "";
-        if (n == 1) cuotaFormateado += item.ctasPagadas;
-        else cuotaFormateado += (4 - item.cuotasPendientes);
+
+        let cuotaFormateado = item.ctasPagadas + "";
+        if(item.ctasPagadas <= 9) cuotaFormateado = "0" + cuotaFormateado;
 
         const nombreCompleto = `${primerNombre} ${segundoNombre}`;
         index += 1;
         let indexFormateado = index + "";
         if (index <= 9) indexFormateado = "0" + indexFormateado;
+        
 
         const fila = `${indexFormateado}. ${nombreCompleto} #${cuotaFormateado}`; // Genera la fila con el índice y nombre
         texto += fila + '\n';

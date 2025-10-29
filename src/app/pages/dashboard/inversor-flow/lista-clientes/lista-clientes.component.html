@@ -1,1 +1,86 @@
-<p>lista-clientes works!</p>
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+
+    <div class="text-center mb-4">
+        <div class=" text-2xl mb-3 label-title">Clientes</div>
+    </div>
+
+    <div class="flex flex-row w-full justify-content-start mb-3">
+        <ng-template [ngIf]="isLoading">
+            <div class="flex flex-row w-full" style="min-width: 278px;">
+                <div class="w-full p-2">
+                    <div class="flex w-full mb-3 gap-2 row-skeleton">
+                        <div class="flex flex-column w-full gap-3">
+                            <p-skeleton class="w-6" height="1rem" />
+                            <p-skeleton class="w-12" height="2rem" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template [ngIf]="!isLoading">
+            <span class="text-gray-500 font-medium line-height-3 w-full">Se listaron {{totalClientes}} clientes.</span>
+        </ng-template>
+
+    </div>
+
+    <ng-template [ngIf]="!isLoading">
+        <div class="relative w-full mb-3">
+            <input (input)="filtrarCliente()" id="email1" name="usuario" [(ngModel)]="busqueda" [maxlength]="30"
+                type="text" placeholder="Buscar por nombre o celular" pInputText class="w-full mb-3">
+            <i class="pi" [ngClass]="busqueda ? 'pi-times-circle' : ''" (click)="cleanFiltroFunct()"
+                style="position: absolute; top: 40%; right: 10px; transform: translateY(-60%); cursor: pointer;">
+            </i>
+        </div>
+    </ng-template>
+
+
+    <!-- <div class="flex flex-row w-full justify-content-between mb-5">
+        <span class="text-gray-500 font-medium line-height-3 text-center w-full">Tus clientes</span>
+    </div> -->
+
+    <div *ngIf="filtroVacio && listaClientesRecovery.length!=0"
+        class="flex flex-column w-full justify-content-center align-items-center gap-2">
+        <i class="pi pi-search-minus"></i>
+        <span class="span-empty">Parece que no tienes un cliente <b>"{{busqueda}}"</b></span>
+    </div>
+
+    <div *ngIf="listaClientesRecovery.length==0 && !isLoading"
+        class="flex flex-row justify-content-center align-items-center w-full">
+        <span class="w-10 span-empty">Aún no tienes clientes registrados.</span>
+    </div>
+
+    <ng-template [ngIf]="isLoading">
+        <div class="flex flex-row w-full" style="min-width: 278px;">
+            <div class="w-full p-2">
+                <div *ngFor="let item of [].constructor(forSkeleton); let i = index"
+                    class="flex w-full mb-3 gap-2 row-skeleton">
+                    <div class="flex flex-column w-full gap-1">
+                        <p-skeleton class="w-10" height="1rem" />
+                        <p-skeleton class="w-4" height="1rem" />
+                    </div>
+                    <p-skeleton class="w-1" height="2rem" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template [ngIf]="!isLoading">
+        <div *ngFor="let cliente of listaClientes"
+            class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
+            <div class="flex flex-row w-full justify-content-center container-cliente gap-2"
+                [routerLink]="['/cliente']" [queryParams]="{ idUsuario: cliente.idUsuario}">
+                <div class="flex flex-column w-10 gap-1">
+                    <span class="span-nombre">{{cliente.persona.nombres+' '+cliente.persona.apellidoPaterno+'
+                        '+cliente.persona.apellidoMaterno}}</span>
+                    <span class="span-desc">{{ formatNumberEspaciado(cliente.persona.celular) }}</span>
+                </div>
+                <div class="flex flex-row justify-content-end align-items-center w-2 gap-1">
+                    <i class="pi pi-angle-right"></i>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <div style="height: 50px;"></div>
+
+</div>

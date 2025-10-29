@@ -46,13 +46,21 @@
 
 
             <div class="overflow-y-auto">
-                <ul class="list-none p-3 m-0">
+                <ul class="list-none p-ul m-0">
                     <li>
                         <a pRipple
                             class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                             [routerLink]="['/inicio']" (click)="closeCallback($event)">
                             <i class="pi pi-home mr-2"></i>
                             <span class="font-medium">Inicio</span>
+                        </a>
+                    </li>
+                    <li *ngIf="codPefil=='INV'">
+                        <a pRipple
+                            class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                            [routerLink]="['clientes']" (click)="closeCallback($event)">
+                            <i class="pi pi-users mr-2"></i>
+                            <span class="font-medium">Clientes</span>
                         </a>
                     </li>
                     <li *ngIf="codPefil=='ADM'">
@@ -63,39 +71,9 @@
                             <span class="font-medium">Configuración</span>
                         </a>
                     </li>
-                    <li *ngIf="codPefil=='INV'">
-                        <div pRipple pStyleClass="@next" enterClass="hidden" enterActiveClass="slidedown"
-                            leaveToClass="hidden" leaveActiveClass="slideup"
-                            class="p-3 flex align-items-center justify-content-between cursor-pointer p-ripple ">
-                            <span class="font-medium">Favoritos</span>
-                            <i class="pi pi-chevron-down"></i>
-                        </div>
-                        <ul class="list-none p-0 m-0 overflow-hidden">
-                            <li>
-                                <a pRipple [routerLink]="['/clientes']" (click)="closeCallback($event)"
-                                    class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                    <i class="pi pi-folder mr-2"></i>
-                                    <span class="font-medium">Clientes</span>
-                                </a>
-                            </li>
-                            <!-- <li>
-                                <a pRipple
-                                    class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                    <i class="pi pi-chart-bar mr-2"></i>
-                                    <span class="font-medium">Performance</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a pRipple
-                                    class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                    <i class="pi pi-cog mr-2"></i>
-                                    <span class="font-medium">Settings</span>
-                                </a>
-                            </li> -->
-                        </ul>
-                    </li>
+
                 </ul>
-                <ul class="list-none p-3 m-0">
+                <ul class="list-none p-ul m-0">
                     <ul class="list-none p-0 m-0 overflow-hidden">
 
                         <!-- <li *ngIf="codPefil=='ADM'">
@@ -163,6 +141,14 @@
                                 </li>
                             </ul>
                         </li>
+                        <li *ngIf="permisoVehicular">
+                            <a pRipple
+                                class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                [routerLink]="['/vehicular/inicio']" (click)="closeCallback($event)">
+                                <i class="pi pi-car mr-2"></i>
+                                <span class="font-medium">Crédito Vehicular</span>
+                            </a>
+                        </li>
                         <li *ngIf="codPefil=='INV'">
                             <a pRipple
                                 class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
@@ -199,14 +185,7 @@
                                 </li>
                             </ul>
                         </li> -->
-                        <li *ngIf="permisoVehicular">
-                            <a pRipple
-                                class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
-                                [routerLink]="['/vehicular/inicio']" (click)="closeCallback($event)">
-                                <i class="pi pi-car mr-2"></i>
-                                <span class="font-medium">Crédito Vehicular</span>
-                            </a>
-                        </li>
+
                         <!-- <li>
                               <a pRipple class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
                                   <i class="pi pi-comments mr-2"></i>

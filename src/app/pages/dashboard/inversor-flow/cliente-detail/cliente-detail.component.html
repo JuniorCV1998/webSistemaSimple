@@ -1,0 +1,213 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+
+    <div class="text-center mb-4">
+        <div class=" text-2xl mb-3 label-title">Datos del Cliente</div>
+    </div>
+
+    <!-- Datos Personales -->
+    <div class="user-card mb-2">
+        <div class="flex flex-row w-full mb-2">
+            <span class="block mb-2">Datos Personales</span>
+        </div>
+        <div class="user-header">
+            <div class="user-avatar">
+                <i class='pi pi-user'></i>
+            </div>
+            <div>
+                <h2 *ngIf="clienteData?.persona?.codTipoDoc==='01' || clienteData?.persona?.codTipoDoc===null"
+                    class="user-name">{{clienteData?.persona?.nombres+' '+clienteData?.persona?.apellidoPaterno+'
+                    '+clienteData?.persona?.apellidoMaterno}}</h2>
+                <h2 *ngIf="clienteData?.persona?.codTipoDoc==='06'" class="user-name">
+                    {{clienteData?.persona?.nombres+' '+clienteData?.persona?.apellidoPaterno+'
+                    '+clienteData?.persona?.apellidoMaterno}}</h2>
+                <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
+                    <i class="pi pi-id-card icon-span"></i>
+                    <p *ngIf="clienteData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
+                        <strong>{{clienteData?.persona?.nroDocumento}}</strong>
+                    </p>
+                    <p *ngIf="clienteData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
+                    <p *ngIf="clienteData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
+                        <strong>{{clienteData?.persona?.nroDocumento}}</strong>
+                    </p>
+                </div> -->
+
+            </div>
+        </div>
+
+        <div class="flex flex-column gap-2 user-info ">
+            <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-phone icon-span-gray"></i>
+                <span
+                    class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(clienteData?.persona?.celular)}}</span>
+            </div>
+            <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-map-marker icon-span-gray"></i>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{clienteData.persona.direccion}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos de la Cuenta -->
+    <div class="user-card mb-2">
+        <div class="flex flex-row w-full mb-2">
+            <span class="block mb-2">Datos de la Cuenta</span>
+        </div>
+
+        <div class="flex flex-column gap-2 user-info ">
+            <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-at icon-span-gray"></i>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{clienteData.credenciales.correo}}</span>
+            </div>
+            <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-key icon-span-gray"></i>
+                <span
+                    class="text-gray-500 font-medium line-height-3 w-full">{{clienteData.credenciales.contrasena}}</span>
+            </div>
+
+            <div class="flex flex-row w-full text-center mb-3">
+                <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small"
+                    (onClick)="copyCredentials()" />
+                <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small"
+                    (onClick)="copyCredentials()" />
+            </div>
+
+            <div class="flex flex-row justify-content-between align-items-center gap-2 mb-2">
+                <label class="w-5  text-gray-500 font-medium line-height-3 w-full">Acceso</label>
+                <div class="toggle">
+                    <input type="checkbox" [checked]="statusActivo" (change)="onToggleChange($event)" id="customToggle"
+                        class="toggle-input">
+                    <label for="customToggle" class="toggle-label">
+                        <span class="toggle-handle">
+                            <i class="pi pi-times"></i>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
+                    <i class="pi pi-calendar icon-span-gray"></i>
+                    <label>Registro</label>
+                </div>
+                <span
+                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{clienteData.fechaRegistro}}</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Tabla de los ultimos registros de inversiones -->
+    <div class="table-container">
+        <!-- [ngIf]="!skeletonShow" -->
+        <div class="flex flex-column gap-2 div-monto custom-banner-4">
+            <div class="flex flex-row justify-content-between txt-green w-full">
+                <div class="flex w-8 gap-2 justify-content-start">
+                    <i class="pi pi-list"></i>
+                    <span class="">Inversiones del cliente</span>
+                </div>
+                <div class="flex w-2 justify-content-center">
+                    <i (click)="mostrarRegistros()" [class.pi-angle-down]="!mostrarInversiones"
+                        [class.pi-angle-up]="mostrarInversiones" class="pi"></i>
+                </div>
+            </div>
+            <ng-template [ngIf]="mostrarInversiones">
+                <ng-template [ngIf]="!skeletonShow">
+                    <div class="w-full">
+                        <table class="w-full">
+                            <tbody> <!-- *ngFor="let inversion of data" -->
+                                <div class="flex flex-row w-full mb-3" *ngFor="let inversion of ultimasInversiones"
+                                    [ngClass]="inversion.estadoDeuda === 'P' ? 'custom-banner-active' : 'custom-banner-passive'">
+                                    <div class="flex flex-column w-full">
+                                        <div class="flex flex-row w-11">
+                                            <div class="flex flex-column w-full gap-1"
+                                                (click)="inversion.detalle=!inversion.detalle">
+                                                <div class="flex flex-row w-full gap-5 mb-1">
+                                                    <span class="w-2"
+                                                        [ngClass]="inversion.estadoDeuda === 'P' ? 'span-nro-inv' : 'span-nro-inv-culm'">
+                                                        #{{inversion.nroInversion}}</span>
+                                                    <span class="span-cuotas w-4"><b>{{inversion.nroCuotas}}</b>
+                                                        cuotas</span>
+                                                    <span class="span-monto w-6">{{currency}} {{inversion.monto |
+                                                        formatNumber}}</span>
+                                                </div>
+                                                <div *ngIf="inversion.detalle">
+                                                    <div class="linea-bottom mb-1"></div>
+                                                    <div class="flex flex-row w-full gap-2 mb-1">
+                                                        <!--  -->
+                                                        <div class="flex flex-column w-6">
+                                                            <div class="flex flex-column gap-1">
+                                                                <span class="span-cuotas"><b>Pendiente</b></span>
+                                                                <span class="span-cuotas">{{inversion.nroCuotas -
+                                                                    inversion.ctasPagadas}}
+                                                                    cuotas</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-column w-6 gap-1">
+                                                            <span class="span-cuotas"><b>De</b></span>
+                                                            <span class="span-cuotas">{{currency}}
+                                                                {{inversion.valorCuota |
+                                                                formatNumber}}</span>
+                                                        </div>
+                                                        <div class="flex flex-column w-6">
+                                                            <div class="flex flex-column gap-1">
+                                                                <span class="span-cuotas"><b>Interes</b></span>
+                                                                <span class="span-cuotas">{{inversion.interes}}
+                                                                    %</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="linea-bottom mb-1"></div>
+                                                    <div class="flex flex-row w-full gap-2">
+                                                        <div class="flex flex-column w-6 gap-1">
+                                                            <span class="span-cuotas"><b>Fecha inicio</b></span>
+                                                            <span class="span-cuotas">{{inversion.fechaInicio}}</span>
+                                                        </div>
+                                                        <div class="flex flex-column w-6 gap-1">
+                                                            <span class="span-cuotas"><b>Fecha fin</b></span>
+                                                            <span class="span-cuotas">{{inversion.fechaFin}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="flex flex-column w-1 justify-content-center align-items-center">
+                                        <i class="pi pi-window-maximize"
+                                            [ngClass]="inversion.estadoDeuda === 'P' ? 'pi-inv-off' : 'pi-inv-on'"
+                                            [routerLink]="['/inversion/cartilla']"
+                                            [queryParams]="{ idInversion: inversion.idInversion}"></i>
+                                    </div>
+                                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-template>
+
+                <ng-template [ngIf]="skeletonShow">
+                    <div class="flex flex-row w-full" style="min-width: 278px;">
+                        <div class="w-full p-2">
+                            <div *ngFor="let item of [].constructor(forSkeleton); let i = index"
+                                class="flex w-full mb-1 gap-2 row-skeleton">
+                                <p-skeleton class="w-12 mb-1" height="2rem" />
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ng-template>
+
+
+        </div>
+    </div>
+
+
+    <div style="height: 70px;"></div>
+    <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
+
+</div>
+
+<app-loading></app-loading>
+
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../../appsettings';
 
@@ -13,8 +13,22 @@ export class InversoresService {
 
   constructor() { }
 
+  /* Cliente */
+
   getMyClients() {
     return this.http.get(this.baseUrl + this.baseComponent + 'getMyClients');
+  }
+
+  getClienteDetail(idUsuario: number) {
+    const params = new HttpParams()
+      .set('idUsuario', Number(idUsuario));
+    return this.http.get(this.baseUrl + this.baseComponent + 'getClienteDetail', { params });
+  }
+
+  getInversionescliente(idUsuario: number) {
+    const params = new HttpParams()
+      .set('idUsuario', Number(idUsuario));
+    return this.http.get(this.baseUrl + this.baseComponent + 'getInversionesCliente', { params });
   }
 
   /* Configuracion */

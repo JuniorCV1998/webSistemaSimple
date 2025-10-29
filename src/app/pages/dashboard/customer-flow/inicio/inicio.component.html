@@ -1,7 +1,8 @@
 <div>
     <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
         <div class="text-center mb-3">
-            <div id="div_line_bootom" class="text-2xl font-medium mb-3" style="text-align: left;"><label class="label-nombre">Hola, {{nombreUsuario}}</label></div>
+            <div id="div_line_bootom" class="text-2xl font-medium mb-3" style="text-align: left;"><label
+                    class="label-nombre">Hola, {{nombreUsuario}}</label></div>
             <span class="text-gray-500 font-medium line-height-3">¡Mantén tus préstamos al día!</span>
         </div>
 
@@ -21,61 +22,68 @@
 
         <!-- INVERSION PENDIENTE -->
         <ng-template [ngIf]="!skeletonShow">
-            <div class="flex flex-row w-full mb-3"
-            *ngFor="let inversion of data"
-            [ngClass]="inversion.estadoDeuda === 'P' ? 'custom-banner-active' : 'custom-banner-passive'">
+            <div class="flex flex-row w-full mb-3" *ngFor="let inversion of data"
+                [ngClass]="inversion.estadoDeuda === 'P' ? 'custom-banner-active' : 'custom-banner-passive'">
                 <div class="flex flex-column w-full">
                     <div class="flex flex-row w-11">
                         <div class="flex flex-column w-full gap-1">
                             <div class="flex flex-row w-full gap-5 mb-1">
-                                <span [ngClass]="inversion.estadoDeuda === 'P' ? 'span-nro-inv' : 'span-nro-inv-culm'">Inversión #{{inversion.nroInversion}}</span>
+                                <span
+                                    [ngClass]="inversion.estadoDeuda === 'P' ? 'span-nro-inv' : 'span-nro-inv-culm'">Inversión
+                                    #{{inversion.nroInversion}}</span>
                                 <span class="span-monto">{{currency}} {{inversion.monto | formatNumber}}</span>
                             </div>
                             <div class="linea-bottom mb-1"></div>
-                            <div *ngIf="inversion.estadoDeuda === 'P'" class="flex flex-row w-full gap-2 mb-1"> <!--  -->
+                            <div *ngIf="inversion.estadoDeuda === 'P'" class="flex flex-row w-full gap-2 mb-1">
+                                <!--  -->
                                 <div class="flex flex-column w-6">
                                     <div class="flex flex-column gap-1">
                                         <span class="span-cuotas"><b>Pendiente</b></span>
-                                        <span class="span-cuotas">{{inversion.nroCuotas - inversion.ctasPagadas}} cuotas</span>
+                                        <span class="span-cuotas">{{inversion.nroCuotas - inversion.ctasPagadas}}
+                                            cuotas</span>
                                     </div>
                                 </div>
                                 <div class="flex flex-column w-6 gap-1">
                                     <span class="span-cuotas"><b>De</b></span>
-                                    <span class="span-cuotas">{{currency}} {{inversion.valorCuota | formatNumber}}</span>
+                                    <span class="span-cuotas">{{currency}} {{inversion.valorCuota |
+                                        formatNumber}}</span>
                                 </div>
                             </div>
-                            <div *ngIf="inversion.estadoDeuda === 'C'" class="flex flex-row w-full gap-2 mb-1"> <!--  -->
+                            <div *ngIf="inversion.estadoDeuda === 'C'" class="flex flex-row w-full gap-2 mb-1">
+                                <!--  -->
                                 <div class="flex flex-row gap-2">
                                     <span class="span-cuotas"><b>Fecha culminada</b></span>
                                     <span class="span-cuotas">{{inversion.fechaActualizacion}}</span>
                                 </div>
                             </div>
-                            <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''" class="linea-bottom mb-2"></div>
+                            <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''"
+                                class="linea-bottom mb-2"></div>
                         </div>
                     </div>
 
-                    <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''" class="flex flex-row w-full gap-2">
-                            <div class="flex flex-column w-6 gap-1">
-                                <span class="span-cuotas"><b>Fecha inicio</b></span>
-                                <span class="span-cuotas">{{inversion.fechaInicio}}</span>
-                            </div>
-                            <div class="flex flex-column w-6 gap-1">
-                                <span class="span-cuotas"><b>Fecha fin</b></span>
-                                <span class="span-cuotas">{{inversion.fechaFin}}</span>
-                            </div>
+                    <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''"
+                        class="flex flex-row w-full gap-2">
+                        <div class="flex flex-column w-6 gap-1">
+                            <span class="span-cuotas"><b>Fecha inicio</b></span>
+                            <span class="span-cuotas">{{inversion.fechaInicio}}</span>
+                        </div>
+                        <div class="flex flex-column w-6 gap-1">
+                            <span class="span-cuotas"><b>Fecha fin</b></span>
+                            <span class="span-cuotas">{{inversion.fechaFin}}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-column w-1 justify-content-center align-items-center">
                     <i class="pi pi-window-maximize"
-                    [ngClass]="inversion.estadoDeuda === 'P' ? 'pi-inv-off' : 'pi-inv-on'"
-                    [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: inversion.idInversion}"
-                    ></i>
+                        [ngClass]="inversion.estadoDeuda === 'P' ? 'pi-inv-off' : 'pi-inv-on'"
+                        [routerLink]="['/inversion/cartilla']"
+                        [queryParams]="{ idInversion: inversion.idInversion}"></i>
                 </div>
             </div>
         </ng-template>
 
         <!-- INVERSION TERMINADA -->
-<!--         <div class="flex flex-row w-full custom-banner-passive mb-3">
+        <!--         <div class="flex flex-row w-full custom-banner-passive mb-3">
             <div class="flex flex-column w-full">
                 <div class="flex flex-row w-11">
                     <div class="flex flex-column w-full gap-1">

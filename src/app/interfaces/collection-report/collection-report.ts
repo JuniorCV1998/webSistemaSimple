@@ -20,7 +20,7 @@ export interface ObjReporteSemanal {
     proximaFecha?: string;
     cuotasPendientes?: number;
     ctasAtrasadas: number;
-    cuotasPagadas: number;
+    ctasPagadas: number;
 }
 
 export interface ReportDiario {

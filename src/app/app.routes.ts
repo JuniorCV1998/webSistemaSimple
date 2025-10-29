@@ -89,6 +89,12 @@ export const routes: Routes = [
         loadComponent:() => import ('././pages/dashboard/inversor-flow/configuracion-inversor/configuracion-inversor.component'),
         data: { profiles: [Constantes.PERFIL_INV] }
     },
+    {
+        path: 'cliente',
+        canActivate: [authGuard],
+        loadComponent:() => import ('././pages/dashboard/inversor-flow/cliente-detail/cliente-detail.component'),
+        data: { profiles: [Constantes.PERFIL_INV] }
+    },
 
 
 
