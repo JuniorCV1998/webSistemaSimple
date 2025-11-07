@@ -22,7 +22,7 @@ import { TempDataService } from '../../../../core/services/temp-data.service';
   selector: 'app-profile-inversor',
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
-    TabMenuModule,FormatNumberPipe, ButtonModule, RouterModule, RouterLink
+    TabMenuModule, FormatNumberPipe, ButtonModule, RouterModule, RouterLink
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './profile-inversor.component.html',
@@ -85,7 +85,7 @@ export default class ProfileInversorComponent {
     public dialogService: DialogService,
     private messageService: MessageService,
     private tempDataService: TempDataService
-  ) { 
+  ) {
     this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
@@ -144,7 +144,7 @@ export default class ProfileInversorComponent {
     ref.onClose.subscribe((result: any) => {
       if (result === 'aceptar') {
         // Navegamos a la ruta deseada al aceptar
-        if (inicio) this.router.navigate(['/vehicular/inicio']);
+        if (inicio) this.router.navigate(['/inicio']);
       }
     });
   }
@@ -277,7 +277,7 @@ export default class ProfileInversorComponent {
       this.confirmationService.confirm({
         key: 'update_membresia',
         header: 'Actualizar Membresía',
-        message: '¿Está seguro que desea eliminar esta inversión?',
+        message: '',
         accept: () => {
           resolve(true);  // Resuelve la promesa con "true" si acepta
         },

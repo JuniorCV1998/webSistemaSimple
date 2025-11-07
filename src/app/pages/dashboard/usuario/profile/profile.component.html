@@ -1,0 +1,94 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+
+    <div class="text-center mb-4">
+        <div class=" text-2xl mb-3 label-title">Perfil</div>
+    </div>
+
+    <!-- Datos Personales -->
+    <div class="user-card mb-2">
+        <div class="flex flex-row w-full mb-2">
+            <span class="block mb-2">Datos Personales</span>
+        </div>
+        <div class="user-header">
+            <div class="user-avatar">
+                <i class='pi pi-user'></i>
+            </div>
+            <div>
+                <h2 *ngIf="usuarioData?.persona?.codTipoDoc==='01' || usuarioData?.persona?.codTipoDoc===null"
+                    class="user-name">{{usuarioData?.persona?.nombres+' '+usuarioData?.persona?.apellidoPaterno+'
+                    '+usuarioData?.persona?.apellidoMaterno}}</h2>
+                <h2 *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-name">
+                    {{usuarioData?.persona?.nombres+' '+usuarioData?.persona?.apellidoPaterno+'
+                    '+usuarioData?.persona?.apellidoMaterno}}</h2>
+                <div class="flex flex-row justify-content-start align-items-center gap-2">
+                    <i class="pi pi-id-card icon-span"></i>
+                    <p *ngIf="usuarioData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
+                        <strong>{{usuarioData?.persona?.nroDocumento}}</strong>
+                    </p>
+                    <p *ngIf="usuarioData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
+                    <p *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
+                        <strong>{{usuarioData?.persona?.nroDocumento}}</strong>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="flex flex-column gap-2 user-info ">
+            <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-phone icon-span-gray"></i>
+                <span
+                    class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(usuarioData?.persona?.celular)}}</span>
+            </div>
+            <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-at icon-span-gray"></i>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{'jose@oexample.com'}}</span>
+            </div> -->
+            <div class="flex flex-row justify-content-start align-items-center gap-2">
+                <i class="pi pi-map-marker icon-span-gray"></i>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{usuarioData?.persona?.direccion}}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos de la Cuenta -->
+    <div class="user-card mb-2">
+        <div class="flex flex-row w-full mb-2">
+            <span class="block mb-2">Datos de la Cuenta</span>
+        </div>
+
+        <div class="flex flex-column gap-2 user-info ">
+            <div class="flex flex-row justify-content-between align-items-center gap-2">
+                <!-- <i class="pi pi-phone icon-span-gray"></i> -->
+                <label class="w-6 text-gray-500 font-medium line-height-3 w-full">Código Único</label>
+                <span class="flex w-6 labelCodUnico justify-content-end"><b>{{usuarioData.codUnico}}</b></span>
+            </div>
+            <div class="flex flex-row justify-content-between align-items-center gap-2">
+                <i class="pi pi-at icon-span-gray"></i>
+                <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.correo}}</span>
+            </div>
+            <div *ngIf="usuarioData.contrasena !== null" class="flex flex-row justify-content-between align-items-center gap-2">
+                <i class="pi pi-key icon-span-gray"></i>
+                <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.contrasena}}</span>
+            </div>
+            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
+                    <i class="pi pi-calendar icon-span-gray"></i>
+                    <label>Registro</label>
+                </div>
+                <span
+                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.fechaRegistro}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 60px;"></div>
+    <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
+
+</div>
+
+<app-loading></app-loading>
+
+<div>
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>

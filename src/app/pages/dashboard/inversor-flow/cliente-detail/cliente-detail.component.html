@@ -112,9 +112,9 @@
             </div>
             <ng-template [ngIf]="mostrarInversiones">
                 <ng-template [ngIf]="!skeletonShow">
-                    <div class="w-full">
+                    <div class="w-full" *ngIf="ultimasInversiones.length!=0">
                         <table class="w-full">
-                            <tbody> <!-- *ngFor="let inversion of data" -->
+                            <tbody>
                                 <div class="flex flex-row w-full mb-3" *ngFor="let inversion of ultimasInversiones"
                                     [ngClass]="inversion.estadoDeuda === 'P' ? 'custom-banner-active' : 'custom-banner-passive'">
                                     <div class="flex flex-column w-full">
@@ -181,6 +181,10 @@
                                 </div>
                             </tbody>
                         </table>
+                    </div>
+                    <div *ngIf="ultimasInversiones.length==0"
+                        class="flex flex-row justify-content-center align-items-center w-full">
+                        <span class="span-empty">Sin inversiones registradas.</span>
                     </div>
                 </ng-template>
 

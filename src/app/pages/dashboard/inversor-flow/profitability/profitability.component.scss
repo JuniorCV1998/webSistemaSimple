@@ -1,0 +1,10 @@
+.valor-txt-detail{
+    margin-left: 5px;
+    color: var(--gray-500);
+    font-weight: 400;
+    font-size: 14px;
+
+    word-wrap: break-word;           // permite dividir palabras largas
+    overflow-wrap: break-word;       // lo mismo, versión más moderna
+    white-space: pre-line;
+}

@@ -1,0 +1,31 @@
+<div class="flex flex-column justify-content-center align-items-center" style="margin-top: 2rem;">
+    <div class="">
+        <h2 class="text-1xl text-center font-bold txt-orange mb-8">{{ header }}</h2>
+
+        <div class="flex flex-column justify-content-center align-items-center mb-8">
+            <lottie-player src="/public/system/warning.json" background="transparent" speed="1" loop autoplay
+                style="width: 300px; cursor: pointer; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </lottie-player>
+        </div>
+        <!-- <div class="flex flex-column justify-content-center align-items-center mb-8">
+            <p class="text-gray-1000 text-center " style="font-size: 14px; font-weight: 500;">{{ body }}</p>
+        </div> -->
+        <div class="flex flex-column justify-content-center align-items-center mb-8">
+            <p-message severity="warn" icon="pi pi-exclamation-circle" text="{{body}}"
+                styleClass="h-full message-small" />
+        </div>
+
+        <div class="text-center">
+            <button pButton pRipple label="Renovar" (click)="dialogRenovar.abrir()" severity="secondary"
+                class="mb-1 shiny-text border-colors"></button>
+        </div>
+
+    </div>
+
+    <button pButton pRipple label="Continuar" routerLink="/inicio" class="mb-1 btn-float"></button>
+
+</div>
+
+<app-dialog-renovar-membresia #dialogRenovar
+    (onSeleccion)="solicitarPorWhatsapp($event)"></app-dialog-renovar-membresia>

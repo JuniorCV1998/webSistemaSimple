@@ -78,13 +78,13 @@ export class NavegationComponent {
     /* Muestra las barras de Menu */
     const showMenu = [
       '/inicio', '/reporte/reporte-cobranza', '/vehicular/inicio', '/clientes',
-      '/inv/configuracion','/adm/configuracion'
+      '/inv/configuracion','/adm/configuracion','/perfil','/reporte/rentabilidad'
     ];
     const sinInicio = [
       '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
     ];
     const flowOutSession = [
-      '/login', '/registrar', '/registrar/personal', '/login-user'
+      '/login', '/registrar', '/registrar/personal', '/login-user','/membresia-exp'
     ];
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta

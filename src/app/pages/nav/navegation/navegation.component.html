@@ -55,6 +55,14 @@
                             <span class="font-medium">Inicio</span>
                         </a>
                     </li>
+                    <li *ngIf="codPefil!=='ADM'">
+                        <a pRipple
+                            class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                            [routerLink]="['/perfil']" (click)="closeCallback($event)">
+                            <i class="pi pi-user mr-2"></i>
+                            <span class="font-medium">Mi perfil</span>
+                        </a>
+                    </li>
                     <li *ngIf="codPefil=='INV'">
                         <a pRipple
                             class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
@@ -125,7 +133,7 @@
                             <a pRipple pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-slidedown"
                                 toggleClass="hidden" leaveToClass="hidden" leaveActiveClass="animate-slideup"
                                 class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple">
-                                <i class="pi pi-chart-line mr-2"></i>
+                                <i class="pi pi-book mr-2"></i>
                                 <span class="font-medium">Reportes</span>
                                 <i class="pi pi-chevron-down ml-auto"></i>
                             </a>
@@ -135,8 +143,17 @@
                                     <a pRipple
                                         class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                                         [routerLink]="['/reporte/reporte-cobranza']" (click)="closeCallback($event)">
-                                        <i class="pi pi-receipt mr-2"></i>
+                                        <i class="pi pi-list-check mr-2"></i>
                                         <span class="font-medium">Reporte de cobranza</span>
+                                    </a>
+                                    <!-- reporte/rentabilidad -->
+                                </li>
+                                <li>
+                                    <a pRipple
+                                        class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                                        [routerLink]="['/reporte/rentabilidad']" (click)="closeCallback($event)">
+                                        <i class="pi pi-chart-bar mr-2"></i>
+                                        <span class="font-medium">Reporte de rentabilidad</span>
                                     </a>
                                 </li>
                             </ul>
@@ -146,7 +163,7 @@
                                 class="flex align-items-center cursor-pointer p-3 border-round  hover:surface-100 transition-duration-150 transition-colors p-ripple"
                                 [routerLink]="['/vehicular/inicio']" (click)="closeCallback($event)">
                                 <i class="pi pi-car mr-2"></i>
-                                <span class="font-medium">Crédito Vehicular</span>
+                                <span class="font-medium">Crédito vehicular</span>
                             </a>
                         </li>
                         <li *ngIf="codPefil=='INV'">

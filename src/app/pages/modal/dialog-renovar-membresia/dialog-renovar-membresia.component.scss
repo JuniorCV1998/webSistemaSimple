@@ -1,0 +1,22 @@
+
+.plan-btn {
+  border: 2px solid transparent;
+  background: linear-gradient(#fff, #fff) padding-box,
+              linear-gradient(90deg, var(--primary-500), var(--blue-500)) border-box;
+  border-radius: 12px;
+  color: var(--text-color);
+  font-weight: 600;
+  transition: 0.3s ease;
+  height: 4rem;
+}
+
+.plan-btn:hover {
+  transform: scale(1.03);
+}
+
+.plan-btn.selected {
+  background: linear-gradient(90deg, var(--primary-500), var(--blue-500));
+  color: #fff !important;
+  border-color: transparent;
+  border: none;
+}

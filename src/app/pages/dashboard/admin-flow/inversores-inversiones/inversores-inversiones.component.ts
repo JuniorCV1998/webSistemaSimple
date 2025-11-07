@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-inversores-inversiones',
   standalone: true,
-  imports: [CommonModule,TabMenuModule, TabViewModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule,MessageModule,
+  imports: [CommonModule,TabMenuModule, TabViewModule, InputTextModule, ButtonModule, SkeletonModule,MessageModule,
             FormsModule, SelectButtonModule, ErrorGeneralComponent, RouterModule     
   ],
   templateUrl: './inversores-inversiones.component.html',

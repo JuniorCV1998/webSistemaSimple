@@ -60,7 +60,7 @@ primeng/resources/themes/rhea/theme.css
 
 :root {
   // Paleta primaria 
-  --primary-50:  var(--p-emerald-50);
+  --primary-50: var(--p-emerald-50);
   --primary-100: var(--p-emerald-100);
   --primary-200: var(--p-emerald-200);
   --primary-300: var(--p-emerald-300);
@@ -68,67 +68,70 @@ primeng/resources/themes/rhea/theme.css
   --primary-500: var(--p-emerald-500);
   --primary-800: var(--p-emerald-800);
   // Paleta secundaria  ¿secondary?
-  --blue-50:  var(--p-blue-50);
+  --blue-50: var(--p-blue-50);
   --blue-100: var(--p-blue-100);
   --blue-200: var(--p-blue-200);
   --blue-300: var(--p-blue-300);
   --blue-400: var(--p-blue-400);
   --blue-500: var(--p-blue-500);
-    // Paleta Red
-  --red-50:  var(--p-red-50);
+  // Paleta Red
+  --red-50: var(--p-red-50);
   --red-100: var(--p-red-100);
   --red-200: var(--p-red-200);
   --red-300: var(--p-red-300);
   --red-400: var(--p-red-400);
   --red-500: var(--p-red-500);
-    // Paleta Orange
-  --orange-50:  var(--p-orange-50);
+  // Paleta Orange
+  --orange-50: var(--p-orange-50);
   --orange-100: var(--p-orange-100);
   --orange-200: var(--p-orange-200);
   --orange-300: var(--p-orange-300);
   --orange-400: var(--p-orange-400);
   --orange-500: var(--p-orange-500);
   // Gris (custom) 
-  --gray-50:  var(--p-gray-50);//#f9fafb;
-  --gray-100: var(--p-gray-100);//#f3f4f6;
-  --gray-200: var(--p-gray-200);//#e5e7eb;
-  --gray-300: var(--p-gray-300);//#d1d5db;
-  --gray-400: var(--p-gray-400);//#9ca3af;
-  --gray-500: var(--p-gray-500);//#6b7280;
+  --gray-50: var(--p-gray-50); //#f9fafb;
+  --gray-100: var(--p-gray-100); //#f3f4f6;
+  --gray-200: var(--p-gray-200); //#e5e7eb;
+  --gray-300: var(--p-gray-300); //#d1d5db;
+  --gray-400: var(--p-gray-400); //#9ca3af;
+  --gray-500: var(--p-gray-500); //#6b7280;
   --gray-600: var(--p-gray-600);
   --gray-700: var(--p-gray-700);
   --gray-800: var(--p-gray-800);
   --gray-900: var(--p-gray-900);
   --gray-950: var(--p-gray-950);
 }
+
 // Para titulos fuertes
-.text-gray-1000{
+.text-gray-1000 {
   color: var(--p-gray-600);
 }
-.title-input{
+
+.title-input {
   color: var(--p-gray-700) !important;
 }
 
-  .tag-transparent-red{
-    border: 1px solid var(--red-500);
-    color: var(--red-500);
-    border-radius: 5px;
-    background-color: transparent;
-    padding: 2px;
-    font-size: 10px;
-    font-weight: 600;
-    width: auto;
-  }
-    .tag-transparent-primary{
-    border: 1px solid var(--primary-500);
-    color: var(--primary-500);
-    border-radius: 5px;
-    background-color: transparent;
-    padding: 2px;
-    font-size: 10px;
-    font-weight: 600;
-    width: auto;
-  }
+.tag-transparent-red {
+  border: 1px solid var(--red-500);
+  color: var(--red-500);
+  border-radius: 5px;
+  background-color: transparent;
+  padding: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  width: auto;
+}
+
+.tag-transparent-primary {
+  border: 1px solid var(--primary-500);
+  color: var(--primary-500);
+  border-radius: 5px;
+  background-color: transparent;
+  padding: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  width: auto;
+}
 
 
 /* //icons
@@ -141,184 +144,236 @@ primeng/resources/themes/rhea/theme.css
 @import "primeflex/primeflex.css";
 
 * {
-    //margin: 0;
-    box-sizing: border-box;
-    user-select: none; /* Texto sin poder seleccionar */
-    -webkit-tap-highlight-color: transparent; /* Elimina el fondo de resaltado en dispositivos móviles */
-  }
+  //margin: 0;
+  box-sizing: border-box;
+  user-select: none;
+  /* Texto sin poder seleccionar */
+  -webkit-tap-highlight-color: transparent;
+  /* Elimina el fondo de resaltado en dispositivos móviles */
+}
 
 html {
   padding: 0;
+  /* font-size: 14px; */
+  font-family: "Inter var", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  line-height: normal; 
 }
-app-root{
+
+app-root {
   width: 100%;
   max-width: 550px;
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 body {
-    /* font-family: "Inter var", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /* font-family: "Inter var", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
      */
-     /* font-family: 'Nunito', sans-serif;; */
-     font-family: 'Roboto', sans-serif;
-     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: .3rem;
-    /* margin-top: 1.4rem; */
+  /* font-family: 'Nunito', sans-serif;; */
+  /* font-family: 'Roboto', sans-serif; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .3rem;
+  /* margin-top: 1.4rem; */
 }
 
 /* Pantallas Grandes */
 @media (min-width: 700px) {
-  .mode-responsive{
+  .mode-responsive {
     min-width: 500px;
   }
-  .image-container{
+
+  .image-container {
     height: 450px;
   }
 }
 
 /* Pantallas pequeñas*/
 @media (max-width: 699px) {
-  .image-container{
+  .image-container {
     height: 300px;
   }
-  .mode-responsive{
+
+  .mode-responsive {
     min-width: 300px;
   }
-  .p-step-list{
-    display: flex !important;          /* activa flexbox */
-    flex-direction: column; /* coloca los hijos en columna */
-    align-items: flex-start !important;/* alinea los hijos a la izquierda */
+
+  .p-step-list {
+    display: flex !important;
+    /* activa flexbox */
+    flex-direction: column;
+    /* coloca los hijos en columna */
+    align-items: flex-start !important;
+    /* alinea los hijos a la izquierda */
   }
 }
 
-#volver-icon{
+#volver-icon {
   font-size: 1.5em;
   color: var(--blue-400);
 }
-.comp_volver{
+
+.comp_volver {
   /* cursor: pointer; */
 }
-.comp_volver a{
+
+.comp_volver a {
   display: flex;
   justify-content: start;
   align-items: center;
   text-decoration: none;
   max-width: 80px;
 }
-.comp_volver a p{
+
+.comp_volver a p {
   font-size: 15px;
   color: var(--gray-500);
 }
-small{
-}
+
+small {}
 
 /* Min-width para pantallas pequeñas y medianas */
 @media (min-width: 700px) {
   #div_line_bootom {
-      min-width: 550px;
-      }
-  input{
+    min-width: 550px;
+  }
+
+  input {
     /* width: 100%; */
     max-width: 600px;
   }
-  .flex-row-column{
+
+  .flex-row-column {
     flex-direction: row;
   }
 }
+
 @media (max-width: 699px) {
   #div_line_bootom {
-      width: 100%;
-      }
-  input{
     width: 100%;
   }
-  .flex-row-column{
+
+  input {
+    width: 100%;
+  }
+
+  .flex-row-column {
     flex-direction: column;
-}
+  }
 }
 
 
 //Component Register
-.terminos_condiciones{
+.terminos_condiciones {
   color: var(--blue-400);
   cursor: pointer;
   border-bottom: solid 1px var(--blue-400);
 }
 
 //Ocupa todo el espacio horizontal disponible
-.width-full{
+.width-full {
   flex: 1;
   grid-template-columns: 1fr;
 }
 
 //titulo coloreado
-.label-title{
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+.label-title {
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
   font-weight: 600;
   margin-top: 5px;
 }
-.label-sub-title{
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+
+.label-sub-title {
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
   font-weight: 500;
   margin-top: 5px;
 }
+
 //titulo coloreado verde
-.label-title-green{
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+.label-title-green {
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
   font-weight: 700;
   font-size: 30px;
 }
-.txt-green{
+
+.txt-green {
   color: var(--primary-500);
 }
-.txt-red{
+
+.txt-red {
   color: var(--red-500);
 }
-.txt-orange{
+
+.txt-orange {
   color: var(--orange-500);
 }
 
 //Btn Continuar
-.btn-disabled{
+.btn-disabled {
   background-color: var(--gray-200);
   border: 1px solid var(--gray-200);
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 //btn flotante al medio abajo
-.btn-float{
+.btn-float {
   position: fixed;
-  bottom: 20px; /* Ajusta el espacio desde el borde inferior */
+  bottom: 20px;
+  /* Ajusta el espacio desde el borde inferior */
   left: 50%;
   transform: translateX(-50%);
   width: 88%;
   max-width: 550px;
 }
 
+.div-float {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* centra en ambas direcciones */
+  z-index: 1000;
+}
+
 /* Estilo de los label's */
-.block{
-    color: var(--gray-500);
-    font-weight: bold;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+.block {
+  color: var(--gray-500);
+  font-weight: bold;
+  white-space: nowrap;
+  /* Evita el salto de línea */
+  overflow: hidden;
+  /* Oculta el texto que sobrepasa el ancho */
+  text-overflow: ellipsis;
+  /* Agrega los "..." cuando el texto es muy largo */
 }
 
 // Estilo para los puntos ... class="text-overflow-ellipsis"
 
 /* Estilos de Span info */
-.span-info-red{
+.span-info-red {
   background: #ffe7e6b3;
   border: solid #ff5757;
   border-width: 0px;
@@ -329,7 +384,8 @@ small{
   border-radius: 5px;
   font-size: 10px;
 }
-.span-info-orange{
+
+.span-info-orange {
   background: #fff1e0b3;
   border: solid #FFA500;
   border-width: 0px;
@@ -340,89 +396,121 @@ small{
   border-radius: 5px;
   font-size: 10px;
 }
+
 /* Diseño degradante de los iconos */
-.icon-span{
+.icon-span {
   font-size: 28px;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
 }
+
 /* diseño para codigo unico text */
-.labelCodUnico{
-    background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-    -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-    background-clip: text; /* Aplicar el fondo degradado al texto */
-    -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+.labelCodUnico {
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
 }
-.icon-span-gray{
+
+.icon-span-gray {
   padding: 3px;
   font-size: 20px;
-  background: linear-gradient(to right, var(--gray-500), var(--gray-500)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+  background: linear-gradient(to right, var(--gray-500), var(--gray-500));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
 }
-.icon-span-blue{
+
+.icon-span-blue {
   padding: 3px;
   font-size: 20px;
-  background: linear-gradient(to right, var(--blue-500), var(--blue-500)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+  background: linear-gradient(to right, var(--blue-500), var(--blue-500));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
 }
 
 /* elemento sin decoracion */
 .no-decoracion {
-  background: none;        /* Quitar el fondo */
-  border: none;           /* Quitar el borde */
-  color: inherit;         /* Heredar el color del texto del padre */
-  font: inherit;          /* Heredar la fuente del padre */
-  padding: 0;             /* Quitar el padding */
-  cursor: pointer;        /* Mantener el cursor de puntero */
-  text-align: left;       /* Alinear el texto a la izquierda, opcional */
+  background: none;
+  /* Quitar el fondo */
+  border: none;
+  /* Quitar el borde */
+  color: inherit;
+  /* Heredar el color del texto del padre */
+  font: inherit;
+  /* Heredar la fuente del padre */
+  padding: 0;
+  /* Quitar el padding */
+  cursor: pointer;
+  /* Mantener el cursor de puntero */
+  text-align: left;
+  /* Alinear el texto a la izquierda, opcional */
 }
 
 /* ESTILO PARA MOBILE */
 
-.no-clic-movil{
-  -webkit-tap-highlight-color: transparent; /* Elimina el fondo de resaltado en dispositivos móviles */
+.no-clic-movil {
+  -webkit-tap-highlight-color: transparent;
+  /* Elimina el fondo de resaltado en dispositivos móviles */
 }
 
 /*  Asegura que las palabras largas se dividan */
-.txt-break{
+.txt-break {
   word-break: break-word;
 }
-.txt-red-link{
+
+.txt-red-link {
   color: red;
   border-bottom: 1px solid red;
 }
 
 /* ESTILO PARA WEB */
-.p-dialog{
+.p-dialog {
   max-width: 600px;
 }
 
 
 
 //PADDING
-.paddin-5{
+.paddin-5 {
   padding: 5px;
 }
-.paddin-10{
+
+.paddin-10 {
   padding: 10px;
 }
-.paddin-15{
+
+.paddin-15 {
   padding: 15px;
 }
-.paddin-20{
+
+.paddin-20 {
   padding: 20px;
 }
 
 
 /* NUEVOS ESTILOS TRAS LA IMPLEMENTACION DE LA PANTALLA CODIGO UNICO */
 /*  */
-.input-fail{
+.input-fail {
   color: red;
   font-size: 12px;
 }
@@ -444,14 +532,15 @@ small{
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
 }
 
 /*  */
-/* CODIGO UNICO */
-  .shiny-text {
+/* CODIGO UNICO, BRILLO */
+.shiny-text {
   position: relative;
   display: inline-block;
   font-weight: bold;
@@ -465,12 +554,10 @@ small{
   left: -75%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.6),
-    transparent
-  );
+  background: linear-gradient(120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent);
   animation: shine 2s infinite;
 }
 
@@ -478,6 +565,7 @@ small{
   0% {
     left: -75%;
   }
+
   100% {
     left: 125%;
   }

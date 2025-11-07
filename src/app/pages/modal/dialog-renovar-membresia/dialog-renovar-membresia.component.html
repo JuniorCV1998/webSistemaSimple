@@ -1,0 +1,21 @@
+<p-confirmDialog [visible]="visible" [closable]="false" styleClass="renovar-dialog">
+    <ng-template pTemplate="headless">
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round w-20rem">
+            <h3 class="titulo">Renovar Membresía</h3>
+            <p>Seleccione una opción</p>
+
+            <div class="flex flex-column gap-3 w-full mt-3">
+                <button *ngFor="let opcion of opciones" pButton [label]="opcion.label + ' - S/' + opcion.precio"
+                    (click)="seleccionar(opcion)" [class.selected]="opcionSeleccionada === opcion"
+                    class="plan-btn w-full"></button>
+            </div>
+
+
+            <div class="flex align-items-center gap-2 mt-4">
+                <button pButton label="Cancelar" (click)="cerrar()" class="p-button-outlined w-8rem"></button>
+                <button pButton label="Solicitar" icon="pi pi-whatsapp" severity="success"
+                    [disabled]="!opcionSeleccionada" (click)="confirmar()" class="w-8rem"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
