@@ -109,6 +109,13 @@ export default class LoginUserComponent {
                   body: err.error.message
                 }
               });
+            } else if (err.error.codigoMessage === Constantes.COD_USUARIO_BLOQUEADO) {
+              this.router.navigate(['/usuario-sin-acceso'], {
+                state: {
+                  header: 'Usuario sin acceso',
+                  body: err.error.message
+                }
+              });
             }
 
           }

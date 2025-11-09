@@ -45,7 +45,6 @@ export class MembresiaExpComponent {
     const mensaje = encodeURIComponent(
       `¡Hola! Me gustaría renovar mi membresía con el plan de ${opcion.label} por S/${opcion.precio}.`
     );
-    console.log("entro: " + mensaje );
     window.open(`https://wa.me/51${this.nroCelular}?text=${mensaje}`, '_blank');
   }
 

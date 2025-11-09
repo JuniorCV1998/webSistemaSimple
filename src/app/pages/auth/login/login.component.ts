@@ -56,7 +56,7 @@ export default class LoginComponent {
   };
 
   creaHoy() {
-    this.router.navigate(['/registrar']);
+    this.router.navigate(['/validate']);
   }
 
   login(form: NgForm) {

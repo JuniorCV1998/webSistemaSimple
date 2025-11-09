@@ -15,12 +15,15 @@ import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
+import { DialogRenovarMembresiaComponent } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
-    TabMenuModule, FormatNumberPipe, ButtonModule, RouterModule, RouterLink],
+    TabMenuModule, ButtonModule, RouterModule, RouterLink, DialogRenovarMembresiaComponent],
+  providers: [ConfirmationService],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -29,13 +32,17 @@ export default class ProfileComponent {
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
   isLoading: boolean = true;
 
+  /* Número de celular */
+  nroCelular = "920605673";
+
   usuarioData: any = {
     "codUnico": "",
     "correo": "",
     "contrasena": null,
     "fechaCreacion": "",
     "idPersona": null,
-    "persona": {}
+    "persona": {},
+    "membresia": {}
   }
 
   constructor(
@@ -78,25 +85,25 @@ export default class ProfileComponent {
   }
 
   show(message: string, header: string, inicio: boolean) {
-      const ref = this.dialogService.open(MessagePopUpComponent, {
-        data: {
-          message: message
-        },
-        header: header,
-        closable: false,
-        closeOnEscape: false,
-        modal: true,
-        width: '90%'
-      });
-  
-      // Suscribirse al evento de cierre del diálogo
-      ref.onClose.subscribe((result: any) => {
-        if (result === 'aceptar') {
-          // Navegamos a la ruta deseada al aceptar
-          if (inicio) this.router.navigate(['/inicio']);
-        }
-      });
-    }
+    const ref = this.dialogService.open(MessagePopUpComponent, {
+      data: {
+        message: message
+      },
+      header: header,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,
+      width: '90%'
+    });
+
+    // Suscribirse al evento de cierre del diálogo
+    ref.onClose.subscribe((result: any) => {
+      if (result === 'aceptar') {
+        // Navegamos a la ruta deseada al aceptar
+        if (inicio) this.router.navigate(['/inicio']);
+      }
+    });
+  }
 
   formatNumberEspaciado(numero: string): string {
     try {
@@ -104,5 +111,12 @@ export default class ProfileComponent {
     } catch (error) {
       return "";
     }
+  }
+
+  solicitarPorWhatsapp(opcion: any) {
+    const mensaje = encodeURIComponent(
+      `¡Hola! Me gustaría renovar mi membresía con el plan de ${opcion.label} por S/${opcion.precio}.`
+    );
+    window.open(`https://wa.me/51${this.nroCelular}?text=${mensaje}`, '_blank');
   }
 }

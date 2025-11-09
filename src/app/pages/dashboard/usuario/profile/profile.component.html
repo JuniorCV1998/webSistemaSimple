@@ -40,10 +40,6 @@
                 <span
                     class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(usuarioData?.persona?.celular)}}</span>
             </div>
-            <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{'jose@oexample.com'}}</span>
-            </div> -->
             <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-map-marker icon-span-gray"></i>
                 <span class="text-gray-500 font-medium line-height-3 w-full">{{usuarioData?.persona?.direccion}}</span>
@@ -67,9 +63,11 @@
                 <i class="pi pi-at icon-span-gray"></i>
                 <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.correo}}</span>
             </div>
-            <div *ngIf="usuarioData.contrasena !== null" class="flex flex-row justify-content-between align-items-center gap-2">
+            <div *ngIf="usuarioData.contrasena !== null"
+                class="flex flex-row justify-content-between align-items-center gap-2">
                 <i class="pi pi-key icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.contrasena}}</span>
+                <span
+                    class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.contrasena}}</span>
             </div>
             <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
                 <div class="w-6 text-gray-500 font-medium line-height-3">
@@ -82,10 +80,76 @@
         </div>
     </div>
 
+    <!-- Datos de la Membresia -->
+    <div class="user-card mb-5">
+        <div class="flex flex-row justify-content-between w-full mb-3">
+            <span class="block w-10 line-height-3">Datos de la Membresía</span>
+        </div>
+
+        <div class="flex flex-column gap-2 user-info">
+            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
+                <!-- <i class="pi pi-calendar icon-span-gray"></i> -->
+                <label class="w-8  text-gray-500 font-medium line-height-3 w-full">Tipo de Membresía</label>
+                <span class="w-7 labelCodUnico"><b>{{usuarioData.membresia.descTipoMembresia}}</b></span>
+            </div>
+            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
+                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Estado de Membresía</label>
+                <span class="w-4" [ngClass]="{
+                    'txt-green': usuarioData.membresia.codMembresia === 'ACT',
+                    'txt-orange': usuarioData.membresia.codMembresia === 'PEX',
+                    'txt-red': usuarioData.membresia.codMembresia === 'VEN'
+                }"><b>{{usuarioData.membresia.descCodMembresia}}</b></span>
+            </div>
+            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
+                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Días restantes</label>
+                <span class="w-4" [ngClass]="{
+                    'txt-green': usuarioData.membresia.codMembresia === 'ACT',
+                    'txt-orange': usuarioData.membresia.codMembresia === 'PEX',
+                    'txt-red': usuarioData.membresia.codMembresia === 'VEN'
+                }"><b>{{usuarioData.membresia.diasRestantes}}</b></span>
+            </div>
+            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
+                    <i class="pi pi-calendar icon-span-gray"></i>
+                    <label>Vencimiento</label>
+                </div>
+                <span class="w-6 text-center" [ngClass]="{
+                    'txt-green': usuarioData.membresia.codMembresia === 'ACT',
+                    'txt-orange': usuarioData.membresia.codMembresia === 'PEX',
+                    'txt-red': usuarioData.membresia.codMembresia === 'VEN'
+                }"><b>{{usuarioData.membresia.fechaVencimiento}}</b></span>
+            </div>
+            <div *ngIf="usuarioData.membresia.fechaActualizacion!==''"
+                class="flex flex-row w-full justify-content-between align-items-center gap-1">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
+                    <i class="pi pi-calendar icon-span-gray"></i>
+                    <label>Actualización</label>
+                </div>
+                <span
+                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.membresia.fechaActualizacion}}</span>
+            </div>
+            <div class="flex flex-row w-full justify-content-between align-items-center gap-1 mb-3">
+                <div class="w-6 text-gray-500 font-medium line-height-3">
+                    <i class="pi pi-calendar icon-span-gray"></i>
+                    <label>Activación</label>
+                </div>
+                <span
+                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.membresia.fechaActivacion}}</span>
+            </div>
+            <div class="text-center">
+                <button pButton pRipple label="Renovar" (click)="dialogRenovar.abrir()" severity="secondary"
+                    class="mb-1 shiny-text border-colors label-title"></button>
+            </div>
+        </div>
+    </div>
+
     <div style="height: 60px;"></div>
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
 
 </div>
+
+<app-dialog-renovar-membresia #dialogRenovar
+    (onSeleccion)="solicitarPorWhatsapp($event)"></app-dialog-renovar-membresia>
 
 <app-loading></app-loading>
 

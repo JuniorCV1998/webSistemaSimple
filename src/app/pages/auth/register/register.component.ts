@@ -19,8 +19,8 @@ import { SoloNumerosDirective } from '../../../components/directives/solo-numero
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ButtonModule,InputTextModule,CheckboxModule,PasswordModule,CommonModule,InputOtpModule,FormsModule,
-    LoadingComponent,SoloNumerosDirective,RouterModule
+  imports: [ButtonModule, InputTextModule, CheckboxModule, PasswordModule, CommonModule, InputOtpModule, FormsModule,
+    LoadingComponent, SoloNumerosDirective, RouterModule
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
@@ -53,23 +53,37 @@ export default class RegisterComponent {
     private dialogService: DialogService,
   ) {
     const objUser = sessionStorage.getItem('objUser');
-    if(objUser) {
+    if (objUser) {
       this.objUser = JSON.parse(objUser);
-      this.codigoUnico = this.objUser?.codigoUnico.replace("SS-","");
+      this.codigoUnico = this.objUser?.codigoUnico.replace("SS-", "");
       this.isValidPassword = this.validarContrasena(this.objUser?.contrasena.trim());
-    }else this.codRegisterValidate = null;
+    } else {
+      this.codRegisterValidate = null;
+      /* Se recupera el codUnico y/o correo de la validacion publica */
+      const codUnico = sessionStorage.getItem('codUnico');
+      const correo = sessionStorage.getItem('correo');
+      if (codUnico) {
+        this.codigoUnico = codUnico.replace('SS-', '');;
+      }
+      if (correo) {
+        this.objUser.correo = correo;
+      }
+    }
   }
 
   isWriting: boolean = false;
   isWritingP: boolean = false;
   valueShow: string = '_ _ _ _ _ _';
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('correo');
+    sessionStorage.removeItem('codUnico');
+
+    console.log("el codigo unico es: ", this.codigoUnico);
   }
 
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     this.onInputChange();
   }
 
@@ -77,83 +91,83 @@ export default class RegisterComponent {
     this.location.back();
   }
 
-validarDatos(){
-  this.loadingComponent.show();
-  this.objUser.codigoUnico = "SS-" + this.codigoUnico;
-  this.registerService.validateRegister(this.objUser).pipe(
-    finalize(() => this.loadingComponent.hide()),
-    catchError((error) => {
-      if (error.status === 400) {
-        if(error.error.descripcion!=undefined) this.show(error.error.descripcion, Constantes.MSG_H_400, false);
-        else this.show(error.error.message, Constantes.MSG_H_400, true);
-      } else {
-        this.show(Constantes.MSG_500, Constantes.MSG_H_500, true); // Mensaje para otros errores
+  validarDatos() {
+    this.loadingComponent.show();
+    this.objUser.codigoUnico = "SS-" + this.codigoUnico;
+    this.registerService.validateRegister(this.objUser).pipe(
+      finalize(() => this.loadingComponent.hide()),
+      catchError((error) => {
+        if (error.status === 400) {
+          if (error.error.descripcion != undefined) this.show(error.error.descripcion, Constantes.MSG_H_400, false);
+          else this.show(error.error.message, Constantes.MSG_H_400, true);
+        } else {
+          this.show(Constantes.MSG_500, Constantes.MSG_H_500, true); // Mensaje para otros errores
+        }
+        // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
+        return of(null);
+      })
+    ).subscribe((resp: any) => {
+      if (resp?.codigoMessage == Constantes.STATUS_SUCCESS_RI) {
+        this.objUser.codRegisterValidate = resp.data.codRegisterValidate;
+        sessionStorage.setItem('objUser', JSON.stringify(this.objUser));
+        sessionStorage.setItem('dataCliente', JSON.stringify(resp.data));
+        this.router.navigate(['registrar/personal']);
       }
-      // Devuelve un observable vacío o con un valor específico para continuar con la lógica sin romper la aplicación
-      return of(null);
-    })
-  ).subscribe((resp: any) => {
-    if (resp?.codigoMessage==Constantes.STATUS_SUCCESS_RI) {
-      this.objUser.codRegisterValidate = resp.data.codRegisterValidate;
-      sessionStorage.setItem('objUser',JSON.stringify(this.objUser));
-      sessionStorage.setItem('dataCliente',JSON.stringify(resp.data));
-      this.router.navigate(['registrar/personal']);
-    }
-  });
-}
-
-show(message: string, header: string, irInicio: boolean) {
-const ref = this.dialogService.open(MessagePopUpComponent, {
-  data: {
-    message: message
-  },
-  header: header,
-  closable: false,
-  closeOnEscape: false,
-  modal: true,         
-  width: '90%'
-});
-
-// Suscribirse al evento de cierre del diálogo
-ref.onClose.subscribe((result: any) => {
-  if (result === 'aceptar') {
-    if(irInicio) this.router.navigate(['/login']);
+    });
   }
-});
-}
+
+  show(message: string, header: string, irInicio: boolean) {
+    const ref = this.dialogService.open(MessagePopUpComponent, {
+      data: {
+        message: message
+      },
+      header: header,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,
+      width: '90%'
+    });
+
+    // Suscribirse al evento de cierre del diálogo
+    ref.onClose.subscribe((result: any) => {
+      if (result === 'aceptar') {
+        if (irInicio) this.router.navigate(['/login']);
+      }
+    });
+  }
 
 
-  onFocus(value:number) {
-    if(value==1) this.isWriting = true;
-    if(value==2) this.isWritingP = true;
+  onFocus(value: number) {
+    if (value == 1) this.isWriting = true;
+    if (value == 2) this.isWritingP = true;
   }
 
   onBlur(value: number) {
-    if(value==1) this.isWriting = false;
-    if(value==2) this.isWritingP = false;
+    if (value == 1) this.isWriting = false;
+    if (value == 2) this.isWritingP = false;
   }
 
-  onInputChange(){
+  onInputChange() {
     let n = this.codigoUnico.length;
     switch (n) {
       case 1:
         this.valueShow = this.codigoUnico + "_ _ _ _ _";
         break;
       case 2:
-          this.valueShow = this.codigoUnico + "_ _ _ _";
-          break;
+        this.valueShow = this.codigoUnico + "_ _ _ _";
+        break;
       case 3:
-          this.valueShow = this.codigoUnico + "_ _ _";
-          break;
+        this.valueShow = this.codigoUnico + "_ _ _";
+        break;
       case 4:
-          this.valueShow = this.codigoUnico + "_ _";
-          break;
+        this.valueShow = this.codigoUnico + "_ _";
+        break;
       case 5:
-          this.valueShow = this.codigoUnico + "_";
-          break;
+        this.valueShow = this.codigoUnico + "_";
+        break;
       case 6:
-          this.valueShow = this.codigoUnico;
-          break;            
+        this.valueShow = this.codigoUnico;
+        break;
       default:
         this.valueShow = "_ _ _ _ _ _";
         break;
@@ -162,8 +176,8 @@ ref.onClose.subscribe((result: any) => {
   }
 
   togglePasswordVisibility(n: number) {
-    if(n == 1) this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-    if(n == 2) this.passwordFieldType2 = this.passwordFieldType2 === 'password' ? 'text' : 'password';
+    if (n == 1) this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+    if (n == 2) this.passwordFieldType2 = this.passwordFieldType2 === 'password' ? 'text' : 'password';
   }
 
   // Método para verificar si todos los campos obligatorios están llenos
@@ -171,16 +185,16 @@ ref.onClose.subscribe((result: any) => {
     return (
       this.objUser?.correo?.trim() !== '' &&
       this.objUser?.contrasena?.trim() !== '' &&
-      this.objUser?.contrasena2?.trim() !== ''  &&
+      this.objUser?.contrasena2?.trim() !== '' &&
       this.codigoUnico.trim() !== '' &&
       this.codigoUnico.length == 6 &&
       this.isValidPassword == true
     );
-}
+  }
 
-validarContrasena(contrasena: string): boolean {
-  const regex = /^\d{6}$/; // Solo 6 dígitos numéricos
-  return regex.test(contrasena);
-}
+  validarContrasena(contrasena: string): boolean {
+    const regex = /^\d{6}$/; // Solo 6 dígitos numéricos
+    return regex.test(contrasena);
+  }
 
 }

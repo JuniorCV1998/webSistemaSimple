@@ -1,33 +1,44 @@
 router-outlet {
-    /* flex: 1; */ /* Esto permite que el contenido ocupe el espacio disponible */
-    padding: 0 !important;
-  }
-  
+  /* flex: 1; */
+  /* Esto permite que el contenido ocupe el espacio disponible */
+  padding: 0 !important;
+}
+
 /*   header {
     background-color: #f8f9fa;
     padding: 10px;
     text-align: center;
   } */
-  
+
 
 /*   _______________________________________________________________________ */
 
 header {
-    position: fixed; /* Hace que el header esté fijo */
-    top: 0; /* Lo posiciona en la parte inferior */
-    left: 50%; /* Mueve el header al centro */
-    transform: translateX(-50%); /* Ajusta el header hacia la izquierda para centrarlo */
-    padding: 10px;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5); /* Sombra para destacar el header */
-    max-width: 550px; /* Ancho máximo */
-    width: 100%; /* Asegura que ocupe el 100% del espacio disponible hasta max-width */
-    text-align: center; /* Centra el texto dentro del header */
-    height: 3.5rem;
-    background-color: white;
-  }
-  .flex {
-    height: 100%;
+  position: fixed;
+  /* Hace que el header esté fijo */
+  top: 0;
+  /* Lo posiciona en la parte inferior */
+  left: 50%;
+  /* Mueve el header al centro */
+  transform: translateX(-50%);
+  /* Ajusta el header hacia la izquierda para centrarlo */
+  padding: 10px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+  /* Sombra para destacar el header */
+  max-width: 550px;
+  /* Ancho máximo */
+  width: 100%;
+  /* Asegura que ocupe el 100% del espacio disponible hasta max-width */
+  text-align: center;
+  /* Centra el texto dentro del header */
+  height: 3.5rem;
+  background-color: white;
 }
+
+.flex {
+  height: 100%;
+}
+
 /* .pi-user{
     font-size: 1.4rem;
     padding: 6px;
@@ -35,11 +46,11 @@ header {
     border: 3px solid var(--primary-400); 
 } */
 
-.pi-angle-left{
+.pi-angle-left {
   font-size: 1.8rem !important;
 }
 
-li a{
+li a {
   cursor: pointer;
   text-decoration: none;
   color: var(--gray-600);
@@ -59,7 +70,8 @@ li a{
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
-  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  z-index: 1000;
+  /* Asegura que esté por encima de otros elementos */
 }
 
 /* Estilo de los links en el sidebar */
@@ -112,33 +124,55 @@ li a{
 }
 
 /* estilo para cerrar sesion */
-.div_cerrarsesion{
+.div_cerrarsesion {
   padding: 10px;
   position: absolute;
   bottom: 0;
   width: 100%;
   background-color: white;
 }
-.closeSession .pi, .closeSession span{
+
+.closeSession .pi,
+.closeSession span {
   color: red;
 }
 
 .router-container {
   position: relative;
 }
-.header{
+
+.header {
   font-weight: 700;
   font-size: 1.3rem;
 }
 
 /* Para los ul */
 .p-ul {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
-.pi-star-fill{
-  color: yellow !important;
+
+.pi-star-fill {
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
 }
-.pi{
+.label-title-mem{
+  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  /* Degradado de colores */
+  -webkit-background-clip: text;
+  /* Aplicar el fondo degradado al texto para navegadores WebKit */
+  background-clip: text;
+  /* Aplicar el fondo degradado al texto */
+  -webkit-text-fill-color: transparent;
+  /* Hacer el color del texto transparente para WebKit */
+  font-weight: 800;
+}
+
+.pi {
   color: var(--primary-500);
 }

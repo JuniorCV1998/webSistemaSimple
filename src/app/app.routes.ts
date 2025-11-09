@@ -3,6 +3,7 @@ import { Constantes } from './core/constant/Constantes';
 import { authGuard } from './core/guards/auth.guard';
 import { MembresiaExpComponent } from './pages/system/warning/membresia-exp/membresia-exp.component';
 import { MembresiaVenComponent } from './pages/system/errores/membresia-ven/membresia-ven.component';
+import { WithoutAccessComponent } from './pages/system/errores/without-access/without-access.component';
 
 export const routes: Routes = [
     {
@@ -26,6 +27,10 @@ export const routes: Routes = [
     {
         path: 'login-user',
         loadComponent: () => import('././pages/auth/login-user/login-user.component')
+    },
+    {
+        path: 'validate',
+        loadComponent: () => import('././pages/auth/validate-public/validate-public.component')
     },
     {
         path: 'registrar',
@@ -173,6 +178,11 @@ export const routes: Routes = [
     {
         path: 'membresia-ven',
         component: MembresiaVenComponent,
+        data: { animation: 'slideRight' },
+    }, 
+    {
+        path: 'usuario-sin-acceso',
+        component: WithoutAccessComponent,
         data: { animation: 'slideRight' },
     },
 

@@ -8,5 +8,6 @@ export const appsettings = {
     API_COMP_INVERSORES: "api/inversionista/",  //inversiones
     API_COMP_REGISTER: "register/",  //inversiones
     API_COMP_ADMIN: "api/admin/",
-    API_COMP_USER: "api/usuario/"
+    API_COMP_USER: "api/usuario/",
+    API_COMP_PUBLIC: "webp/",
 }

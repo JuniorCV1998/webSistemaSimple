@@ -1,1 +1,25 @@
-<p>without-access works!</p>
+<div class="flex flex-column justify-content-center align-items-center" style="margin-top: 2rem;">
+    <div class="">
+        <h2 class="text-1xl text-center font-bold txt-red mb-6">{{ header }}</h2>
+
+        <div class="flex flex-column justify-content-center align-items-center mb-6">
+            <lottie-player src="/public/system/without-access.json" background="transparent" speed="1" loop autoplay
+                style="width: 300px; cursor: pointer; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </lottie-player>
+        </div>
+        <div class="flex flex-column justify-content-center align-items-center mb-6">
+            <p-message severity="error" icon="pi pi-exclamation-circle" text="{{body}}"
+                styleClass="h-full message-small" />
+        </div>
+
+        <div class="text-center">
+            <button pButton label="Soporte" icon="pi pi-whatsapp" severity="success"
+                 class="w-8rem" (click)="soportePorWhatsapp()"></button>
+        </div>
+
+    </div>
+
+    <button pButton pRipple label="Volver" routerLink="/" class="mb-1 btn-float"></button>
+
+</div>

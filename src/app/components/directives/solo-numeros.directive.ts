@@ -1,4 +1,5 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
+import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[appSoloNumeros]',
@@ -6,18 +7,18 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 })
 export class SoloNumerosDirective {
 
-  constructor(
-    private readonly elRef: ElementRef,
-  ) { }
+  constructor(private ngControl: NgControl) { }
 
-  @HostListener('input',['$event'])
-  onchangeInput(event: Event):void{  //captura el elemento en el DOM
-    const numero = /[^0-9]*/g ;
-    const initVaule = this.elRef.nativeElement.value;
-    
-    this.elRef.nativeElement.value = initVaule.replace(numero,'');
-    if(initVaule !== this.elRef.nativeElement.value) event.stopPropagation();
-    
+  @HostListener('input', ['$event'])
+  onInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const newValue = input.value.replace(/[^0-9]/g, '');
+
+    // actualiza el input en el DOM
+    input.value = newValue;
+
+    // actualiza también el modelo interno de Angular Forms
+    this.ngControl.control?.setValue(newValue, { emitEvent: true });
   }
 
 }
