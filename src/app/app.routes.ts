@@ -4,6 +4,9 @@ import { authGuard } from './core/guards/auth.guard';
 import { MembresiaExpComponent } from './pages/system/warning/membresia-exp/membresia-exp.component';
 import { MembresiaVenComponent } from './pages/system/errores/membresia-ven/membresia-ven.component';
 import { WithoutAccessComponent } from './pages/system/errores/without-access/without-access.component';
+import { CodigoManualComponent } from './pages/system/informativo/codigo-manual/codigo-manual.component';
+import { MantenimientoComponent } from './pages/system/informativo/mantenimiento/mantenimiento.component';
+import { BlockBackGuard } from './core/guards/block-back';
 
 export const routes: Routes = [
     {
@@ -179,14 +182,23 @@ export const routes: Routes = [
         path: 'membresia-ven',
         component: MembresiaVenComponent,
         data: { animation: 'slideRight' },
-    }, 
+    },
     {
         path: 'usuario-sin-acceso',
         component: WithoutAccessComponent,
         data: { animation: 'slideRight' },
+    }, 
+    {
+        path: 'codigo-manual',
+        component: CodigoManualComponent,
+        data: { animation: 'slideRight' },
+    }, 
+    {
+        path: 'mantenimiento',
+        component: MantenimientoComponent,
+        data: { animation: 'slideRight' },
+        canDeactivate: [BlockBackGuard]
     },
-
-
 
     /* Pantallas para ADM */
     {

@@ -60,7 +60,7 @@ export class NavegationComponent {
     private router: Router,
     private loginService: LoginService,
     private route: ActivatedRoute,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
   ) {
     /* const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
@@ -84,14 +84,13 @@ export class NavegationComponent {
       '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
     ];
     const flowOutSession = [
-      '/login', '/registrar', '/registrar/personal', '/login-user','/membresia-exp'
+      '/login', '/registrar', '/registrar/personal', '/login-user','/membresia-exp','/mantenimiento'
     ];
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
     this.routerSubscription = this.router.events.subscribe((event) => {
       /* Definir el perfil de usuario */
       const decodedToken = this.loginService.getDecodedToken();
-
 
       if (decodedToken) {
         this.codPefil = decodedToken.codPerfil;

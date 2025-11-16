@@ -4,6 +4,7 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { NavegationComponent } from './pages/nav/navegation/navegation.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MaintenanceSocketService } from './core/services/mantenimiento/maintenance-socket.service';
 
 
 
@@ -18,7 +19,10 @@ export class AppComponent implements OnInit{
   title = 'WebSistemaSimple';
   confetti: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private maintenanceSocketService: MaintenanceSocketService
+  ) {}
 
   ngOnInit() {
     // Habilita desplazamiento automático con teclado

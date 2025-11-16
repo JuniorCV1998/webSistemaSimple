@@ -51,6 +51,8 @@ compileOptions {
 Remove-Item -Recurse -Force node_modules, package-lock.json
 // reinstalar librerias
 npm install
+// limpiar cache
+ng cache clean
 // correr proyecto
 ng s
 

@@ -1,9 +1,11 @@
-import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 import { finalize, map, Observable, tap } from 'rxjs';
 import { appsettings } from '../../../appsettings';
 import { jwtDecode } from "jwt-decode";
 import { inject, Injectable } from '@angular/core';
+import { SystemService } from '../../system/system.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,41 +13,58 @@ import { inject, Injectable } from '@angular/core';
 export class LoginService {
 
   private http = inject(HttpClient);
-  private baseUrl:string = appsettings.API_SERVER;
+  private baseUrl: string = appsettings.API_SERVER;
 
- user = {};
+  user = {};
 
   constructor(
-    
+    private systemService: SystemService,
+    private router: Router
   ) {
-   }
+  }
 
   /*  iniciarSesion(credenciales: any):Observable<any> {
     return this.http.post<any>(`${this.baseUrl}login`,credenciales);
   } */
 
-    iniciarSesion(credenciales: any): Observable<any> {
-      return this.http.post<any>(`${this.baseUrl}login`, credenciales, { observe: 'response' })
-        .pipe(
-          tap(response => {
-            // Recupera la cookie del encabezado de la respuesta
-            const cookie = response.headers.get('Authorization')!;
-            if (cookie) {
-              // Guarda la cookie en sesión
-              //sessionStorage.setItem('miCookie', cookie);
-              const token = cookie.replace("Bearer ","");
-              sessionStorage.setItem('token',token);
-            }
-          }),
-          map(response => response.body)
-        );
-    }
+  iniciarSesion(credenciales: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}login`, credenciales, { observe: 'response' })
+      .pipe(
+        tap(response => {
+          // Recupera la cookie del encabezado de la respuesta
+          const cookie = response.headers.get('Authorization')!;
+          if (cookie) {
+            // Guarda la cookie en sesión
+            //sessionStorage.setItem('miCookie', cookie);
+            const token = cookie.replace("Bearer ", "");
+            sessionStorage.setItem('token', token);
 
-   getToken(){
+            this.consultarMantenimiento();
+          }
+        }),
+        map(response => response.body)
+      );
+  }
+
+  consultarMantenimiento() {
+    this.systemService.mantenimiento().subscribe({
+      next: (response: any) => {
+        if (response[0].value == 1) {
+          this.router.navigate(['/mantenimiento']);
+        }
+      },
+      error: err => {
+        console.error('Error al verificar mantenimiento', err);
+      }
+    });
+
+  }
+
+  getToken() {
     return sessionStorage.getItem('token');
-   }
+  }
 
-   isTokenValid(): boolean {
+  isTokenValid(): boolean {
     const token = this.getToken();
     if (!token) return false;
     const decoded: any = jwtDecode(token);

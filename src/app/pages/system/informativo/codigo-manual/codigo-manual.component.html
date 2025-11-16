@@ -1,0 +1,28 @@
+<div class="flex flex-column gap-1 justify-content-center align-items-center text-center" style="padding-top: 40px;">
+    <p-message severity="info" icon="pi pi-send" text="Por ahora no es posible generar un código único."
+        styleClass="h-full" />
+    <!-- <h2 class="text-base font-semibold text-gray-600">Muy pronto habilitaremos nuevamente el servicio para que puedas
+    crear más.</h2> -->
+    <lottie-player src="/public/system/working.json" background="transparent" speed="1"
+        style="width: 90%; height: 30%; max-width: 500px; margin-bottom: 20px;" loop autoplay>
+    </lottie-player>
+
+
+    <h2 class="text-base font-semibold text-gray-600">Si deseas una atención preferencial y generar tu código
+        directamente, contáctanos:</h2>
+    <div class="flex flex-row gap-3 justify-content-center mt-3">
+        <!-- Botón correo -->
+        <a href="mailto:generalservicesjyr@gmail.com">
+            <p-button label="Correo" icon="pi pi-envelope" severity="info" [raised]="true" />
+        </a>
+
+        <!-- Botón WhatsApp -->
+        <a href="https://wa.me/51920605673?text=%C2%A1Hola!%20Me%20gustar%C3%ADa%20generar%20mi%20c%C3%B3digo%20%C3%BAnico%20de%20manera%20preferencial."
+            target="_blank">
+            <p-button label="WhatsApp" icon="pi pi-whatsapp" severity="success" [raised]="true" />
+        </a>
+    </div>
+
+    <button pButton pRipple label="Volver" routerLink="/" class="mb-1 btn-float"></button>
+
+</div>

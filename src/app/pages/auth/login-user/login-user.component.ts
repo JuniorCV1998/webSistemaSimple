@@ -1,21 +1,20 @@
-import { Component, ViewChild } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
-import { PasswordModule } from 'primeng/password';
-import { Router } from '@angular/router';
-import { LoginService } from '../../../core/services/auth/login/login.service';
-import { FormsModule, NgForm } from '@angular/forms';
-import { ConfirmationService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
-import { DialogService } from 'primeng/dynamicdialog';
-import { Constantes } from '../../../core/constant/Constantes';
-import { LoadingComponent } from '../../modal/loading/loading.component';
-import { finalize } from 'rxjs';
+import { Component, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogService } from 'primeng/dynamicdialog';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { finalize } from 'rxjs';
+import { Constantes } from '../../../core/constant/Constantes';
+import { LoginService } from '../../../core/services/auth/login/login.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { LoadingComponent } from '../../modal/loading/loading.component';
+import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 
 @Component({
   selector: 'app-login-user',
@@ -73,20 +72,18 @@ export default class LoginUserComponent {
       finalize(() => this.enteredCode = [])).subscribe({
         next: response => {
           this.loadingComponent.hide();
+          sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
+          if (response.data.person.codTipoDoc === "06") {
+            sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
+            sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
+          }
+          // Guardar temporalmente informacion de configuracion del usuario
+          this.tempDataService.setConstant('currency', response.data.config.moneda);
+          sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
+          sessionStorage.setItem('pathSello', response.data.config.pathSello);
 
           if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) this.router.navigate(['inicio']);
           else if (response.codigoMessage === Constantes.COD_MEMBRESIA_POR_VENCER) {
-
-            sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
-            if (response.data.person.codTipoDoc === "06") {
-              sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
-              sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
-            }
-            // Guardar temporalmente informacion de configuracion del usuario
-            this.tempDataService.setConstant('currency', response.data.config.moneda);
-            sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
-            sessionStorage.setItem('pathSello', response.data.config.pathSello);
-
             this.router.navigate(['/membresia-exp'], {
               state: {
                 header: 'Membresía por expirar',
@@ -117,7 +114,6 @@ export default class LoginUserComponent {
                 }
               });
             }
-
           }
           else {
             this.show(Constantes.MSG_500);
