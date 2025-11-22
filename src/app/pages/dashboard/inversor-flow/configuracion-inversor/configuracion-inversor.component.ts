@@ -18,6 +18,7 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { ErrorGeneralComponent } from '../../../system/errores/error-general/error-general.component';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
 import { TempDataService } from '../../../../core/services/temp-data.service';
+import { appsettings } from '../../../../core/appsettings';
 
 @Component({
   selector: 'app-configuracion-inversor',
@@ -210,7 +211,7 @@ export default class ConfiguracionInversorComponent {
     // Mostrar sello si existe
 
     if (pathSello) {
-      if(pathLogo === pathSello && pathSello) this.checked = true;
+      if (pathLogo === pathSello && pathSello) this.checked = true;
       else this.checked = false;
       this.previewUrlSello = this.config.pathSello;
       this.selectedFileNameSello = this.extractFileName(this.config.pathSello);
@@ -223,22 +224,28 @@ export default class ConfiguracionInversorComponent {
     try {
       // Subir LOGO si hay archivo nuevo
       if (this.selectedFile) {
+        let path = "";
+        if (appsettings.API_SERVER == "http://localhost:8080/") path = `logo/logo_${this.codUnico}.png`;
+        else path = `produccion/logo/logo_${this.codUnico}.png`
         const downloadURL = await this.firebaseStorage.uploadImage(
           this.selectedFile,
-          `logo/logo_${this.codUnico}.png`
+          path
         );
         this.configUpdate.pathLogo = downloadURL;
         sessionStorage.setItem('pathLogo', downloadURL);
       }
 
       // Subir SELLO si hay archivo nuevo
-      if(this.checked){
+      if (this.checked) {
         this.configUpdate.pathSello = this.configUpdate.pathLogo;
       }
-      else if(this.selectedFileSello) {
+      else if (this.selectedFileSello) {
+        let path = "";
+        if (appsettings.API_SERVER == "http://localhost:8080/") path = `sello/sello_${this.codUnico}.png`;
+        else path = `produccion/sello/sello_${this.codUnico}.png`
         const downloadURL = await this.firebaseStorage.uploadImage(
           this.selectedFileSello,
-          `sello/sello_${this.codUnico}.png`
+          path
         );
         this.configUpdate.pathSello = downloadURL;
         sessionStorage.setItem('pathSello', downloadURL);
@@ -272,7 +279,7 @@ export default class ConfiguracionInversorComponent {
           this.selectedFile = null;
           this.selectedFileSello = null;
           //setear nuevo simbolo, data temp moneda
-          if(this.selectedMoneda) this.tempDataService.setConstant('currency', this.selectedMoneda.simbolo);
+          if (this.selectedMoneda) this.tempDataService.setConstant('currency', this.selectedMoneda.simbolo);
         }
       });
 
