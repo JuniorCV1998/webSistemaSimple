@@ -209,13 +209,12 @@ export default class CodigoUnicoComponent {
                 }
             })
         ).subscribe((resp: any) => {
+
             if (resp?.codigo === Constantes.STATUS_SUCCESS_RI) {
                 this.data = resp;
-                if (resp.codigo === Constantes.STATUS_SUCCESS_RI) {
-                    this.headerMessage = "¡Tu cuenta ha sido creada con éxito!";
-                    this.bodyMessage = "Hemos generado tu código único <b>" + this.data.data.codigo + "</b>. Ahora sigue los pasos a continuación para completar tu registro."
-                    activateCallback(2);
-                }
+                this.headerMessage = "¡Tu cuenta ha sido creada con éxito!";
+                this.bodyMessage = "Hemos generado tu código único <b>" + this.data.data.codigo + "</b>. Ahora sigue los pasos a continuación para completar tu registro."
+                activateCallback(2);
             }
 
         });
