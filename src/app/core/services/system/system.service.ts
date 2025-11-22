@@ -21,5 +21,15 @@ export class SystemService {
     return this.http.get(this.baseUrl + this.baseComponent + 'mantenimiento');
   }
 
+  versionAnd(versionActual: String) {
+    const params = new HttpParams()
+			.set('versionActual', String(versionActual));
+      return this.http.get(this.baseUrl+this.baseComponent+'version', {params});
+  }
+
+  urlStore() {
+    return this.http.get(this.baseUrl + this.baseComponent + 'url-store');
+  }
+
 
 }

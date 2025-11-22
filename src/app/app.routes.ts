@@ -7,6 +7,7 @@ import { WithoutAccessComponent } from './pages/system/errores/without-access/wi
 import { CodigoManualComponent } from './pages/system/informativo/codigo-manual/codigo-manual.component';
 import { MantenimientoComponent } from './pages/system/informativo/mantenimiento/mantenimiento.component';
 import { BlockBackGuard } from './core/guards/block-back';
+import { UpdateAppComponent } from './pages/system/informativo/update-app/update-app.component';
 
 export const routes: Routes = [
     {
@@ -199,6 +200,13 @@ export const routes: Routes = [
         data: { animation: 'slideRight' },
         canDeactivate: [BlockBackGuard]
     },
+    {
+        path: 'actualizar-app',
+        component: UpdateAppComponent,
+        data: { animation: 'slideRight' }
+    },
+
+
 
     /* Pantallas para ADM */
     {

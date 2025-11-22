@@ -15,6 +15,7 @@ import { PasswordModule } from 'primeng/password';
 import { StepperModule } from 'primeng/stepper';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { MessageService } from 'primeng/api';
+import { SystemService } from '../../../../core/services/system/system.service';
 
 
 @Component({
@@ -57,13 +58,17 @@ export default class CodigoUnicoComponent {
     bodyMessage: string = "";
     data: any = {};
 
+    /* Link Play Store */
+    urlPlayStore: string = '';
+
     constructor(
         private adminService: AdminService,
         private messageService: MessageService,
+        private systemService: SystemService
     ) { }
 
     ngOnInit() {
-
+        this.consultarURLPlayStore();
     }
 
 
@@ -85,6 +90,16 @@ export default class CodigoUnicoComponent {
         }
     ];
 
+    consultarURLPlayStore() {
+        this.systemService.urlStore().subscribe({
+            next: (response: any) => {
+                this.urlPlayStore = response[0].descripcion;
+            },
+            error: err => {
+                this.urlPlayStore = 'https://play.google.com/store/apps/details?id=com.ssimple.app';
+            }
+        });
+    }
 
     buscarCliente(tipoDocumento: string, nroDocumento: string, activateCallback: Function) {
         this.cargando = true;
@@ -141,7 +156,7 @@ export default class CodigoUnicoComponent {
                     else this.severity = 'warn';
                     this.message = error.error.descripcion;
                 }
-                else if(error.status === 422) {
+                else if (error.status === 422) {
                     this.severity = 'warn';
                     this.message = error.error.message;
                 } else {
@@ -288,7 +303,7 @@ export default class CodigoUnicoComponent {
             });
         }
     }
-    
+
     messaheCopiarUrlStore = "Copiar enlace";
     async copyUrlStore(url: string): Promise<void> {
         try {
@@ -296,7 +311,7 @@ export default class CodigoUnicoComponent {
 
             this.messaheCopiarUrlStore = "¡Copiado!";
             setTimeout(() => {
-                this.messaheCopiarUrlStore = "Copiar enlace"; 
+                this.messaheCopiarUrlStore = "Copiar enlace";
             }, 3000); // 3 segundos
             this.copyToClipboard(texto);
         } catch (err) {

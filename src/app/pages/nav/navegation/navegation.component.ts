@@ -13,12 +13,14 @@ import { SidebarModule, Sidebar } from 'primeng/sidebar';
 import { StyleClassModule } from 'primeng/styleclass';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { Drawer, DrawerModule } from 'primeng/drawer';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-navegation',
   standalone: true,
   imports: [RouterOutlet, CommonModule, SidebarModule, ButtonModule, RippleModule, StyleClassModule,
-    AvatarModule, TabMenuModule, RouterModule, DrawerModule],
+    AvatarModule, TabMenuModule, RouterModule, DrawerModule,ToastModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss',
   animations: [slideInAnimation]
@@ -61,6 +63,7 @@ export class NavegationComponent {
     private loginService: LoginService,
     private route: ActivatedRoute,
     private tempDataService: TempDataService,
+    private messageService: MessageService,
   ) {
     /* const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
@@ -78,13 +81,13 @@ export class NavegationComponent {
     /* Muestra las barras de Menu */
     const showMenu = [
       '/inicio', '/reporte/reporte-cobranza', '/vehicular/inicio', '/clientes',
-      '/inv/configuracion','/adm/configuracion','/perfil','/reporte/rentabilidad'
+      '/inv/configuracion', '/adm/configuracion', '/perfil', '/reporte/rentabilidad'
     ];
     const sinInicio = [
       '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
     ];
     const flowOutSession = [
-      '/login', '/registrar', '/registrar/personal', '/login-user','/membresia-exp','/mantenimiento'
+      '/login', '/registrar', '/registrar/personal', '/login-user', '/membresia-exp', '/mantenimiento'
     ];
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
@@ -135,11 +138,29 @@ export class NavegationComponent {
       /* Cargar Logo y Sello */
       const logoGuardado = sessionStorage.getItem('pathLogo');
       this.pathLogo = logoGuardado && logoGuardado !== 'null' ? logoGuardado : 'public/logos/logo_ssimple.png';
+
+      /* Mostrar mensajes */
+      this.showMessageInfo();
     });
 
     //Definir de donde vengo
     this.definirFrom();
 
+  }
+
+  showMessageInfo() {
+    /* Mostrar msg inversion eliminada */
+    if (this.tempDataService.hasItem('delete_inversion')) {
+      const messageData = {
+        severity: 'success',
+        summary: '!INVERSIÓN ELIMINADA¡',
+        detail: 'Se eliminó correctamente.',
+        life: 3000
+      };
+
+      this.messageService.add(messageData);
+      this.tempDataService.removeItem('delete_inversion');
+    }
   }
 
   setValueConfetti() {

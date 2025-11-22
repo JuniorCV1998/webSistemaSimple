@@ -79,8 +79,6 @@ export default class RegisterComponent {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('correo');
     sessionStorage.removeItem('codUnico');
-
-    console.log("el codigo unico es: ", this.codigoUnico);
   }
 
   ngAfterViewInit(): void {

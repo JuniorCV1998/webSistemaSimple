@@ -73,8 +73,6 @@ export default class InversionesListComponent {
       private route: ActivatedRoute,
       private loginService: LoginService,
       private viewportScroller: ViewportScroller,
-      private tempDataService: TempDataService,
-      private messageService: MessageService,
     ){
       const decodedToken = this.loginService.getDecodedToken();
       if (decodedToken) {
@@ -98,19 +96,6 @@ export default class InversionesListComponent {
     ngAfterViewInit(): void {
       if(this.codPerfil===Constantes.PERFIL_INV) this.listarInversiones();
       else this.listarInversionesAdm(this.idInversor);   
-
-      /* Mostrar msg inversion eliminada */
-      if(this.tempDataService.hasItem('delete_inversion')){
-        const messageData = {
-          severity: 'success',
-          summary: '!INVERSIÓN ELIMINADA¡',
-          detail: 'Se eliminó correctamente.',
-          life: 3000
-          };
-               
-          this.messageService.add(messageData);
-          this.tempDataService.removeItem('delete_inversion');
-      }
     }
 
     listarInversiones(){

@@ -12,52 +12,65 @@ div{
 }
  */
 
- 
-.span-padre{
-    font-weight: 500;
-    color: rgb(43, 43, 43);
-    font-size: 15px;
-    text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
-  .span-1{
-    font-weight: 500;
-    color: rgb(43, 43, 43);
-    font-size: 13px;
-    text-align: right;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
-  .span-desc{
-    font-weight: 500;
-    color: rgb(43, 43, 43);
-    font-size: 13px;
-    text-align: right;
-    word-break: break-word; /* rompe palabras largas */
-    white-space: normal;    /* permite múltiples líneas */
-  }
-.span-2{
-    color: var(--gray-500);
-    font-size: 13px;
-    text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
 
-.container-line{
-    border-bottom: solid 1px var(--gray-200);
-    padding: 10px;
-  }
+.span-padre {
+  font-weight: 700;
+  color: var(--primary-500);
+  font-size: 16px;
+  text-align: left;
+  white-space: nowrap;
+  /* Evita el salto de línea */
+  overflow: hidden;
+  /* Oculta el texto que sobrepasa el ancho */
+  text-overflow: ellipsis;
+  /* Agrega los "..." cuando el texto es muy largo */
+}
 
-  .cuadro-color{
-    background-color: aqua;
-    text-align: right;
-    width: 20px;
-    height: 20px;
-    border: 1px solid var(--gray-300);
-    border-radius: 5px;
-  }
+.span-1 {
+  font-weight: 700;
+  color: var(--gray-500);
+  font-size: 14px;
+  padding: 5px;
+  text-align: right;
+  white-space: nowrap;
+  /* Evita el salto de línea */
+  overflow: hidden;
+  /* Oculta el texto que sobrepasa el ancho */
+  text-overflow: ellipsis;
+  /* Agrega los "..." cuando el texto es muy largo */
+}
+
+.span-2 {
+  color: var(--gray-500);
+  font-size: 14px;
+  padding: 5px;
+  text-align: left;
+  white-space: nowrap;
+  /* Evita el salto de línea */
+  overflow: hidden;
+  /* Oculta el texto que sobrepasa el ancho */
+  text-overflow: ellipsis;
+  /* Agrega los "..." cuando el texto es muy largo */
+}
+
+.span-desc {
+  font-weight: 700;
+  color: var(--gray-500);
+  font-size: 14px;
+  padding: 5px;
+  text-align: right;
+}
+
+.container-line {
+  border-bottom: dashed 1px var(--gray-200);
+  padding: 10px;
+}
+
+.cuadro-color {
+  background-color: aqua;
+  text-align: right;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--gray-300);
+  border-radius: 5px;
+}

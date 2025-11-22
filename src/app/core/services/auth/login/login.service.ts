@@ -1,11 +1,15 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 
-import { finalize, map, Observable, tap } from 'rxjs';
+import { EMPTY, filter, finalize, map, Observable, of, switchMap, tap } from 'rxjs';
 import { appsettings } from '../../../appsettings';
 import { jwtDecode } from "jwt-decode";
 import { inject, Injectable } from '@angular/core';
 import { SystemService } from '../../system/system.service';
 import { Router } from '@angular/router';
+import { Constantes } from '../../../constant/Constantes';
+import { App } from '@capacitor/app';
+import { DialogService } from 'primeng/dynamicdialog';
+import { UpdateAppComponent } from '../../../../pages/system/informativo/update-app/update-app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -17,33 +21,66 @@ export class LoginService {
 
   user = {};
 
+  appVersion = '';
+
   constructor(
     private systemService: SystemService,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) {
   }
 
-  /*  iniciarSesion(credenciales: any):Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}login`,credenciales);
-  } */
+  ngOnInit(): void {
+    App.getInfo().then(info => {
+      this.appVersion = info.version;
+    });
+  }
 
   iniciarSesion(credenciales: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}login`, credenciales, { observe: 'response' })
-      .pipe(
-        tap(response => {
-          // Recupera la cookie del encabezado de la respuesta
-          const cookie = response.headers.get('Authorization')!;
-          if (cookie) {
-            // Guarda la cookie en sesión
-            //sessionStorage.setItem('miCookie', cookie);
-            const token = cookie.replace("Bearer ", "");
-            sessionStorage.setItem('token', token);
 
-            this.consultarMantenimiento();
-          }
-        }),
-        map(response => response.body)
-      );
+    return this.versionApp().pipe(
+      switchMap(respVersion => {
+
+        if (!respVersion.actualizado) {
+          return this.dialogService.open(UpdateAppComponent, {
+            //header: "Actualización requerida",
+            showHeader: false,  // Oculta la barra superior
+            width: '90vw',
+            closable: false,
+            modal: true,
+            closeOnEscape: false,
+            data: { respVersion },
+            
+          }).onClose;
+        }
+
+        return of(true);
+      }),
+
+      switchMap((respuesta: boolean) => {
+        if (!respuesta) return EMPTY;
+
+        return this.http.post<any>(`${this.baseUrl}login`, credenciales, {
+          observe: 'response'
+        });
+      }),
+
+      tap(response => {
+        const cookie = response.headers.get('Authorization');
+        if (cookie) {
+          const token = cookie.replace("Bearer ", "");
+          sessionStorage.setItem('token', token);
+          if (response.body.data.codPerfil !== Constantes.PERFIL_ADM) this.consultarMantenimiento();
+        }
+      }),
+
+      map(response => response.body)
+    );
+  }
+
+
+  versionApp(): Observable<any> { //'3.0.0'
+    return this.systemService.versionAnd(this.appVersion);
   }
 
   consultarMantenimiento() {

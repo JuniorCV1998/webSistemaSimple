@@ -165,7 +165,7 @@ app-root {
   max-width: 550px;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap'); */
 
 body {
   /* font-family: "Inter var", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -331,6 +331,10 @@ small {}
   color: var(--orange-500);
 }
 
+.txt-blue {
+  color: var(--blue-500);
+}
+
 //Btn Continuar
 .btn-disabled {
   background-color: var(--gray-200);
@@ -487,8 +491,6 @@ small {}
 .p-dialog {
   max-width: 600px;
 }
-
-
 
 //PADDING
 .paddin-5 {

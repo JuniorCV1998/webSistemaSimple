@@ -69,57 +69,59 @@ export default class LoginUserComponent {
 
     this.loadingComponent.show();
     this.loginService.iniciarSesion(this.credenciales).pipe(
-      finalize(() => this.enteredCode = [])).subscribe({
-        next: response => {
-          this.loadingComponent.hide();
-          sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
-          if (response.data.person.codTipoDoc === "06") {
-            sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
-            sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
-          }
-          // Guardar temporalmente informacion de configuracion del usuario
-          this.tempDataService.setConstant('currency', response.data.config.moneda);
-          sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
-          sessionStorage.setItem('pathSello', response.data.config.pathSello);
+      finalize(() => {
+        this.enteredCode = [];
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: response => {
+        sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
+        if (response.data.person.codTipoDoc === "06") {
+          sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
+          sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
+        }
+        // Guardar temporalmente informacion de configuracion del usuario
+        this.tempDataService.setConstant('currency', response.data.config.moneda);
+        sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
+        sessionStorage.setItem('pathSello', response.data.config.pathSello);
 
-          if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) this.router.navigate(['inicio']);
-          else if (response.codigoMessage === Constantes.COD_MEMBRESIA_POR_VENCER) {
-            this.router.navigate(['/membresia-exp'], {
+        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) this.router.navigate(['inicio']);
+        else if (response.codigoMessage === Constantes.COD_MEMBRESIA_POR_VENCER) {
+          this.router.navigate(['/membresia-exp'], {
+            state: {
+              header: 'Membresía por expirar',
+              body: response.data.membresia.descripcion
+            }
+          });
+
+        }
+
+      },
+      error: err => {
+        if (err.status === 401) {
+          this.show(Constantes.MSG_401);
+        } else if (err.status === 403) {
+          if (err.error.codigoMessage === Constantes.COD_MEMBRESIA_VENCIDA) {
+            this.router.navigate(['/membresia-ven'], {
               state: {
-                header: 'Membresía por expirar',
-                body: response.data.membresia.descripcion
+                header: 'Membresía expirada',
+                body: err.error.message
               }
             });
-
-          }
-
-        },
-        error: err => {
-          this.loadingComponent.hide();
-          if (err.status === 401) {
-            this.show(Constantes.MSG_401);
-          } else if (err.status === 403) {
-            if (err.error.codigoMessage === Constantes.COD_MEMBRESIA_VENCIDA) {
-              this.router.navigate(['/membresia-ven'], {
-                state: {
-                  header: 'Membresía expirada',
-                  body: err.error.message
-                }
-              });
-            } else if (err.error.codigoMessage === Constantes.COD_USUARIO_BLOQUEADO) {
-              this.router.navigate(['/usuario-sin-acceso'], {
-                state: {
-                  header: 'Usuario sin acceso',
-                  body: err.error.message
-                }
-              });
-            }
-          }
-          else {
-            this.show(Constantes.MSG_500);
+          } else if (err.error.codigoMessage === Constantes.COD_USUARIO_BLOQUEADO) {
+            this.router.navigate(['/usuario-sin-acceso'], {
+              state: {
+                header: 'Usuario sin acceso',
+                body: err.error.message
+              }
+            });
           }
         }
-      });
+        else {
+          this.show(Constantes.MSG_500);
+        }
+      }
+    });
   }
 
   show(message: string) {
@@ -129,6 +131,7 @@ export default class LoginUserComponent {
       },
       header: Constantes.MSG_GLOBAL,
       closable: false,
+      closeOnEscape: false,
       modal: true,
       width: '90%'
     });

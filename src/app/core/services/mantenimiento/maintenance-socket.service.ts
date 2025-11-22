@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import SockJS from 'sockjs-client';
 import { LoginService } from '../auth/login/login.service';
 import { BehaviorSubject } from 'rxjs';
+import { Constantes } from '../../constant/Constantes';
 
 
 @Injectable({
@@ -41,10 +42,10 @@ export class MaintenanceSocketService {
         this.isMaintenance$.next(isMaintenance);
 
         if (isMaintenance) {
-          if (this.codPerfil !== 'ADM') this.router.navigate(['/mantenimiento']);
+          if (this.codPerfil !== Constantes.PERFIL_ADM) this.router.navigate(['/mantenimiento']);
         } else {
           this.ignoreBackBlock = true;
-          if (this.codPerfil !== 'ADM') this.router.navigate(['/inicio']);
+          if (this.codPerfil !== Constantes.PERFIL_ADM) this.router.navigate(['/inicio']);
         }
       });
     };

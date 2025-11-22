@@ -16,6 +16,7 @@ import { LoadingComponent } from '../../modal/loading/loading.component';
 import { InputOtpModule } from 'primeng/inputotp';
 import { SystemService } from '../../../core/services/system/system.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { finalize } from 'rxjs';
 
 
 @Component({
@@ -80,7 +81,11 @@ export default class LoginComponent {
 
   login(form: NgForm) {
     this.loadingComponent.show();
-    this.loginService.iniciarSesion(this.credenciales).subscribe({
+    this.loginService.iniciarSesion(this.credenciales).pipe(
+          finalize(() => {
+            this.loadingComponent.hide();
+          })
+    ).subscribe({
       next: response => {
         this.loadingComponent.hide();
         localStorage.setItem('correo', this.credenciales.correo);

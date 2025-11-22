@@ -1,0 +1,32 @@
+<div class="flex flex-column justify-content-center align-items-center">
+    <div class="text-center align-items-center" [ngClass]="!respVersion.mandatorio ? 'mb-5' : ''">
+        <h2 class="text-1xl text-center font-bold txt-blue">{{ header }}</h2>
+        <span class="font-semibold text-center text-gray-500">{{respVersion.version}}</span>
+        <div class="flex flex-column justify-content-center align-items-center mb-3">
+            <lottie-player src="/public/system/update-app.json" background="transparent" speed="1" loop autoplay
+                style="width: 300px; cursor: pointer; transition: transform 0.2s;"
+                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            </lottie-player>
+        </div>
+
+        <div class="flex flex-column justify-content-between align-items-center mb-2">
+            <p class="font-semibold text-gray-500">Actualiza la app desde</p>
+            <a (click)="actualizarApp()">
+                <lottie-player src="/public/elements/store/play_store.json" background="transparent" speed="1" loop
+                    autoplay style="width: 150px; cursor: pointer; transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                </lottie-player>
+            </a>
+        </div>
+        <div class="flex flex-column justify-content-center align-items-center mb-3">
+            <p class="text-gray-500 w-10" style="font-size: 14px;" [innerHTML]="respVersion.descripcion"></p>
+        </div>
+    </div>
+    <div class="text-center"> <!--  routerLink="/inicio" -->
+        <button *ngIf="!respVersion.mandatorio" pButton pRipple label="Más tarde" (click)="continuar()"
+            class="mb-1 btn-float"></button>
+        <a *ngIf="respVersion.mandatorio" class="font-medium no-underline text-blue-500"
+            (click)="actualizarApp()">¡Actualizar!</a>
+    </div>
+
+</div>

@@ -355,7 +355,14 @@ export default class InversionDetailComponent {
           subscribe((resp: any) => {
 
             this.tempDataService.setItem('delete_inversion', true);
-            window.history.back();
+            /* Definir de donde viene el usuario */
+            // Recuperar el parámetro de consulta `from`
+            this.route.queryParamMap.subscribe(params => {
+              const fromView = params.get('from');
+              if (fromView == 'register') this.router.navigate(['/inicio']);
+              else window.history.back();
+            });
+            
           }
           );
       }
@@ -500,13 +507,13 @@ export default class InversionDetailComponent {
   }
 
   async copyToClipboard(text: string) {
-  try {
-    await navigator.clipboard.writeText(text);
-    console.log('Texto copiado al portapapeles');
-  } catch (err) {
-    console.error('Error al copiar el texto: ', err);
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log('Texto copiado al portapapeles');
+    } catch (err) {
+      console.error('Error al copiar el texto: ', err);
+    }
   }
-}
 
   formatNumberEspaciado(numero: string): string {
     return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
