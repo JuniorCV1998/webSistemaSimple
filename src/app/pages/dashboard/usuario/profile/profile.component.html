@@ -18,15 +18,15 @@
                     class="user-name">{{usuarioData?.persona?.nombres+' '+usuarioData?.persona?.apellidoPaterno+'
                     '+usuarioData?.persona?.apellidoMaterno}}</h2>
                 <h2 *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-name">
-                    {{usuarioData?.persona?.nombres+' '+usuarioData?.persona?.apellidoPaterno+'
-                    '+usuarioData?.persona?.apellidoMaterno}}</h2>
+                    {{usuarioData?.persona?.razonSocial}}</h2>
+                <span class="text-gray-500 font-medium line-height-3 w-full">{{usuarioData?.persona?.nombreComercial}}</span>
                 <div class="flex flex-row justify-content-start align-items-center gap-2">
                     <i class="pi pi-id-card icon-span"></i>
                     <p *ngIf="usuarioData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
                         <strong>{{usuarioData?.persona?.nroDocumento}}</strong>
                     </p>
                     <p *ngIf="usuarioData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
-                    <p *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
+                    <p *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-subtitle">RUC •
                         <strong>{{usuarioData?.persona?.nroDocumento}}</strong>
                     </p>
                 </div>
@@ -81,7 +81,7 @@
     </div>
 
     <!-- Datos de la Membresia -->
-    <div class="user-card mb-5">
+    <div class="user-card mb-5" *ngIf="perfil!=='CLI'">
         <div class="flex flex-row justify-content-between w-full mb-3">
             <span class="block w-10 line-height-3">Datos de la Membresía</span>
         </div>

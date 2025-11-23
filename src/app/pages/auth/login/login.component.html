@@ -12,7 +12,8 @@
             <form #form="ngForm" (ngSubmit)="login(form)">
                 <label for="email1" class="block font-medium mb-2">Correo electrónico</label>
                 <div class="relative w-full mb-2">
-                    <input id="email1" name="usuario" [(ngModel)]="credenciales.correo" [maxlength]="120" type="text" placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3">
+                    <input id="email1" name="usuario" [(ngModel)]="credenciales.correo" [maxlength]="120" type="text" 
+                    placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3" (ngModelChange)="credenciales.correo = $event.toLowerCase()">
                     <!-- Icono de eliminar x -->
                     <i class="pi" [ngClass]="credenciales.correo ? 'pi-times-circle' : ''" 
                       (click)="cleanCorreoFunct()" 

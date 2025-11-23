@@ -17,6 +17,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogRenovarMembresiaComponent } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
 import { ConfirmationService } from 'primeng/api';
+import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
   selector: 'app-profile',
@@ -45,11 +46,16 @@ export default class ProfileComponent {
     "membresia": {}
   }
 
+  perfil: string = '';
+
   constructor(
     private usuarioService: UsuarioService,
     private router: Router,
     public dialogService: DialogService,
-  ) { }
+    private tempDataService: TempDataService
+  ) {
+    if(this.tempDataService.hasConstant("codPerfil")) this.perfil = this.tempDataService.getConstant("codPerfil") ?? '';
+   }
 
   ngOnInit() {
 

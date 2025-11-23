@@ -15,8 +15,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-update-app',
   standalone: true,
-  imports: [TabMenuModule, RouterLink, ButtonModule, ConfirmDialogModule, MessageModule, CommonModule,
-    DialogRenovarMembresiaComponent],
+  imports: [TabMenuModule, ButtonModule, ConfirmDialogModule, MessageModule, CommonModule],
   providers: [ConfirmationService],
   templateUrl: './update-app.component.html',
   styleUrl: './update-app.component.scss',
@@ -39,7 +38,6 @@ export class UpdateAppComponent {
 
   constructor(
     private router: Router,
-    private confirmationService: ConfirmationService,
     private systemService: SystemService,
     private ref: DynamicDialogRef,
     private config: DynamicDialogConfig,
@@ -55,9 +53,6 @@ export class UpdateAppComponent {
   }
 
   ngOnInit(): void {
-    App.getInfo().then(info => {
-      this.appVersion = info.version;
-    });
     this.consultarURLPlayStore();
   }
 

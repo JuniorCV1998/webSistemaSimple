@@ -153,6 +153,8 @@ export default class InversoresInversionesComponent {
           ${persona.nombres} ${persona.apellidoPaterno} ${persona.apellidoMaterno} 
           ${persona.celular}
           ${persona.nroDocumento}
+          ${persona.razonSocial} 
+          ${persona.nombreComercial} 
         `.toLowerCase();
 
       return textoBuscado.includes(filtro);

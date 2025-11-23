@@ -1,10 +1,11 @@
-
 <div>
     <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
     <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         <div class="comp_volver">
             <!-- <a href="/registrar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
-            <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a>
+            <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i>
+                <p>Volver</p>
+            </a>
         </div>
         <div class="text-center mb-4">
             <img src="public/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
@@ -12,29 +13,34 @@
         </div>
 
         <div class="mb-4">
-                <div class="flex flex-row align-items-center justify-content-center mb-4">
-                    <div class="flex flex-row justify-content-center align-items-center gap-4 w-full">
-                        <!-- <label for="apellidop" class="block  font-medium mb-2">Núm. de Documento</label> -->
-                        <i class="pi pi-id-card icon-span"></i>
-                        <span *ngIf="isClienteNatural" class="nro-document">{{objPersona.nroDocumento}}</span>
-                        <span *ngIf="!isClienteNatural" class="nro-document">{{objPersonaJuridica.nroDocumento}}</span>
-                    </div>
+            <div class="flex flex-row align-items-center justify-content-center mb-4">
+                <div class="flex flex-row justify-content-center align-items-center gap-4 w-full">
+                    <!-- <label for="apellidop" class="block  font-medium mb-2">Núm. de Documento</label> -->
+                    <i class="pi pi-id-card icon-span"></i>
+                    <span *ngIf="isClienteNatural" class="nro-document">{{objPersona.nroDocumento}}</span>
+                    <span *ngIf="!isClienteNatural" class="nro-document">{{objPersonaJuridica.nroDocumento}}</span>
                 </div>
+            </div>
 
             <!-- Persona natural -->
             <div *ngIf="isClienteNatural">
                 <label for="nombres" class="block font-medium mb-2">Nombres</label>
-                <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+                <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off"
+                    placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
 
                 <div class="flex flex-row gap-2 align-items-center justify-content-center">
                     <div class="flex flex-column w-full">
                         <label for="apellidop" class="block font-medium mb-2">Apellido paterno</label>
-                        <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+                        <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text"
+                            autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras
+                            class="w-full mb-3 btn-disabled">
                     </div>
 
                     <div class="flex flex-column w-full">
                         <label for="apellidom" class="block font-medium mb-2">Apellido materno</label>
-                        <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text" autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+                        <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text"
+                            autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras
+                            class="w-full mb-3 btn-disabled">
                     </div>
                 </div>
             </div>
@@ -44,42 +50,53 @@
             <div *ngIf="!isClienteNatural">
 
                 <label for="nombres" class="block  font-medium mb-2">Razón Social</label>
-                <input id="nombres" [(ngModel)]="objPersonaJuridica.razonSocial" [maxlength]="25" type="text" autocomplete="off" placeholder="Razón Social" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+                <input id="nombres" [(ngModel)]="objPersonaJuridica.razonSocial" [maxlength]="25" type="text"
+                    autocomplete="off" placeholder="Razón Social" pInputText appSoloLetras
+                    class="w-full mb-3 btn-disabled">
 
                 <div class="flex flex-row gap-2 align-items-center justify-content-center">
                     <div class="flex flex-column w-full">
                         <label for="apellidop" class="block  font-medium mb-2">Nombre Comercial</label>
-                        <input id="apellidop" [(ngModel)]="objPersonaJuridica.nombreComercial" [maxlength]="20" type="text" autocomplete="off" placeholder="Nombre Comercial" pInputText appSoloLetras class="w-full mb-3">
+                        <input id="apellidop" [(ngModel)]="objPersonaJuridica.nombreComercial" [maxlength]="20"
+                            type="text" autocomplete="off" placeholder="Nombre Comercial" pInputText appSoloLetras
+                            class="w-full mb-3">
                     </div>
                 </div>
             </div>
 
             <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                <div class="flex flex-column w-full">
+                <div *ngIf="isClienteNatural" class="flex flex-column w-full">
                     <label for="celular" class="block  font-medium mb-2">Celular</label>
-                    <input id="celular" [(ngModel)]="objPersona.celular" type="text" placeholder="Celular" autocomplete="off" pInputText appNroCelular class="w-full mb-3">
+                    <input id="celular" [(ngModel)]="objPersona.celular" type="text" placeholder="Celular"
+                        autocomplete="off" pInputText appNroCelular class="w-full mb-3">
                 </div>
-
+                <div *ngIf="!isClienteNatural" class="flex flex-column w-full">
+                    <label for="celular" class="block  font-medium mb-2">Celular</label>
+                    <input id="celular" [(ngModel)]="objPersonaJuridica.celular" type="text" placeholder="Celular"
+                        autocomplete="off" pInputText appNroCelular class="w-full mb-3">
+                </div>
                 <div *ngIf="isClienteNatural" class="flex flex-column w-full">
                     <label for="direccion" class="block  font-medium mb-2">Dirección</label>
-                    <input id="direccion"
-                     [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3">
+                    <input id="direccion" [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text"
+                        autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3">
                 </div>
                 <div *ngIf="!isClienteNatural" class="flex flex-column w-full">
                     <label for="direccion" class="block  font-medium mb-2">Dirección</label>
-                    <input id="direccion"
-                     [(ngModel)]="objPersonaJuridica.direccion" [maxlength]="60" type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3 btn-disabled">
+                    <input id="direccion" [(ngModel)]="objPersonaJuridica.direccion" [maxlength]="60" type="text"
+                        autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3 btn-disabled">
                 </div>
             </div>
 
             <div class="flex flex-row gap-3 align-items-center justify-content-center">
                 <p-checkbox [(ngModel)]="checked" [binary]="true" />
-                <p>He leído y acepto la 
-                    <a class="font-medium no-underline text-blue-400 cursor-pointer" (click)="showDialog()">Política de Privacidad</a>
-                 y confirmo que soy mayor de 18 años de edad.</p>
+                <p>He leído y acepto la
+                    <a class="font-medium no-underline text-blue-400 cursor-pointer" (click)="showDialog()">Política de
+                        Privacidad</a>
+                    y confirmo que soy mayor de 18 años de edad.
+                </p>
             </div>
 
-                <!-- <div class="card flex justify-content-center">
+            <!-- <div class="card flex justify-content-center">
                     
                     <p-card>
                         <i id="i_image" class="pi pi-image"></i>
@@ -90,37 +107,44 @@
                         
                     </p-card>
                 </div> -->
-            
+
             <div style="height: 40px;"></div>
             <button [ngClass]="{
                 'btn-disabled': !isFormValid()
-              }"
-            pButton pRipple label="Registrarme" (click)="registrarInversor()" [disabled]="!isFormValid()" class="btn-float"></button>
+              }" pButton pRipple label="Registrarme" (click)="registrarInversor()" [disabled]="!isFormValid()"
+                class="btn-float"></button>
         </div>
     </div>
 
     <!-- TERMINOS Y CONDICIONES -->
-    <p-dialog header="Política de Privacidad" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+    <p-dialog header="Política de Privacidad" [(visible)]="visible" [modal]="true"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false"
+        [resizable]="false">
         <p>
             Actualizado: 31 de enero de 2025<br><br>
 
             <b>1. Introducción</b><br><br>
 
-            En Sistema Simple, nos comprometemos a proteger la privacidad y la seguridad de los datos personales de nuestros usuarios. <br>Esta política de privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos la información personal que nos proporcionas al utilizar nuestra aplicación.
+            En Sistema Simple, nos comprometemos a proteger la privacidad y la seguridad de los datos personales de
+            nuestros usuarios. <br>Esta política de privacidad explica cómo recopilamos, utilizamos, almacenamos y
+            protegemos la información personal que nos proporcionas al utilizar nuestra aplicación.
             <br><br>
-            Nuestra aplicación permite a los usuarios gestionar sus préstamos personales, visualizar su historial de pagos y consultar detalles sobre sus cuotas. No otorgamos préstamos directamente ni actuamos como entidad financiera.
+            Nuestra aplicación permite a los usuarios gestionar sus préstamos personales, visualizar su historial de
+            pagos y consultar detalles sobre sus cuotas. No otorgamos préstamos directamente ni actuamos como entidad
+            financiera.
             <br><br>
             <b>2. Datos que recopilamos</b><br><br>
 
             Al registrarte y utilizar nuestra aplicación, recopilamos los siguientes datos personales:
             <br><br>
-            Nombre completo, 
-            Apellido, 
-            Dirección, 
-            Número de celular, 
+            Nombre completo,
+            Apellido,
+            Dirección,
+            Número de celular,
             Correo electrónico.<br><br>
 
-            Estos datos se recopilan cuando creas una cuenta y se utilizan exclusivamente para la gestión de préstamos y la administración de la información relacionada con los mismos.
+            Estos datos se recopilan cuando creas una cuenta y se utilizan exclusivamente para la gestión de préstamos y
+            la administración de la información relacionada con los mismos.
             <br><br>
             <b>3. Uso de la información</b><br><br>
 
@@ -132,28 +156,37 @@
 
             <b>4. Almacenamiento de la información</b><br><br>
 
-            Tu información personal será almacenada en nuestros servidores de manera segura. Tomamos las medidas necesarias para proteger tus datos de accesos no autorizados, alteración o eliminación.
+            Tu información personal será almacenada en nuestros servidores de manera segura. Tomamos las medidas
+            necesarias para proteger tus datos de accesos no autorizados, alteración o eliminación.
             <br><br>
             <b>5. No validación de la información</b><br><br>
 
-            Es importante tener en cuenta que no validamos la veracidad de los datos proporcionados. La aplicación únicamente almacena y organiza la información tal como se introduce, sin verificar si los datos son correctos o reales. Es responsabilidad del usuario proporcionar datos precisos y completos.
+            Es importante tener en cuenta que no validamos la veracidad de los datos proporcionados. La aplicación
+            únicamente almacena y organiza la información tal como se introduce, sin verificar si los datos son
+            correctos o reales. Es responsabilidad del usuario proporcionar datos precisos y completos.
             <br><br>
             <b>6. Compartición de la información</b><br><br>
 
-            No compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con las leyes o regulaciones aplicables, o si es requerido por un proceso legal.
+            No compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con las leyes
+            o regulaciones aplicables, o si es requerido por un proceso legal.
             <br><br>
-            
+
             <b>7. Seguridad de los datos</b><br><br>
 
-            Implementamos medidas de seguridad razonables para proteger tu información personal. Sin embargo, ninguna transmisión de datos a través de Internet o sistema de almacenamiento electrónico es completamente segura, por lo que no podemos garantizar la seguridad absoluta de tus datos.
+            Implementamos medidas de seguridad razonables para proteger tu información personal. Sin embargo, ninguna
+            transmisión de datos a través de Internet o sistema de almacenamiento electrónico es completamente segura,
+            por lo que no podemos garantizar la seguridad absoluta de tus datos.
             <br><br>
             <b>8. Cambios en esta política de privacidad</b><br><br>
 
-            Nos reservamos el derecho de actualizar o modificar esta política de privacidad en cualquier momento. Cualquier cambio será publicado en esta página, y la fecha de la última actualización será indicada al inicio de la política.
+            Nos reservamos el derecho de actualizar o modificar esta política de privacidad en cualquier momento.
+            Cualquier cambio será publicado en esta página, y la fecha de la última actualización será indicada al
+            inicio de la política.
             <br><br>
             <b>9. Contacto</b><br><br>
 
-            Si tienes alguna pregunta o inquietud sobre esta política de privacidad o cómo manejamos tus datos, no dudes en contactarnos a través de:
+            Si tienes alguna pregunta o inquietud sobre esta política de privacidad o cómo manejamos tus datos, no dudes
+            en contactarnos a través de:
             <br><br>
             <a class="font-medium no-underline text-blue-400 cursor-pointer"> {{userEmail}} </a>
         </p>
@@ -167,7 +200,8 @@
     <p-confirmDialog #cd key="cd">
         <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
             <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                <div *ngIf="!confirmCase" class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
+                <div *ngIf="!confirmCase"
+                    class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
                     <img [src]="pathSello" width="100" height="100">
                 </div>
                 <span class="font-bold text-2xl block mb-2 mt-4">
@@ -183,7 +217,9 @@
                 <div *ngIf="confirmCase" class="flex flex-column w-full align-items-left confirm-date">
                     <div class="flex flex-row gap-2 p-3 align-items-center">
                         <i class="pi pi-user"></i>
-                        <span>{{ objPersona.nombres+" "+objPersona.apellidoPaterno+" "+objPersona.apellidoMaterno}}</span>
+                        <span *ngIf="isClienteNatural" >{{ objPersona.nombres+" "+objPersona.apellidoPaterno+"
+                            "+objPersona.apellidoMaterno}}</span>
+                        <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.razonSocial}}</span>
                     </div>
                     <div class="flex flex-row gap-2 p-3 align-items-center">
                         <i class="pi pi-at"></i>
@@ -191,34 +227,24 @@
                     </div>
                     <div class="flex flex-row gap-2 p-3 align-items-center">
                         <i class="pi pi-phone"></i>
-                        <span>{{ objPersona.celular }}</span>
+                        <span *ngIf="isClienteNatural">{{ objPersona.celular }}</span>
+                        <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.celular}}</span>
                     </div>
                     <div class="flex flex-row gap-2 p-3 align-items-center">
                         <i class="pi pi-map-marker"></i>
-                        <span>{{ objPersona.direccion }}</span>
+                        <span *ngIf="isClienteNatural">{{ objPersona.direccion }}</span>
+                        <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.direccion}}</span>
                     </div>
                 </div>
 
                 <div *ngIf="confirmCase" class="flex align-items-center gap-2 mt-4">
-                    <button 
-                        pButton 
-                        label="Cancelar" 
-                        (click)="onReject()"
-                        class="p-button-outlined w-8rem ">
+                    <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
                     </button>
-                    <button 
-                        pButton 
-                        label="Confirmar" 
-                        (click)="onAccept()" 
-                        class="w-8rem">
+                    <button pButton label="Confirmar" (click)="onAccept()" class="w-8rem">
                     </button>
                 </div>
                 <div *ngIf="!confirmCase" class="flex align-items-center gap-2 mt-4">
-                    <button 
-                        pButton 
-                        label="Aceptar" 
-                        (click)="onAccept()" 
-                        class="w-8rem">
+                    <button pButton label="Aceptar" (click)="onAccept()" class="w-8rem">
                     </button>
                 </div>
             </div>

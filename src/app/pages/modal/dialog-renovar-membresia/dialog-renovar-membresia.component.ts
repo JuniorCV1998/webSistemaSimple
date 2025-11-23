@@ -19,9 +19,9 @@ export class DialogRenovarMembresiaComponent {
   opcionSeleccionada: any = null;
 
   opciones = [
-    { label: '1 mes', precio: 30 },
-    { label: '2 meses', precio: 55 },
-    { label: '3 meses', precio: 80 }
+    { label: '1 mes', precio: "30.00" },
+    { label: '2 meses', precio: "55.00" },
+    { label: '3 meses', precio: "80.00" }
   ];
 
   abrir() {

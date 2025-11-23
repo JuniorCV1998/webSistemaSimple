@@ -7,6 +7,7 @@
                 <p>Volver</p>
             </a>
         </div>
+        <div *ngIf="cargando" class="loading-bar"></div>
         <div class="text-center mb-5">
             <img src="public/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
             <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3" (click)="respCodigoUnico()">Únete
@@ -34,7 +35,7 @@
                 </div>
                 <div class="flex pt-6 justify-content-end">
                     <p-button (onClick)="buscarCliente(selectedTipoDoc.codigo, nroDocumento)" label="Siguiente"
-                        icon="pi pi-arrow-right" iconPos="right" [disabled]="!isDocumentoValido()" [ngClass]="{
+                        icon="pi pi-arrow-right" iconPos="right" [disabled]="!isDocumentoValido() || cargando" [ngClass]="{
                     'btn-disabled': !isDocumentoValido() }" />
                 </div>
             </ng-container>
@@ -53,7 +54,7 @@
                     </div>
                     <div class="flex flex-wrap justify-content-center gap-3" style="max-width: 12rem;">
                         <!-- <label for="email" class="font-semibold">Correo electrónico</label> -->
-                        <input id="email" [(ngModel)]="correo" (ngModelChange)="showMessage=false" maxlength="70"
+                        <input id="email" [(ngModel)]="correo" maxlength="70" (ngModelChange)="correo = $event.toLowerCase(); showMessage = false"
                             pInputText placeholder="ejemplo@gmail.com" class="w-full" />
                     </div>
                     <div class="flex flex-column align-items-center gap-2 mx-auto text-center"
@@ -64,7 +65,7 @@
                 <div class="flex pt-6 justify-content-between">
                     <p-button (onClick)="atras();" label="Atrás" severity="secondary" icon="pi pi-arrow-left" />
                     <p-button (onClick)="validarCorreoExistente(correo)" label="Siguiente" icon="pi pi-arrow-right"
-                        iconPos="right" [disabled]="!isCorreoValido()" [ngClass]="{
+                        iconPos="right" [disabled]="!isCorreoValido() || cargando" [ngClass]="{
                     'btn-disabled': !isCorreoValido() }" />
                 </div>
             </ng-container>

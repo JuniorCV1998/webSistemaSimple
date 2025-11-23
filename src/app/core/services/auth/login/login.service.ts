@@ -28,12 +28,13 @@ export class LoginService {
     private router: Router,
     private dialogService: DialogService
   ) {
-  }
-
-  ngOnInit(): void {
     App.getInfo().then(info => {
       this.appVersion = info.version;
     });
+  }
+
+  ngOnInit(): void {
+
   }
 
   iniciarSesion(credenciales: any): Observable<any> {
@@ -50,7 +51,7 @@ export class LoginService {
             modal: true,
             closeOnEscape: false,
             data: { respVersion },
-            
+
           }).onClose;
         }
 

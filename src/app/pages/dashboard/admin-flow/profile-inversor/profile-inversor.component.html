@@ -13,23 +13,27 @@
             <div class="user-avatar">
                 <i class='pi pi-user'></i>
             </div>
+ 
             <div>
                 <h2 *ngIf="inversorData?.persona?.codTipoDoc==='01' || inversorData?.persona?.codTipoDoc===null"
                     class="user-name">{{inversorData?.persona?.nombres+' '+inversorData?.persona?.apellidoPaterno+'
                     '+inversorData?.persona?.apellidoMaterno}}</h2>
                 <h2 *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-name">
-                    {{inversorData?.persona?.nombres+' '+inversorData?.persona?.apellidoPaterno+'
-                    '+inversorData?.persona?.apellidoMaterno}}</h2>
+                    {{inversorData?.persona?.razonSocial}}</h2>
+                <span
+                    class="text-gray-500 font-medium line-height-3 w-full">{{inversorData?.persona?.nombreComercial}}</span>
                 <div class="flex flex-row justify-content-start align-items-center gap-2">
                     <i class="pi pi-id-card icon-span"></i>
                     <p *ngIf="inversorData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
-                        <strong>{{inversorData?.persona?.nroDocumento}}</strong></p>
+                        <strong>{{inversorData?.persona?.nroDocumento}}</strong>
+                    </p>
                     <p *ngIf="inversorData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
-                    <p *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
-                        <strong>{{inversorData?.persona?.nroDocumento}}</strong></p>
+                    <p *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-subtitle">RUC •
+                        <strong>{{inversorData?.persona?.nroDocumento}}</strong>
+                    </p>
                 </div>
-
             </div>
+            
         </div>
 
         <div class="flex flex-column gap-2 user-info ">
@@ -156,25 +160,23 @@
                 <div class="card flex flex-column align-items-center gap-2 p-2 rounded shadow-md bg-white w-80">
                     <h3 class="text-lg font-semibold text-gray-500">Extender Membresía</h3>
                     <!-- Slider -->
-                    <input type="range" min="1" max="3" (ngModelChange)="actualizarNuevaFecha()" step="1" [(ngModel)]="meses" class="slider">
+                    <input type="range" min="1" max="3" (ngModelChange)="actualizarNuevaFecha()" step="1"
+                        [(ngModel)]="meses" class="slider">
                     <!-- Meses seleccionados -->
                     <p class="text-gray-500 text-center">
                         <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
                     </p>
                     <!-- Monto a pagar -->
-                     <h3 class="text-lg font-semibold text-gray-500">Monto a recaudar ({{currency}})</h3>
-                        <div class="flex w-full flex-column align-items-center justify-content-center mb-3 gap-2">
-                            <p-inputNumber
-                            [(ngModel)]="montoPago"
-                            id="monto" 
-                            [minFractionDigits]="2" [maxFractionDigits]="2"  
-                            mode="decimal" autocomplete="off" 
-                            placeholder="Ingrese monto" class="w-full w-8"
-                            [min]="1" [max]="100000"
-                            />
-                            <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a {{currency}} {{1 | formatNumber}}.</span>
-                            <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a {{currency}} {{100000 | formatNumber}}.</span>
-                        </div>
+                    <h3 class="text-lg font-semibold text-gray-500">Monto a recaudar ({{currency}})</h3>
+                    <div class="flex w-full flex-column align-items-center justify-content-center mb-3 gap-2">
+                        <p-inputNumber [(ngModel)]="montoPago" id="monto" [minFractionDigits]="2"
+                            [maxFractionDigits]="2" mode="decimal" autocomplete="off" placeholder="Ingrese monto"
+                            class="w-full w-8" [min]="1" [max]="100000" />
+                        <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor
+                            a {{currency}} {{1 | formatNumber}}.</span>
+                        <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser
+                            mayor a {{currency}} {{100000 | formatNumber}}.</span>
+                    </div>
                     <!-- Fecha calculada -->
                     <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">
                         <span class="text-sm text-gray-500">Nueva fecha de vencimiento</span><br>
@@ -193,21 +195,17 @@
                         <strong class="text-center w-full">¿Desea continuar?</strong>
                     </span> -->
                 <div class="flex align-items-center gap-2 mt-4">
-                    <button pButton label="Cancelar" (click)="onReject()"
-                        class="p-button-outlined w-8rem ">
+                    <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
                     </button>
-                    <button
-                    [ngClass]="{
-                    'btn-disabled': !isFormValid() }"
-                    [disabled]="!isFormValid()"
-                     severity="success" pButton label="Actualizar" (click)="onAccept()"
-                        class=" w-8rem">
+                    <button [ngClass]="{
+                    'btn-disabled': !isFormValid() }" [disabled]="!isFormValid()" severity="success" pButton
+                        label="Actualizar" (click)="onAccept()" class=" w-8rem">
                     </button>
                 </div>
             </div>
         </ng-template>
     </p-confirmDialog>
-    
+
     <div style="height: 60px;"></div>
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
 

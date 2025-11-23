@@ -91,11 +91,14 @@ export default class ClienteDetailComponent {
       const id = params.get('idUsuario');
       this.idUsuario = id ? +id : null; // Convertir a número si existe
     });
+  }
 
+  ngAfterViewInit() {
     this.getClienteData();
   }
 
   getClienteData() {
+    this.loadingComponent.show();
     this.inversoresService.getClienteDetail(this.idUsuario ?? 0).pipe(
       finalize(() => {
         this.loadingComponent.hide();
