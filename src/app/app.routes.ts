@@ -81,11 +81,18 @@ export const routes: Routes = [
 
     /* Reportes */
     {
-        path: 'reporte/reporte-cobranza',
+        path: 'reporte/pagos-pendientes',
         canActivate: [authGuard],
         loadComponent: () => import('././pages/nav/collection-report/collection-report.component'),
         data: { profiles: [Constantes.PERFIL_INV] }
     },
+    {
+        path: 'reporte/reporte-cobranza',
+        canActivate: [authGuard],
+        loadComponent: () => import('././pages/dashboard/inversion/reporte-cobranza/reporte-cobranza.component'),
+        data: { profiles: [Constantes.PERFIL_INV] }
+    },
+
     {
         path: 'reporte/rentabilidad',
         canActivate: [authGuard],

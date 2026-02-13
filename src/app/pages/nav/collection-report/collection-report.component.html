@@ -1,107 +1,119 @@
 <div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
     <div class="text-center mb-4">
-        <div id="div_line_bootom" class=" text-2xl mb-3 label-title">Reporte de cobranza</div>
+        <div id="div_line_bootom" class=" text-2xl mb-3 label-title">Pagos pendientes</div>
     </div>
 
     <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
-        <div class="flex flex-row w-full align-items-center justify-content-between">
-            <span class="block mb-2" 
-            >Diario</span>
+        <div class="flex flex-row w-full align-items-center justify-content-start gap-2 mb-2">
+            <span class="block align-items-center">Diario</span>
+            <div><i class="pi pi-question-circle" (click)="modalDiario()"></i></div>
         </div>
 
         <div class="flex flex-column align-items-center" *ngIf="data.reportDiario.lista.length > 0" class="mb-3">
             <div *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : data.reportDiario.lista | slice:0:5); let i = index"
-            (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota, item.nroInversion, item.nroCuotas)"
-            class="custom-banner-detail-body mb-1">
-               <div class="flex flex-row justify-content-center gap-1 align-items-center w-full" style="height: 12px;">
-                   <div class="flex flex-column w-6">
-                       <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
-                   </div>
-                   <div class="w-2 align-items-center">
-                       <span class="span-body-desc"
-                       [ngClass]="item.actualizado==1?'txt-actualizado-v':'txt-actualizado'"
-                       ># {{ item.ctasPagadas | twoDigits }}</span>
-                   </div>
-                   <div class="w-3">
-                       <span class="span-body-desc">{{currency}} {{item.valorCuota | formatNumber}}</span>
-                   </div>
-                   <div class="flex w-1 justify-content-center">
-                    <div *ngIf="item.ctasAtrasadas!==0" >
-                        <lottie-player *ngIf="item.ctasAtrasadas>=3" src="/public/elements/point/warning.json" background="transparent" speed="1" loop autoplay
-                            style="width: 25px; transition: transform 0.2s;"/>
-                         <lottie-player *ngIf="item.ctasAtrasadas<3" src="/public/elements/point/warn.json" background="transparent" speed="1" loop autoplay
-                            style="width: 25px; transition: transform 0.2s;"/>
-                   </div>
-                   </div>
-               </div>
-           </div>
-           <div class="flex flex-row w-full paddin-5 justify-content-between">
-            <div class="flex flex-row gap-2 w-6 justify-content-start w-full" (click)="onLongPress(1)">
-                <div class="copy-txt">Copiar</div>
-                <i class="pi pi-clone"></i>
+                (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota, item.nroInversion, item.nroCuotas)"
+                class="custom-banner-detail-body mb-1">
+                <div class="flex flex-row justify-content-center gap-1 align-items-center w-full" style="height: 12px;">
+                    <div class="flex flex-column w-6">
+                        <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
+                    </div>
+                    <div class="w-2 align-items-center">
+                        <span class="span-body-desc"
+                            [ngClass]="item.actualizado==1?'txt-actualizado-v':'txt-actualizado'"># {{ item.ctasPagadas
+                            | twoDigits }}</span>
+                    </div>
+                    <div class="w-3">
+                        <span class="span-body-desc">{{currency}} {{item.valorCuota | formatNumber}}</span>
+                    </div>
+                    <div class="flex w-1 justify-content-center">
+                        <div *ngIf="item.ctasAtrasadas!==0">
+                            <lottie-player *ngIf="item.ctasAtrasadas>=3" src="/public/elements/point/warning.json"
+                                background="transparent" speed="1" loop autoplay
+                                style="width: 25px; transition: transform 0.2s;" />
+                            <lottie-player *ngIf="item.ctasAtrasadas<3" src="/public/elements/point/warn.json"
+                                background="transparent" speed="1" loop autoplay
+                                style="width: 25px; transition: transform 0.2s;" />
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-row gap-3 justify-content-end w-full">
-                <span class="span-body-desc"><b>Total</b></span>
-                <span class="span-body-desc">{{data.reportDiario.totalCuotas | formatNumber}}</span>
+            <div class="flex flex-row w-full paddin-5 justify-content-between">
+                <div class="flex flex-row gap-2 w-6 justify-content-start w-full" (click)="onLongPress(1)">
+                    <div class="copy-txt">Copiar</div>
+                    <i class="pi pi-clone"></i>
+                </div>
+                <div class="flex flex-row gap-3 justify-content-end w-full">
+                    <span class="span-body-desc"><b>Total</b></span>
+                    <span class="span-body-desc">{{data.reportDiario.totalCuotas | formatNumber}}</span>
+                </div>
             </div>
-           </div>
         </div>
         <div *ngIf="data.reportDiario.lista.length == 0" class="mb-3">
             <app-list-empty-none></app-list-empty-none>
         </div>
 
-        
+
         <div class="flex flex-column align-items-center mb-3" *ngIf="data.reportDiario.lista.length > 0">
             <!-- Mostrar el botón solo si hay más de 5 registros -->
-            <button *ngIf="data.reportDiario.lista.length > 5" class="futuristic-button w-4 mb-3" (click)="toggleMostrar()">
+            <button *ngIf="data.reportDiario.lista.length > 5" class="futuristic-button w-4 mb-3"
+                (click)="toggleMostrar()">
                 {{ mostrarTodo ? 'Ver menos' : 'Ver más' }}
             </button>
             <div class="flex flex-row w-full justify-content-around align-items-center amount-rec">
                 <div class="flex w-8 align-items-center gap-3 p-1">
-                    <i class="pi pi-wallet"></i><span class="span-body-desc"><b>Monto recaudado</b></span> 
+                    <i class="pi pi-wallet"></i><span class="span-body-desc"><b>Monto recaudado</b></span>
                 </div>
-                <div class="flex w-4 align-items-center" style="font-weight: bold;">{{currency}} {{data.amountCharged | formatNumber}}</div>
+                <div class="flex w-4 align-items-center" style="font-weight: bold;">{{currency}} {{data.amountCharged |
+                    formatNumber}}</div>
+                <div><i class="pi pi-question-circle" (click)="questionMondoRecaudado()"></i></div>
             </div>
         </div>
     </div>
 
     <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
-        <span class="block mb-2">Semanal</span>
+
+        <div class="flex flex-row w-full align-items-center justify-content-start gap-2 mb-2">
+            <span class="block align-items-center">Semanal</span>
+            <div><i class="pi pi-question-circle" (click)="modalSemanal()"></i></div>
+        </div>
+
         <div class="flex flex-column align-items-center" *ngIf="data.reportSemanal.length > 0">
-            
+
             <div *ngFor="let item of (mostrarTodoS ? data.reportSemanal : data.reportSemanal | slice:0:5); let i = index"
-            class="flex flex-column w-full align-items-center justify-content-center custom-banner-detail-body mb-1">
-               <div class="flex flex-row w-full justify-content-center gap-1 align-items-center mb-1" style="height: 25px;">
-                <div class="flex flex-column gap-2 w-8 align-items-center">
-                    <div class="flex w-full">
-                        <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
+                class="flex flex-column w-full align-items-center justify-content-center custom-banner-detail-body mb-1">
+                <div class="flex flex-row w-full justify-content-center gap-1 align-items-center mb-1"
+                    style="height: 25px;">
+                    <div class="flex flex-column gap-2 w-8 align-items-center">
+                        <div class="flex w-full">
+                            <span class="span-body-desc">{{i + 1}}. {{item.fullName}}</span>
+                        </div>
+                        <div class="flex w-full align-items-center gap-1">
+                            <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
+                            <span class="span-body-desc"># {{ item.ctasPagadas | twoDigits}}</span>
+                        </div>
                     </div>
-                     <div class="flex w-full align-items-center gap-1">
-                        <div class="proxima-fecha">Próximo: {{item.proximaFecha}} </div>
-                        <span class="span-body-desc"
-                        ># {{ item.ctasPagadas | twoDigits}}</span>
-                     </div>
+                    <div class="flex flex-column gap-2 w-3 align-items-center">
+                        <div class="flex w-full justify-content-center">
+                            <span class="span-body-desc">{{currency}} {{item.valorCuota | formatNumber}}</span>
+                        </div>
+                        <div class="flex justify-content-center w-full">
+                            <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
+                                class="pi pi-window-maximize"></i>
+                        </div>
+                    </div>
+                    <div class="flex flex-column w-1 align-items-center">
+                        <div *ngIf="item.ctasAtrasadas!==0" class="flex justify-content-center">
+                            <lottie-player *ngIf="item.ctasAtrasadas>=3" src="/public/elements/point/warning.json"
+                                background="transparent" speed="1" loop autoplay
+                                style="width: 25px; transition: transform 0.2s;" />
+                            <lottie-player *ngIf="item.ctasAtrasadas<3" src="/public/elements/point/warn.json"
+                                background="transparent" speed="1" loop autoplay
+                                style="width: 25px; transition: transform 0.2s;" />
+                        </div>
+                    </div>
+
                 </div>
-                <div class="flex flex-column gap-2 w-3 align-items-center">
-                    <div class="flex w-full justify-content-center">
-                        <span class="span-body-desc">{{currency}} {{item.valorCuota | formatNumber}}</span>
-                    </div>
-                    <div class="flex justify-content-center w-full">
-                        <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
-                             class="pi pi-window-maximize"></i>
-                    </div>
-                </div>
-                <div class="flex flex-column w-1 align-items-center">
-                    <div *ngIf="item.ctasAtrasadas!==0" class="flex justify-content-center">
-                        <lottie-player *ngIf="item.ctasAtrasadas>=3" src="/public/elements/point/warning.json" background="transparent" speed="1" loop autoplay
-                            style="width: 25px; transition: transform 0.2s;"/>
-                        <lottie-player *ngIf="item.ctasAtrasadas<3" src="/public/elements/point/warn.json" background="transparent" speed="1" loop autoplay
-                            style="width: 25px; transition: transform 0.2s;"/>
-                    </div>
-                   </div>
-                   
-               </div>
-           </div>
+            </div>
 
             <div class="flex flex-row w-full paddin-5 justify-content-between">
                 <div class="flex flex-row gap-2 w-6 justify-content-start w-full" (click)="onLongPress(2)">
@@ -125,13 +137,13 @@
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="mb-1 btn-float"></button>
 </div>
 
-<app-loading></app-loading> 
+<app-loading></app-loading>
 
 <div class="toast">
     <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
 </div>
 
-<p-confirmDialog #cd>
+<p-confirmDialog #cd key="cd">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
         <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
             <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
@@ -162,35 +174,81 @@
                 </div>
                 <div class="flex flex-row w-4 justify-content-end user-confirm">
                     <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: IdInversion}"
-                             class="pi pi-window-maximize"></i>
+                        class="pi pi-window-maximize"></i>
                 </div>
             </div>
-            
+
             <!-- <p class="mb-2 message-confirm">{{ message.message }}</p> -->
             <div class="flex flex-column">
-                <p-datepicker 
-                [(ngModel)]="date" 
-                [showIcon]="true" 
-                [showOnFocus]="true" 
-                [touchUI]="false"
-                [dateFormat]="'dd/mm/yy'"
-                [showTime]="true"
-                inputId="fecha" />
+                <p-datepicker [(ngModel)]="date" [showIcon]="true" [showOnFocus]="true" [touchUI]="false"
+                    [dateFormat]="'dd/mm/yy'" [showTime]="true" inputId="fecha" />
             </div>
             <div class="flex align-items-center gap-2 mt-4">
-                <button 
-                    pButton 
-                    label="Cancelar" 
-                    (click)="onReject()"
-                    class="p-button-outlined w-8rem ">
+                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
                 </button>
-                <button 
-                    pButton 
-                    label="Pagar" 
-                    (click)="onAccept()" 
-                    class="w-8rem">
+                <button pButton label="Pagar" (click)="onAccept()" class="w-8rem">
                 </button>
-                
+
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #montorecaudado key="montorecaudado">
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+
+            <div class="flex flex-column w-full justify-content-center align-items-center gap-3">
+                <span class=" font-bold text-1xl block">
+                    {{ message.header }}
+                </span>
+                <span class="span-desc">{{ message.message}}</span>
+                <a class="link-cobros-diarios no-underline text-blue-500 cursor-pointer" [routerLink]="['/reporte/reporte-cobranza']">Ver historial de cobros anteriores</a>
+            </div>
+
+            <div class="flex align-items-center gap-2 mt-4">
+                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
+                </button>
+
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #diario key="diario">
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+
+            <div class="flex flex-column w-full justify-content-center align-items-center gap-3">
+                <span class=" font-bold text-1xl block">
+                    {{ message.header }}
+                </span>
+                <span class="span-desc">{{ message.message}}</span>
+            </div>
+
+            <div class="flex align-items-center gap-2 mt-4">
+                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
+                </button>
+
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #semanal key="semanal">
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div class="flex flex-column w-full justify-content-center align-items-center gap-3">
+                <span class=" font-bold text-1xl block">
+                    {{ message.header }}
+                </span>
+                <span class="span-desc">{{ message.message}}</span>
+            </div>
+
+            <div class="flex align-items-center gap-2 mt-4">
+                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
+                </button>
+
             </div>
         </div>
     </ng-template>

@@ -1,0 +1,116 @@
+<div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+
+    <div class="text-center mb-3">
+        <div id="div_line_bootom" class="text-2xl font-medium label-title">
+            Cobros realizados
+        </div>
+    </div>
+
+    <div class="text-center">
+        <div class="valor-txt-detail mb-3 text-gray-500">Resumen diario de los cobros de los últimos 30 días.</div>
+    </div>
+
+    <ng-template [ngIf]="skeletonShow">
+        <div class="flex flex-row w-full" style="min-width: 300px;">
+            <div class="w-full">
+                <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex flex-column mb-2">
+                    <p-skeleton class="w-full" height="3rem" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <div *ngIf="!skeletonShow && cobrosHistory.length > 0">
+        <div class="flex flex-column justify-content-center">
+
+            <div *ngFor="let cobrosDelDia of cobrosHistory"
+                class="flex flex-column align-items-center custom-banner-detail-body mb-1">
+
+                <div class="flex flex-row justify-content-center align-items-center mb-1 w-full"
+                    (click)="openDialog(cobrosDelDia)">
+
+                    <div class="flex w-1 align-items-center gap-3 p-1">
+                        <i class="pi pi-wallet"></i><!-- <span class="span-body-desc"><b>Monto recaudado</b></span> -->
+                    </div>
+
+                    <div class="flex flex-column align-items-center w-4">
+                        <b><span class="span-body-desc">{{ cobrosDelDia.fecha }}</span></b>
+                    </div>
+
+                    <div class="line-right"></div>
+
+                    <div class="flex flex-column w-3 align-items-center">
+                        <span class="span-body-desc">
+                            {{ cobrosDelDia.cobranza.length }} inv.
+                        </span>
+                    </div>
+
+                    <div class="line-right"></div>
+
+                    <div class="flex flex-column w-4 align-items-center">
+                        <span class="span-body-desc">
+                            <b>{{ currency }} {{ cobrosDelDia.totalMontoCobrado | formatNumber }}</b>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="cobrosHistory.length == 0 && !skeletonShow">
+        <app-list-empty-none></app-list-empty-none>
+    </div>
+
+    <!-- UN SOLO DIALOG -->
+    <p-dialog header="Detalle" [(visible)]="dialogVisible" [modal]="true" [resizable]="false"
+        [style]="{ width: '95vw', maxHeight: '90vh' }" appendTo="body">
+
+        <div class="table-wrapper mb-3">
+
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <!-- <th>Monto</th> -->
+                        <th>Cuota</th>
+                        <th>Cuotas pagadas</th>
+                        <th>Total cobrado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let item of cobranzaSeleccionada">
+                        <td class="text-ellipsis" style="max-width: 150px;">
+                            {{ item.fullName }}
+                        </td>
+                        <!-- <td>
+                            {{ currency }} {{ item.monto | formatNumber }}
+                        </td> -->
+                        <td>
+                            {{ currency }} {{ item.valorCuota | formatNumber }}
+                        </td>
+                        <td>
+                            {{ item.totalRegistros }}
+                        </td>
+                        <td>
+                            {{ currency }} {{ item.totalCobrado | formatNumber }}
+                        </td>
+                        <td *ngIf="item.estadoInversion=='A'"><i class="pi pi-window-maximize"
+                                [routerLink]="['/inversion/cartilla']"
+                                [queryParams]="{ idInversion: item.idInversion }"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <ng-template pTemplate="footer">
+            <p-button label="Cerrar" (onClick)="dialogVisible = false">
+            </p-button>
+        </ng-template>
+
+    </p-dialog>
+
+
+</div>

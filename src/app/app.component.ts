@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
 
       const alwaysBlockedRoutes = [
         '/vehicular/inicio',
-        '/reporte/reporte-cobranza'
+        '/reporte/pagos-pendientes'
       ];
 
       const exitAppRoutes = [

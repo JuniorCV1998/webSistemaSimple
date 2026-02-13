@@ -1,10 +1,109 @@
-.valor-txt-detail{
-    margin-left: 5px;
-    color: var(--gray-500);
-    font-weight: 400;
-    font-size: 14px;
+.valor-txt-detail {
+  margin-left: 5px;
+  color: var(--gray-500);
+  font-weight: 400;
+  font-size: 15px;
 
-    word-wrap: break-word;           // permite dividir palabras largas
-    overflow-wrap: break-word;       // lo mismo, versión más moderna
-    white-space: pre-line;
+  word-wrap: break-word; // permite dividir palabras largas
+  overflow-wrap: break-word; // lo mismo, versión más moderna
+  white-space: pre-line;
+}
+
+/* Estilos para la tabla y graficos */
+
+:host ::ng-deep .compact-table {
+  font-size: 12px;
+}
+
+:host ::ng-deep .compact-table th,
+:host ::ng-deep .compact-table td {
+  padding: 0.3rem 0.4rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .compact-table th {
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  :host ::ng-deep .compact-table {
+    font-size: 11px;
+  }
+}
+
+:host ::ng-deep .compact-table tbody tr:nth-child(even) {
+  background: #f6f7f9;
+}
+
+:host ::ng-deep .compact-table tbody tr:hover {
+  background: #eceff1;
+}
+
+.current {
+  animation: pulse-primary 1.8s infinite;
+  font-weight: 600;
+}
+
+/* Parpadeo usando primary-500 */
+@keyframes pulse-primary {
+  0% {
+    background-color: color-mix(in srgb, var(--primary-500) 15%, transparent);
+  }
+
+  50% {
+    background-color: color-mix(in srgb, var(--primary-500) 35%, transparent);
+  }
+
+  100% {
+    background-color: color-mix(in srgb, var(--primary-500) 15%, transparent);
+  }
+}
+
+/* Estilo para botones actual y 6 meses */
+.tag {
+  background-color: var(--gray-200);
+  color: var(--gray-500);
+  font-weight: 600;
+  border-radius: 5px;
+  font-size: 13px;
+  padding: 10px;
+  text-align: center;
+}
+
+.success {
+  background-color: #0ea5e9;
+  color: white;
+  border: #0ea5e9;
+}
+
+.span-body-desc {
+  color: var(--gray-500);
+  font-size: 13px;
+  text-align: left;
+}
+
+.amount-rec {
+  padding: 8px;
+  border: 1px solid var(--gray-300);
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.pi-lightbulb {
+  color: #ecf80f;
+  font-weight: bold;
+}
+
+.span-cab {
+  color: var(--gray-500);
+  font-size: 13px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.span-desc {
+  color: var(--gray-500);
+  font-size: 13px;
+  text-align: center;
 }

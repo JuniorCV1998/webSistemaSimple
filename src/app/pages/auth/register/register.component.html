@@ -16,7 +16,7 @@
             <label for="email1" class="block font-medium mb-2">Correo electrónico</label>
             <input [(ngModel)]="objUser.correo" id="email1" aria-describedby="email-help" type="text" autocomplete="off"
                 (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText
-                class="w-full mb-3">
+                class="w-full mb-3" (ngModelChange)="objUser.correo = $event.toLowerCase()">
             <small *ngIf="isWriting" id="email-help"><br><i class="pi pi-info-circle"></i> Recuerda que este correo será
                 usado para enviarte información respecto a tu cuenta.<br><br></small>
 

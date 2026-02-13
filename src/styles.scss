@@ -375,6 +375,15 @@ small {}
 }
 
 // Estilo para los puntos ... class="text-overflow-ellipsis"
+.text-ellipsis {
+  color: var(--gray-500);
+  white-space: nowrap;
+  /* Evita el salto de línea */
+  overflow: hidden;
+  /* Oculta el texto que sobrepasa el ancho */
+  text-overflow: ellipsis;
+  /* Agrega los "..." cuando el texto es muy largo */
+}
 
 /* Estilos de Span info */
 .span-info-red {

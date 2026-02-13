@@ -67,6 +67,13 @@ export default class CollectionReportComponent {
   currency: string | null = null;
   pathSello: string | null = null;
 
+  //Monto recaudado - modal
+  descMontoRecaudado: string = 'Es el total del dinero que has registrado como pagado durante el día. Te muestra cuánto has cobrado hoy en tus préstamos.';
+  descDiario: string = 'Diario muestra todas las cobranzas programadas para realizarse hoy.'+
+                        '\nAquí encontrarás únicamente los pagos diarios que deben ser cobrados en la fecha actual, según la programación de cada inversión.';
+  descSemanal: string = 'Semanal muestra las inversiones que tienen un cobro semanal.'+
+                        '\nA diferencia de “Diario”, esta vista no depende del día exacto del cobro, sino del tipo de frecuencia con la que fue registrada la inversión.';
+
   constructor(
     private getInversionService: GetInversionService,
     public dialogService: DialogService,
@@ -149,8 +156,68 @@ export default class CollectionReportComponent {
     this.date = new Date();
     return new Promise((resolve) => {
       this.confirmationService.confirm({
+        key: 'cd',
         header: 'Pagar cuota',
         message: 'Cuota: ' + nroCuota + '',
+        accept: () => {
+          resolve(true);  // Resuelve la promesa con "true" si acepta
+        },
+        reject: () => {
+          resolve(false); // Resuelve la promesa con "false" si rechaza
+        }
+      });
+    });
+  }
+
+  questionMondoRecaudado() {
+    this.confirmMontoRecaudado().then((result) => {
+      if (result) {
+
+      }
+    });
+  }
+
+  confirmMontoRecaudado(): Promise<boolean> {
+    this.date = new Date();
+    return new Promise((resolve) => {
+      this.confirmationService.confirm({
+        key: 'montorecaudado',
+        header: '¿Qué es el "Monto recaudado"?',
+        message: this.descMontoRecaudado,
+        accept: () => {
+          resolve(true);  // Resuelve la promesa con "true" si acepta
+        },
+        reject: () => {
+          resolve(false); // Resuelve la promesa con "false" si rechaza
+        }
+      });
+    });
+  }
+
+  modalDiario(): Promise<boolean> {
+    this.date = new Date();
+    return new Promise((resolve) => {
+      this.confirmationService.confirm({
+        key: 'diario',
+        header: '¿Qué es “Diario”?',
+        message: this.descDiario,
+        accept: () => {
+          resolve(true);  // Resuelve la promesa con "true" si acepta
+        },
+        reject: () => {
+          resolve(false); // Resuelve la promesa con "false" si rechaza
+        }
+      });
+    });
+  }
+
+  modalSemanal(): Promise<boolean> {
+    this.date = new Date();
+    return new Promise((resolve) => {
+      this.confirmationService.confirm({
+        key: 'semanal',
+        header: '¿Qué es Semanal?',
+        message: this.descSemanal,
         accept: () => {
           resolve(true);  // Resuelve la promesa con "true" si acepta
         },
@@ -215,13 +282,13 @@ export default class CollectionReportComponent {
         const segundoNombre = item.fullName.split(' ')[1] || ''; // Segundo nombre (si existe)
 
         let cuotaFormateado = item.ctasPagadas + "";
-        if(item.ctasPagadas <= 9) cuotaFormateado = "0" + cuotaFormateado;
+        if (item.ctasPagadas <= 9) cuotaFormateado = "0" + cuotaFormateado;
 
         const nombreCompleto = `${primerNombre} ${segundoNombre}`;
         index += 1;
         let indexFormateado = index + "";
         if (index <= 9) indexFormateado = "0" + indexFormateado;
-        
+
 
         const fila = `${indexFormateado}. ${nombreCompleto} #${cuotaFormateado}`; // Genera la fila con el índice y nombre
         texto += fila + '\n';

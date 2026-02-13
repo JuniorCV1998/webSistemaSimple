@@ -1,50 +1,64 @@
 /* Estilo para la lista */
 .custom-banner-detail-body {
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 5px;                   /* Espacio alrededor de cada banner */
+    flex: 1;
+    /* Permite que cada banner tome el mismo espacio disponible */
+    margin: 5px;
+    /* Espacio alrededor de cada banner */
     padding: 12px;
     background: #fff;
-    box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2); 
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
+    box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
+    color: var(--gray-500);
+    /* Color del texto del banner */
+    text-align: center;
+    /* Centra el texto dentro del banner */
+    border-radius: 8px;
+    /* Bordes redondeados */
     min-width: 30px;
     align-items: center;
     height: auto;
-  }
-  .span-body-desc{
-      color: var(--gray-500);
+}
+
+.span-body-desc {
+    color: var(--gray-500);
     font-size: 13px;
     text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
+    white-space: nowrap;
+    /* Evita el salto de línea */
+    overflow: hidden;
+    /* Oculta el texto que sobrepasa el ancho */
+    text-overflow: ellipsis;
+    /* Agrega los "..." cuando el texto es muy largo */
+}
 
 /* Estilo tabla diario */
-.table-diario, .table-semanal {
+.table-diario,
+.table-semanal {
     width: 100%;
     border-collapse: collapse;
 }
 
-.table-diario th, .table-diario td {
+.table-diario th,
+.table-diario td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
     font-size: 14px;
 }
 
-.table-diario th, .table-semanal th {
+.table-diario th,
+.table-semanal th {
     /* background-color: #f2f2f2; */
     font-size: 15px;
     color: var(--primary-500);
     font-weight: 600;
 }
-.copy-txt{
+
+.copy-txt {
     font-size: 13px;
     color: var(--gray-500);
 }
-.pi-clone{
+
+.pi-clone {
     font-size: .9rem;
     color: var(--gray-500);
 }
@@ -55,43 +69,52 @@
 }
 
 ::ng-deep .toast .p-element {
-    font-size: 15px ;
+    font-size: 15px;
     width: 50px;
 }
 
 /* ESTILO DE CONFIRMA DIALOG */
-.pi-user, .pi-sort-numeric-up-alt{
+.pi-user,
+.pi-sort-numeric-up-alt {
     font-size: 1.2rem;
 }
-.user-confirm{
+
+.user-confirm {
     color: var(--gray-500);
     font-weight: 500;
 }
-.message-confirm{
+
+.message-confirm {
     font-size: 15px;
 }
 
-.item-txt{
+.item-txt {
     font-size: 12px !important;
     padding: 0 !important;
 }
-.txt-actualizado{
+
+.txt-actualizado {
     color: var(--gray-500);
 }
-.txt-actualizado-v{
+
+.txt-actualizado-v {
     color: var(--primary-500);
     font-weight: 600;
 }
 
-.table-diario tr:nth-child(even), .table-semanal tr:nth-child(even) {
+.table-diario tr:nth-child(even),
+.table-semanal tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.table-diario tr:hover, .table-semanal tr:hover {
+.table-diario tr:hover,
+.table-semanal tr:hover {
     background-color: #f1f1f1;
 }
+
 /* Estilo tabla semanal */
-.table-semanal th, .table-semanal td {
+.table-semanal th,
+.table-semanal td {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -99,70 +122,100 @@
 }
 
 /* Estilo de etiquetas */
-.nroInv{
+.nroInv {
     color: var(--blue-500);
     font-size: 12px;
     font-weight: 500;
 }
-.proxima-fecha{
+
+.proxima-fecha {
     display: inline-block;
     white-space: nowrap;
-    padding: 4px;      
+    padding: 4px;
     background: var(--primary-100);
     color: var(--primary-800);
     border-radius: 5px;
     font-size: 11px;
 }
-.amount-rec{
+
+.amount-rec {
     padding: 8px;
     border: 1px solid var(--gray-300);
     border-radius: 5px;
     font-size: 14px;
 }
-.pi-wallet, .pi-money-bill{
+
+.pi-wallet,
+.pi-money-bill {
     color: var(--primary-500);
     font-size: 1.1rem;
 }
 
 /* Enviar a cartilla de inversion */
-.pi-window-maximize{
+.pi-window-maximize {
     color: var(--primary-400);
     font-size: 1rem;
     cursor: pointer;
 }
 
- /* POP UP DE CONFIRMACION */
- ::ng-deep .p-dialog{
+/* POP UP DE CONFIRMACION */
+::ng-deep .p-dialog {
     width: 90%;
     max-width: 550px;
-  }
+}
 
 
 /* Estilo para el boton ver mas / ver menos */
 .futuristic-button {
-    background-color: #609af8; /* Color de fondo */
-    color: white;              /* Color del texto */
-    border: none;              /* Sin borde */
-    border-radius: 5px;       /* Bordes redondeados */
-    padding: 6px 12px;        /* Espaciado interno reducido */
-    font-size: 12px;          /* Tamaño de fuente más pequeño */
-    cursor: pointer;           /* Cambia el cursor al pasar el mouse */
-    transition: all 0.3s;     /* Transiciones suaves */
-    box-shadow: 0 3px 8px rgba(96, 154, 248, 0.5); /* Sombra */
-    outline: none;            /* Sin contorno al hacer clic */
+    background-color: #609af8;
+    /* Color de fondo */
+    color: white;
+    /* Color del texto */
+    border: none;
+    /* Sin borde */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    padding: 6px 12px;
+    /* Espaciado interno reducido */
+    font-size: 12px;
+    /* Tamaño de fuente más pequeño */
+    cursor: pointer;
+    /* Cambia el cursor al pasar el mouse */
+    transition: all 0.3s;
+    /* Transiciones suaves */
+    box-shadow: 0 3px 8px rgba(96, 154, 248, 0.5);
+    /* Sombra */
+    outline: none;
+    /* Sin contorno al hacer clic */
 }
 
 .futuristic-button:hover {
-    background-color: #14b8a6; /* Color de fondo al pasar el mouse */
-    box-shadow: 0 5px 12px rgba(20, 184, 166, 0.5); /* Sombra más intensa */
+    background-color: #14b8a6;
+    /* Color de fondo al pasar el mouse */
+    box-shadow: 0 5px 12px rgba(20, 184, 166, 0.5);
+    /* Sombra más intensa */
 }
 
 .futuristic-button:active {
-    transform: translateY(1px); /* Efecto al hacer clic */
-    box-shadow: 0 2px 6px rgba(20, 184, 166, 0.5); /* Sombra más pequeña */
+    transform: translateY(1px);
+    /* Efecto al hacer clic */
+    box-shadow: 0 2px 6px rgba(20, 184, 166, 0.5);
+    /* Sombra más pequeña */
 }
 
-
-
-
+/* Estilos para el modal de monto recaudado, mas historial de montos diarios */
+.pi-question-circle {
+    font-size: .9rem;
+    color: var(--blue-500);
+}
+.link-cobros-diarios{
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.span-desc {
+    color: var(--gray-500);
+    font-size: 13px;
+    text-align: center;
+}
 /* Efecto punto radar */

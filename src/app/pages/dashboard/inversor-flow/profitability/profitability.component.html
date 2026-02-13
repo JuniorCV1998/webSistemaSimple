@@ -1,21 +1,143 @@
 <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
 
-    <div class="flex flex-column justify-content-center align-items-center">
-        <div class="text-center mb-4">
-            <div class="text-2xl mb-3 label-title">Rentabilidad</div>
-        </div>
-        <span class="block mb-2">Rentabilidad próximamente</span>
-        <div class="flex flex-column justify-content-center align-items-center mb-2">
-            <lottie-player src="/public/system/revenue.json" background="transparent" speed="1" loop autoplay
-                style="width: 70%; cursor: pointer; transition: transform 0.2s;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </lottie-player>
-        </div>
-        <div class="text-center">
-            <div class="valor-txt-detail mb-3 text-gray-500">Estamos trabajando para habilitar esta sección y ofrecerte reportes
-                de rentabilidad detallados muy pronto.</div>
-        </div>
+    <div class="text-center mb-4">
+        <div class="text-2xl mb-3 label-title">Rentabilidad</div>
     </div>
+
+    <ng-container *ngIf="rentabilidadService; else errorTemplate">
+
+        <div class="flex flex-row w-full justify-content-center items-center gap-2 mb-4">
+            <span class="w-6 tag" (click)="changeOpen(true)" [ngClass]="actual?'success':''">Mes actual</span>
+            <span class="w-6 tag" (click)="changeOpen(false)" [ngClass]="!actual?'success':''">Últ. 6 meses</span>
+        </div>
+
+        <div class="flex flex-row w-full justify-content-between mb-2">
+            <span class="valor-txt-detail mb-3 text-gray-500">Resumen de tu rentabilidad según el período
+                seleccionado, estos datos se actualizan diariamente.</span>
+        </div>
+
+        <!-- GRÁFICOS -->
+        <div class="card mb-3">
+            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
+        </div>
+
+        <div class="flex flex-row w-full justify-content-between mb-3">
+            <span class="valor-txt-detail text-gray-500">Indicadores de rentabilidad y resultados de tus
+                inversiones.</span>
+        </div>
+
+        <!-- TABLA -->
+        <div class="card mb-3">
+            <!-- Diario -->
+            <p-table *ngIf="actual" [value]="rentabilidadData" styleClass="compact-table">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Día</th>
+                        <th>Inv.</th>
+                        <th>Capital</th>
+                        <th>Cobrado</th>
+                        <th>Rentab.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr [class.current]="row.mesActual">
+                        <td>{{ row.fecha}}</td>
+                        <td>{{ row.inversionesRegistradas }}</td>
+                        <td>{{currency}}{{ row.capitalInvertido }}</td>
+                        <td>{{currency}}{{ row.montoCobrado }}</td>
+                        <td>{{currency}}{{ row.rentabilidadObtenida }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!-- Mes -->
+            <p-table *ngIf="!actual" [value]="rentabilidadData" styleClass="compact-table">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Mes</th>
+                        <th>Inv.</th>
+                        <th>Capital</th>
+                        <th>Cobrado</th>
+                        <th>Rent. Proy.</th>
+                        <th>Rentab.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr [class.current]="row.mesActual">
+                        <td>{{ row.nombreMes}}</td>
+                        <td>{{ row.inversionesRegistradas }}</td>
+                        <td>{{currency}}{{ row.capitalInvertido }}</td>
+                        <td>{{currency}}{{ row.montoCobrado }}</td>
+                        <td *ngIf="row.mesActual">{{currency}}{{ row.rentabilidadProyectada }}</td>
+                        <td *ngIf="!row.mesActual">-</td>
+                        <td>{{currency}}{{ row.rentabilidadAcumulada }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+
+        <!-- TERMINOS A CONOCER -->
+        <div class="flex flex-row w-full justify-content-around align-items-center amount-rec mb-8"
+            (click)="modalTerminos()">
+            <div class="flex w-12 align-items-center justify-content-center gap-3 p-1">
+                <i class="pi pi-lightbulb"></i><span class="span-body-desc"><b>Te aclaramos algunos términos</b></span>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #errorTemplate>
+        <div class="flex flex-column justify-content-center align-items-center">
+
+            <span class="block mb-2">No pudimos cargar la rentabilidad</span>
+            <div class="flex flex-column justify-content-center align-items-center mb-2">
+                <lottie-player src="/public/system/revenue.json" background="transparent" speed="1" loop autoplay
+                    style="width: 70%; cursor: pointer; transition: transform 0.2s;"
+                    onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                </lottie-player>
+            </div>
+            <div class="text-center">
+                <div class="valor-txt-detail mb-3 text-gray-500">No pudimos mostrar tu rentabilidad en este momento.
+                    Si aún no tienes movimientos registrados, esta información estará disponible desde el día siguiente.
+                    De lo contrario, por favor intenta nuevamente en unos minutos.</div>
+            </div>
+        </div>
+    </ng-template>
+
+    <!-- <div style="height: 80px;"></div> -->
 
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
 </div>
+
+<p-confirmDialog #terminos key="terminos">
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+
+            <div class="flex  w-full justify-content-center align-items-center gap-3 mb-3">
+                <span class=" font-bold text-1xl block">
+                    {{ message.header }}
+                </span>
+                <span class="span-desc">{{ message.message}}</span>
+            </div>
+
+            <div class="flex flex-column gap-1">
+                <div class="flex flex-row justify-content-start"><span class="span-cab">Inv.:</span><span
+                        class="span-desc">&nbsp; Inversiones registradas en el período.</span></div>
+                <div class="flex flex-row justify-content-start"><span class="span-cab">Capital:</span><span
+                        class="span-desc">&nbsp; Monto total invertido.</span></div>
+                <div class="flex flex-row justify-content-start"><span class="span-cab">Cobrado:</span><span
+                        class="span-desc">&nbsp; Total de dinero recibido por pagos.</span></div>
+                <div class="flex flex-row justify-content-start"><span class="span-cab">Rentab.:</span><span
+                        class="span-desc">&nbsp; Ganancia generada por las inversiones.</span></div>
+            </div>
+
+            <div class="flex align-items-center gap-2 mt-4">
+                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
+                </button>
+
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<app-loading></app-loading>

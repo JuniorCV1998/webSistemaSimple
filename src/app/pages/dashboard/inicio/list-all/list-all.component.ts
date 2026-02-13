@@ -42,8 +42,4 @@ export default class ListAllComponent {
     }
   }
 
-  volver() {
-    this.location.back();
-}
-
 }
