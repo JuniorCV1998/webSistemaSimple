@@ -16,28 +16,33 @@ jobs:
         with:
           node-version: 20
 
-      - name: Limpiar instalación previa
+      - name: Limpiar entorno
         run: |
           rm -rf node_modules
           rm -rf ios
           npm install
 
-      - name: Compilar Angular
-        run: npx ng build --configuration production
-
       - name: Instalar Capacitor CLI
         run: npm install -g @capacitor/cli
 
-      - name: Crear iOS limpio
+      - name: Build Angular
+        run: npx ng build --configuration production
+
+      - name: Crear iOS desde cero
         run: |
           npx cap add ios || true
           npx cap sync ios
 
-      - name: Forzar iOS deployment target
+      - name: Forzar iOS 15 en Podfile (CRÍTICO)
+        shell: pwsh
+        run: |
+          (Get-Content ios/App/Podfile) -replace "platform :ios, '.*'", "platform :ios, '15.0'" | Set-Content ios/App/Podfile
+
+      - name: Forzar iOS deployment en Xcode project
         run: |
           cd ios/App
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0/IPHONEOS_DEPLOYMENT_TARGET = 14.0/g' project.pbxproj || true
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0/IPHONEOS_DEPLOYMENT_TARGET = 14.0/g' project.pbxproj || true
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 13.0/IPHONEOS_DEPLOYMENT_TARGET = 15.0/g' project.pbxproj || true
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 14.0/IPHONEOS_DEPLOYMENT_TARGET = 15.0/g' project.pbxproj || true
 
       - name: Instalar CocoaPods
         run: |
@@ -46,7 +51,7 @@ jobs:
           rm -rf Pods Podfile.lock
           pod install
 
-      - name: Compilar iOS
+      - name: Build iOS (Archive)
         run: |
           xcodebuild \
           -workspace ios/App/App.xcworkspace \
@@ -57,13 +62,13 @@ jobs:
           archive \
           CODE_SIGNING_ALLOWED=NO
 
-      - name: Exportar IPA
+      - name: Crear IPA
         run: |
           mkdir -p Payload
           cp -R ios/App/App.xcarchive/Products/Applications/App.app Payload/
           zip -r App.ipa Payload
 
-      - name: Subir IPA
+      - name: Subir artefacto IPA
         uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
