@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.ssimple.app',
+  appId: 'com.ssimplepay.app',
   appName: 'web-sistema-simple',
   webDir: 'dist/web-sistema-simple/browser',
   plugins: {
