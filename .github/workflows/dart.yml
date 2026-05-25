@@ -16,8 +16,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Instalar dependencias
-        run: npm install
+      - name: Limpiar instalación previa
+        run: |
+          rm -rf node_modules
+          rm -rf ios
+          npm install
 
       - name: Compilar Angular
         run: npx ng build --configuration production
@@ -25,13 +28,22 @@ jobs:
       - name: Instalar Capacitor CLI
         run: npm install -g @capacitor/cli
 
-      - name: Sincronizar iOS
-        run: npx cap sync ios
+      - name: Crear iOS limpio
+        run: |
+          npx cap add ios || true
+          npx cap sync ios
+
+      - name: Forzar iOS deployment target
+        run: |
+          cd ios/App
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 11.0/IPHONEOS_DEPLOYMENT_TARGET = 14.0/g' project.pbxproj || true
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 12.0/IPHONEOS_DEPLOYMENT_TARGET = 14.0/g' project.pbxproj || true
 
       - name: Instalar CocoaPods
         run: |
           sudo gem install cocoapods
           cd ios/App
+          rm -rf Pods Podfile.lock
           pod install
 
       - name: Compilar iOS
@@ -47,8 +59,8 @@ jobs:
 
       - name: Exportar IPA
         run: |
-          mkdir Payload
-          cp -R ios/App/App.xcarchive/Products/Applications/App.app Payload
+          mkdir -p Payload
+          cp -R ios/App/App.xcarchive/Products/Applications/App.app Payload/
           zip -r App.ipa Payload
 
       - name: Subir IPA
