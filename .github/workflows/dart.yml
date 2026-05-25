@@ -8,50 +8,49 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Clonar proyecto
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Instalar Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Limpiar entorno
+      - name: Clean install
         run: |
           rm -rf node_modules
-          rm -rf ios
           npm install
 
-      - name: Instalar Capacitor CLI
+      - name: Install Capacitor CLI
         run: npm install -g @capacitor/cli
 
       - name: Build Angular
         run: npx ng build --configuration production
 
-      - name: Crear iOS desde cero
+      # 🔥 CRÍTICO: generar iOS primero
+      - name: Create iOS project
         run: |
-          npx cap add ios || true
-          npx cap sync ios
+          rm -rf ios
+          npx cap add ios
 
-      - name: Forzar iOS 15 en Podfile (CRÍTICO)
-        shell: pwsh
+      # 🔥 PATCH ANTES DEL SYNC (IMPORTANTE)
+      - name: Force Podfile iOS 15 BEFORE sync
         run: |
-          (Get-Content ios/App/Podfile) -replace "platform :ios, '.*'", "platform :ios, '15.0'" | Set-Content ios/App/Podfile
+          sed -i '' "s/platform :ios, '13.0'/platform :ios, '15.0'/g" ios/App/Podfile || true
+          sed -i '' "s/platform :ios, '14.0'/platform :ios, '15.0'/g" ios/App/Podfile || true
 
-      - name: Forzar iOS deployment en Xcode project
-        run: |
-          cd ios/App
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 13.0/IPHONEOS_DEPLOYMENT_TARGET = 15.0/g' project.pbxproj || true
-          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 14.0/IPHONEOS_DEPLOYMENT_TARGET = 15.0/g' project.pbxproj || true
+      # 🔥 AHORA SÍ sync
+      - name: Sync iOS
+        run: npx cap sync ios
 
-      - name: Instalar CocoaPods
+      - name: Install CocoaPods
         run: |
           sudo gem install cocoapods
           cd ios/App
           rm -rf Pods Podfile.lock
           pod install
 
-      - name: Build iOS (Archive)
+      - name: Build iOS
         run: |
           xcodebuild \
           -workspace ios/App/App.xcworkspace \
@@ -62,13 +61,13 @@ jobs:
           archive \
           CODE_SIGNING_ALLOWED=NO
 
-      - name: Crear IPA
+      - name: Export IPA
         run: |
           mkdir -p Payload
           cp -R ios/App/App.xcarchive/Products/Applications/App.app Payload/
           zip -r App.ipa Payload
 
-      - name: Subir artefacto IPA
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
