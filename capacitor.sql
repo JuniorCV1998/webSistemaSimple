@@ -21,7 +21,7 @@ npx cap add android
 npx cap open android 
 
 --> Generar archivos Ios & Compilar
-npx cap open android
+npx cap add ios
 npx cap open ios
 
 /* CORREO CAMBIOS NEUVOS IMPLEMENTADOS LUEGO DE CORRER EL APK */
