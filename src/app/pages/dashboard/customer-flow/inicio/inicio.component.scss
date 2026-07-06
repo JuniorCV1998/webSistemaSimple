@@ -104,4 +104,104 @@
     display: inline-block; /* Necesario para que la animación funcione correctamente */
 }
 
+/* Título de sección (Préstamos / Financiamiento vehicular) */
+.section-titulo {
+    color: var(--gray-700);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.link-ver-todos {
+    color: var(--blue-400);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.span-empty {
+    color: var(--gray-500);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Limita la lista de préstamos a un alto fijo con scroll interno,
+   para que "Financiamiento vehicular" quede siempre visible debajo
+   sin importar cuántos préstamos tenga el cliente. */
+.prestamos-lista {
+    max-height: 320px;
+    overflow-y: auto;
+    /* padding a los lados para que el box-shadow de las tarjetas no se recorte:
+       al fijar overflow-y el navegador computa overflow-x como "auto" también,
+       y sin este espacio la sombra queda cortada en los bordes izquierdo/derecho. */
+    padding: 6px 10px;
+    margin: -6px -10px 0.5rem;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent 100%);
+}
+
+/* Tarjetas de financiamiento vehicular (mismo estilo que src/app/pages/inv vehicular/inicio) */
+.custom-banner-1 {
+    flex: 1;
+    padding: 15px;
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+    color: var(--gray-500);
+    border-radius: 8px;
+    min-width: 30px;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom-banner-1 .pi-car {
+    color: var(--gray-200);
+    font-size: 35px;
+}
+
+.custom-banner-1 .color1 {
+    height: 8px;
+    border-top: solid 1px var(--gray-300);
+    border-left: solid 1px var(--gray-300);
+    border-bottom: solid 1px var(--gray-300);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.custom-banner-1 .color2 {
+    height: 8px;
+    border-top: solid 1px var(--gray-300);
+    border-right: solid 1px var(--gray-300);
+    border-bottom: solid 1px var(--gray-300);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.custom-banner-1 .span-nombre {
+    font-weight: 500;
+    color: black;
+    font-size: 15px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-banner-1 .span-desc {
+    color: var(--gray-500);
+    font-size: 14px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-banner-1 .span-fecha {
+    color: rgb(67, 67, 67);
+    font-size: 12px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 

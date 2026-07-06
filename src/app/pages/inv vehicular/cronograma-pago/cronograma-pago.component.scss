@@ -1,0 +1,118 @@
+.span-subtitulo {
+  color: var(--gray-500);
+  font-size: 13px;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: var(--gray-50);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+}
+
+.resumen-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.resumen-label {
+  font-size: 0.68rem;
+  color: var(--gray-500);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.resumen-valor {
+  font-size: 0.9rem;
+  color: var(--gray-700);
+  font-weight: 500;
+}
+
+/* Grupos por mes */
+.grupo-mes {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.grupo-header {
+  padding: 8px 12px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.grupo-titulo {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--gray-700);
+  text-transform: capitalize;
+}
+
+.grupo-monto {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--primary-500);
+}
+
+/* Tabla */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.custom-table thead th {
+  background: #fff;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+  color: var(--gray-500);
+  font-size: 0.72rem;
+}
+
+.custom-table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap;
+  color: var(--gray-700);
+}
+
+.custom-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.estado-chip {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.estado-pagado {
+  background: #e6f9ef;
+  color: var(--primary-500);
+}
+
+.estado-pendiente {
+  background: var(--gray-100);
+  color: var(--gray-500);
+}
+
+.btn-subir-arriba {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 3rem;
+  height: 3rem;
+  box-shadow: var(--shadow-float);
+}

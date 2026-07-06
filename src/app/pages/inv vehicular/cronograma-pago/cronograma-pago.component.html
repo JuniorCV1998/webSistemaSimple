@@ -1,0 +1,86 @@
+<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+
+    <div class="text-center mb-4">
+        <div class="text-2xl mb-1 label-title">Cronograma de pago</div>
+        <span class="span-subtitulo">{{ invDetail.fullName }}</span>
+    </div>
+
+    <div class="resumen-grid mb-3">
+        <div class="resumen-item">
+            <span class="resumen-label">Placa vehículo</span>
+            <span class="resumen-valor">{{ invDetail.placaVehiculo }}</span>
+        </div>
+        <div class="resumen-item">
+            <span class="resumen-label">Frecuencia</span>
+            <span class="resumen-valor">{{ invDetail.frecuencia }}</span>
+        </div>
+        <div class="resumen-item">
+            <span class="resumen-label">Fecha inicio</span>
+            <span class="resumen-valor">{{ invDetail.fechaInicio }}</span>
+        </div>
+        <div class="resumen-item">
+            <span class="resumen-label">Fecha fin</span>
+            <span class="resumen-valor">{{ invDetail.fechaFin }}</span>
+        </div>
+        <div class="resumen-item">
+            <span class="resumen-label">N° de cuotas</span>
+            <span class="resumen-valor">{{ totalCuotas }}</span>
+        </div>
+        <div class="resumen-item" *ngIf="mostrarMontosAgregados">
+            <span class="resumen-label">Monto total</span>
+            <span class="resumen-valor">{{ currency }} {{ totalMonto | formatNumber }}</span>
+        </div>
+    </div>
+
+    <div class="flex justify-content-center mb-4">
+        <button pButton label="Descargar PDF" icon="pi pi-file-pdf" [loading]="isGeneratingPdf"
+            [disabled]="isLoading" (click)="descargarPDF()" class="w-full lg:w-auto"></button>
+    </div>
+
+    <ng-template [ngIf]="isLoading">
+        <div *ngFor="let item of [].constructor(8)" class="mb-2">
+            <p-skeleton height="2.25rem" />
+        </div>
+    </ng-template>
+
+    <div *ngIf="!isLoading">
+        <div *ngFor="let grupo of grupos" class="grupo-mes mb-3">
+            <div class="flex flex-row justify-content-between align-items-center grupo-header">
+                <span class="grupo-titulo">{{ grupo.label }}</span>
+                <span class="grupo-monto" *ngIf="mostrarMontosAgregados">{{ currency }} {{ grupo.montoGrupo | formatNumber }}</span>
+            </div>
+            <div class="table-wrapper">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>N° Cuota</th>
+                            <th>Fecha</th>
+                            <th>Días</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of grupo.items">
+                            <td>{{ item.nroCuota | twoDigits }}</td>
+                            <td>{{ item.fechaCierre }}</td>
+                            <td>{{ item.diasCuota }}</td>
+                            <td>{{ currency }} {{ item.montoCuota | formatNumber }}</td>
+                            <td>
+                                <span class="estado-chip" [ngClass]="item.pagado ? 'estado-pagado' : 'estado-pendiente'">
+                                    {{ item.pagado ? 'Pagado' : 'Pendiente' }}
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 20px;"></div>
+
+    <button *ngIf="mostrarBotonSubir" pButton icon="pi pi-arrow-up" (click)="irArriba()"
+        class="btn-subir-arriba p-button-rounded" aria-label="Subir arriba"></button>
+
+</div>

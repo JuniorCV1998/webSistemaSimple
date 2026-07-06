@@ -8,6 +8,7 @@ import { Constantes } from '../../../../core/constant/Constantes';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { LoginService } from '../../../../core/services/auth/login/login.service';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
+import { InversionVehService } from '../../../../core/services/inversion-veh/inversion-veh.service';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 
 @Component({
@@ -23,26 +24,36 @@ export class InicioClientComponent {
   /* Skeleton */
   forSkeleton: number = 5;
   skeletonShow: boolean = true;
+  skeletonShowVehicular: boolean = true;
 
   data: any[] = [];
+  dataVehicular: any[] = [];
+
+  /* Permiso de financiamiento vehicular */
+  permisoVehicular: boolean = false;
 
   currency: string | null = null;
 
   constructor(
     private loginService: LoginService,
     private getInversionService: GetInversionService,
+    private inversionVehService: InversionVehService,
     private tempDataService: TempDataService
   ){
     const decodedToken = this.loginService.getDecodedToken();
     if (decodedToken) {
       const fullName = decodedToken.nombre.split(" ");
       this.nombreUsuario = fullName[0];
+      this.permisoVehicular = (decodedToken.permisos ?? []).some(
+        (p: any) => p.codigo === Constantes.INV_VEHICULAR
+      );
     }
     this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
   ngAfterViewInit() {
     this.getInversionesClient();
+    if (this.permisoVehicular) this.getInversionesVehiculares();
     this.setupClickListener();
   }
 
@@ -57,6 +68,20 @@ export class InicioClientComponent {
         this.data = [];
       }
     } );
+  }
+
+  getInversionesVehiculares(){
+    this.skeletonShowVehicular = true;
+    this.inversionVehService.getInversionesVehList('P').pipe(finalize(() => this.skeletonShowVehicular = false)).
+    subscribe({
+      next: (resp: any) => this.dataVehicular = resp?.data ?? [],
+      error: () => this.dataVehicular = []
+    });
+  }
+
+  refrescarTodo(){
+    this.getInversionesClient();
+    if (this.permisoVehicular) this.getInversionesVehiculares();
   }
 
 setupClickListener() {

@@ -56,6 +56,20 @@
   padding: 10px;
 }
 
+.cronograma-link{
+  display: flex;
+  align-items: center;
+  color: var(--primary-500);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.cronograma-link:hover{
+  text-decoration: underline;
+}
+
 /* Body */
 
 .custom-banner-header{
@@ -167,18 +181,67 @@
   font-size: 12px;
   font-weight: 700;
 }
-.position{
-  min-width: 25px;
-  background-color: var(--gray-300);
-  border-radius: 50%;
-  color: white;
-  text-align: center;
-  font-size: 15px;
-  padding: 5px;
-}
 .input-fail{
   color: red;
   font-size: 12px;
+}
+.cuota-hero{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, var(--primary-50, #e6f7f0), #ffffff);
+  border: 1px solid var(--primary-200, var(--primary-300));
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+.cuota-hero-badge{
+  flex-shrink: 0;
+  min-width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--primary-500);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+.cuota-hero-info{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+.cuota-hero-label{
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+.cuota-hero-monto{
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary-600, var(--primary-500));
+}
+.cuota-hero-fecha{
+  font-size: 12px;
+  color: var(--gray-600);
+}
+.siguiente-cuota-preview{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gray-500);
+  padding: 8px 4px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.siguiente-cuota-preview i{
+  color: var(--primary-400, var(--primary-300));
+  flex-shrink: 0;
 }
 .linea{
   border-bottom: 1px dashed var(--gray-400);

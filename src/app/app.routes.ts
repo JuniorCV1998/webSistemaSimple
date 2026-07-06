@@ -145,6 +145,13 @@ export const routes: Routes = [
     },
 
     {
+        path: 'vehicular/cronograma',
+        canActivate: [authGuard],
+        loadComponent: () => import('././pages/inv vehicular/cronograma-pago/cronograma-pago.component'),
+        data: { permisos: [Constantes.INV_VEHICULAR] }
+    },
+
+    {
         path: 'registro/datoscliente',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/resource/cliente/cliente.component'),

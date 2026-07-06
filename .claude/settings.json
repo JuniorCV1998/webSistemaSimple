@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node pdf-view.js)",
+      "Bash(command -v magick)",
+      "Bash(command -v gswin64c)",
+      "Bash(command -v gs)",
+      "Bash(where.exe pdftoppm.exe)",
+      "Bash(where.exe magick.exe)",
+      "Bash(npm install *)",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"console.log\\(require\\('pdf-parse'\\)\\)\")",
+      "Bash(node -e \"console.log\\(Object.getOwnPropertyNames\\(require\\('pdf-parse'\\).PDFParse.prototype\\)\\)\")"
+    ]
+  }
+}

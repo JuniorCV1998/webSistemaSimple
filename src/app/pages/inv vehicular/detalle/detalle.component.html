@@ -65,6 +65,12 @@
         </div>
     </div>
 
+    <div class="flex justify-content-center mb-3">
+        <a class="cronograma-link" (click)="verCronogramaPago()">
+            <i class="pi pi-calendar mr-2"></i>Ver cronograma de pago
+        </a>
+    </div>
+
     <!-- *************************************************************** -->
 
     <!-- HEADER -->
@@ -216,40 +222,21 @@
             <span class="font-bold text-2xl mb-4 mt-4 txt-primary">
                 {{ message.header }}
             </span>
-            <!-- <p class="mb-2">{{ message.message }}</p> -->
-             <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i> Esta es la cuota a agregar</span>
-             <div class="flex flex-row align-items-center gap-4 mb-3">
-                <div class="position">
-                    {{ invDetail.ultimaCuota + 1 | twoDigits }}
-                </div>
-             </div>
-             <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto de la cuota ({{currency}})</span>
-             <div class="flex flex-column w-8 align-items-center justify-content-center mb-3">
-                <p-inputNumber
-                [(ngModel)]="montoPago"
-                 id="monto" 
-                 [minFractionDigits]="2" [maxFractionDigits]="2"  
-                 mode="decimal" autocomplete="off" 
-                 placeholder="Ingrese monto" class="w-full"
-                 [min]="1" [max]="100000"
-                 />
-                 <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor a {{currency}} {{1 | formatNumber}}.</span>
-                 <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser mayor a {{currency}} {{100000 | formatNumber}}.</span>
-             </div>
 
-             <!-- Fecha inicio y fin -->
-             <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Fecha de pago</span>
-            <div class="flex flex-row w-8 gap-2 justify-content-center align-items-center mb-3">
-                    <!-- <label for="fecha1" class="txt-left">Fecha inicio</label> -->
-                    <p-datepicker 
-                    [(ngModel)]="fechaPago" 
-                    [showIcon]="true" 
-                    [showOnFocus]="true" 
-                    [touchUI]="false"
-                    [dateFormat]="'dd/mm/yy'"
-                    [showTime]="false"
-                    inputId="fecha1" 
-                    />
+            <!-- Cuota a agregar: monto y fecha ya vienen completados desde el servicio (próxima cuota) -->
+            <div class="cuota-hero w-full mb-3">
+                <div class="cuota-hero-badge">{{ invDetail.proximoPago?.nroCuota | twoDigits }}</div>
+                <div class="cuota-hero-info">
+                    <span class="cuota-hero-label">Cuota a agregar</span>
+                    <span class="cuota-hero-monto">{{currency}} {{ montoPago | formatNumber }}</span>
+                    <span class="cuota-hero-fecha"><i class="pi pi-calendar mr-1"></i>{{ fechaPago | formatDate }}</span>
+                </div>
+            </div>
+
+            <!-- Siguiente cuota, después de esta (informativo, en una sola línea) -->
+            <div *ngIf="invDetail.siguientePago" class="siguiente-cuota-preview w-full">
+                <i class="pi pi-arrow-circle-right"></i>
+                <span>Siguiente: Cuota {{ invDetail.siguientePago.nroCuota | twoDigits }} · {{ parseFecha(invDetail.siguientePago.fecha) | formatDate }} · {{currency}} {{ invDetail.siguientePago.montoCuota | formatNumber }}</span>
             </div>
 
             <div class="flex align-items-center gap-2 mt-2">
@@ -289,7 +276,7 @@
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
                     <div class="w-6 txt-label mb-2">Número de cuota</div>
                     <div class="w-6 dataConfirm">
-                        {{ invDetail.ultimaCuota + 1 | twoDigits}}
+                        {{ invDetail.proximoPago?.nroCuota | twoDigits}}
                     </div>
                 </div>
 

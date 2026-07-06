@@ -1,6 +1,6 @@
 
 <div>
-    <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+    <div class="auth-card auth-fade-in">
         <div class="text-center mb-5">
             <img src="public/logos/logo_ssimple.png" alt="Image" height="150" style="margin-bottom: 0;" class="mb-0">
             <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3">¡Qué alegría verte otra vez!</div>
@@ -12,19 +12,19 @@
             <form #form="ngForm" (ngSubmit)="login(form)">
                 <label for="email1" class="block font-medium mb-2">Correo electrónico</label>
                 <div class="relative w-full mb-2">
-                    <input id="email1" name="usuario" [(ngModel)]="credenciales.correo" [maxlength]="120" type="text" 
-                    placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3" (ngModelChange)="credenciales.correo = $event.toLowerCase()">
+                    <i class="pi pi-envelope input-icon-left"></i>
+                    <input id="email1" name="usuario" [(ngModel)]="credenciales.correo" [maxlength]="120" type="text"
+                    placeholder="Dirección de correo electrónico" pInputText class="w-full mb-3 input-with-icon" (ngModelChange)="credenciales.correo = $event.toLowerCase()">
                     <!-- Icono de eliminar x -->
-                    <i class="pi" [ngClass]="credenciales.correo ? 'pi-times-circle' : ''" 
-                      (click)="cleanCorreoFunct()" 
-                      style="position: absolute; top: 40%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                    <i class="pi input-icon-right" [ngClass]="credenciales.correo ? 'pi-times-circle' : ''"
+                      (click)="cleanCorreoFunct()">
                     </i>
                 </div>
 
 
                 <label for="password1" class="block font-medium mb-2">Contraseña</label>
                 <p-inputOtp [(ngModel)]="credenciales.contrasena" [integerOnly]="true" [length]="6" class="w-full mb-6"/>
-                
+
                 <div class="flex align-items-center justify-content-center mb-6"> <!-- between: cuando acompaña el rememberme -->
                     <!-- <div class="flex align-items-center">
                         <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>

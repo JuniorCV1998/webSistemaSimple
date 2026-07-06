@@ -1,6 +1,5 @@
 <div>
-    <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+    <div class="auth-card auth-fade-in">
         <div class="comp_volver">
             <!-- <a href="/login"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
             <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i>
@@ -14,23 +13,26 @@
 
         <div>
             <label for="email1" class="block font-medium mb-2">Correo electrónico</label>
-            <input [(ngModel)]="objUser.correo" id="email1" aria-describedby="email-help" type="text" autocomplete="off"
-                (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText
-                class="w-full mb-3" (ngModelChange)="objUser.correo = $event.toLowerCase()">
+            <div class="relative w-full mb-3">
+                <i class="pi pi-envelope input-icon-left"></i>
+                <input [(ngModel)]="objUser.correo" id="email1" aria-describedby="email-help" type="text" autocomplete="off"
+                    (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText
+                    class="w-full input-with-icon" (ngModelChange)="objUser.correo = $event.toLowerCase()">
+            </div>
             <small *ngIf="isWriting" id="email-help"><br><i class="pi pi-info-circle"></i> Recuerda que este correo será
                 usado para enviarte información respecto a tu cuenta.<br><br></small>
 
             <label for="password1" class="block  font-medium mb-2">Contraseña</label>
             <div class="relative w-full mb-3">
+                <i class="pi pi-lock input-icon-left"></i>
                 <input [(ngModel)]="objUser.contrasena" id="password1" aria-describedby="pass-help" [maxlength]="6"
                     appSoloNumeros (ngModelChange)="isValidPassword = validarContrasena(objUser.contrasena.trim())"
                     [type]="passwordFieldType" placeholder="Contraseña" (focus)="onFocus(2)" (blur)="onBlur(2)"
-                    pInputText class="w-full">
+                    pInputText class="w-full input-with-icon">
                 <!-- Icono de ojo -->
-                <i id="iconPassword1" class="pi"
+                <i id="iconPassword1" class="pi input-icon-right"
                     [ngClass]="passwordFieldType === 'password' ? 'pi-eye' : 'pi-eye-slash'"
-                    (click)="togglePasswordVisibility(1)"
-                    style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                    (click)="togglePasswordVisibility(1)">
                 </i>
             </div>
             <small *ngIf="isWritingP || (!isValidPassword && objUser?.contrasena?.length > 0)"
@@ -41,13 +43,13 @@
             <!-- <p-password formControlName="value" [feedback]="true" [toggleMask]="true"/> -->
             <label for="password2" class="block font-medium mb-2">Confirmar contraseña</label>
             <div class="relative w-full mb-3">
+                <i class="pi pi-lock input-icon-left"></i>
                 <input [(ngModel)]="objUser.contrasena2" id="password2" [type]="passwordFieldType2" [maxlength]="6"
-                    appSoloNumeros placeholder="Confirmar contraseña" pInputText class="w-full">
+                    appSoloNumeros placeholder="Confirmar contraseña" pInputText class="w-full input-with-icon">
                 <!-- Icono de ojo -->
-                <i id="iconPassword1" class="pi"
+                <i id="iconPassword1" class="pi input-icon-right"
                     [ngClass]="passwordFieldType2 === 'password' ? 'pi-eye' : 'pi-eye-slash'"
-                    (click)="togglePasswordVisibility(2)"
-                    style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                    (click)="togglePasswordVisibility(2)">
                 </i>
             </div>
 

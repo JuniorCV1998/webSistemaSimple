@@ -7,28 +7,23 @@ import { Constantes } from '../../../core/constant/Constantes';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TempDataService } from '../../../core/services/temp-data.service';
-import { FormsModule } from '@angular/forms';
 import { Component, ViewChild } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { TwoDigitsPipe } from '../../../core/pipes/two-digits.pipe';
 import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
-import { DatePicker } from 'primeng/datepicker';
 import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-detalle',
   standalone: true,
   imports: [CommonModule,SkeletonModule,TabMenuModule,LoadingComponent,ButtonModule,ToastModule,ConfirmDialogModule,
-    CalendarModule,FormsModule,  FloatLabelModule, InputNumberModule,FormatNumberPipe, TwoDigitsPipe,DatePicker,FormatDatePipe],
+    FormatNumberPipe, TwoDigitsPipe,FormatDatePipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './detalle.component.html',
   styleUrl: './detalle.component.scss'
@@ -161,6 +156,9 @@ confirmCerrarInv(): Promise<boolean> {
   }
 
   agregarCuota(){
+    const proximo = this.invDetail?.proximoPago;
+    this.montoPago = proximo?.montoCuota ?? null;
+    this.fechaPago = proximo?.fecha ? this.parseFecha(proximo.fecha) : new Date();
     this.modalCuota().then((result) => {
         if(result){
             this.confirmCuota().then((confirm) => {
@@ -268,11 +266,23 @@ confirmCerrarInv(): Promise<boolean> {
 }
 
 
-  mostrarDetalle(i: number, o: number){ 
+  verCronogramaPago(){
+    this.router.navigate(['/vehicular/cronograma'], {
+      queryParams: { idInversionVeh: this.idInversionVeh },
+      state: { invDetail: this.invDetail }
+    });
+  }
+
+  mostrarDetalle(i: number, o: number){
     if(this.invDetail.frecuencia==='SEMANAL') {
       this.invDetail.body[o].pagosAgrupados[i].mostrarDetalle = !this.invDetail.body[o].pagosAgrupados[i].mostrarDetalle;
     }
     else if(this.invDetail.frecuencia==='MENSUAL') this.invDetail.body[i].mostrarDetalle = !this.invDetail.body[i].mostrarDetalle;
+  }
+
+  // Convierte la fecha "YYYY-MM-DD HH:mm:ss" del servicio en un objeto Date
+  parseFecha(fecha: string): Date {
+    return new Date(fecha.replace(' ', 'T'));
   }
 
   // Método para formatear la fecha

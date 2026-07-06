@@ -52,5 +52,19 @@ export class InversionVehService {
         .set('montoCuota', Number(montoCuota));
         return this.http.post(this.baseUrl+this.baseComponent+'insertPayVehicular',null, {params});
      }
-    
+
+    // Respuesta: { codigoMessage, totalRecord, data: [{ nroCuota, fechaCierre, diasCuota, montoCuota }], message, success }
+    getCronogramaPagoVeh(idInversionVeh: number){
+      const params = new HttpParams()
+        .set('idInversionVeh', Number(idInversionVeh));
+      return this.http.get(this.baseUrl+this.baseComponent+'getCronogramaPagos', {params});
+    }
+
+    // TODO: endpoint provisional a la espera del servicio real (pendiente de confirmar por el usuario)
+    getProximaCuotaVeh(idInversionVeh: number){
+      const params = new HttpParams()
+        .set('idInversionVeh', Number(idInversionVeh));
+      return this.http.get(this.baseUrl+this.baseComponent+'getProximaCuotaVeh', {params});
+    }
+
 }
