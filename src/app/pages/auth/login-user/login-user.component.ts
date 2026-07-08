@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
@@ -13,6 +13,9 @@ import { finalize } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { LoginService } from '../../../core/services/auth/login/login.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { CuentasGuardadasService } from '../../../core/services/auth/cuentas-guardadas.service';
+import { BiometricAuthService } from '../../../core/services/auth/biometric-auth.service';
+import { BiometricActivationComponent } from '../../modal/biometric-activation/biometric-activation.component';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
 
@@ -22,36 +25,61 @@ import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up
   imports: [ButtonModule, InputTextModule, CheckboxModule, PasswordModule, FormsModule,
     ConfirmDialogModule, CommonModule, LoadingComponent],
   templateUrl: './login-user.component.html',
-  styleUrl: './login-user.component.scss'
+  styleUrl: './login-user.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export default class LoginUserComponent {
+export default class LoginUserComponent implements AfterViewInit {
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
+  @ViewChild('carousel') carouselRef!: ElementRef<HTMLDivElement>;
 
-  /* Mostrar/ocultar contraseña */
-  passwordFieldType: string = 'password';
-  /* Limpiar caja de email */
-  emailClean: string = 'clean'
+  /* Cuentas guardadas (hasta 3) y carrusel para moverse entre ellas */
+  cuentas: string[] = [];
+  cuentaActivaIndex: number = 0;
+  modoEdicion: boolean = false;
+  private scrollTimeout: any;
 
-  /* LOGIN USER */
-  correo: string = '';
+  /* Ingreso con huella para la cuenta activa del carrusel */
+  biometriaDisponibleActiva: boolean = false;
+
   appVersion = '';
 
   constructor(
     private router: Router,
     private loginService: LoginService,
     private dialogService: DialogService,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
+    private cuentasGuardadasService: CuentasGuardadasService,
+    private biometricAuthService: BiometricAuthService
   ) {
-    const correo = localStorage.getItem('correo');
-    if (correo) this.correo = correo;
-    else router.navigate(['/login']);
+    const cuentas = this.cuentasGuardadasService.obtenerCuentas();
+    if (cuentas.length === 0) {
+      router.navigate(['/login']);
+      return;
+    }
+
+    this.cuentas = cuentas;
+    const activa = this.cuentasGuardadasService.obtenerCuentaActiva();
+    const idx = activa ? cuentas.indexOf(activa) : -1;
+    this.cuentaActivaIndex = idx >= 0 ? idx : 0;
   }
 
   ngOnInit(): void {
     App.getInfo().then(info => {
       this.appVersion = info.version;
     });
+    this.actualizarDisponibilidadBiometria();
+  }
+
+  ngAfterViewInit(): void {
+    const el = this.carouselRef?.nativeElement;
+    if (el && this.cuentaActivaIndex > 0) {
+      el.scrollLeft = this.cuentaActivaIndex * el.clientWidth;
+    }
+  }
+
+  get correo(): string {
+    return this.cuentas[this.cuentaActivaIndex] ?? '';
   }
 
   credenciales = {
@@ -59,13 +87,86 @@ export default class LoginUserComponent {
     contrasena: ''
   };
 
-  usarOtraCuenta() {
-    this.clearSessionAndLocalStorage([]);
+  /* Detecta a qué cuenta del carrusel se deslizó el usuario */
+  onCarouselScroll(): void {
+    clearTimeout(this.scrollTimeout);
+    this.scrollTimeout = setTimeout(() => this.actualizarCuentaActivaPorScroll(), 120);
+  }
+
+  private actualizarCuentaActivaPorScroll(): void {
+    const el = this.carouselRef?.nativeElement;
+    if (!el || el.clientWidth === 0) return;
+
+    const index = Math.round(el.scrollLeft / el.clientWidth);
+    const clamped = Math.max(0, Math.min(index, this.cuentas.length - 1));
+    if (clamped !== this.cuentaActivaIndex) {
+      this.cuentaActivaIndex = clamped;
+      this.enteredCode = [];
+      this.cuentasGuardadasService.establecerCuentaActiva(this.correo);
+      this.actualizarDisponibilidadBiometria();
+    }
+  }
+
+  private async actualizarDisponibilidadBiometria(): Promise<void> {
+    const correo = this.correo;
+    const soportado = await this.biometricAuthService.esSoportado();
+    this.biometriaDisponibleActiva = soportado && await this.biometricAuthService.estaActivadaParaCuenta(correo);
+  }
+
+  /** Ingreso rápido con huella para la cuenta activa del carrusel. */
+  async ingresarConBiometria(): Promise<void> {
+    const credenciales = await this.biometricAuthService.autenticarYObtenerCredenciales(this.correo);
+    if (!credenciales) return; // cancelado o fallido: el usuario sigue con el teclado normal
+    this.credenciales.contrasena = credenciales.password;
+    this.login();
+  }
+
+  irACuenta(index: number): void {
+    const el = this.carouselRef?.nativeElement;
+    if (!el) return;
+    el.scrollTo({ left: index * el.clientWidth, behavior: 'smooth' });
+  }
+
+  usarOtraCuenta(event: Event) {
+    // Evita que el clic burbujee hasta el contenedor y cancele el modo edición recién activado
+    event.stopPropagation();
+    if (this.cuentasGuardadasService.haAlcanzadoLimite()) {
+      this.modoEdicion = true;
+      return;
+    }
+    this.irAAgregarCuenta();
+  }
+
+  cancelarEdicion(): void {
+    this.modoEdicion = false;
+  }
+
+  eliminarCuenta(index: number, event: Event): void {
+    event.stopPropagation();
+    const correoEliminado = this.cuentas[index];
+    this.cuentas = this.cuentasGuardadasService.eliminarCuenta(correoEliminado);
+    this.biometricAuthService.desactivarParaCuenta(correoEliminado);
+
+    if (this.cuentas.length === 0) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.cuentaActivaIndex = Math.min(this.cuentaActivaIndex, this.cuentas.length - 1);
+    this.enteredCode = [];
+    this.modoEdicion = false;
+    // Ya hay espacio libre: continuamos directo al flujo de agregar cuenta
+    this.irAAgregarCuenta();
+  }
+
+  private irAAgregarCuenta(): void {
+    sessionStorage.clear();
+    sessionStorage.setItem('modoAgregarCuenta', 'true');
     this.router.navigate(['/login']);
   }
 
   login() {
-    this.credenciales.correo = localStorage.getItem('correo') ?? '';
+    this.credenciales.correo = this.correo;
 
     this.loadingComponent.show();
     this.loginService.iniciarSesion(this.credenciales).pipe(
@@ -75,6 +176,10 @@ export default class LoginUserComponent {
       })
     ).subscribe({
       next: response => {
+        this.cuentasGuardadasService.guardarCuenta(this.credenciales.correo);
+        // Se guarda temporalmente para poder confirmar la clave al activar el ingreso con huella
+        // desde la pantalla de Configuración, sin tener que pedirla de nuevo por otra vía.
+        sessionStorage.setItem('contrasenaSesion', this.credenciales.contrasena);
         sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
         if (response.data.person.codTipoDoc === "06") {
           sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
@@ -85,7 +190,10 @@ export default class LoginUserComponent {
         sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
         sessionStorage.setItem('pathSello', response.data.config.pathSello);
 
-        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) this.router.navigate(['inicio']);
+        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) {
+          this.ofrecerActivarBiometria(this.credenciales.correo, this.credenciales.contrasena);
+          this.router.navigate(['inicio']);
+        }
         else if (response.codigoMessage === Constantes.COD_MEMBRESIA_POR_VENCER) {
           this.router.navigate(['/membresia-exp'], {
             state: {
@@ -124,6 +232,32 @@ export default class LoginUserComponent {
     });
   }
 
+  /** Tras un login exitoso, ofrece activar el ingreso con huella si el dispositivo lo soporta. */
+  private async ofrecerActivarBiometria(correo: string, contrasena: string): Promise<void> {
+    const soportado = await this.biometricAuthService.esSoportado();
+    if (!soportado) return;
+    if (this.biometricAuthService.fueDescartadaParaCuenta(correo)) return;
+
+    const yaActivada = await this.biometricAuthService.estaActivadaParaCuenta(correo);
+    if (yaActivada) return;
+
+    const ref = this.dialogService.open(BiometricActivationComponent, {
+      showHeader: false,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,
+      width: '90%'
+    });
+
+    ref.onClose.subscribe((resultado: string) => {
+      if (resultado === 'activar') {
+        this.biometricAuthService.activarParaCuenta(correo, contrasena).then(() => this.actualizarDisponibilidadBiometria());
+      } else {
+        this.biometricAuthService.marcarDescartadaParaCuenta(correo);
+      }
+    });
+  }
+
   show(message: string) {
     const ref = this.dialogService.open(MessagePopUpComponent, {
       data: {
@@ -144,15 +278,6 @@ export default class LoginUserComponent {
       /* this.credenciales.contrasena.trim() !== '' && */
       this.enteredCode.length === 6
     );
-  }
-
-  togglePasswordVisibility() {
-    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
-  }
-
-  clearSessionAndLocalStorage(keysToKeep: string[]) {
-    sessionStorage.clear();
-    localStorage.clear();
   }
 
   /* LOGICA PARA EL TECLADO ALEATORIO */

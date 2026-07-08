@@ -28,6 +28,7 @@
     "@capacitor/share": "^7.0.4",
     "@capacitor/status-bar": "^7.0.3",
     "@capawesome/capacitor-android-edge-to-edge-support": "^7.2.3",
+    "@capgo/capacitor-native-biometric": "^7.6.0",
     "@firebase/storage": "^0.14.0",
     "@lottiefiles/lottie-player": "^2.0.12",
     "@primeng/themes": "^20.1.2",

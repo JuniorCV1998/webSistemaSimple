@@ -1,0 +1,40 @@
+<div class="flex flex-column align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-2">
+    <div class="flex flex-column w-full justify-content-center gap-2">
+        <div class="flex flex-row justify-content-between align-items-center w-full gap-2">
+            <div class="flex flex-row align-items-center gap-2">
+                <lottie-player class="biometria-icon" src="/public/system/fingerprint.json"
+                    background="transparent" speed="1" loop autoplay></lottie-player>
+                <span class="block">Ingreso con huella</span>
+            </div>
+            <p-toggleswitch [(ngModel)]="biometriaActiva" [ngModelOptions]="{standalone: true}"
+                [disabled]="!biometriaSoportada" (ngModelChange)="onToggleBiometria($event)">
+                <ng-template #handle let-checked="checked">
+                    <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                </ng-template>
+            </p-toggleswitch>
+        </div>
+
+        <span class="txt-span">
+            <ng-container *ngIf="biometriaSoportada; else noSoportado">
+                Activa el ingreso rápido con tu huella para esta cuenta, sin escribir tu clave cada vez. Puedes
+                desactivarlo cuando quieras.
+            </ng-container>
+            <ng-template #noSoportado>
+                Tu dispositivo no cuenta con sensor de huella dactilar disponible.
+            </ng-template>
+        </span>
+
+        <div *ngIf="mostrarConfirmarActivacion" class="flex flex-column gap-2 mt-1 confirmar-biometria">
+            <span class="txt-span">Ingresa tu clave de 6 dígitos para confirmar la activación.</span>
+            <div class="flex flex-row gap-2 align-items-center">
+                <input type="password" pInputText inputmode="numeric" maxlength="6" [ngModel]="passwordConfirmacion"
+                    (ngModelChange)="onPasswordConfirmacionChange($event)" [ngModelOptions]="{standalone: true}"
+                    placeholder="Clave de 6 dígitos" class="w-full" />
+                <button pButton icon="pi pi-check" class="p-button-sm" [disabled]="passwordConfirmacion.length !== 6"
+                    (click)="confirmarActivacionBiometria()"></button>
+                <button pButton icon="pi pi-times" class="p-button-sm p-button-outlined"
+                    (click)="cancelarActivacionBiometria()"></button>
+            </div>
+        </div>
+    </div>
+</div>

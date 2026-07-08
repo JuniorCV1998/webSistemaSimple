@@ -11,6 +11,7 @@ import { ToggleSwitch } from 'primeng/toggleswitch';
 import { catchError, finalize, throwError } from 'rxjs';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { AdminService } from '../../../../core/services/admin/admin.service';
+import { BiometriaConfigCardComponent } from '../../shared/biometria-config-card/biometria-config-card.component';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { ErrorGeneralComponent } from '../../../system/errores/error-general/error-general.component';
 
@@ -18,7 +19,7 @@ import { ErrorGeneralComponent } from '../../../system/errores/error-general/err
   selector: 'app-configuracion-admin',
   standalone: true,
   imports: [ToastModule, FormsModule, InputNumber, ErrorGeneralComponent, CommonModule, LoadingComponent,
-    ToggleSwitch, ButtonModule, MessageModule
+    ToggleSwitch, ButtonModule, MessageModule, BiometriaConfigCardComponent
   ],
   providers: [ConfirmationService, MessageService,],
   templateUrl: './configuracion-admin.component.html',

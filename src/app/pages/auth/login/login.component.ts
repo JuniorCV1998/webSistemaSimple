@@ -16,6 +16,9 @@ import { LoadingComponent } from '../../modal/loading/loading.component';
 import { InputOtpModule } from 'primeng/inputotp';
 import { SystemService } from '../../../core/services/system/system.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { CuentasGuardadasService } from '../../../core/services/auth/cuentas-guardadas.service';
+import { BiometricAuthService } from '../../../core/services/auth/biometric-auth.service';
+import { BiometricActivationComponent } from '../../modal/biometric-activation/biometric-activation.component';
 import { finalize } from 'rxjs';
 
 
@@ -41,10 +44,20 @@ export default class LoginComponent {
     private loginService: LoginService,
     private dialogService: DialogService,
     private systemService: SystemService,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
+    private cuentasGuardadasService: CuentasGuardadasService,
+    private biometricAuthService: BiometricAuthService
   ) {
-    const correo = localStorage.getItem('correo');
-    if (correo) router.navigate(['/login-user']);
+    // Si venimos de "Agregar otra cuenta" en /login-user, se deja el formulario
+    // en blanco aunque ya existan cuentas guardadas.
+    if (sessionStorage.getItem('modoAgregarCuenta')) {
+      sessionStorage.removeItem('modoAgregarCuenta');
+      return;
+    }
+
+    if (this.cuentasGuardadasService.obtenerCuentaActiva()) {
+      router.navigate(['/login-user']);
+    }
   }
 
   ngOnInit(): void {
@@ -88,7 +101,10 @@ export default class LoginComponent {
     ).subscribe({
       next: response => {
         this.loadingComponent.hide();
-        localStorage.setItem('correo', this.credenciales.correo);
+        this.cuentasGuardadasService.guardarCuenta(this.credenciales.correo);
+        // Se guarda temporalmente para poder confirmar la clave al activar el ingreso con huella
+        // desde la pantalla de Configuración, sin tener que pedirla de nuevo por otra vía.
+        sessionStorage.setItem('contrasenaSesion', this.credenciales.contrasena);
         sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
         if (response.data.person.codTipoDoc === "06") {
           sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
@@ -99,7 +115,10 @@ export default class LoginComponent {
         sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
         sessionStorage.setItem('pathSello', response.data.config.pathSello);
 
-        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) this.router.navigate(['inicio']);
+        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) {
+          this.ofrecerActivarBiometria(this.credenciales.correo, this.credenciales.contrasena);
+          this.router.navigate(['inicio']);
+        }
         else if (response.codigoMessage === Constantes.COD_MEMBRESIA_POR_VENCER) {
           this.router.navigate(['/membresia-exp'], {
             state: {
@@ -133,6 +152,32 @@ export default class LoginComponent {
         } else {
           this.show(Constantes.MSG_500);
         }
+      }
+    });
+  }
+
+  /** Tras un login exitoso, ofrece activar el ingreso con huella si el dispositivo lo soporta. */
+  private async ofrecerActivarBiometria(correo: string, contrasena: string): Promise<void> {
+    const soportado = await this.biometricAuthService.esSoportado();
+    if (!soportado) return;
+    if (this.biometricAuthService.fueDescartadaParaCuenta(correo)) return;
+
+    const yaActivada = await this.biometricAuthService.estaActivadaParaCuenta(correo);
+    if (yaActivada) return;
+
+    const ref = this.dialogService.open(BiometricActivationComponent, {
+      showHeader: false,
+      closable: false,
+      closeOnEscape: false,
+      modal: true,
+      width: '90%'
+    });
+
+    ref.onClose.subscribe((resultado: string) => {
+      if (resultado === 'activar') {
+        this.biometricAuthService.activarParaCuenta(correo, contrasena);
+      } else {
+        this.biometricAuthService.marcarDescartadaParaCuenta(correo);
       }
     });
   }

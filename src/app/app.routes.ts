@@ -127,6 +127,12 @@ export const routes: Routes = [
         loadComponent: () => import('././pages/dashboard/usuario/profile/profile.component'),
         data: { profiles: [Constantes.PERFIL_INV, Constantes.PERFIL_CLI] }
     },
+    {
+        path: 'configuracion-cliente',
+        canActivate: [authGuard],
+        loadComponent: () => import('././pages/dashboard/customer-flow/configuracion-cliente/configuracion-cliente.component'),
+        data: { profiles: [Constantes.PERFIL_CLI] }
+    },
 
 
     /* Inversión Vehicular */

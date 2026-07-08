@@ -1,0 +1,15 @@
+<div class="biometric-activation">
+    <div class="icon-wrapper">
+        <div class="icon-pulse"></div>
+        <lottie-player class="fingerprint-icon" src="/public/system/fingerprint.json" background="transparent"
+            speed="1" loop autoplay></lottie-player>
+    </div>
+
+    <h3 class="titulo">Ingresa más rápido la próxima vez</h3>
+    <p class="descripcion">Activa tu huella para iniciar sesión sin escribir tu clave cada vez.</p>
+
+    <div class="flex flex-column w-full gap-2 mt-4">
+        <button pButton label="Activar" (click)="activar()" class="w-full btn-activar"></button>
+        <button pButton label="En otro momento" (click)="omitir()" class="w-full p-button-text btn-omitir"></button>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+.biometric-activation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+}
+
+.icon-wrapper {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.icon-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--primary-100, #d1fae5);
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+
+  70% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+.fingerprint-icon {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  z-index: 1;
+}
+
+.titulo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-800, #1f2937);
+  margin: 0 0 .5rem;
+}
+
+.descripcion {
+  font-size: .88rem;
+  color: var(--gray-500);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.btn-activar {
+  background: var(--primary-500);
+  border: none;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+}
+
+.btn-omitir {
+  color: var(--gray-500);
+}

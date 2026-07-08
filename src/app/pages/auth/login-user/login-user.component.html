@@ -1,5 +1,5 @@
 <div>
-    <div class="auth-card auth-fade-in">
+    <div class="auth-card auth-fade-in" (click)="modoEdicion && cancelarEdicion()">
         <div class="flex flex-column w-full justify-content-center gap-2 mb-3 image-presentacion">
             <div class="flex flex-row w-11 justify-content-center">
                 <img src="public/logos/logo_ssimple.png" alt="Image" height="230" style="margin-bottom: 0;"
@@ -8,13 +8,36 @@
             <span *ngIf="appVersion!=''" class="version-style-float">v{{appVersion}}</span>
         </div>
 
+        <!-- Selector de cuentas guardadas -->
+        <div class="cuentas-carousel-wrapper mb-2">
+            <div class="cuentas-carousel" #carousel (scroll)="onCarouselScroll()">
+                <div class="cuenta-slide" *ngFor="let cuenta of cuentas; let i = index">
+                    <div class="cuenta-card">
+                        <i class="pi pi-user cuenta-icon"></i>
+                        <span class="cuenta-correo">{{cuenta}}</span>
+                        <button *ngIf="modoEdicion" type="button" class="cuenta-eliminar"
+                            (click)="eliminarCuenta(i, $event)" aria-label="Eliminar cuenta">
+                            <i class="pi pi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cuentas-dots" *ngIf="cuentas.length > 1">
+                <span *ngFor="let cuenta of cuentas; let i = index" class="dot"
+                    [ngClass]="{'dot-active': i === cuentaActivaIndex}" (click)="irACuenta(i)"></span>
+            </div>
+        </div>
+
+        <div *ngIf="modoEdicion" class="flex justify-content-center mb-2 modo-edicion-hint">
+            <span>Máximo 3 cuentas. Elimina una para agregar otra.</span>
+        </div>
+
         <div>
             <form #form="ngForm">
 
-                <div id="div_line_bootom" class="text-gray-500 text-2xl font-medium">Ingresa tu clave</div>
                 <div class="login-container">
-                    <div *ngIf="passwordFieldType === 'password'"
-                        class="flex flex-row gap-5 justify-content-center mb-3 div-pass">
+                    <div class="flex flex-row gap-5 justify-content-center mb-3 div-pass">
                         <i class="pi pi-circle-fill"
                             [ngClass]="enteredCode.length >= 1 ? 'passCheck':'passNoCheck'"></i>
                         <i class="pi pi-circle-fill"
@@ -28,15 +51,6 @@
                         <i class="pi pi-circle-fill"
                             [ngClass]="enteredCode.length == 6 ? 'passCheck':'passNoCheck'"></i>
                     </div>
-                    <div *ngIf="passwordFieldType === 'text'"
-                        class="flex flex-row gap-2 justify-content-center mb-3 div-pass">
-                        <div class="visibility-pass">{{enteredCode[0]}}</div>
-                        <div class="visibility-pass">{{enteredCode[1]}}</div>
-                        <div class="visibility-pass">{{enteredCode[2]}}</div>
-                        <div class="visibility-pass">{{enteredCode[3]}}</div>
-                        <div class="visibility-pass">{{enteredCode[4]}}</div>
-                        <div class="visibility-pass">{{enteredCode[5]}}</div>
-                    </div>
 
                     <!-- Teclado numérico aleatorio -->
                     <div class="keypad">
@@ -44,11 +58,13 @@
                             class="keypad-button" type="button">
                             {{ number }}
                         </button>
-                        <!-- Botón de "Visualizar/Ocultar" contraseña -->
-                        <!-- == 'password' ? 'pi-eye' : 'pi-eye-slash'"  -->
-                        <button (click)="togglePasswordVisibility()" class="keypad-button delete-button" type="button">
-                            <i class="pi" [ngClass]="passwordFieldType === 'password' ? 'pi-eye-slash' : 'pi-eye'"></i>
+                        <!-- Ingreso rápido con huella para la cuenta activa (o espacio vacío para mantener la cuadrícula) -->
+                        <button *ngIf="biometriaDisponibleActiva" (click)="ingresarConBiometria()"
+                            class="keypad-button huella-button" type="button" aria-label="Ingresar con huella">
+                            <lottie-player src="/public/system/fingerprint.json" background="transparent" speed="1"
+                                loop autoplay></lottie-player>
                         </button>
+                        <div *ngIf="!biometriaDisponibleActiva" class="keypad-button" style="visibility: hidden;"></div>
                         <!-- Mostrar el último número -->
                         <button *ngIf="randomNumbers.length > 9"
                             (click)="onDigitPress(randomNumbers[randomNumbers.length - 1])"
@@ -66,7 +82,7 @@
 
                 <div class="flex w-full justify-content-center">
                     <a class="font-medium no-underline ml-2 text-blue-400 cursor-pointer"
-                        (click)="usarOtraCuenta()">Usar otra cuenta</a>
+                        (click)="usarOtraCuenta($event)">Agregar otra cuenta</a>
                 </div>
 
             </div>

@@ -13,6 +13,7 @@ import { Constantes } from '../../../../core/constant/Constantes';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { FirebaseStorageService } from '../../../../core/services/firebase/firebase-storage.service';
 import { InversoresService } from '../../../../core/services/inversores/inversores.service';
+import { BiometriaConfigCardComponent } from '../../shared/biometria-config-card/biometria-config-card.component';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { ErrorGeneralComponent } from '../../../system/errores/error-general/error-general.component';
@@ -24,7 +25,7 @@ import { appsettings } from '../../../../core/appsettings';
   selector: 'app-configuracion-inversor',
   standalone: true,
   imports: [ToastModule, FormsModule, ErrorGeneralComponent, CommonModule, LoadingComponent,
-    ButtonModule, MessageModule, SelectModule, Checkbox, FormatNumberPipe],
+    ButtonModule, MessageModule, SelectModule, Checkbox, FormatNumberPipe, BiometriaConfigCardComponent],
   providers: [ConfirmationService, MessageService,],
   templateUrl: './configuracion-inversor.component.html',
   styleUrl: './configuracion-inversor.component.scss'
@@ -102,7 +103,6 @@ export default class ConfiguracionInversorComponent {
       this.loadingComponent.show();
       this.getConfiguracionAdmin();
     });
-
 
   }
 

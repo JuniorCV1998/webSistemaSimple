@@ -1,0 +1,29 @@
+.custom-banner-codigo-unico {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
+    color: var(--gray-500);
+    text-align: center;
+    border-radius: 8px;
+    min-width: 30px;
+    align-items: center;
+}
+
+.txt-span {
+    font-size: 13px;
+    text-align: left;
+}
+
+.biometria-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
+
+.confirmar-biometria {
+    background: var(--primary-50, #ecfdf5);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+}
