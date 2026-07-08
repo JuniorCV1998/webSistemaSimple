@@ -146,7 +146,36 @@ export async function generarPdfCronograma(params: GenerarPdfParams) {
     drawFooter(i, pageCount);
   }
 
-  doc.save(`cronograma-${invDetail?.placaVehiculo ?? 'inversion'}.pdf`);
+  const fileName = `cronograma-${invDetail?.placaVehiculo ?? 'inversion'}.pdf`;
+  await guardarOCompartirPdf(doc, fileName);
+}
+
+// En Android/iOS nativos, doc.save() no hace nada porque depende del mecanismo de
+// descarga del navegador (blob + <a download>), que el WebView no maneja. Por eso
+// ahí se escribe el archivo con Filesystem y se abre el diálogo nativo de compartir.
+async function guardarOCompartirPdf(doc: any, fileName: string) {
+  const { Capacitor } = await import('@capacitor/core');
+
+  if (!Capacitor.isNativePlatform()) {
+    doc.save(fileName);
+    return;
+  }
+
+  const { Filesystem, Directory } = await import('@capacitor/filesystem');
+  const { Share } = await import('@capacitor/share');
+
+  const base64Data = doc.output('datauristring').split(',')[1];
+  const written = await Filesystem.writeFile({
+    path: fileName,
+    data: base64Data,
+    directory: Directory.Cache,
+  });
+
+  await Share.share({
+    title: fileName,
+    url: written.uri,
+    dialogTitle: 'Guardar o compartir cronograma',
+  });
 }
 
 async function imageUrlToDataUrl(url: string | null): Promise<string | null> {

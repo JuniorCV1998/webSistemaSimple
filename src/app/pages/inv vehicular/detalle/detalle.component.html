@@ -229,14 +229,14 @@
                 <div class="cuota-hero-info">
                     <span class="cuota-hero-label">Cuota a agregar</span>
                     <span class="cuota-hero-monto">{{currency}} {{ montoPago | formatNumber }}</span>
-                    <span class="cuota-hero-fecha"><i class="pi pi-calendar mr-1"></i>{{ fechaPago | formatDate }}</span>
+                    <span class="cuota-hero-fecha"><i class="pi pi-calendar mr-1"></i>{{ invDetail.proximoPago?.fechaTexto }}</span>
                 </div>
             </div>
 
             <!-- Siguiente cuota, después de esta (informativo, en una sola línea) -->
             <div *ngIf="invDetail.siguientePago" class="siguiente-cuota-preview w-full">
                 <i class="pi pi-arrow-circle-right"></i>
-                <span>Siguiente: Cuota {{ invDetail.siguientePago.nroCuota | twoDigits }} · {{ parseFecha(invDetail.siguientePago.fecha) | formatDate }} · {{currency}} {{ invDetail.siguientePago.montoCuota | formatNumber }}</span>
+                <span>Siguiente: Cuota {{ invDetail.siguientePago.nroCuota | twoDigits }} · {{ invDetail.siguientePago.fechaTexto }} · {{currency}} {{ invDetail.siguientePago.montoCuota | formatNumber }}</span>
             </div>
 
             <div class="flex align-items-center gap-2 mt-2">
@@ -290,7 +290,7 @@
                 <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
                     <div class="txt-label w-6 mb-2">Fecha de pago</div>
                     <div class="w-6 dataConfirm fechas">
-                        {{fechaPago | formatDate}}
+                        {{invDetail.proximoPago?.fechaTexto}}
                     </div>
                 </div>
     

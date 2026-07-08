@@ -17,13 +17,12 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ToastModule } from 'primeng/toast';
 import { TwoDigitsPipe } from '../../../core/pipes/two-digits.pipe';
 import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
-import { FormatDatePipe } from '../../../core/pipes/format-date.pipe';
 
 @Component({
   selector: 'app-detalle',
   standalone: true,
   imports: [CommonModule,SkeletonModule,TabMenuModule,LoadingComponent,ButtonModule,ToastModule,ConfirmDialogModule,
-    FormatNumberPipe, TwoDigitsPipe,FormatDatePipe],
+    FormatNumberPipe, TwoDigitsPipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './detalle.component.html',
   styleUrl: './detalle.component.scss'

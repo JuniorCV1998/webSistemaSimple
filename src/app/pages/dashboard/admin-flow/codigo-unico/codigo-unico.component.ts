@@ -96,7 +96,7 @@ export default class CodigoUnicoComponent {
                 this.urlPlayStore = response[0].descripcion;
             },
             error: err => {
-                this.urlPlayStore = 'https://play.google.com/store/apps/details?id=com.ssimple.app';
+                this.urlPlayStore = 'https://play.google.com/store/apps/details?id=com.ssimplepay.app';
             }
         });
     }
