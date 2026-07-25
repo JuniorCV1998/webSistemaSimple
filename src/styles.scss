@@ -568,6 +568,13 @@ small {}
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
+/* Misma altura que .btn-float, para botones "Siguiente"/CTA que van inline (no fijos al fondo) */
+.btn-tall {
+  border-radius: var(--radius-sm) !important;
+  padding-top: .95rem !important;
+  padding-bottom: .95rem !important;
+}
+
 .btn-float:not(.btn-disabled):active {
   transform: translateX(-50%) scale(0.98);
 }
@@ -586,7 +593,7 @@ input.p-inputtext,
 /* Iconos dentro de inputs (correo, password, etc.) */
 .input-icon-left {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 12px;
   transform: translateY(-50%);
   color: var(--gray-400);
@@ -596,7 +603,7 @@ input.p-inputtext,
 
 .input-icon-right {
   position: absolute;
-  top: 40%;
+  top: 50%;
   right: 12px;
   transform: translateY(-50%);
   cursor: pointer;
