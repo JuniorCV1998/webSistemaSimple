@@ -71,6 +71,10 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
   private pollingHandle: any = null;
   private cuentaRegresivaHandle: any = null;
   private estadoWatchHandle: any = null;
+  /** Evita ticks del polling superpuestos: si el WebView estuvo en segundo plano (ej. el usuario
+   *  fue a WhatsApp a ingresar el código) el navegador puede disparar varios ticks encolados de
+   *  golpe al volver a primer plano, generando llamadas y toasts duplicados. */
+  private pollingEnConsulta: boolean = false;
 
   /* Hora de envío de los recordatorios */
   horaEnvio: string = '09:00';
@@ -319,10 +323,17 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
 
   private iniciarPolling(): void {
     this.detenerPolling();
+    this.pollingEnConsulta = false;
     this.pollingHandle = setInterval(() => {
+      // Si ya hay una consulta en curso o el polling ya se resolvió, ignora este tick
+      // (protege contra ráfagas de ticks encolados al volver del segundo plano).
+      if (this.pollingEnConsulta || !this.vinculando) return;
+      this.pollingEnConsulta = true;
       this.getInversionService.getEstadoWhatsapp().pipe(
-        catchError(() => of(null))
+        catchError(() => of(null)),
+        finalize(() => this.pollingEnConsulta = false)
       ).subscribe((resp: any) => {
+        if (!this.vinculando) return; // ya se resolvió mientras esta respuesta viajaba
         if (resp && resp.data && resp.data.vinculado) {
           this.estadoWhatsapp = resp.data;
           this.vinculando = false;
@@ -362,6 +373,12 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
     const qr = this.estadoWhatsapp.qrCode;
     if (!qr) return;
 
+    const { Capacitor } = await import('@capacitor/core');
+    if (Capacitor.isNativePlatform()) {
+      await this.compartirQrNativo(qr);
+      return;
+    }
+
     try {
       const blob = await (await fetch(qr)).blob();
       const file = new File([blob], 'whatsapp-qr.png', { type: blob.type || 'image/png' });
@@ -375,6 +392,34 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
     }
 
     this.descargarQr(qr);
+  }
+
+  /** En Android/iOS nativos, navigator.share/<a download> no hacen nada porque dependen del
+   *  navegador, que el WebView de Capacitor no tiene. Se escribe el QR como archivo y se abre
+   *  el diálogo nativo de compartir (mismo patrón que cronograma-pdf.util.ts). */
+  private async compartirQrNativo(qr: string): Promise<void> {
+    try {
+      const { Filesystem, Directory } = await import('@capacitor/filesystem');
+      const { Share } = await import('@capacitor/share');
+
+      const base64Data = qr.split(',')[1];
+      const written = await Filesystem.writeFile({
+        path: 'whatsapp-qr.png',
+        data: base64Data,
+        directory: Directory.Cache,
+      });
+
+      await Share.share({
+        title: 'Código QR de WhatsApp',
+        url: written.uri,
+        dialogTitle: 'Compartir código QR',
+      });
+    } catch (err) {
+      this.messageService.add({
+        severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+        detail: 'No se pudo compartir el código QR.', life: 3000
+      });
+    }
   }
 
   private descargarQr(qr: string): void {
