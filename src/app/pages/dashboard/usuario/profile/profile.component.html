@@ -8,8 +8,8 @@
     <div class="user-card mb-2">
         <div class="flex flex-row w-full mb-2 justify-content-between align-items-center">
             <span class="block mb-2">Datos Personales</span>
-            <i *ngIf="!editando" class="pi pi-pencil editar-icon" (click)="toggleEditar()"></i>
-            <i *ngIf="editando" class="pi pi-times editar-icon" (click)="toggleEditar()"></i>
+            <i *ngIf="!editando && perfil!=='CLI'" class="pi pi-pencil editar-icon" (click)="toggleEditar()"></i>
+            <i *ngIf="editando && perfil!=='CLI'" class="pi pi-times editar-icon" (click)="toggleEditar()"></i>
         </div>
         <div class="user-header">
             <div class="user-avatar">

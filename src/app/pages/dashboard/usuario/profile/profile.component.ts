@@ -105,6 +105,7 @@ export default class ProfileComponent {
   /* EDICIÓN DE DATOS PROPIOS */
 
   toggleEditar(): void {
+    if (this.perfil === 'CLI') return; // Solo el inversor puede editar sus propios datos, el cliente no.
     if (!this.editando) {
       this.formEdit.celular = this.usuarioData?.persona?.celular || '';
       this.formEdit.direccion = this.usuarioData?.persona?.direccion || '';
@@ -140,7 +141,7 @@ export default class ProfileComponent {
   }
 
   guardarDatos(): void {
-    if (!this.puedeGuardar) return;
+    if (this.perfil === 'CLI' || !this.puedeGuardar) return;
 
     const body: { celular?: string; direccion?: string; contrasena?: string } = {};
     const celularActual = (this.usuarioData?.persona?.celular || '').replace(/\s+/g, '');

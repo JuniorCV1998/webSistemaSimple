@@ -1,85 +1,43 @@
+/* SALUDO */
+.home-header {
+    padding: 4px 2px;
+}
 
-
-/* Estilo para el nombre y presentacion del usuario*/
-.label-nombre{
-    background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-    -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-    background-clip: text; /* Aplicar el fondo degradado al texto */
-    -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+.greeting {
+    background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-weight: 700;
-  }
+    font-size: 1.5rem;
+    line-height: 1.3;
+}
 
-  .custom-banner-active {
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 0px;                   /* Espacio alrededor de cada banner */
-    padding: 10px;                  /* Espacio dentro de cada banner */
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 300px;
-    align-items: center;
-  }
-
-  .custom-banner-passive {
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 0px;                   /* Espacio alrededor de cada banner */
-    padding: 10px;                  /* Espacio dentro de cada banner */
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2); 
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 300px;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* Estilo de los elementos */
-  .span-nro-inv{
-    font-size: .8rem;
-    text-align: left;
-    color: var(--primary-500);
-  }
-  .span-nro-inv-culm{
-    font-size: .8rem;
-    text-align: left;
+.subtitle {
     color: var(--gray-500);
-  }
-  .span-monto{
+    font-weight: 500;
+    font-size: .85rem;
+}
+
+.refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: var(--blue-50);
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.refresh-btn i {
+    color: var(--blue-500);
     font-size: 1rem;
-    text-align: left;
-    font-weight: 800;
-  }
-  .span-fecha-creacion{
-    font-size: .8rem;
-    text-align: left;
-  }
+    font-weight: 600;
+    display: inline-block; /* Necesario para que la animación funcione correctamente */
+}
 
-  .span-cuotas{
-    font-size: .8rem;
-    text-align: left;
-  }
-  .linea-bottom{
-    border-bottom: 1px solid var(--gray-400);
-    opacity: .4;
-  }
-
-  /* Estilo de los iconos */
-  .pi-inv-off{
-    color: var(--primary-500);
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
-  .pi-inv-on{
-    color: var(--gray-400);
-    font-size: 1.2rem;
-    font-weight: 500;
-  }
 /* Define la animación */
 @keyframes girar {
     from {
@@ -91,17 +49,8 @@
 }
 
 /* Clase que activa la animación */
-.girar {
+.girar i {
     animation: girar 1s ease forwards; /* Gira en 1 segundo */
-}
-
-/* Icono actualizar cliente */
-.pi-sync {
-    color: var(--blue-400);
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-right: 1rem;
-    display: inline-block; /* Necesario para que la animación funcione correctamente */
 }
 
 /* Título de sección (Préstamos / Financiamiento vehicular) */
@@ -113,15 +62,99 @@
 }
 
 .link-ver-todos {
-    color: var(--blue-400);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--blue-500);
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
+}
+
+.link-ver-todos i {
+    font-size: .65rem;
+}
+
+/* Tarjetas de préstamos */
+.prestamo-card {
+    background: #fff;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+    padding: 12px 14px;
+    cursor: pointer;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.status-dot-on {
+    background: var(--primary-500);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-500) 18%, transparent);
+}
+
+.status-dot-off {
+    background: var(--gray-400);
+}
+
+.span-nro-inv {
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--gray-600);
+}
+
+.span-monto {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--gray-700);
+}
+
+.span-cuotas-label {
+    font-size: .7rem;
+    color: var(--gray-500);
+    font-weight: 600;
+}
+
+.span-cuotas-value {
+    font-size: .8rem;
+    color: var(--gray-700);
+}
+
+.prestamo-divider {
+    border-bottom: 1px solid var(--gray-100);
+    margin: 8px 0;
+}
+
+.prestamo-chevron {
+    color: var(--gray-300);
+    font-size: .85rem;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+/* Estado vacío */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: var(--gray-50);
+    border: 2px dashed var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 22px 16px;
+}
+
+.empty-state-icon {
+    font-size: 1.6rem;
+    color: var(--gray-300);
 }
 
 .span-empty {
     color: var(--gray-500);
-    font-size: 12px;
+    font-size: 12.5px;
     text-align: center;
 }
 
@@ -140,25 +173,38 @@
     mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent 100%);
 }
 
-/* Tarjetas de financiamiento vehicular (mismo estilo que src/app/pages/inv vehicular/inicio) */
-.custom-banner-1 {
-    flex: 1;
-    padding: 15px;
+/* Tarjetas de financiamiento vehicular */
+.vehicular-card {
     background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);
-    border-radius: 8px;
-    min-width: 30px;
-    align-items: center;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+    padding: 12px 14px;
     cursor: pointer;
 }
 
-.custom-banner-1 .pi-car {
-    color: var(--gray-200);
-    font-size: 35px;
+.vehicular-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--primary-50);
+    flex-shrink: 0;
 }
 
-.custom-banner-1 .color1 {
+.vehicular-icon i {
+    color: var(--primary-500);
+    font-size: 1.3rem;
+}
+
+.vehicular-chevron {
+    color: var(--gray-300);
+    font-size: .85rem;
+    flex-shrink: 0;
+}
+
+.color1 {
     height: 8px;
     border-top: solid 1px var(--gray-300);
     border-left: solid 1px var(--gray-300);
@@ -167,7 +213,7 @@
     border-bottom-left-radius: 15px;
 }
 
-.custom-banner-1 .color2 {
+.color2 {
     height: 8px;
     border-top: solid 1px var(--gray-300);
     border-right: solid 1px var(--gray-300);
@@ -176,18 +222,9 @@
     border-bottom-right-radius: 15px;
 }
 
-.custom-banner-1 .span-nombre {
-    font-weight: 500;
-    color: black;
-    font-size: 15px;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.custom-banner-1 .span-desc {
-    color: var(--gray-500);
+.span-nombre {
+    font-weight: 600;
+    color: var(--gray-700);
     font-size: 14px;
     text-align: left;
     white-space: nowrap;
@@ -195,13 +232,20 @@
     text-overflow: ellipsis;
 }
 
-.custom-banner-1 .span-fecha {
-    color: rgb(67, 67, 67);
-    font-size: 12px;
+.span-desc {
+    color: var(--gray-500);
+    font-size: 13px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-
+.span-fecha {
+    color: var(--gray-500);
+    font-size: 11px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
