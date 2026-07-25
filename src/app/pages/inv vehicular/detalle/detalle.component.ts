@@ -41,6 +41,9 @@ export default class DetalleComponent {
   fechaPago: Date = new Date();
   montoPago: any = null;
   perfil: string = '';
+  /* Evita que dos taps rápidos en "+" disparen dos registros con la misma cuota/fecha
+     antes de que invDetail.proximoPago se refresque con el pago recién insertado. */
+  registrandoCuota: boolean = false;
 
   currency: string | null = null;
   
@@ -81,6 +84,9 @@ export default class DetalleComponent {
         finalize(() => {
           this.loadingComponent.hide();
           this.isLoading = false; // Cambia a falso cuando termine
+          // Recién aquí invDetail.proximoPago queda actualizado: liberar el flag antes
+          // dejaría abierta la ventana para leer la cuota/fecha ya registrada.
+          this.registrandoCuota = false;
         }),
           // Manejamos errores de respuesta HTTP con catchError
           catchError((error) => {
@@ -155,6 +161,9 @@ confirmCerrarInv(): Promise<boolean> {
   }
 
   agregarCuota(){
+    if (this.registrandoCuota) return; // ya hay un registro de cuota en curso: ignorar el tap repetido
+    this.registrandoCuota = true;
+
     const proximo = this.invDetail?.proximoPago;
     this.montoPago = proximo?.montoCuota ?? null;
     this.fechaPago = proximo?.fecha ? this.parseFecha(proximo.fecha) : new Date();
@@ -164,10 +173,13 @@ confirmCerrarInv(): Promise<boolean> {
                 if(confirm){
                     /* Servicio de insertar pago */
                     this.insertPayService();
-                } 
+                } else {
+                    this.registrandoCuota = false; // canceló la confirmación: liberar
+                }
             });
+        } else {
+            this.registrandoCuota = false; // canceló el primer modal: liberar
         }
-        
     });
   }
 
@@ -179,6 +191,7 @@ confirmCerrarInv(): Promise<boolean> {
         }),
         // Manejamos errores de respuesta HTTP con catchError
         catchError((error) => {
+        this.registrandoCuota = false; // el pago no se registró: liberar para permitir reintentar
         // Aquí manejamos los diferentes errores HTTP (400, 500, etc.)
         if (error.status === 400) this.show(error.error.descripcion, Constantes.MSG_H_400, false); // Mensaje para 400
         else if (error.status === 403) this.show(error.error.descripcion, Constantes.MSG_H_403, false);
@@ -187,7 +200,7 @@ confirmCerrarInv(): Promise<boolean> {
             return of(null);
         })
     ).
-    subscribe((resp: any)=> { 
+    subscribe((resp: any)=> {
         if(resp.codigo==Constantes.STATUS_SUCCESS_RI) {
             let toasTemp = {
                 severity: 'success',
@@ -196,7 +209,11 @@ confirmCerrarInv(): Promise<boolean> {
                 life: 3000
             };
             this.messageService.add(toasTemp);
+            // registrandoCuota se libera dentro de getInversionesDetailVeh() una vez que
+            // invDetail.proximoPago quede actualizado con la cuota realmente pendiente.
             this.getInversionesDetailVeh();
+        } else {
+            this.registrandoCuota = false;
         }
     }
 );
@@ -228,8 +245,7 @@ confirmCerrarInv(): Promise<boolean> {
                 resolve(true);  // Resuelve la promesa con "true" si acepta
             },
             reject: () => {
-                this.agregarCuota();
-                //resolve(false); // Resuelve la promesa con "false" si rechaza
+                resolve(false); // Resuelve la promesa con "false" si rechaza
             }
         });
     });

@@ -1,66 +1,178 @@
+/* Encabezado con acceso a configurar recordatorios WhatsApp */
+.header-row {
+    position: relative;
+}
+
+.whatsapp-config-btn {
+    position: absolute;
+    top: -2px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: none;
+    background: #e9fbf1;
+    color: #25d366;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform .12s ease;
+}
+
+.whatsapp-config-btn:active {
+    transform: scale(0.92);
+}
+
+.whatsapp-badge {
+    color: #25d366;
+    font-size: .85rem;
+}
+
 /* Estilo para la lista */
 .custom-banner-detail-body {
-    flex: 1;
-    /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 5px;
-    /* Espacio alrededor de cada banner */
-    padding: 12px;
+    width: 100%;
+    padding: 12px 14px;
     background: #fff;
-    box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-card);
     color: var(--gray-500);
-    /* Color del texto del banner */
-    text-align: center;
-    /* Centra el texto dentro del banner */
-    border-radius: 8px;
-    /* Bordes redondeados */
-    min-width: 30px;
+    text-align: left;
+    border-radius: var(--radius-sm);
     align-items: center;
     height: auto;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
 }
 
-.span-body-desc {
-    color: var(--gray-500);
-    font-size: 13px;
+.custom-banner-detail-body:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px -4px rgba(16, 24, 40, 0.18);
+}
+
+.span-body-name {
+    color: var(--gray-700);
+    font-size: 13.5px;
+    font-weight: 600;
     text-align: left;
     white-space: nowrap;
-    /* Evita el salto de línea */
     overflow: hidden;
-    /* Oculta el texto que sobrepasa el ancho */
     text-overflow: ellipsis;
-    /* Agrega los "..." cuando el texto es muy largo */
 }
 
-/* Estilo tabla diario */
-.table-diario,
-.table-semanal {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-diario th,
-.table-diario td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
-}
-
-.table-diario th,
-.table-semanal th {
-    /* background-color: #f2f2f2; */
-    font-size: 15px;
+.span-body-amount {
     color: var(--primary-500);
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Inversión con cuotas atrasadas: único acento, minimalista, sobre el propio monto */
+.span-body-amount.span-body-amount-leve {
+    color: var(--orange-500);
+}
+
+.span-body-amount.span-body-amount-severo {
+    color: var(--red-500);
+}
+
+.min-w-0 {
+    min-width: 0;
+}
+
+/* Pill de cuotas pagadas */
+.cuota-pill {
+    display: inline-block;
+    width: fit-content;
+    font-size: 11px;
     font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
 }
 
-.copy-txt {
+.cuota-pill-pending {
+    background: var(--gray-100);
+    color: var(--gray-500);
+}
+
+.cuota-pill-ok {
+    background: var(--primary-50, #ecfdf5);
+    color: var(--primary-500);
+}
+
+/* Encabezados de sección (Diario / Semanal) */
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gray-700);
+}
+
+.section-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.section-icon i {
+    font-size: .85rem;
+}
+
+.section-icon-diario {
+    background: var(--primary-50, #ecfdf5);
+}
+
+.section-icon-diario i {
+    color: var(--primary-500);
+}
+
+.section-icon-semanal {
+    background: var(--blue-50, #eff6ff);
+}
+
+.section-icon-semanal i {
+    color: var(--blue-500);
+}
+
+.info-icon {
+    font-size: .95rem;
+    color: var(--blue-500);
+    cursor: pointer;
+}
+
+.info-icon-light {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* Botón "Copiar" */
+.copy-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    padding: 4px 6px;
+    color: var(--gray-500);
     font-size: 13px;
-    color: var(--gray-500);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color .15s ease;
 }
 
-.pi-clone {
+.copy-chip:active {
+    background: var(--gray-100);
+}
+
+.copy-chip i {
     font-size: .9rem;
-    color: var(--gray-500);
+}
+
+.total-chip {
+    font-size: 13px;
+    color: var(--gray-600);
 }
 
 ::ng-deep .card .p-element {
@@ -93,59 +205,52 @@
     padding: 0 !important;
 }
 
-.txt-actualizado {
-    color: var(--gray-500);
-}
-
-.txt-actualizado-v {
-    color: var(--primary-500);
-    font-weight: 600;
-}
-
-.table-diario tr:nth-child(even),
-.table-semanal tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.table-diario tr:hover,
-.table-semanal tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Estilo tabla semanal */
-.table-semanal th,
-.table-semanal td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px;
-}
-
-/* Estilo de etiquetas */
-.nroInv {
-    color: var(--blue-500);
-    font-size: 12px;
-    font-weight: 500;
-}
-
 .proxima-fecha {
     display: inline-block;
     white-space: nowrap;
-    padding: 4px;
+    padding: 3px 7px;
     background: var(--primary-100);
     color: var(--primary-800);
-    border-radius: 5px;
+    border-radius: 999px;
     font-size: 11px;
+    font-weight: 600;
 }
 
+/* Tarjeta hero "Monto recaudado" */
 .amount-rec {
-    padding: 8px;
-    border: 1px solid var(--gray-300);
-    border-radius: 5px;
-    font-size: 14px;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--primary-500), var(--blue-500));
+    box-shadow: var(--shadow-card);
+    color: #fff;
 }
 
-.pi-wallet,
+.amount-rec-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.amount-rec-icon .pi-wallet {
+    color: #fff;
+    font-size: 1rem;
+}
+
+.amount-rec-label {
+    font-weight: 600;
+    font-size: 13.5px;
+}
+
+.amount-rec-value {
+    font-weight: 700;
+    font-size: 15px;
+}
+
 .pi-money-bill {
     color: var(--primary-500);
     font-size: 1.1rem;
@@ -165,49 +270,32 @@
 }
 
 
-/* Estilo para el boton ver mas / ver menos */
-.futuristic-button {
-    background-color: #609af8;
-    /* Color de fondo */
-    color: white;
-    /* Color del texto */
+/* Botón ver más / ver menos */
+.ver-mas-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-50, #ecfdf5);
+    color: var(--primary-500);
     border: none;
-    /* Sin borde */
-    border-radius: 5px;
-    /* Bordes redondeados */
-    padding: 6px 12px;
-    /* Espaciado interno reducido */
-    font-size: 12px;
-    /* Tamaño de fuente más pequeño */
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 12.5px;
+    font-weight: 600;
     cursor: pointer;
-    /* Cambia el cursor al pasar el mouse */
-    transition: all 0.3s;
-    /* Transiciones suaves */
-    box-shadow: 0 3px 8px rgba(96, 154, 248, 0.5);
-    /* Sombra */
-    outline: none;
-    /* Sin contorno al hacer clic */
+    transition: transform .12s ease, background-color .15s ease;
 }
 
-.futuristic-button:hover {
-    background-color: #14b8a6;
-    /* Color de fondo al pasar el mouse */
-    box-shadow: 0 5px 12px rgba(20, 184, 166, 0.5);
-    /* Sombra más intensa */
+.ver-mas-btn:active {
+    transform: scale(0.96);
+    background: var(--primary-100);
 }
 
-.futuristic-button:active {
-    transform: translateY(1px);
-    /* Efecto al hacer clic */
-    box-shadow: 0 2px 6px rgba(20, 184, 166, 0.5);
-    /* Sombra más pequeña */
+.ver-mas-btn i {
+    font-size: .75rem;
 }
 
 /* Estilos para el modal de monto recaudado, mas historial de montos diarios */
-.pi-question-circle {
-    font-size: .9rem;
-    color: var(--blue-500);
-}
 .link-cobros-diarios{
     font-size: 15px;
     font-weight: 500;

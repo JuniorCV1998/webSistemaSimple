@@ -66,7 +66,7 @@ export class InicioComponent {
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
-    this.clearSessionStorageExcept(['token', 'codTipoDoc', 'nombreComercial', 'razonSocial', 'pathLogo', 'pathSello']);
+    this.clearSessionStorageExcept(['token', 'codTipoDoc', 'nombreComercial', 'razonSocial', 'pathLogo', 'pathSello', 'contrasenaSesion']);
 
   }
 

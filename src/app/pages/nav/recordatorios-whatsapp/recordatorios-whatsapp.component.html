@@ -1,0 +1,233 @@
+<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+    <div class="text-center mb-3">
+        <div class="text-2xl mb-2 label-title">Recordatorios WhatsApp</div>
+        <p class="intro-text">Activa el envío automático de un recordatorio por WhatsApp a tus clientes con número
+            registrado.</p>
+    </div>
+
+    <!-- Vinculación de WhatsApp -->
+    <div class="whatsapp-status-card mb-3">
+        <div class="flex flex-row align-items-center justify-content-between gap-2" *ngIf="!vinculando">
+            <div class="flex align-items-center gap-2">
+                <span class="status-dot" [ngClass]="estadoWhatsapp.vinculado ? 'status-dot-on' : 'status-dot-off'"></span>
+                <span class="status-text">
+                    {{ estadoWhatsapp.vinculado
+                        ? (estadoWhatsapp.numeroVinculado ? ('Vinculado con ' + formatNumeroVinculado(estadoWhatsapp.numeroVinculado)) : 'WhatsApp vinculado')
+                        : 'WhatsApp no vinculado' }}
+                </span>
+            </div>
+            <button *ngIf="!estadoWhatsapp.vinculado" type="button" class="link-btn"
+                [disabled]="iniciandoVinculacion" (click)="vincularWhatsapp()">
+                Vincular
+            </button>
+            <button *ngIf="estadoWhatsapp.vinculado" type="button" class="link-btn link-btn-danger"
+                [disabled]="desvinculando" (click)="desvincularWhatsapp()">
+                Desvincular
+            </button>
+        </div>
+
+        <div *ngIf="!vinculando && !estadoWhatsapp.vinculado" class="numero-vincular-row">
+            <i class="pi pi-phone numero-vincular-icon"></i>
+            <span class="numero-vincular-prefijo">+51</span>
+            <input type="text" [(ngModel)]="numeroParaVincular" [ngModelOptions]="{standalone: true}" appNroCelular
+                maxlength="11" [disabled]="iniciandoVinculacion" placeholder="9** *** *** (opcional)"
+                class="numero-vincular-input" />
+        </div>
+
+        <div class="flex flex-column align-items-center gap-2 py-2" *ngIf="vinculando">
+            <span class="status-text">Vincula tu WhatsApp con una de estas opciones</span>
+
+            <img *ngIf="estadoWhatsapp.qrCode" [src]="estadoWhatsapp.qrCode" alt="Código QR de WhatsApp"
+                class="qr-image" />
+
+            <div *ngIf="estadoWhatsapp.qrCode && estadoWhatsapp.pairingCode" class="qr-divider">
+                <span>o</span>
+            </div>
+
+            <div *ngIf="estadoWhatsapp.pairingCode" class="pairing-code-box">
+                <span class="pairing-code-label">Código de vinculación</span>
+                <span class="pairing-code-value">{{estadoWhatsapp.pairingCode}}</span>
+                <span class="pairing-code-hint">En WhatsApp: Ajustes → Dispositivos vinculados → Vincular con
+                    número de teléfono</span>
+                <button type="button" class="link-btn" (click)="copiarPairingCode()">
+                    <i class="pi pi-copy"></i> Copiar código
+                </button>
+            </div>
+
+            <span class="qr-countdown">Expira en {{segundosRestantesQr}}s</span>
+
+            <div *ngIf="estadoWhatsapp.qrCode" class="same-device-hint">
+                <i class="pi pi-info-circle"></i>
+                <span *ngIf="estadoWhatsapp.pairingCode">¿Usas este mismo celular para WhatsApp? Usa mejor el
+                    código de arriba: se ingresa directamente en tu WhatsApp, sin necesitar otro dispositivo.</span>
+                <span *ngIf="!estadoWhatsapp.pairingCode">¿Usas este mismo celular para WhatsApp? No podrás
+                    escanear su propia pantalla. Comparte o descarga esta imagen y ábrela en otro dispositivo (PC,
+                    tablet u otro celular) para escanearla con la cámara de WhatsApp de tu teléfono.</span>
+            </div>
+            <button *ngIf="estadoWhatsapp.qrCode" type="button" class="link-btn" (click)="compartirEnlace()">
+                <i class="pi pi-share-alt"></i>
+                Compartir código QR
+            </button>
+        </div>
+    </div>
+
+    <!-- Hora de envío -->
+    <div class="whatsapp-status-card mb-3">
+        <div class="flex flex-row align-items-center justify-content-start gap-3 flex-nowrap hora-row">
+            <span class="status-text hora-label flex-shrink-0">
+                <!-- <i class="pi pi-clock hora-icon"></i> --> Hora de envío
+            </span>
+            <div class="flex align-items-center gap-1 flex-shrink-0">
+                <p-calendar [(ngModel)]="horaSeleccionada" [ngModelOptions]="{standalone: true}" [timeOnly]="true"
+                    [hourFormat]="'12'" [showIcon]="true" iconDisplay="input" inputId="horaEnvioPicker"
+                    styleClass="hora-calendar">
+                    <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                        <i class="pi pi-clock hora-icon" (click)="clickCallBack($event)"></i>
+                    </ng-template>
+                </p-calendar>
+                <button type="button" class="link-btn flex-shrink-0" [disabled]="!horaCambiada || guardandoHora"
+                    (click)="guardarHoraEnvio()">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje personalizado -->
+    <div class="mensaje-accordion-wrap mb-3">
+        <p-accordion styleClass="mensaje-accordion" expandIcon="pi pi-chevron-down" collapseIcon="pi pi-chevron-up">
+            <p-accordion-panel value="mensaje">
+                <p-accordion-header>
+                    <span class="status-text">Mensaje del recordatorio</span>
+                </p-accordion-header>
+                <p-accordion-content>
+                    <div class="flex flex-column gap-2">
+                        <textarea pTextarea [(ngModel)]="mensajeEditado" [ngModelOptions]="{standalone: true}"
+                            [maxlength]="mensajeMaxLength" rows="3" class="mensaje-textarea"
+                            placeholder="Escribe el mensaje que recibirán tus clientes"></textarea>
+                        <div class="flex align-items-center justify-content-between gap-2">
+                            <span class="mensaje-hint">Usa <strong>{{ '{nombre}' }}</strong> para incluir el nombre
+                                del cliente.</span>
+                            <span
+                                class="mensaje-counter flex-shrink-0">{{mensajeEditado.length}}/{{mensajeMaxLength}}</span>
+                        </div>
+                        <button type="button" class="link-btn align-self-end"
+                            [disabled]="!mensajeCambiado || !mensajeEditado.trim() || guardandoMensaje"
+                            (click)="guardarMensaje()">
+                            Guardar
+                        </button>
+                    </div>
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    </div>
+
+    <div class="search-box mb-3">
+        <i class="pi pi-search search-icon"></i>
+        <input type="text" [(ngModel)]="filtroTexto" [ngModelOptions]="{standalone: true}"
+            placeholder="Buscar cliente por nombre o N° inversión" class="search-input" />
+        <i *ngIf="filtroTexto" class="pi pi-times-circle search-clear" (click)="filtroTexto=''"></i>
+    </div>
+
+    <p-tabview styleClass="recordatorios-tabview">
+        <p-tabPanel header="Diario" leftIcon="pi pi-calendar">
+            <div class="rule-banner">
+                <i class="pi pi-info-circle"></i>
+                <span>Se envía el mismo día de la cuota, si el cliente aún no ha pagado.</span>
+            </div>
+
+            <div class="flex flex-column w-full gap-2" *ngIf="listaDiarioFiltrada.length > 0">
+                <ng-container *ngFor="let item of listaDiarioFiltrada">
+                    <ng-container *ngTemplateOutlet="filaRecordatorio; context: { item: item }"></ng-container>
+                </ng-container>
+            </div>
+            <div *ngIf="listaDiarioFiltrada.length == 0" class="mb-3">
+                <app-list-empty-none></app-list-empty-none>
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Semanal" leftIcon="pi pi-refresh">
+            <div class="rule-banner">
+                <i class="pi pi-info-circle"></i>
+                <span>Se envía un día antes y el mismo día de la cuota.</span>
+            </div>
+
+            <div class="flex flex-column w-full gap-2" *ngIf="listaSemanalFiltrada.length > 0">
+                <ng-container *ngFor="let item of listaSemanalFiltrada">
+                    <ng-container *ngTemplateOutlet="filaRecordatorio; context: { item: item }"></ng-container>
+                </ng-container>
+            </div>
+            <div *ngIf="listaSemanalFiltrada.length == 0" class="mb-3">
+                <app-list-empty-none></app-list-empty-none>
+            </div>
+        </p-tabPanel>
+    </p-tabview>
+
+    <!-- Fila de cliente reutilizada en ambas pestañas -->
+    <ng-template #filaRecordatorio let-item="item">
+        <div class="recordatorio-card">
+            <div class="flex flex-row justify-content-between align-items-center w-full gap-2">
+                <div class="flex flex-column flex-1 min-w-0">
+                    <span class="span-body-name">{{item.fullName}}</span>
+                    <div class="flex align-items-center gap-2 mt-1 flex-wrap">
+                        <span class="nro-pill">N° {{item.nroInversion}}</span>
+                        <span class="celular-text" *ngIf="item.celular; else sinCelular">
+                            <i class="pi pi-phone"></i> {{item.celular}}
+                        </span>
+                        <ng-template #sinCelular>
+                            <span class="sin-celular-text">Sin número registrado</span>
+                        </ng-template>
+                    </div>
+                </div>
+                <p-toggleswitch [(ngModel)]="item.recordatorioActivo" [ngModelOptions]="{standalone: true}"
+                    [disabled]="!item.celular" (ngModelChange)="onToggle(item)">
+                    <ng-template #handle let-checked="checked">
+                        <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                    </ng-template>
+                </p-toggleswitch>
+            </div>
+        </div>
+    </ng-template>
+
+    <div style="height: 70px;"></div>
+
+    <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="mb-1 btn-float"></button>
+</div>
+
+<app-loading></app-loading>
+
+<div class="toast">
+    <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
+</div>
+
+<p-confirmDialog #desvincular_whatsapp key="desvincular_whatsapp">
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div class="border-circle confirm-icon-danger inline-flex justify-content-center align-items-center h-4rem w-4rem">
+                <i class="pi pi-ban"></i>
+            </div>
+            <span class="font-bold mb-2 mt-3 txt-red">
+                {{ message.header }}
+            </span>
+            <span class="flex flex-column gap-2 mb-3 txt-label">
+                <strong>{{ message.message }}</strong>
+                <span>Dejarás de enviar recordatorios automáticos hasta que vincules nuevamente.</span>
+            </span>
+            <div class="flex align-items-center gap-2 mt-4">
+                <button
+                    pButton
+                    label="Cancelar"
+                    (click)="onReject()"
+                    class="p-button-outlined w-8rem ">
+                </button>
+                <button
+                    severity="danger"
+                    pButton
+                    label="Desvincular"
+                    (click)="onAccept()"
+                    class=" w-8rem">
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>

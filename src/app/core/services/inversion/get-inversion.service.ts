@@ -86,4 +86,56 @@ export class GetInversionService {
     return this.http.get(this.baseUrl + this.baseComponent + 'getReporteRentabilidad', { params });
   }
 
+  /* Recordatorios automáticos de pago por WhatsApp */
+
+  getRecordatoriosWhatsapp() {
+    return this.http.get(this.baseUrl + this.baseComponent + 'getRecordatoriosWhatsapp');
+  }
+
+  actualizarRecordatorioWhatsapp(idInversion: number, activar: boolean) {
+    const params = new HttpParams()
+      .set('idInversion', Number(idInversion))
+      .set('activar', activar);
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarRecordatorioWhatsapp', null, { params });
+  }
+
+  /** Consulta si el inversor ya vinculó su WhatsApp. No genera QR: para usar en polling. */
+  getEstadoWhatsapp() {
+    return this.http.get(this.baseUrl + this.baseComponent + 'getEstadoWhatsapp');
+  }
+
+  /**
+   * Inicia/retoma la vinculación. Devuelve un QR si aún no está conectado.
+   * "numero" es opcional: solo tiene efecto la primera vez que el inversor vincula
+   * (cuando aún no existe ninguna instancia); en ese caso también devuelve un pairingCode.
+   */
+  vincularWhatsapp(numero?: string) {
+    let params = new HttpParams();
+    if (numero) params = params.set('numero', numero);
+    return this.http.post(this.baseUrl + this.baseComponent + 'vincularWhatsapp', null, { params });
+  }
+
+  /** Cierra la sesión de WhatsApp vinculada (elimina la instancia en Evolution API y marca whatsappEstado='N'). */
+  desvincularWhatsapp() {
+    return this.http.post(this.baseUrl + this.baseComponent + 'desvincularWhatsapp', null);
+  }
+
+  getConfiguracionWhatsapp() {
+    return this.http.get(this.baseUrl + this.baseComponent + 'getConfiguracionWhatsapp');
+  }
+
+  actualizarHoraEnvioWhatsapp(hora: string) {
+    const params = new HttpParams()
+      .set('hora', hora);
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarHoraEnvioWhatsapp', null, { params });
+  }
+
+  /** Guarda el mensaje personalizado del recordatorio. Puede incluir "{nombre}", que el backend
+   *  reemplaza por el nombre del cliente al momento de enviar. Máximo 500 caracteres. */
+  actualizarMensajeWhatsapp(mensaje: string) {
+    const params = new HttpParams()
+      .set('mensaje', mensaje);
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarMensajeWhatsapp', null, { params });
+  }
+
 }

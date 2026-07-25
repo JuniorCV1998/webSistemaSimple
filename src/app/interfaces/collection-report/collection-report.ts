@@ -8,6 +8,7 @@ export interface ObjReporteDiario {
     nroCuotas: number;
     actualizado: number;
     ctasAtrasadas: number;
+    recordatorioActivo?: boolean;
 }
 
 export interface ObjReporteSemanal {
@@ -21,6 +22,7 @@ export interface ObjReporteSemanal {
     cuotasPendientes?: number;
     ctasAtrasadas: number;
     ctasPagadas: number;
+    recordatorioActivo?: boolean;
 }
 
 export interface ReportDiario {

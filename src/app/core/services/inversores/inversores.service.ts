@@ -31,6 +31,13 @@ export class InversoresService {
     return this.http.get(this.baseUrl + this.baseComponent + 'getInversionesCliente', { params });
   }
 
+  /** Actualiza celular, dirección y/o contraseña de un cliente. Enviar solo los campos que cambiaron. */
+  actualizarCliente(idUsuario: number, body: { celular?: string; direccion?: string; contrasena?: string }) {
+    const params = new HttpParams()
+      .set('idUsuario', Number(idUsuario));
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarCliente', body, { params });
+  }
+
   /* Configuracion */
   getConfiguracionInv() {
     return this.http.get(this.baseUrl + this.baseComponent + 'configuration-inv');

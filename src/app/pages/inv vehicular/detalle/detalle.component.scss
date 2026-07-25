@@ -1,3 +1,8 @@
+.icon-disabled {
+    opacity: .4;
+    pointer-events: none;
+}
+
 .color1{
     height: 12px;
     border-top: solid 1px var(--gray-300);

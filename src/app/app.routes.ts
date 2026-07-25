@@ -92,6 +92,12 @@ export const routes: Routes = [
         loadComponent: () => import('././pages/dashboard/inversion/reporte-cobranza/reporte-cobranza.component'),
         data: { profiles: [Constantes.PERFIL_INV] }
     },
+    {
+        path: 'reporte/recordatorios-whatsapp',
+        canActivate: [authGuard],
+        loadComponent: () => import('././pages/nav/recordatorios-whatsapp/recordatorios-whatsapp.component'),
+        data: { profiles: [Constantes.PERFIL_INV] }
+    },
 
     {
         path: 'reporte/rentabilidad',

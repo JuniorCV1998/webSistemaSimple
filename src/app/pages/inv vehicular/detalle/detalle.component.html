@@ -95,7 +95,8 @@
         <div *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" class="line-right"></div>
         <div *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" class="flex flex-column w-2 justify-content-center align-items-center" >
             <div class="flex flex-row justify-content-center w-full">
-                <i class="pi pi-plus-circle icon-span" (click)="agregarCuota()"></i>
+                <i class="pi pi-plus-circle icon-span" [class.icon-disabled]="registrandoCuota"
+                    (click)="agregarCuota()"></i>
             </div>
         </div>
     </div>

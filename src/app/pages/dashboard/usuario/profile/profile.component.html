@@ -6,8 +6,10 @@
 
     <!-- Datos Personales -->
     <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2">
+        <div class="flex flex-row w-full mb-2 justify-content-between align-items-center">
             <span class="block mb-2">Datos Personales</span>
+            <i *ngIf="!editando" class="pi pi-pencil editar-icon" (click)="toggleEditar()"></i>
+            <i *ngIf="editando" class="pi pi-times editar-icon" (click)="toggleEditar()"></i>
         </div>
         <div class="user-header">
             <div class="user-avatar">
@@ -34,7 +36,7 @@
             </div>
         </div>
 
-        <div class="flex flex-column gap-2 user-info ">
+        <div *ngIf="!editando" class="flex flex-column gap-2 user-info ">
             <div class="flex flex-row justify-content-start align-items-center gap-2">
                 <i class="pi pi-phone icon-span-gray"></i>
                 <span
@@ -45,6 +47,24 @@
                 <span class="text-gray-500 font-medium line-height-3 w-full">{{usuarioData?.persona?.direccion}}</span>
             </div>
         </div>
+
+        <div *ngIf="editando" class="flex flex-column gap-2 edit-panel">
+            <label class="edit-label">Celular</label>
+            <div class="relative w-full">
+                <i class="pi pi-phone input-icon-left"></i>
+                <input [(ngModel)]="formEdit.celular" [ngModelOptions]="{standalone: true}" appNroCelular
+                    maxlength="11" placeholder="9** *** ***" pInputText class="w-full input-with-icon">
+            </div>
+            <small *ngIf="!celularValido" class="input-fail"><i class="pi pi-info-circle"></i> El celular debe tener
+                9 dígitos.</small>
+
+            <label class="edit-label mt-2">Dirección</label>
+            <div class="relative w-full">
+                <i class="pi pi-map-marker input-icon-left"></i>
+                <input [(ngModel)]="formEdit.direccion" [ngModelOptions]="{standalone: true}"
+                    placeholder="Dirección" pInputText class="w-full input-with-icon">
+            </div>
+        </div>
     </div>
 
     <!-- Datos de la Cuenta -->
@@ -53,7 +73,7 @@
             <span class="block mb-2">Datos de la Cuenta</span>
         </div>
 
-        <div class="flex flex-column gap-2 user-info ">
+        <div *ngIf="!editando" class="flex flex-column gap-2 user-info ">
             <div class="flex flex-row justify-content-between align-items-center gap-2">
                 <!-- <i class="pi pi-phone icon-span-gray"></i> -->
                 <label class="w-6 text-gray-500 font-medium line-height-3 w-full">Código Único</label>
@@ -76,6 +96,26 @@
                 </div>
                 <span
                     class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.fechaRegistro}}</span>
+            </div>
+        </div>
+
+        <div *ngIf="editando" class="flex flex-column gap-2 edit-panel">
+            <label class="edit-label">Nueva contraseña (opcional)</label>
+            <div class="relative w-full">
+                <i class="pi pi-lock input-icon-left"></i>
+                <input [(ngModel)]="formEdit.contrasena" [ngModelOptions]="{standalone: true}" [type]="passwordFieldType"
+                    [maxlength]="6" appSoloNumeros placeholder="6 dígitos" pInputText class="w-full input-with-icon">
+                <i class="pi input-icon-right" [ngClass]="passwordFieldType === 'password' ? 'pi-eye' : 'pi-eye-slash'"
+                    (click)="togglePasswordVisibility()"></i>
+            </div>
+            <small *ngIf="!contrasenaValida" class="input-fail"><i class="pi pi-info-circle"></i> Debe contener
+                exactamente 6 dígitos numéricos.</small>
+
+            <div class="flex flex-row w-full gap-2 mt-3">
+                <p-button class="w-6" label="Cancelar" severity="secondary" outlined="true" styleClass="w-full"
+                    [disabled]="guardandoDatos" (onClick)="toggleEditar()" />
+                <p-button class="w-6" label="Guardar" icon="pi pi-check" styleClass="w-full"
+                    [disabled]="!puedeGuardar" [loading]="guardandoDatos" (onClick)="guardarDatos()" />
             </div>
         </div>
     </div>

@@ -1,0 +1,477 @@
+.whatsapp-status-card {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--gray-50, #f9fafb);
+}
+
+::ng-deep .mensaje-accordion {
+    .p-accordionpanel {
+        border: none;
+        background: var(--gray-50, #f9fafb);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+    }
+
+    .p-accordionheader {
+        background: transparent;
+        border: none;
+        padding: 12px 14px;
+        border-radius: var(--radius-sm);
+    }
+
+    .p-accordionheader:hover,
+    .p-accordionheader:not(.p-disabled):hover {
+        background: var(--gray-100);
+    }
+
+    .p-accordioncontent-content {
+        background: transparent;
+        border: none;
+        padding: 0 14px 14px;
+    }
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.status-dot-on {
+    background: #25d366;
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.18);
+}
+
+.status-dot-off {
+    background: var(--gray-400);
+}
+
+.status-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.link-btn {
+    background: transparent;
+    border: none;
+    color: #25d366;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 4px;
+    white-space: nowrap;
+}
+
+.link-btn:active {
+    opacity: .7;
+}
+
+.link-btn:disabled {
+    color: var(--gray-400);
+    cursor: default;
+    opacity: 1;
+}
+
+.link-btn-danger {
+    color: var(--red-500);
+}
+
+.confirm-icon-danger {
+    background: var(--red-50);
+}
+
+.confirm-icon-danger i {
+    color: var(--red-500);
+    font-size: 1.6rem;
+}
+
+::ng-deep .p-dialog {
+    width: 90%;
+    max-width: 550px;
+}
+
+.numero-vincular-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.numero-vincular-icon {
+    color: var(--gray-400);
+    font-size: .8rem;
+    flex-shrink: 0;
+}
+
+.numero-vincular-prefijo {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--gray-500);
+    flex-shrink: 0;
+}
+
+.numero-vincular-input {
+    width: 100%;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12.5px;
+    color: var(--gray-700);
+    background: #fff;
+    outline: none;
+}
+
+.numero-vincular-input:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 1px var(--primary-500);
+}
+
+.numero-vincular-input::placeholder {
+    color: var(--gray-400);
+}
+
+.numero-vincular-input:disabled {
+    background: var(--gray-50, #f9fafb);
+    color: var(--gray-400);
+}
+
+.qr-image {
+    width: 190px;
+    height: 190px;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+    background: #fff;
+    padding: 8px;
+}
+
+.qr-divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 220px;
+    color: var(--gray-400);
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.qr-divider::before,
+.qr-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+}
+
+.qr-divider span {
+    padding: 0 8px;
+}
+
+.pairing-code-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    background: #fff;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+    padding: 12px 14px;
+    text-align: center;
+}
+
+.pairing-code-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+.pairing-code-value {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--gray-700);
+}
+
+.pairing-code-hint {
+    font-size: 11px;
+    color: var(--gray-500);
+    line-height: 1.4;
+    max-width: 260px;
+}
+
+.qr-countdown {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+.same-device-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    background: #fff;
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    margin-top: 4px;
+}
+
+.same-device-hint i {
+    font-size: .8rem;
+    color: var(--blue-500);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.same-device-hint span {
+    font-size: 11.5px;
+    color: var(--gray-600);
+    line-height: 1.4;
+    text-align: left;
+}
+
+.mensaje-textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 12.5px;
+    font-family: inherit;
+    color: var(--gray-700);
+    background: #fff;
+    outline: none;
+}
+
+.mensaje-textarea:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 1px var(--primary-500);
+}
+
+.mensaje-textarea::placeholder {
+    color: var(--gray-400);
+}
+
+.mensaje-hint {
+    font-size: 11px;
+    color: var(--gray-500);
+    line-height: 1.4;
+}
+
+.mensaje-hint strong {
+    color: var(--gray-600);
+}
+
+.mensaje-counter {
+    font-size: 11px;
+    color: var(--gray-400);
+}
+
+.hora-row {
+    flex-wrap: nowrap;
+}
+
+.hora-label {
+    white-space: nowrap;
+}
+
+.hora-icon {
+    color: var(--blue-500);
+    font-size: .95rem;
+}
+
+::ng-deep .hora-calendar {
+    .p-datepicker-input {
+        width: 92px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gray-700);
+        padding: 6px 26px 6px 8px;
+    }
+
+    .p-datepicker-input:enabled:focus {
+        border-color: var(--primary-500);
+        box-shadow: 0 0 0 1px var(--primary-500);
+    }
+
+    .p-datepicker-input-icon {
+        color: var(--blue-500);
+    }
+
+    .p-datepicker-input-icon-container {
+        top: 50%;
+        margin-top: 0;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+    }
+}
+
+::ng-deep .p-datepicker-time-picker button {
+    color: var(--primary-500);
+}
+
+::ng-deep .p-datepicker-time-picker span {
+    font-weight: 700;
+    color: var(--gray-700);
+}
+
+.intro-text {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin: 0 auto;
+    max-width: 320px;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    font-size: .8rem;
+    color: var(--gray-400);
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 10px 32px;
+    font-size: 13px;
+    color: var(--gray-700);
+    background: #fff;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 1px var(--primary-500);
+}
+
+.search-input::placeholder {
+    color: var(--gray-400);
+}
+
+.search-clear {
+    position: absolute;
+    right: 12px;
+    font-size: .85rem;
+    color: var(--gray-400);
+    cursor: pointer;
+}
+
+/* Banner de contexto dentro de cada pestaña (Diario / Semanal) */
+.rule-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: var(--gray-50, #f9fafb);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+
+.rule-banner i {
+    font-size: .85rem;
+    color: var(--blue-500);
+    margin-top: 1px;
+    flex-shrink: 0;
+}
+
+.rule-banner span {
+    font-size: 12.5px;
+    color: var(--gray-600);
+    line-height: 1.4;
+}
+
+/* Estilo del p-tabview para que combine con las tarjetas de la app */
+::ng-deep .recordatorios-tabview {
+    .p-tablist-tab-list {
+        border-color: var(--gray-200);
+        background: transparent;
+        justify-content: center;
+    }
+
+    .p-tab {
+        padding: 0.7rem 1rem;
+        font-weight: 600;
+        font-size: 13.5px;
+        color: var(--gray-500);
+        border-color: transparent;
+        background: transparent;
+    }
+
+    .p-tab-active {
+        color: var(--primary-500);
+    }
+
+    .p-tablist-active-bar {
+        background-color: var(--primary-500);
+    }
+
+    .p-tabpanels {
+        padding: 1rem 0 0;
+        background: transparent;
+    }
+
+    .p-tabview-left-icon {
+        margin-right: 6px;
+    }
+}
+
+.recordatorio-card {
+    width: 100%;
+    padding: 12px 14px;
+    background: #fff;
+    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-sm);
+}
+
+.span-body-name {
+    color: var(--gray-700);
+    font-size: 13.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.min-w-0 {
+    min-width: 0;
+}
+
+.nro-pill {
+    display: inline-block;
+    width: fit-content;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    background: var(--gray-100);
+    color: var(--gray-500);
+}
+
+.celular-text {
+    font-size: 12px;
+    color: var(--gray-500);
+    white-space: nowrap;
+}
+
+.celular-text i {
+    font-size: .75rem;
+    margin-right: 2px;
+}
+
+.sin-celular-text {
+    font-size: 11.5px;
+    color: var(--gray-400);
+    font-style: italic;
+}

@@ -7,11 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 import { KnobModule } from 'primeng/knob';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { catchError, finalize, of } from 'rxjs';
+import { NroCelularDirective } from '../../../../components/directives/nro-celular.directive';
+import { SoloNumerosDirective } from '../../../../components/directives/solo-numeros.directive';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { AdminService } from '../../../../core/services/admin/admin.service';
@@ -24,7 +27,8 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
   selector: 'app-cliente-detail',
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
-    TabMenuModule, FormatNumberPipe, ButtonModule, RouterModule, RouterLink, SkeletonModule],
+    TabMenuModule, FormatNumberPipe, ButtonModule, RouterModule, RouterLink, SkeletonModule, NroCelularDirective,
+    SoloNumerosDirective, InputTextModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './cliente-detail.component.html',
   styleUrl: './cliente-detail.component.scss'
@@ -63,6 +67,12 @@ export default class ClienteDetailComponent {
   statusActivo: boolean = false;
   /* Estado copiar credenciales */
   copy: boolean = false;
+
+  /* Edición de datos del cliente */
+  editando: boolean = false;
+  guardandoDatos: boolean = false;
+  passwordFieldType: string = 'password';
+  formEdit = { celular: '', direccion: '', contrasena: '' };
 
 
   // Mostrar inversiones
@@ -165,6 +175,87 @@ export default class ClienteDetailComponent {
         };
         this.messageService.add(messageData);
         this.getClienteData();
+      }
+    });
+  }
+
+  /* EDICIÓN DE DATOS DEL CLIENTE */
+
+  toggleEditar(): void {
+    if (!this.editando) {
+      this.formEdit.celular = this.clienteData?.persona?.celular || '';
+      this.formEdit.direccion = this.clienteData?.persona?.direccion || '';
+      this.formEdit.contrasena = '';
+      this.passwordFieldType = 'password';
+    }
+    this.editando = !this.editando;
+  }
+
+  togglePasswordVisibility(): void {
+    this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
+  }
+
+  get celularValido(): boolean {
+    const limpio = this.formEdit.celular.replace(/\s+/g, '');
+    return limpio === '' || limpio.length === 9;
+  }
+
+  get contrasenaValida(): boolean {
+    return this.formEdit.contrasena === '' || /^\d{6}$/.test(this.formEdit.contrasena);
+  }
+
+  private hayCambios(): boolean {
+    const celularActual = (this.clienteData?.persona?.celular || '').replace(/\s+/g, '');
+    const direccionActual = (this.clienteData?.persona?.direccion || '').trim();
+    return this.formEdit.celular.replace(/\s+/g, '') !== celularActual
+      || this.formEdit.direccion.trim() !== direccionActual
+      || this.formEdit.contrasena !== '';
+  }
+
+  get puedeGuardar(): boolean {
+    return this.hayCambios() && this.celularValido && this.contrasenaValida && !this.guardandoDatos;
+  }
+
+  guardarDatos(): void {
+    if (!this.puedeGuardar) return;
+
+    const body: { celular?: string; direccion?: string; contrasena?: string } = {};
+    const celularActual = (this.clienteData?.persona?.celular || '').replace(/\s+/g, '');
+    const celularNuevo = this.formEdit.celular.replace(/\s+/g, '');
+    if (celularNuevo && celularNuevo !== celularActual) body.celular = celularNuevo;
+
+    const direccionActual = (this.clienteData?.persona?.direccion || '').trim();
+    const direccionNueva = this.formEdit.direccion.trim();
+    if (direccionNueva && direccionNueva !== direccionActual) body.direccion = direccionNueva;
+
+    if (this.formEdit.contrasena) body.contrasena = this.formEdit.contrasena;
+
+    if (Object.keys(body).length === 0) {
+      this.editando = false;
+      return;
+    }
+
+    this.guardandoDatos = true;
+    this.loadingComponent.show();
+    this.inversoresService.actualizarCliente(this.idUsuario ?? 0, body).pipe(
+      finalize(() => {
+        this.guardandoDatos = false;
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success', summary: Constantes.MSG_SERVICE_UPDATE,
+          detail: Constantes.MSG_SERVICE_DESC_UPDATE, life: 3000
+        });
+        this.editando = false;
+        this.getClienteData();
+      },
+      error: (error) => {
+        let detail = Constantes.MSG_500;
+        if (error.status === 400) detail = error.error?.descripcion || Constantes.MSG_400;
+        else if (error.status === 403) detail = 'No tienes permiso para editar a este cliente.';
+        this.messageService.add({ severity: 'error', summary: Constantes.MSG_SERVICE_ERROR, detail, life: 3500 });
       }
     });
   }

@@ -137,6 +137,7 @@ export default class CollectionReportComponent {
             return of(null);
           }))
           .subscribe((resp: any) => {
+            if (!resp) return; // El error ya se mostró en catchError
             if (resp.codigo == Constantes.STATUS_SUCCESS_RI) {
               this.messageService.add({
                 severity: 'success', summary: 'Pagar cuota', detail: resp.descripcion, life: 1500

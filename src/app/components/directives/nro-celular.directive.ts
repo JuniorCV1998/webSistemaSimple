@@ -24,7 +24,7 @@ export class NroCelularDirective {
       initValue = '9' + initValue.slice(1);
     }
 
-    // Formatear como 9XX-XXX-XXX
+    // Formatear como 9**-***-***
     if (initValue.length > 1) {
       initValue = initValue.slice(0, 9); // Limitar longitud máxima
       initValue = initValue.replace(/(\d{1})(\d{2})(\d{3})(\d{3})/, '$1$2 $3 $4');
