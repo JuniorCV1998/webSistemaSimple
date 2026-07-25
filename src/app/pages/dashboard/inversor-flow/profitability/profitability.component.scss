@@ -1,15 +1,125 @@
-.valor-txt-detail {
-  margin-left: 5px;
+.intro-text {
+  font-size: 13px;
   color: var(--gray-500);
-  font-weight: 400;
-  font-size: 15px;
-
-  word-wrap: break-word; // permite dividir palabras largas
-  overflow-wrap: break-word; // lo mismo, versión más moderna
-  white-space: pre-line;
+  margin: 0 auto;
+  max-width: 320px;
 }
 
-/* Estilos para la tabla y graficos */
+/* Selector de período (segmentado, estilo pill) */
+.periodo-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--gray-100);
+  border-radius: var(--radius-sm);
+}
+
+.periodo-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--gray-500);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 9px 10px;
+  border-radius: calc(var(--radius-sm) - 4px);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+}
+
+.periodo-btn.active {
+  background: #fff;
+  color: var(--primary-500);
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.12);
+}
+
+/* KPIs del período vigente */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  padding: 12px 10px;
+  min-width: 0;
+}
+
+.kpi-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+}
+
+.kpi-icon-primary {
+  background: var(--primary-50);
+  color: var(--primary-500);
+}
+
+.kpi-icon-blue {
+  background: var(--blue-50);
+  color: var(--blue-500);
+}
+
+.kpi-icon-green {
+  background: var(--primary-50);
+  color: var(--primary-500);
+}
+
+.kpi-label {
+  font-size: 11px;
+  color: var(--gray-500);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.kpi-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 380px) {
+  .kpi-value {
+    font-size: 12.5px;
+  }
+}
+
+/* Tarjetas de sección (gráfico / tabla) */
+.section-card {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  padding: 14px 12px;
+}
+
+.section-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-700);
+  margin-bottom: 10px;
+}
+
+/* Estilos para la tabla y gráficos */
 
 :host ::ng-deep .compact-table {
   font-size: 12px;
@@ -17,13 +127,18 @@
 
 :host ::ng-deep .compact-table th,
 :host ::ng-deep .compact-table td {
-  padding: 0.3rem 0.4rem;
+  padding: 0.4rem 0.4rem;
   text-align: center;
   white-space: nowrap;
 }
 
 :host ::ng-deep .compact-table th {
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  color: var(--gray-500);
+  background: var(--gray-50);
 }
 
 @media (max-width: 480px) {
@@ -33,11 +148,11 @@
 }
 
 :host ::ng-deep .compact-table tbody tr:nth-child(even) {
-  background: #f6f7f9;
+  background: var(--gray-50);
 }
 
 :host ::ng-deep .compact-table tbody tr:hover {
-  background: #eceff1;
+  background: var(--gray-100);
 }
 
 .current {
@@ -60,50 +175,82 @@
   }
 }
 
-/* Estilo para botones actual y 6 meses */
-.tag {
-  background-color: var(--gray-200);
-  color: var(--gray-500);
-  font-weight: 600;
-  border-radius: 5px;
+/* Banner "Te aclaramos algunos términos" */
+.tip-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--orange-50);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: transform .15s ease;
+}
+
+.tip-banner:active {
+  transform: scale(0.98);
+}
+
+.tip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--orange-100);
+  color: var(--orange-500);
+  flex-shrink: 0;
+  font-size: .85rem;
+}
+
+.tip-text {
+  flex: 1;
   font-size: 13px;
-  padding: 10px;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.tip-chevron {
+  color: var(--orange-500);
+  font-size: .8rem;
+  flex-shrink: 0;
+}
+
+/* Diálogo "Te aclaramos algunos términos" */
+::ng-deep .p-dialog {
+  width: 90%;
+  max-width: 400px;
+}
+
+.terminos-icon {
+  background: var(--orange-50);
+  color: var(--orange-500);
+  font-size: 1.6rem;
+}
+
+.terminos-title {
+  font-size: 16px;
+  color: var(--gray-700);
   text-align: center;
 }
 
-.success {
-  background-color: #0ea5e9;
-  color: white;
-  border: #0ea5e9;
+.terminos-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
-.span-body-desc {
+.terminos-item-label {
+  flex-shrink: 0;
+  min-width: 54px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--primary-500);
+}
+
+.terminos-item-desc {
+  font-size: 12.5px;
   color: var(--gray-500);
-  font-size: 13px;
-  text-align: left;
-}
-
-.amount-rec {
-  padding: 8px;
-  border: 1px solid var(--gray-300);
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.pi-lightbulb {
-  color: #ecf80f;
-  font-weight: bold;
-}
-
-.span-cab {
-  color: var(--gray-500);
-  font-size: 13px;
-  text-align: center;
-  font-weight: bold;
-}
-
-.span-desc {
-  color: var(--gray-500);
-  font-size: 13px;
-  text-align: center;
+  line-height: 1.4;
 }

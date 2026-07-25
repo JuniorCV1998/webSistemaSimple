@@ -81,7 +81,8 @@ export class NavegationComponent {
     /* Muestra las barras de Menu */
     const showMenu = [
       '/inicio', '/reporte/pagos-pendientes', '/vehicular/inicio', '/clientes',
-      '/inv/configuracion', '/adm/configuracion', '/perfil', '/reporte/rentabilidad'
+      '/inv/configuracion', '/adm/configuracion', '/perfil', '/reporte/rentabilidad',
+      '/reporte/recordatorios-whatsapp'
     ];
     const sinInicio = [
       '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'

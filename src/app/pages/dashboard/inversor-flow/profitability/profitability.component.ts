@@ -39,6 +39,12 @@ export default class ProfitabilityComponent {
 
   actual: boolean = false;
 
+  /** Fila del período vigente (hoy si es vista diaria, mes en curso si es vista mensual):
+   *  se usa para destacar sus valores en las tarjetas KPI, sin inventar sumas nuevas sobre datos financieros. */
+  get filaActual(): any {
+    return this.rentabilidadData.find(row => row.mesActual) ?? null;
+  }
+
   constructor(
     private cd: ChangeDetectorRef,
     private getInversionService: GetInversionService,

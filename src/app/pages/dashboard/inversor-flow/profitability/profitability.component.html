@@ -1,33 +1,49 @@
 <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
 
-    <div class="text-center mb-4">
-        <div class="text-2xl mb-3 label-title">Rentabilidad</div>
+    <div class="text-center mb-3">
+        <div class="text-2xl mb-2 label-title">Rentabilidad</div>
+        <p class="intro-text">Resumen de tu rentabilidad según el período seleccionado. Se actualiza diariamente.</p>
     </div>
 
     <ng-container *ngIf="rentabilidadService; else errorTemplate">
 
-        <div class="flex flex-row w-full justify-content-center items-center gap-2 mb-4">
-            <span class="w-6 tag" (click)="changeOpen(true)" [ngClass]="actual?'success':''">Mes actual</span>
-            <span class="w-6 tag" (click)="changeOpen(false)" [ngClass]="!actual?'success':''">Últ. 6 meses</span>
+        <!-- Selector de período -->
+        <div class="periodo-toggle mb-4">
+            <button type="button" class="periodo-btn" [class.active]="actual" (click)="changeOpen(true)">Mes
+                actual</button>
+            <button type="button" class="periodo-btn" [class.active]="!actual" (click)="changeOpen(false)">Últ. 6
+                meses</button>
         </div>
 
-        <div class="flex flex-row w-full justify-content-between mb-2">
-            <span class="valor-txt-detail mb-3 text-gray-500">Resumen de tu rentabilidad según el período
-                seleccionado, estos datos se actualizan diariamente.</span>
+        <!-- KPI del período vigente -->
+        <div class="kpi-grid mb-4" *ngIf="filaActual as fila">
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon-primary"><i class="pi pi-wallet"></i></div>
+                <span class="kpi-label">Capital invertido</span>
+                <span class="kpi-value">{{currency}}{{fila.capitalInvertido}}</span>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon-blue"><i class="pi pi-money-bill"></i></div>
+                <span class="kpi-label">Cobrado</span>
+                <span class="kpi-value">{{currency}}{{fila.montoCobrado}}</span>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-icon kpi-icon-green"><i class="pi pi-chart-line"></i></div>
+                <span class="kpi-label">{{ actual ? 'Rentabilidad' : 'Rentab. acumulada' }}</span>
+                <span
+                    class="kpi-value">{{currency}}{{ actual ? fila.rentabilidadObtenida : fila.rentabilidadAcumulada }}</span>
+            </div>
         </div>
 
         <!-- GRÁFICOS -->
-        <div class="card mb-3">
-            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
-
-        <div class="flex flex-row w-full justify-content-between mb-3">
-            <span class="valor-txt-detail text-gray-500">Indicadores de rentabilidad y resultados de tus
-                inversiones.</span>
+        <div class="section-card mb-3">
+            <span class="section-title">Evolución</span>
+            <p-chart type="line" [data]="data" [options]="options" class="h-[26rem] block" />
         </div>
 
         <!-- TABLA -->
-        <div class="card mb-3">
+        <div class="section-card mb-3">
+            <span class="section-title">Detalle por {{ actual ? 'día' : 'mes' }}</span>
             <!-- Diario -->
             <p-table *ngIf="actual" [value]="rentabilidadData" styleClass="compact-table">
                 <ng-template pTemplate="header">
@@ -78,11 +94,10 @@
         </div>
 
         <!-- TERMINOS A CONOCER -->
-        <div class="flex flex-row w-full justify-content-around align-items-center amount-rec mb-8"
-            (click)="modalTerminos()">
-            <div class="flex w-12 align-items-center justify-content-center gap-3 p-1">
-                <i class="pi pi-lightbulb"></i><span class="span-body-desc"><b>Te aclaramos algunos términos</b></span>
-            </div>
+        <div class="tip-banner mb-8" (click)="modalTerminos()">
+            <div class="tip-icon"><i class="pi pi-lightbulb"></i></div>
+            <span class="tip-text">Te aclaramos algunos términos</span>
+            <i class="pi pi-chevron-right tip-chevron"></i>
         </div>
     </ng-container>
 
@@ -104,7 +119,7 @@
         </div>
     </ng-template>
 
-    <!-- <div style="height: 80px;"></div> -->
+    <div style="height: 70px;"></div>
 
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
 </div>
@@ -112,30 +127,32 @@
 <p-confirmDialog #terminos key="terminos">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
         <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+            <div
+                class="border-circle terminos-icon inline-flex justify-content-center align-items-center h-4rem w-4rem">
+                <i class="pi pi-lightbulb"></i>
+            </div>
+            <span class="font-bold mt-3 mb-3 terminos-title">{{ message.header }}</span>
 
-            <div class="flex  w-full justify-content-center align-items-center gap-3 mb-3">
-                <span class=" font-bold text-1xl block">
-                    {{ message.header }}
-                </span>
-                <span class="span-desc">{{ message.message}}</span>
+            <div class="flex flex-column gap-3 w-full">
+                <div class="terminos-item">
+                    <span class="terminos-item-label">Inv.</span>
+                    <span class="terminos-item-desc">Inversiones registradas en el período.</span>
+                </div>
+                <div class="terminos-item">
+                    <span class="terminos-item-label">Capital</span>
+                    <span class="terminos-item-desc">Monto total invertido.</span>
+                </div>
+                <div class="terminos-item">
+                    <span class="terminos-item-label">Cobrado</span>
+                    <span class="terminos-item-desc">Total de dinero recibido por pagos.</span>
+                </div>
+                <div class="terminos-item">
+                    <span class="terminos-item-label">Rentab.</span>
+                    <span class="terminos-item-desc">Ganancia generada por las inversiones.</span>
+                </div>
             </div>
 
-            <div class="flex flex-column gap-1">
-                <div class="flex flex-row justify-content-start"><span class="span-cab">Inv.:</span><span
-                        class="span-desc">&nbsp; Inversiones registradas en el período.</span></div>
-                <div class="flex flex-row justify-content-start"><span class="span-cab">Capital:</span><span
-                        class="span-desc">&nbsp; Monto total invertido.</span></div>
-                <div class="flex flex-row justify-content-start"><span class="span-cab">Cobrado:</span><span
-                        class="span-desc">&nbsp; Total de dinero recibido por pagos.</span></div>
-                <div class="flex flex-row justify-content-start"><span class="span-cab">Rentab.:</span><span
-                        class="span-desc">&nbsp; Ganancia generada por las inversiones.</span></div>
-            </div>
-
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
-                </button>
-
-            </div>
+            <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem mt-4"></button>
         </div>
     </ng-template>
 </p-confirmDialog>
