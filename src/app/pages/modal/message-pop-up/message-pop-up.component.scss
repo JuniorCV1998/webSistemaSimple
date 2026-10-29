@@ -1,0 +1,63 @@
+/* Mensaje genérico: popup fintech mobile light (mismo patrón que ac-pop / ct-pop / rm-pop) */
+.mp {
+  --c: var(--blue-400);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px 2px;
+  text-align: center;
+
+  &.mp-error { --c: var(--red-500); }
+  &.mp-aviso { --c: var(--orange-500); }
+}
+
+.mp-ico {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--c) 12%, #fff);
+  color: var(--c);
+
+  .pi { font-size: 22px; font-weight: 700; }
+}
+
+/* Información: el ícono lleva el degradado de la marca */
+.mp-info .mp-ico {
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--blue-400) 70%, transparent);
+}
+
+.mp-titulo {
+  margin: 6px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.mp-texto {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gray-500);
+  white-space: pre-line;
+}
+
+.mp-btn {
+  width: 100%;
+  height: 48px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:active { transform: scale(.98); }
+}

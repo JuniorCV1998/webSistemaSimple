@@ -1,41 +1,49 @@
 import { CommonModule, Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { LoginService } from '../../../core/services/auth/login/login.service';
-import { slideInAnimation } from '../animation/slideInAnimation ';
 import { TempDataService } from '../../../core/services/temp-data.service';
 import { Constantes } from '../../../core/constant/Constantes';
-import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet, Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
-import { AvatarModule } from 'primeng/avatar';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { SidebarModule, Sidebar } from 'primeng/sidebar';
-import { StyleClassModule } from 'primeng/styleclass';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { Drawer, DrawerModule } from 'primeng/drawer';
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
+import { IonApp, IonRouterOutlet, NavController } from '@ionic/angular';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
+/** Pantallas sin sesión: no muestran header. */
+const FLOW_OUT_SESSION = [
+  '/login', '/registrar', '/registrar/personal', '/login-user', '/membresia-exp', '/mantenimiento'
+];
+
+/** Pantallas raíz (con barra de pestañas): el header no muestra "volver". */
+const SHOW_MENU = [
+  '/inicio', '/reporte/pagos-pendientes', '/vehicular/inicio', '/clientes',
+  '/inv/configuracion', '/adm/configuracion', '/perfil', '/rentabilidad',
+  '/whatsapp', '/configuracion-cliente'
+];
+
+const SIN_INICIO = [
+  '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
+];
+
+/** Donde el botón atrás está bloqueado (app.component): tampoco se permite el gesto de deslizar. */
+const SIN_SWIPE = [
+  '/vehicular/inicio', '/reporte/pagos-pendientes', ...SIN_INICIO, '/mantenimiento'
+];
+
+/**
+ * Shell de la app: <ion-app> + header + <ion-router-outlet> (transiciones nativas iOS/Android).
+ * El menú lateral (drawer) se reemplazó por la barra de pestañas (pages/nav/tabs).
+ */
 @Component({
   selector: 'app-navegation',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, SidebarModule, ButtonModule, RippleModule, StyleClassModule,
-    AvatarModule, TabMenuModule, RouterModule, DrawerModule,ToastModule],
+  imports: [CommonModule, IonApp, IonRouterOutlet, ToastModule],
   templateUrl: './navegation.component.html',
   styleUrl: './navegation.component.scss',
-  animations: [slideInAnimation]
 })
 export class NavegationComponent {
 
-  prepareRoute(outlet: RouterOutlet) {
-    return outlet && outlet.activatedRouteData?.['animation'];
-  }
-
-  @ViewChild('drawerRef') drawerRef!: Drawer;
-
   showVolverButton: boolean = true;
-  showIconHome: boolean = false;
-  showAux: boolean = false;
 
   irInicio: boolean = false;
 
@@ -43,17 +51,13 @@ export class NavegationComponent {
   outSession: boolean = false;
   confetti: boolean = false;
 
+  /** Gesto de deslizar para volver (iOS). Se apaga donde el botón atrás está bloqueado. */
+  swipeHabilitado: boolean = true;
+
   /* Vehicular */
   registerVeh: boolean = false;
 
   private routerSubscription!: Subscription;
-
-  /* Datos del usuario */
-  codPefil: any = null;
-
-  /* Permisos del usuario */
-  permisos: any = null;
-  permisoVehicular: boolean = false; // permiso vehicular
 
   pathLogo: string | null = null;
 
@@ -64,32 +68,11 @@ export class NavegationComponent {
     private route: ActivatedRoute,
     private tempDataService: TempDataService,
     private messageService: MessageService,
-  ) {
-    /* const decodedToken = this.loginService.getDecodedToken();
-    if (decodedToken) {
-      console.log('Nombre:', decodedToken.nombre);
-      console.log('Código Único:', decodedToken.codigoUnico);
-      console.log('codPerfil:', decodedToken.codPerfil);
-      console.log('Correo:', decodedToken.usuario);
-      console.log('inversor',decodedToken.inversor);
-      console.log('idUsuario:', decodedToken.idUsuario);
-      console.log('permisos:', decodedToken.permisos);
-    } */
-  }
+    private navCtrl: NavController,
+  ) { }
 
   ngOnInit() {
-    /* Muestra las barras de Menu */
-    const showMenu = [
-      '/inicio', '/reporte/pagos-pendientes', '/vehicular/inicio', '/clientes',
-      '/inv/configuracion', '/adm/configuracion', '/perfil', '/reporte/rentabilidad',
-      '/reporte/recordatorios-whatsapp'
-    ];
-    const sinInicio = [
-      '/registrar/inversiondetalle', '/vehicular/registro/inversiondetalle'
-    ];
-    const flowOutSession = [
-      '/login', '/registrar', '/registrar/personal', '/login-user', '/membresia-exp', '/mantenimiento'
-    ];
+    let urlActual = '';
 
     // Suscribirse a los eventos de navegación para detectar cambios de ruta
     this.routerSubscription = this.router.events.subscribe((event) => {
@@ -97,43 +80,41 @@ export class NavegationComponent {
       const decodedToken = this.loginService.getDecodedToken();
 
       if (decodedToken) {
-        this.codPefil = decodedToken.codPerfil;
-        this.tempDataService.setConstant("codPerfil", this.codPefil);
-        this.permisos = decodedToken.permisos ?? [];
-        this.tempDataService.setConstant('permisos', this.permisos);
-        // Validaciones de permisos
-        this.permisoVehicular = this.permisos.some(
-          (p: any) => p.codigo === Constantes.INV_VEHICULAR
-        );
-
+        const codPerfil = decodedToken.codPerfil;
+        this.tempDataService.setConstant("codPerfil", codPerfil);
+        const permisos = decodedToken.permisos ?? [];
+        this.tempDataService.setConstant('permisos', permisos);
       }
       //Definir valor de confetti
       this.setValueConfetti();
+
+      if (event instanceof NavigationStart) {
+        // Entrar o salir de la sesión (login -> inicio, cerrar sesión, sesión expirada) reinicia la
+        // pila de Ionic: así "atrás" o el gesto de deslizar no regresan a la otra zona de la app.
+        const destino = event.url.split('?')[0];
+        if (urlActual && FLOW_OUT_SESSION.includes(urlActual) !== FLOW_OUT_SESSION.includes(destino)) {
+          this.navCtrl.setDirection('root', true, 'forward');
+        }
+      }
+
       if (event instanceof NavigationEnd) {
-        const currentRoute = event.url.split('?')[0]; // Para ignorar parámetros de query
+        const currentRoute = event.urlAfterRedirects.split('?')[0]; // Para ignorar parámetros de query
+        urlActual = currentRoute;
         // Controlar la visibilidad del botón "Volver" en función de la ruta actual
-        if (showMenu.includes(currentRoute)) {
+        if (SHOW_MENU.includes(currentRoute)) {
           this.showVolverButton = false;
-          this.showAux = false;
-          /* this.showIconHome = true; */
-        } else if (sinInicio.includes(currentRoute)) {
-          if (this.confetti) this.showVolverButton = false;
-          else this.showVolverButton = true;
-          this.showAux = true;
+        } else if (SIN_INICIO.includes(currentRoute)) {
+          this.showVolverButton = !this.confetti;
         } else {
           this.showVolverButton = true;
           this.irInicio = false;
-          this.showAux = false;
         }
+
+        this.swipeHabilitado = !SIN_SWIPE.includes(currentRoute) && !this.confetti;
 
         //CONTROLAR VISIBILIDAD DEL HEADER
-        if (this.loginService.getToken() != null) {
-          this.session = true;
-        }
-        else this.session = false;
-
-        if (flowOutSession.includes(currentRoute)) this.outSession = true;
-        else this.outSession = false;
+        this.session = this.loginService.getToken() != null;
+        this.outSession = FLOW_OUT_SESSION.includes(currentRoute);
       }
 
       /* Cargar Logo y Sello */
@@ -146,7 +127,6 @@ export class NavegationComponent {
 
     //Definir de donde vengo
     this.definirFrom();
-
   }
 
   showMessageInfo() {
@@ -170,25 +150,6 @@ export class NavegationComponent {
       this.confetti = JSON.parse(obj);
     } else this.confetti = false;
   }
-
-  //Slider Module
-  closeCallback(e: Event): void {
-    this.drawerRef.close(e);
-  }
-
-  visible: boolean = false;
-  sidebarOpened: boolean = false;
-
-  openNav() {
-    //alert("")
-    this.sidebarOpened = true;
-  }
-
-  // Método para cerrar el sidebar
-  /*   closeNav() {
-      this.sidebarOpened = false;
-    } */
-
 
   ngOnDestroy() {
     // Limpiar la suscripción cuando el componente se destruya para evitar fugas de memoria
@@ -220,13 +181,6 @@ export class NavegationComponent {
       }
       else this.fromList = null;
     });
-  }
-
-  sessionClear() {
-    const event = new Event('');
-    this.closeCallback(event);
-    sessionStorage.clear();
-    this.router.navigate(['/login-user']);
   }
 
 }

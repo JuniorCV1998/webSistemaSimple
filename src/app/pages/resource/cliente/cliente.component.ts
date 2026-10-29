@@ -5,19 +5,20 @@ import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SkeletonModule } from 'primeng/skeleton';
-import { TabMenuModule } from 'primeng/tabmenu';
-import { TabViewModule } from 'primeng/tabview';
 import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { InversoresService } from '../../../core/services/inversores/inversores.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { FlowStepsComponent } from '../../../components/resources/flow-steps/flow-steps.component';
+import { PASOS_PRESTAMO, PASOS_VEHICULAR } from '../../../core/utils/flujos';
+import { celularParaMostrar } from '../../../core/utils/documento-pais';
 
 
 @Component({
   selector: 'app-cliente',
   standalone: true,
-  imports: [CommonModule,TabMenuModule, TabViewModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule,
-    RouterModule
+  imports: [CommonModule, FormsModule, InputTextModule, ButtonModule, SkeletonModule,
+    RouterModule, FlowStepsComponent
   ],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'
@@ -107,6 +108,24 @@ ngOnInit(): void{
   formatNumberEspaciado(numero: string): string {
     if(numero!=null) return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     else return ""
+  }
+
+  /** En el flujo vehicular este es el paso 1; en el de préstamo, el 2. */
+  get esVehicular(): boolean {
+    return this.tempDataService.hasItem('flow') && this.tempDataService.getItem<any>('flow') === 'vehicular';
+  }
+
+  get pasos(): string[] { return this.esVehicular ? PASOS_VEHICULAR : PASOS_PRESTAMO; }
+  get pasoActual(): number { return this.esVehicular ? 1 : 2; }
+
+  iniciales(persona: any): string {
+    const n = (persona?.nombres || '').trim().charAt(0);
+    const a = (persona?.apellidoPaterno || '').trim().charAt(0);
+    return (n + a).toUpperCase() || '?';
+  }
+
+  celular(persona: any): string {
+    return celularParaMostrar(persona?.celular, persona?.codPais);
   }
 
   cleanFiltroFunct() {

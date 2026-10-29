@@ -1,0 +1,14 @@
+<header class="fs">
+    <ol class="fs-track" [attr.aria-label]="'Paso ' + actual + ' de ' + pasos.length">
+        <li *ngFor="let paso of pasos; let i = index" class="fs-step"
+            [class.fs-done]="i + 1 < actual" [class.fs-current]="i + 1 === actual">
+            <span class="fs-dot">
+                <i *ngIf="i + 1 < actual" class="pi pi-check"></i>
+                <ng-container *ngIf="i + 1 >= actual">{{ i + 1 }}</ng-container>
+            </span>
+            <span class="fs-label">{{ paso }}</span>
+        </li>
+    </ol>
+    <h1 *ngIf="titulo" class="fs-title label-title">{{ titulo }}</h1>
+    <p *ngIf="subtitulo" class="fs-subtitle">{{ subtitulo }}</p>
+</header>

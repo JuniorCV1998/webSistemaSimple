@@ -1,279 +1,145 @@
-<div class="card"> <!--  -->
-  <div *ngIf="cargando" class="loading-bar"></div> <!--  -->
-  <div class="flex items-center justify-content-center w-full h-full">
-    <div class="w-full max-w-3xl p-3 bg-white rounded-2xl shadow-lg">
-      <p-stepper [(value)]="activeStep" class="w-full">
-        <p-step-list>
-          <p-step [value]="1">
-            <ng-template #content let-activateCallback="activateCallback" let-value="value">
-              <p-button icon="pi pi-user" [rounded]="true"
-                [severity]="value <= activeStep ? 'success' : 'secondary'" /><!-- (click)="activateCallback()" -->
-            </ng-template>
-          </p-step>
+<div class="adm">
+  <div *ngIf="cargando" class="loading-bar"></div>
 
-          <p-step [value]="2">
-            <ng-template #content let-activateCallback="activateCallback" let-value="value">
-              <p-button icon="pi pi-verified" [rounded]="true"
-                [severity]="value <= activeStep ? 'success' : 'secondary'" /><!-- (click)="activateCallback()" -->
-            </ng-template>
-          </p-step>
-        </p-step-list>
-
-        <p-step-panels>
-          <p-step-panel [value]="1">
-            <ng-template #content let-activateCallback="activateCallback">
-              <div class="flex flex-column align-items-center gap-2 mx-auto text-center mb-4" style="max-width: 20rem;">
-                <h2 class="text-xl font-semibold">Tipo y número de documento</h2>
-                <div class="flex flex-row w-full gap-1 justify-content-between">
-                  <div class="flex w-7 flex-column justify-content-center gap-2 align-items-left">
-                    <div class="flex flex-column align-items-center gap-1 mb-3">
-                      <p-select [options]="tipoDocs" [(ngModel)]="selectedTipoDoc" optionLabel="descripcionAbrev"
-                        (onChange)="onTipoDocChange()" placeholder="Tipo de Documento" class="w-full" />
-                      <input appSoloNumeros (ngModelChange)="showMessage=false" [(ngModel)]="nroDocumento" pInputText
-                        placeholder="Número de Documento" class="w-full text-overflow-ellipsis" />
-                      <span *ngIf="selectedTipoDoc?.codigo === '01' && nroDocumento.length > 8"
-                        class="w-full input-fail">El
-                        DNI
-                        ingresado supera los 8 dígitos.</span>
-                      <span *ngIf="selectedTipoDoc?.codigo === '06' && nroDocumento.length > 11"
-                        class="w-full input-fail">El
-                        RUC
-                        ingresado supera los 11 dígitos.</span>
-                    </div>
-                  </div>
-                  <div class="flex w-5 flex-column justify-content-center align-items-center">
-                    <div class="flex flex-row justify-content-center items-center gap-2 mb-4">
-                      <span class="tag w-full" (click)="reniecSunat=!reniecSunat"
-                        [ngClass]="reniecSunat?'success':''">Reniec / Sunat</span>
-                    </div>
-
-                  </div>
-                </div>
-
-                <!-- Persona Natural -->
-                <div *ngIf="selectedTipoDoc?.codigo==='01'" class="flex flex-column gap-2">
-                  <!-- *ngIf="selectedTipoDoc!=null" -->
-                  <div class="flex flex-wrap justify-center gap-1 mb-2">
-                    <label for="nombres" class="block font-medium mb-2">Nombres</label>
-                    <input id="nombres" [(ngModel)]="cliNatural.nombres" (ngModelChange)="showMessage=false"
-                      maxlength="70" pInputText placeholder="Nombres" class="w-full text-overflow-ellipsis" required />
-                  </div>
-                  <div class="flex flex-row justify-content-between gap-2 mb-2 w-full">
-                    <div class="flex flex-wrap justify-center gap-1 mb-2">
-                      <label for="apellidop" class="block font-medium mb-2d">Apellido paterno</label>
-                      <input id="apellidop" [(ngModel)]="cliNatural.apellidoPaterno" (ngModelChange)="showMessage=false"
-                        maxlength="70" pInputText placeholder="Apellido paterno" class="w-full text-overflow-ellipsis"
-                        required />
-                    </div>
-                    <div class="flex flex-wrap justify-center gap-1 mb-2">
-                      <label for="apellidom" class="block font-medium mb-2">Apellido materno</label>
-                      <input id="apellidom" [(ngModel)]="cliNatural.apellidoMaterno" (ngModelChange)="showMessage=false"
-                        maxlength="70" pInputText placeholder="Apellido materno" class="w-full text-overflow-ellipsis"
-                        required />
-                    </div>
-                  </div>
-                </div>
-                <!-- Persona Juridica -->
-                <div *ngIf="selectedTipoDoc?.codigo==='06'" class="flex flex-column gap-2"> <!--  -->
-                  <div class="flex flex-wrap justify-center gap-1 mb-2">
-                    <label for="rasonsocial" class="block font-medium mb-2">Razón social</label>
-                    <input id="rasonsocial" [(ngModel)]="cliJuridico.razonSocial" (ngModelChange)="showMessage=false"
-                      maxlength="70" pInputText placeholder="Razón social" class="w-full text-overflow-ellipsis"
-                      required />
-                  </div>
-                </div>
-
-                <!-- Correo Electronico -->
-                <div *ngIf="selectedTipoDoc!=null" class="flex flex-wrap justify-center gap-1 mb-2">
-                  <label for="email" class="block font-medium mb-2">Correo electrónico</label>
-                  <input id="email" [(ngModel)]="correo" (ngModelChange)="showMessage=false" maxlength="70" pInputText
-                    placeholder="ejemplo@gmail.com" class="w-full text-overflow-ellipsis" required />
-                </div>
-
-              </div>
-              <div class="flex flex-column align-items-center gap-2 mx-auto text-center">
-                <p-message *ngIf="showMessage" [severity]="severity" size="small">{{message}}</p-message>
-              </div>
-              <div class="flex pt-6 justify-content-end">
-                <p-button (onClick)="buscarCliente(selectedTipoDoc.codigo, nroDocumento, activateCallback)"
-                  label="Siguiente" icon="pi pi-arrow-right" iconPos="right" [disabled]="!isFormValid()"
-                  [ngClass]="{
-                    'btn-disabled': !isFormValid() }"/>
-              </div>
-            </ng-template>
-          </p-step-panel>
-
-          <p-step-panel [value]="2">
-            <ng-template #content let-activateCallback="activateCallback">
-
-              <div class="flex flex-column align-items-center gap-1 mx-auto text-center"
-                style="max-width: 24rem; min-height: 18rem;">
-
-                <div class="flex flex-column gap-4 align-items-center mode-responsive mb-5">
-                  <span class="font-bold labelCodUnico">{{headerMessage}}</span>
-                  <span [innerHTML]="bodyMessage" class="text-gray-500">{{bodyMessage}}</span>
-                  <!-- <span class="font-semibold text-blue-500 cursor-pointer">Ver flujo completo</span> -->
-                </div>
-
-                <!-- SOLO SI YA SE REGISTRO EN EL APP -->
-                <div *ngIf="data?.data?.estado==='I'"
-                  class="flex flex-column custom-banner-active mode-responsive mb-3">
-                  <div class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
-                    <h5 class="text-sm font-bold text-green-600 m-0">INICIA SESIÓN</h5>
-                    <h3 class="font-bold text-gray-600 m-0">Descargar APP</h3>
-                  </div>
-                  <div class="flex flex-column justify-content-between align-items-center mb-2">
-                    <p class="text-gray-500">Descarga nuestra app desde:</p>
-                    <a href="{{urlPlayStore}}"
-                      target="_blank">
-                      <lottie-player src="/public/elements/store/play_store.json" background="transparent" speed="1"
-                        loop autoplay style="width: 150px; cursor: pointer; transition: transform 0.2s;"
-                        onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                      </lottie-player>
-                    </a>
-                  </div>
-                  <div class="flex flex-column justify-content-between align-items-center mb-2">
-                    <p class="text-gray-500">ó</p>
-                    <div class="flex flex-column">
-                      <p-button severity="info" variant="outlined"
-                        (click)="copyUrlStore(urlPlayStore)">{{messaheCopiarUrlStore}}</p-button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- PASOS PARA IR A APP SSIMPLE -->
-                <div *ngIf="data?.data?.estado==='A' || data?.codigo==='SS00RI00'"
-                  class="card flex justify-center mode-responsive">
-                  <p-stepper [value]="1" class="w-full">
-                    <p-step-list class="p-step-list">
-                      <p-step [value]="1">Código único</p-step>
-                      <p-step [value]="2">Descargar APP</p-step>
-                      <p-step [value]="3">Activar Cuenta</p-step>
-                    </p-step-list>
-                    <p-step-panels>
-                      <p-step-panel [value]="1">
-                        <ng-template #content let-activateCallback="activateCallback">
-                          <div class="flex flex-column h-48">
-                            <div>
-                              <div class="flex flex-column custom-banner-active mode-responsive mb-3">
-                                <div
-                                  class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
-                                  <h5 class="text-sm font-bold text-green-600 m-0">PASO 1</h5>
-                                  <h3 class="font-bold text-gray-600 m-0">Código único</h3>
-                                </div>
-                                <div class="flex flex-column">
-                                  <p class="text-gray-500">Tu código único es: </p>
-                                  <span class="font-bold labelCodUnico">{{ data?.data?.codigo }}</span>
-                                </div>
-                                <div class="flex flex-column mb-5">
-                                  <p class="text-gray-500">Correo afiliado:</p>
-                                  <span class="font-bold labelCodUnico">{{ data?.data?.descripcion }}</span>
-                                </div>
-                                <div class="flex flex-column">
-                                  <p-button severity="info" variant="outlined"
-                                    (click)="copyCodigoOperacion(data?.data?.codigo, data?.data?.descripcion)">{{messageCopiarCodUnico}}</p-button>
-                                </div>
-
-                              </div>
-                            </div>
-                            <div class="flex pt-3 justify-content-end">
-                              <p-button label="Paso 2" icon="pi pi-arrow-right" iconPos="right"
-                                (onClick)="activateCallback(2)" />
-                            </div>
-                          </div>
-                        </ng-template>
-                      </p-step-panel>
-
-                      <p-step-panel [value]="2">
-                        <ng-template #content let-activateCallback="activateCallback">
-                          <div class="flex flex-column h-48">
-                            <div>
-                              <div class="flex flex-column custom-banner-active mode-responsive mb-3">
-                                <div
-                                  class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
-                                  <h5 class="text-sm font-bold text-green-600 m-0">PASO 2</h5>
-                                  <h3 class="font-bold text-gray-600 m-0">Descargar APP</h3>
-                                </div>
-                                <div class="flex flex-column justify-content-between align-items-center mb-2">
-                                  <p class="text-gray-500">Descarga nuestra app desde:</p>
-                                  <a href="{{urlPlayStore}}"
-                                    target="_blank">
-                                    <lottie-player src="/public/elements/store/play_store.json" background="transparent"
-                                      speed="1" loop autoplay
-                                      style="width: 150px; cursor: pointer; transition: transform 0.2s;"
-                                      onmouseover="this.style.transform='scale(1.05)'"
-                                      onmouseout="this.style.transform='scale(1)'">
-                                    </lottie-player>
-                                  </a>
-                                </div>
-                                <div class="flex flex-column justify-content-between align-items-center mb-2">
-                                  <p class="text-gray-500">ó</p>
-                                  <div class="flex flex-column">
-                                    <p-button severity="info" variant="outlined"
-                                      (click)="copyUrlStore(urlPlayStore)">{{messaheCopiarUrlStore}}</p-button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="flex pt-3 justify-content-between">
-                            <p-button label="Paso 1" severity="secondary" icon="pi pi-arrow-left"
-                              (onClick)="activateCallback(1)" />
-                            <p-button label="Paso 3" icon="pi pi-arrow-right" iconPos="right"
-                              (onClick)="activateCallback(3)" />
-                          </div>
-                        </ng-template>
-                      </p-step-panel>
-
-                      <p-step-panel [value]="3">
-                        <ng-template #content let-activateCallback="activateCallback">
-                          <div class="flex flex-column h-48">
-                            <div>
-                              <div class="flex flex-column custom-banner-active mode-responsive">
-                                <div
-                                  class="flex flex-row justify-content-between align-items-center mb-2 div_line_bootom">
-                                  <h5 class="text-sm font-bold text-green-600 m-0">PASO 3</h5>
-                                  <h3 class="font-bold text-gray-600 m-0">Activar Cuenta</h3>
-                                </div>
-
-                                <p class="text-gray-500 text-left">
-                                  1. Abre la aplicación y toca el botón “<span class="font-bold text-blue-400">¡Crea
-                                    hoy!</span>”.
-                                </p>
-                                <p class="text-gray-500 text-left">
-                                  2. Ingresa tu <span class="font-bold text-green-400">correo electrónico</span>, crea
-                                  tu <span class="font-bold text-green-400">contraseña</span> e ingresa el <span
-                                    class="font-bold text-green-400">código único</span> que acabas de crear.
-                                </p>
-                                <div class="flex flex-column gap-3 align-items-center">
-                                  <span class="font-bold labelCodUnico">{{ '¡Listo!' }}</span>
-                                  <span class="text-gray-500">Completa el registro y empieza a disfrutar
-                                    de la aplicación.</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="flex pt-3 justify-content-start">
-                            <p-button label="Paso 2" icon="pi pi-arrow-left" iconPos="right"
-                              (onClick)="activateCallback(2)" />
-                          </div>
-                        </ng-template>
-                      </p-step-panel>
-                    </p-step-panels>
-                  </p-stepper>
-                </div>
-
-              </div>
-
-              <div class="flex justify-start">
-                <p-button (onClick)="onBack(activateCallback, 1)" label="Atrás" severity="secondary"
-                  icon="pi pi-arrow-left" />
-              </div>
-            </ng-template>
-          </p-step-panel>
-
-        </p-step-panels>
-      </p-stepper>
-    </div>
+  <div class="adm-head">
+    <div class="text-2xl label-title">Crear código único</div>
+    <span class="adm-desc">Registra el documento y el correo de la persona para generar su código.</span>
   </div>
+
+  <div class="cu-pasos">
+    <span class="on"></span><span [class.on]="activeStep === 2"></span>
+  </div>
+  <span class="cu-paso-text">Paso {{activeStep}} de 2 · {{activeStep === 1 ? 'Datos' : 'Resultado'}}</span>
+
+  <!-- PASO 1: DATOS -->
+  <section *ngIf="activeStep === 1" class="adm-card cu-form">
+    <label class="cu-label">Tipo de documento</label>
+    <p-select [options]="tipoDocs" [(ngModel)]="selectedTipoDoc" optionLabel="descripcionAbrev"
+      (onChange)="onTipoDocChange()" placeholder="Selecciona el tipo" class="w-full" />
+
+    <label class="cu-label">Número de documento</label>
+    <input [value]="nroDocumento" (input)="onNroDocumentoInput($event)" pInputText
+      [attr.inputmode]="reglaDoc?.alfanumerico ? 'text' : 'numeric'" autocapitalize="characters"
+      [attr.maxlength]="reglaDoc?.max" placeholder="Número de documento" class="w-full" />
+    <small *ngIf="reglaDoc && nroDocumento.length > 0 && !nroDocValido" class="cu-error">
+      <i class="pi pi-info-circle"></i> {{ mensajeNroDoc }}</small>
+
+    <!-- Origen de los nombres -->
+    <div class="cu-origen">
+      <span *ngIf="soloManual" class="cu-nota"><i class="pi pi-info-circle"></i> Sin consulta RENIEC: ingresa el nombre a mano.</span>
+      <button *ngIf="!soloManual" type="button" class="cu-switch" [class.on]="reniecSunat" (click)="reniecSunat=!reniecSunat">
+        <i class="pi" [ngClass]="reniecSunat ? 'pi-check-circle' : 'pi-circle'"></i>
+        Consultar en RENIEC / SUNAT
+      </button>
+    </div>
+
+    <!-- Persona natural -->
+    <ng-container *ngIf="esNatural">
+      <label for="nombres" class="cu-label">Nombres</label>
+      <input id="nombres" [(ngModel)]="cliNatural.nombres" (ngModelChange)="showMessage=false" maxlength="70" pInputText
+        placeholder="Nombres" class="w-full" required />
+      <div class="cu-dos">
+        <div>
+          <label for="apellidop" class="cu-label">Apellido paterno</label>
+          <input id="apellidop" [(ngModel)]="cliNatural.apellidoPaterno" (ngModelChange)="showMessage=false"
+            maxlength="70" pInputText placeholder="Paterno" class="w-full" required />
+        </div>
+        <div>
+          <label for="apellidom" class="cu-label">Apellido materno</label>
+          <input id="apellidom" [(ngModel)]="cliNatural.apellidoMaterno" (ngModelChange)="showMessage=false"
+            maxlength="70" pInputText placeholder="Materno" class="w-full" required />
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Persona jurídica -->
+    <ng-container *ngIf="selectedTipoDoc?.codigo==='06'">
+      <label for="rasonsocial" class="cu-label">Razón social</label>
+      <input id="rasonsocial" [(ngModel)]="cliJuridico.razonSocial" (ngModelChange)="showMessage=false" maxlength="70"
+        pInputText placeholder="Razón social" class="w-full" required />
+    </ng-container>
+
+    <!-- Correo -->
+    <ng-container *ngIf="selectedTipoDoc!=null">
+      <label for="email" class="cu-label">Correo electrónico</label>
+      <input id="email" type="email" inputmode="email" [(ngModel)]="correo" (ngModelChange)="showMessage=false"
+        maxlength="70" pInputText placeholder="ejemplo@gmail.com" class="w-full" required />
+    </ng-container>
+
+    <p-message *ngIf="showMessage" [severity]="severity" size="small" styleClass="mt-2">{{message}}</p-message>
+
+    <button type="button" class="adm-btn cu-siguiente" [disabled]="!isFormValid() || cargando"
+      (click)="buscarCliente(selectedTipoDoc.codigo, nroDocumento, irAPaso)">
+      Crear código <i class="pi pi-arrow-right"></i>
+    </button>
+  </section>
+
+  <!-- PASO 2: RESULTADO -->
+  <ng-container *ngIf="activeStep === 2">
+    <section class="adm-card cu-resultado">
+      <span class="adm-pop-ico"><i class="pi" [ngClass]="data?.data?.estado==='I' ? 'pi-user' : 'pi-check'"></i></span>
+      <h3 class="adm-pop-titulo">{{headerMessage}}</h3>
+      <p class="cu-texto" [innerHTML]="bodyMessage"></p>
+    </section>
+
+    <!-- Cuenta ya activa: solo descargar la app -->
+    <section *ngIf="data?.data?.estado==='I'" class="adm-card cu-guia">
+      <span class="adm-chip"><i class="pi pi-sign-in"></i>Inicia sesión</span>
+      <h4>Descarga la app</h4>
+      <div class="cu-botones">
+        <a class="adm-btn" [href]="urlPlayStore" target="_blank"><i class="pi pi-google"></i> Abrir Google Play</a>
+        <button type="button" class="adm-btn adm-btn-suave" (click)="copyUrlStore(urlPlayStore)">
+          <i class="pi pi-copy"></i> {{messaheCopiarUrlStore}}</button>
+      </div>
+    </section>
+
+    <!-- Pasos para que la persona active su cuenta -->
+    <section *ngIf="data?.data?.estado==='A' || data?.codigo==='SS00RI00'" class="adm-card cu-guia">
+      <div class="cu-tabs">
+        <button type="button" [class.on]="pasoGuia===1" (click)="pasoGuia=1">1 · Código</button>
+        <button type="button" [class.on]="pasoGuia===2" (click)="pasoGuia=2">2 · App</button>
+        <button type="button" [class.on]="pasoGuia===3" (click)="pasoGuia=3">3 · Activar</button>
+      </div>
+
+      <ng-container *ngIf="pasoGuia===1">
+        <div class="adm-fila">
+          <span class="adm-ico adm-ico-grad"><i class="pi pi-qrcode"></i></span>
+          <span class="adm-label">Código único</span>
+          <span class="adm-valor cu-codigo">{{ data?.data?.codigo }}</span>
+        </div>
+        <div class="adm-fila">
+          <span class="adm-ico"><i class="pi pi-at"></i></span>
+          <span class="adm-label">Correo</span>
+          <span class="adm-valor">{{ data?.data?.descripcion }}</span>
+        </div>
+        <div class="cu-botones">
+          <button type="button" class="adm-btn adm-btn-suave"
+            (click)="copyCodigoOperacion(data?.data?.codigo, data?.data?.descripcion)">
+            <i class="pi pi-copy"></i> {{messageCopiarCodUnico}}</button>
+          <button type="button" class="adm-btn" (click)="pasoGuia=2">Siguiente <i class="pi pi-arrow-right"></i></button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="pasoGuia===2">
+        <p class="cu-texto">Comparte el enlace para que descargue la app.</p>
+        <div class="cu-botones">
+          <a class="adm-btn" [href]="urlPlayStore" target="_blank"><i class="pi pi-google"></i> Abrir Google Play</a>
+          <button type="button" class="adm-btn adm-btn-suave" (click)="copyUrlStore(urlPlayStore)">
+            <i class="pi pi-copy"></i> {{messaheCopiarUrlStore}}</button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="pasoGuia===3">
+        <ol class="cu-lista">
+          <li>Abre la aplicación y toca <b>“¡Crea hoy!”</b>.</li>
+          <li>Ingresa tu <b>correo</b>, crea tu <b>contraseña</b> y escribe el <b>código único</b>.</li>
+          <li>Completa el registro y empieza a usar la app. <b>¡Listo!</b></li>
+        </ol>
+      </ng-container>
+    </section>
+
+    <button type="button" class="adm-btn adm-btn-sec cu-atras" (click)="onBack(irAPaso, 1)">
+      <i class="pi pi-arrow-left"></i> Crear otro código
+    </button>
+  </ng-container>
 </div>

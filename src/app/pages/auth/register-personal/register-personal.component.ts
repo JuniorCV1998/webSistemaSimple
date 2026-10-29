@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NroCelularDirective } from '../../../components/directives/nro-celular.directive';
 import { SoloLetrasDirective } from '../../../components/directives/solo-letras.directive';
+import { CelularPaisComponent } from '../../../components/resources/celular-pais/celular-pais.component';
+import { COD_PAIS_PERU, celularLimpio, celularParaMostrar, celularValido, etiquetaDocumento, sinAutocompletado } from '../../../core/utils/documento-pais';
 import { Location } from '@angular/common';
 import { LoadingComponent } from '../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../modal/message-pop-up/message-pop-up.component';
@@ -12,6 +13,8 @@ import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { transicionFade } from '../../../core/ionic/transiciones';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -21,12 +24,14 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { InputOtpModule } from 'primeng/inputotp';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { SystemService } from '../../../core/services/system/system.service';
+import { AJUSTES_ACTUALES } from '../../../core/utils/membresia';
 
 @Component({
   selector: 'app-register-personal',
   standalone: true,
   imports: [ButtonModule, InputTextModule, CheckboxModule, PasswordModule,
-    CommonModule, InputOtpModule, FormsModule, NroCelularDirective, SoloLetrasDirective,
+    CommonModule, InputOtpModule, FormsModule, CelularPaisComponent, SoloLetrasDirective,
     CardModule, BreadcrumbModule, LoadingComponent, ConfirmDialogModule, DialogModule],
   providers: [ConfirmationService],
   templateUrl: './register-personal.component.html',
@@ -40,10 +45,16 @@ export default class RegisterPersonalComponent {
   correo: string = '';
 
   confirmCase: boolean = true;
-  // Política de Privacidad
+  // Términos y Política de Privacidad
   checked: boolean = false;
   visible: boolean = false;
-  userEmail = 'generalservicesjyr@gmail.com';
+  /** Correo de contacto: el configurado por el admin en "Ajustes del sistema" (con respaldo local). */
+  userEmail = AJUSTES_ACTUALES.contacto.correo;
+
+  aceptarTerminos(): void {
+    this.checked = true;
+    this.visible = false;
+  }
 
   objPersona: any = {
     codTipoDoc: "",
@@ -51,6 +62,7 @@ export default class RegisterPersonalComponent {
     nombres: "",
     apellidoPaterno: "",
     apellidoMaterno: "",
+    codPais: COD_PAIS_PERU,
     celular: "",
     direccion: ""
   }
@@ -60,11 +72,25 @@ export default class RegisterPersonalComponent {
     nroDocumento: "",
     razonSocial: "",
     nombreComercial: "",
+    codPais: COD_PAIS_PERU,
     celular: "",
     direccion: ""
   }
 
   isClienteNatural: Boolean = true;
+  nombresEditables = false;
+
+  get personaActual(): any {
+    return this.isClienteNatural ? this.objPersona : this.objPersonaJuridica;
+  }
+
+  get etiquetaDoc(): string {
+    return etiquetaDocumento(this.personaActual.codTipoDoc);
+  }
+
+  get celularMostrar(): string {
+    return celularParaMostrar(this.personaActual.celular, this.personaActual.codPais, true);
+  }
 
   pathSello: string | null = null;
 
@@ -73,8 +99,11 @@ export default class RegisterPersonalComponent {
     private location: Location,
     private dialogService: DialogService,
     private registerService: RegisterService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private navCtrl: NavController,
+    systemService: SystemService
   ) {
+    systemService.ajustesPublicos().subscribe(a => { if (a.contacto?.correo) this.userEmail = a.contacto.correo; });
     // recuperando el codigo de registro
     const obj = sessionStorage.getItem('objUser');
     const cliente = sessionStorage.getItem('dataCliente');
@@ -83,18 +112,21 @@ export default class RegisterPersonalComponent {
       this.codRegisterValidate = reqObj.codRegisterValidate;
       this.correo = reqObj.correo;
       const reqCliente = JSON.parse(cliente);
-      if (reqCliente.codTipoDoc == '01') {
-        this.objPersona.codTipoDoc = reqCliente.codTipoDoc;
-        this.objPersona.nombres = reqCliente.nombres;
-        this.objPersona.apellidoPaterno = reqCliente.apellidoPaterno;
-        this.objPersona.apellidoMaterno = reqCliente.apellidoMaterno;
-        this.objPersona.nroDocumento = reqCliente.nroDocumento;
-      } else if (reqCliente.codTipoDoc == '06') {
+      if (reqCliente.codTipoDoc == '06') {
         this.objPersonaJuridica.codTipoDoc = reqCliente.codTipoDoc;
         this.objPersonaJuridica.razonSocial = reqCliente.razonSocial;
         this.objPersonaJuridica.direccion = reqCliente.direccion;
         this.objPersonaJuridica.nroDocumento = reqCliente.nroDocumento;
         this.isClienteNatural = false;
+      } else if (reqCliente.codTipoDoc) {
+        // DNI (01), carné de extranjería (04) y pasaporte (07)
+        this.objPersona.codTipoDoc = reqCliente.codTipoDoc;
+        this.objPersona.nombres = reqCliente.nombres || '';
+        this.objPersona.apellidoPaterno = reqCliente.apellidoPaterno || '';
+        this.objPersona.apellidoMaterno = reqCliente.apellidoMaterno || '';
+        this.objPersona.nroDocumento = reqCliente.nroDocumento;
+        // C.E./pasaporte no se autocompletan (RENIEC no los cubre): el usuario escribe su nombre
+        this.nombresEditables = sinAutocompletado(reqCliente.codTipoDoc) || !this.objPersona.nombres;
       }
     }
   }
@@ -115,12 +147,19 @@ export default class RegisterPersonalComponent {
   registrarInversor() {
     this.confirm(Constantes.CD_HEADER_MSG_CONF, Constantes.CD_BODY_MSG_CONF).then((result) => {
       if (result) {
-        const nroCelular = (this.isClienteNatural ? this.objPersona.celular.replace(/\s+/g, '') : this.objPersonaJuridica.celular.replace(/\s+/g, ''));
+        // Copia para no dejar el celular sin espacios en el formulario si el registro falla
+        const persona = { ...this.personaActual };
+        persona.celular = celularLimpio(persona.celular);
+        persona.codPais = persona.codPais || COD_PAIS_PERU;
+        if (this.isClienteNatural) {
+          persona.nombres = persona.nombres.trim();
+          persona.apellidoPaterno = persona.apellidoPaterno.trim();
+          persona.apellidoMaterno = persona.apellidoMaterno.trim();
+        }
         let reqBody = {
           codRegisterValidate: this.codRegisterValidate,
-          persona: this.isClienteNatural ? this.objPersona : this.objPersonaJuridica
+          persona
         };
-        reqBody.persona.celular = nroCelular;
 
         this.loadingComponent.show();
         this.registerService.confirmRegister(reqBody).pipe(
@@ -138,8 +177,11 @@ export default class RegisterPersonalComponent {
           if (resp?.codigoMessage == Constantes.STATUS_SUCCESS_RI && resp.totalRecord == 1) {
             sessionStorage.setItem('emailCreate', resp.data);
             this.confirmCase = false;
-            this.confirm("¡Bienvenido!", Constantes.CD_BODY_MSG_BNV).then((result) => {
-              this.router.navigate(['login']);
+            this.confirm("¡Bienvenido!", Constantes.CD_BODY_MSG_BNV).then(() => {
+              // El diálogo vive en <body>: se cierra explícitamente y se navega como raíz para que
+              // Ionic descarte las pantallas del registro (si no, el popup quedaba flotando encima).
+              this.confirmationService.close();
+              this.navCtrl.navigateRoot('/login', { animation: transicionFade });
             });
           } else this.show(Constantes.MSG_500, Constantes.MSG_H_500, true);
         });
@@ -194,8 +236,7 @@ export default class RegisterPersonalComponent {
         this.objPersona.nombres.trim() !== '' &&
         this.objPersona.apellidoPaterno.trim() !== '' &&
         this.objPersona.apellidoMaterno.trim() !== '' &&
-        this.objPersona.celular.trim() !== '' &&
-        this.objPersona.celular.length === 11 &&
+        celularValido(this.objPersona.celular, this.objPersona.codPais) &&
         this.objPersona.direccion.trim() !== '' &&
         this.checked !== false
       );
@@ -203,8 +244,7 @@ export default class RegisterPersonalComponent {
       // Validación para persona jurídica
       return (
         this.objPersonaJuridica.razonSocial.trim() !== '' &&
-        this.objPersonaJuridica.celular.trim() !== '' &&
-        this.objPersonaJuridica.celular.length === 11 &&
+        celularValido(this.objPersonaJuridica.celular, this.objPersonaJuridica.codPais) &&
         this.objPersonaJuridica.direccion.trim() !== '' &&
         this.checked !== false
       );

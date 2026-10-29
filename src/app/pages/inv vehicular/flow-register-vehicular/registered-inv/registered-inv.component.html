@@ -1,39 +1,46 @@
-<div *ngIf="!isLoading">
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12 mb-5">
-        <div class="text-center mb-5">
-            <div id="div_line_bootom" class=" label-title-green">¡INVERSION <br>REGISTRADA!</div>
-        </div>
+<div *ngIf="!isLoading" class="flujo rg">
 
-        <div class="flex w-full flex-column justify-content-center align-items-center mb-5">
-            <div class="flex flex-column align-items-center w-full mb-3">
-                <i class="pi pi-car icon-span" (click)="triggerConfetti()"></i>
-            </div>
-            <div class="flex flex-column w-full mb-2">
-                <span class="span-1">{{objInversionVeh.fullName}}</span>
-            </div>
-            <div class="flex flex-column w-full">
-                <span class="span-2">{{objInversionVeh.descripcion}}</span>
-            </div>
+    <!-- Encabezado de éxito -->
+    <section class="rg-exito">
+        <div class="rg-icono" (click)="triggerConfetti()">
+            <i class="pi pi-car"></i>
+            <span class="rg-check"><i class="pi pi-check"></i></span>
         </div>
+        <h1 class="rg-titulo label-title">¡Inversión registrada!</h1>
+        <p class="rg-sub">¡Genial! Tu registro se realizó con éxito</p>
+    </section>
 
-        <div class="flex w-full flex-column justify-content-center align-items-center mb-5">
-            <div class="flex flex-column align-items-center w-full mb-2">
-                <span class=" w-full txt-aditional"><b>¡Genial! Tu registro se realizó con éxito</b></span>
-            </div>
-            <div class="flex flex-column w-full mb-3">
-                <span class="w-full txt-aditional">{{objInversionVeh.fechaCreacion}}</span>
-            </div>
-            <div class="flex flex-row w-full justify-content-center">
-                <a class="terminos_condiciones" [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: objInversionVeh.idInversionVeh ,from: 'registerVeh'}">Ver inversión</a>
+    <!-- Resumen -->
+    <section class="flujo-card rg-card">
+        <h2 class="flujo-card-title"><i class="pi pi-user"></i> Cliente</h2>
+        <div class="rg-cliente">
+            <span class="flujo-avatar">{{iniciales}}</span>
+            <div class="rg-cliente-text">
+                <span class="rg-nombre">{{objInversionVeh.fullName}}</span>
+                <span *ngIf="objInversionVeh.descripcion" class="rg-desc">{{objInversionVeh.descripcion}}</span>
             </div>
         </div>
 
+        <dl class="rg-list">
+            <div>
+                <dt><i class="pi pi-clock"></i> Fecha de registro</dt>
+                <dd>{{objInversionVeh.fechaCreacion}}</dd>
+            </div>
+        </dl>
+    </section>
+
+    <a class="rg-ver" [routerLink]="['/vehicular/inversiondetalle']"
+        [queryParams]="{ idInversionVeh: objInversionVeh.idInversionVeh, from: 'registerVeh' }">
+        <span class="rg-ver-ico"><i class="pi pi-eye"></i></span>
+        <span class="rg-ver-text">
+            <span class="rg-ver-titulo">Ver inversión</span>
+            <span class="rg-ver-sub">Cuotas, cronograma y pagos</span>
+        </span>
+        <i class="pi pi-angle-right rg-ver-flecha"></i>
+    </a>
+
+    <div style="height: 70px;"></div>
     <button pButton pRipple label="Ver inversiones" routerLink="/vehicular/inicio" class="btn-float"></button>
-
-    </div>
 </div>
 
-
-
-
-<app-loading *ngIf="isLoading"></app-loading> 
+<app-loading *ngIf="isLoading"></app-loading>

@@ -1,190 +1,375 @@
-<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-    <div class="text-center mb-3">
-        <div class="text-2xl mb-2 label-title">Recordatorios WhatsApp</div>
-        <p class="intro-text">Activa el envío automático de un recordatorio por WhatsApp a tus clientes con número
-            registrado.</p>
+<div *ngIf="!isLoading" class="wa-page w-full">
+    <!-- Encabezado -->
+    <div class="wa-header">
+        <div class="text-2xl label-title">WhatsApp</div>
+        <p class="wa-subtitle">Conecta el WhatsApp de tu negocio y envía recordatorios de pago automáticos a tus
+            clientes.</p>
     </div>
 
-    <!-- Vinculación de WhatsApp -->
-    <div class="whatsapp-status-card mb-3">
-        <div class="flex flex-row align-items-center justify-content-between gap-2" *ngIf="!vinculando">
-            <div class="flex align-items-center gap-2">
-                <span class="status-dot" [ngClass]="estadoWhatsapp.vinculado ? 'status-dot-on' : 'status-dot-off'"></span>
-                <span class="status-text">
-                    {{ estadoWhatsapp.vinculado
-                        ? (estadoWhatsapp.numeroVinculado ? ('Vinculado con ' + formatNumeroVinculado(estadoWhatsapp.numeroVinculado)) : 'WhatsApp vinculado')
-                        : 'WhatsApp no vinculado' }}
-                </span>
-            </div>
-            <button *ngIf="!estadoWhatsapp.vinculado" type="button" class="link-btn"
-                [disabled]="iniciandoVinculacion" (click)="vincularWhatsapp()">
-                Vincular
-            </button>
-            <button *ngIf="estadoWhatsapp.vinculado" type="button" class="link-btn link-btn-danger"
-                [disabled]="desvinculando" (click)="desvincularWhatsapp()">
-                Desvincular
-            </button>
-        </div>
+    <div class="wa-panel">
+        <p-tabview styleClass="wa-tabview">
 
-        <div *ngIf="!vinculando && !estadoWhatsapp.vinculado" class="numero-vincular-row">
-            <i class="pi pi-phone numero-vincular-icon"></i>
-            <span class="numero-vincular-prefijo">+51</span>
-            <input type="text" [(ngModel)]="numeroParaVincular" [ngModelOptions]="{standalone: true}" appNroCelular
-                maxlength="11" [disabled]="iniciandoVinculacion" placeholder="9** *** *** (opcional)"
-                class="numero-vincular-input" />
-        </div>
-
-        <div class="flex flex-column align-items-center gap-2 py-2" *ngIf="vinculando">
-            <span class="status-text">Vincula tu WhatsApp con una de estas opciones</span>
-
-            <img *ngIf="estadoWhatsapp.qrCode" [src]="estadoWhatsapp.qrCode" alt="Código QR de WhatsApp"
-                class="qr-image" />
-
-            <div *ngIf="estadoWhatsapp.qrCode && estadoWhatsapp.pairingCode" class="qr-divider">
-                <span>o</span>
-            </div>
-
-            <div *ngIf="estadoWhatsapp.pairingCode" class="pairing-code-box">
-                <span class="pairing-code-label">Código de vinculación</span>
-                <span class="pairing-code-value">{{estadoWhatsapp.pairingCode}}</span>
-                <span class="pairing-code-hint">En WhatsApp: Ajustes → Dispositivos vinculados → Vincular con
-                    número de teléfono</span>
-                <button type="button" class="link-btn" (click)="copiarPairingCode()">
-                    <i class="pi pi-copy"></i> Copiar código
-                </button>
-            </div>
-
-            <span class="qr-countdown">Expira en {{segundosRestantesQr}}s</span>
-
-            <div *ngIf="estadoWhatsapp.qrCode" class="same-device-hint">
-                <i class="pi pi-info-circle"></i>
-                <span *ngIf="estadoWhatsapp.pairingCode">¿Usas este mismo celular para WhatsApp? Usa mejor el
-                    código de arriba: se ingresa directamente en tu WhatsApp, sin necesitar otro dispositivo.</span>
-                <span *ngIf="!estadoWhatsapp.pairingCode">¿Usas este mismo celular para WhatsApp? No podrás
-                    escanear su propia pantalla. Comparte o descarga esta imagen y ábrela en otro dispositivo (PC,
-                    tablet u otro celular) para escanearla con la cámara de WhatsApp de tu teléfono.</span>
-            </div>
-            <button *ngIf="estadoWhatsapp.qrCode" type="button" class="link-btn" (click)="compartirEnlace()">
-                <i class="pi pi-share-alt"></i>
-                Compartir código QR
-            </button>
-        </div>
-    </div>
-
-    <!-- Hora de envío -->
-    <div class="whatsapp-status-card mb-3">
-        <div class="flex flex-row align-items-center justify-content-start gap-3 flex-nowrap hora-row">
-            <span class="status-text hora-label flex-shrink-0">
-                <!-- <i class="pi pi-clock hora-icon"></i> --> Hora de envío
-            </span>
-            <div class="flex align-items-center gap-1 flex-shrink-0">
-                <p-calendar [(ngModel)]="horaSeleccionada" [ngModelOptions]="{standalone: true}" [timeOnly]="true"
-                    [hourFormat]="'12'" [showIcon]="true" iconDisplay="input" inputId="horaEnvioPicker"
-                    styleClass="hora-calendar">
-                    <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
-                        <i class="pi pi-clock hora-icon" (click)="clickCallBack($event)"></i>
-                    </ng-template>
-                </p-calendar>
-                <button type="button" class="link-btn flex-shrink-0" [disabled]="!horaCambiada || guardandoHora"
-                    (click)="guardarHoraEnvio()">
-                    Guardar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mensaje personalizado -->
-    <div class="mensaje-accordion-wrap mb-3">
-        <p-accordion styleClass="mensaje-accordion" expandIcon="pi pi-chevron-down" collapseIcon="pi pi-chevron-up">
-            <p-accordion-panel value="mensaje">
-                <p-accordion-header>
-                    <span class="status-text">Mensaje del recordatorio</span>
-                </p-accordion-header>
-                <p-accordion-content>
-                    <div class="flex flex-column gap-2">
-                        <textarea pTextarea [(ngModel)]="mensajeEditado" [ngModelOptions]="{standalone: true}"
-                            [maxlength]="mensajeMaxLength" rows="3" class="mensaje-textarea"
-                            placeholder="Escribe el mensaje que recibirán tus clientes"></textarea>
-                        <div class="flex align-items-center justify-content-between gap-2">
-                            <span class="mensaje-hint">Usa <strong>{{ '{nombre}' }}</strong> para incluir el nombre
-                                del cliente.</span>
-                            <span
-                                class="mensaje-counter flex-shrink-0">{{mensajeEditado.length}}/{{mensajeMaxLength}}</span>
+            <!-- ============ CONEXIÓN ============ -->
+            <p-tabPanel header="Conexión">
+                <div class="wa-card wa-card-conexion">
+                    <!-- Estado: no vinculando -->
+                    <ng-container *ngIf="!vinculando">
+                        <div class="wa-status">
+                            <div class="wa-status-icon"
+                                [ngClass]="estadoWhatsapp.vinculado ? 'wa-status-icon-on' : 'wa-status-icon-off'">
+                                <i class="pi" [ngClass]="estadoWhatsapp.vinculado ? 'pi-whatsapp' : 'pi-mobile'"></i>
+                            </div>
+                            <div class="flex flex-column min-w-0 gap-1">
+                                <div class="flex align-items-center gap-2 flex-wrap">
+                                    <span class="wa-status-title">
+                                        {{ estadoWhatsapp.vinculado ? 'WhatsApp conectado' : 'WhatsApp no vinculado' }}
+                                    </span>
+                                    <span class="wa-badge"
+                                        [ngClass]="estadoWhatsapp.vinculado ? 'wa-badge-on' : 'wa-badge-off'">
+                                        <span class="status-dot"
+                                            [ngClass]="estadoWhatsapp.vinculado ? 'status-dot-on' : 'status-dot-off'"></span>
+                                        {{ estadoWhatsapp.vinculado ? 'Activo' : 'Desconectado' }}
+                                    </span>
+                                </div>
+                                <span class="wa-status-desc" *ngIf="estadoWhatsapp.vinculado">
+                                    <ng-container *ngIf="estadoWhatsapp.numeroVinculado; else sinNumero">
+                                        Número vinculado: <strong>{{ formatNumeroVinculado(estadoWhatsapp.numeroVinculado) }}</strong>
+                                    </ng-container>
+                                    <ng-template #sinNumero>Tus recordatorios se enviarán desde este WhatsApp.</ng-template>
+                                </span>
+                                <span class="wa-status-desc" *ngIf="!estadoWhatsapp.vinculado">
+                                    Vincula el WhatsApp de tu negocio para enviar recordatorios de pago automáticos con
+                                    un clic.
+                                </span>
+                            </div>
                         </div>
-                        <button type="button" class="link-btn align-self-end"
-                            [disabled]="!mensajeCambiado || !mensajeEditado.trim() || guardandoMensaje"
-                            (click)="guardarMensaje()">
-                            Guardar
+
+                        <!-- Número opcional + botón vincular -->
+                        <div *ngIf="!estadoWhatsapp.vinculado" class="wa-link-form">
+                            <label class="wa-field-label" for="numeroVincular">Número de WhatsApp <span
+                                    class="wa-optional">(opcional)</span></label>
+                            <!-- Cualquier país: el backend recibe código + número juntos (ej. 573001234567) -->
+                            <app-celular-pais inputId="numeroVincular" [(codPais)]="codPaisVincular"
+                                [(celular)]="numeroParaVincular" [disabled]="iniciandoVinculacion" />
+                            <span class="wa-field-hint">Si lo ingresas, también te daremos un código para vincular
+                                desde el mismo celular.</span>
+
+                            <button type="button" class="wa-btn wa-btn-primary"
+                                [disabled]="iniciandoVinculacion || numeroVincularInvalido" (click)="vincularWhatsapp()">
+                                <i class="pi pi-qrcode"></i>
+                                Vincular WhatsApp
+                            </button>
+                        </div>
+
+                        <button *ngIf="estadoWhatsapp.vinculado" type="button" class="wa-btn wa-btn-danger-outline"
+                            [disabled]="desvinculando" (click)="desvincularWhatsapp()">
+                            <i class="pi pi-sign-out"></i>
+                            Desvincular
                         </button>
-                    </div>
-                </p-accordion-content>
-            </p-accordion-panel>
-        </p-accordion>
-    </div>
+                    </ng-container>
 
-    <div class="search-box mb-3">
-        <i class="pi pi-search search-icon"></i>
-        <input type="text" [(ngModel)]="filtroTexto" [ngModelOptions]="{standalone: true}"
-            placeholder="Buscar cliente por nombre o N° inversión" class="search-input" />
-        <i *ngIf="filtroTexto" class="pi pi-times-circle search-clear" (click)="filtroTexto=''"></i>
-    </div>
+                    <!-- Estado: vinculando (QR / código) -->
+                    <div *ngIf="vinculando" class="wa-linking">
+                        <div class="wa-linking-head">
+                            <span class="wa-status-title">Escanea para vincular</span>
+                            <span class="wa-countdown" [class.wa-countdown-low]="segundosRestantesQr <= 10">
+                                <i class="pi pi-clock"></i> {{segundosRestantesQr}}s
+                            </span>
+                        </div>
 
-    <p-tabview styleClass="recordatorios-tabview">
-        <p-tabPanel header="Diario" leftIcon="pi pi-calendar">
-            <div class="rule-banner">
-                <i class="pi pi-info-circle"></i>
-                <span>Se envía el mismo día de la cuota, si el cliente aún no ha pagado.</span>
-            </div>
+                        <div class="wa-linking-body">
+                            <div class="wa-qr-col">
+                                <img *ngIf="estadoWhatsapp.qrCode" [src]="estadoWhatsapp.qrCode"
+                                    alt="Código QR de WhatsApp" class="qr-image" />
+                                <button *ngIf="estadoWhatsapp.qrCode" type="button" class="link-btn"
+                                    (click)="compartirEnlace()">
+                                    <i class="pi pi-share-alt"></i>
+                                    Compartir código QR
+                                </button>
+                            </div>
 
-            <div class="flex flex-column w-full gap-2" *ngIf="listaDiarioFiltrada.length > 0">
-                <ng-container *ngFor="let item of listaDiarioFiltrada">
-                    <ng-container *ngTemplateOutlet="filaRecordatorio; context: { item: item }"></ng-container>
-                </ng-container>
-            </div>
-            <div *ngIf="listaDiarioFiltrada.length == 0" class="mb-3">
-                <app-list-empty-none></app-list-empty-none>
-            </div>
-        </p-tabPanel>
+                            <div class="wa-steps-col">
+                                <ol class="wa-steps">
+                                    <li>Abre <strong>WhatsApp</strong> en tu celular.</li>
+                                    <li>Ve a <strong>Ajustes → Dispositivos vinculados</strong>.</li>
+                                    <li>Toca <strong>Vincular un dispositivo</strong> y escanea el código.</li>
+                                </ol>
 
-        <p-tabPanel header="Semanal" leftIcon="pi pi-refresh">
-            <div class="rule-banner">
-                <i class="pi pi-info-circle"></i>
-                <span>Se envía un día antes y el mismo día de la cuota.</span>
-            </div>
+                                <div *ngIf="estadoWhatsapp.pairingCode" class="pairing-code-box">
+                                    <span class="pairing-code-label">O usa este código de vinculación</span>
+                                    <span class="pairing-code-value">{{estadoWhatsapp.pairingCode}}</span>
+                                    <span class="pairing-code-hint">En WhatsApp: Dispositivos vinculados → Vincular con
+                                        número de teléfono</span>
+                                    <button type="button" class="link-btn" (click)="copiarPairingCode()">
+                                        <i class="pi pi-copy"></i> Copiar código
+                                    </button>
+                                </div>
 
-            <div class="flex flex-column w-full gap-2" *ngIf="listaSemanalFiltrada.length > 0">
-                <ng-container *ngFor="let item of listaSemanalFiltrada">
-                    <ng-container *ngTemplateOutlet="filaRecordatorio; context: { item: item }"></ng-container>
-                </ng-container>
-            </div>
-            <div *ngIf="listaSemanalFiltrada.length == 0" class="mb-3">
-                <app-list-empty-none></app-list-empty-none>
-            </div>
-        </p-tabPanel>
-    </p-tabview>
-
-    <!-- Fila de cliente reutilizada en ambas pestañas -->
-    <ng-template #filaRecordatorio let-item="item">
-        <div class="recordatorio-card">
-            <div class="flex flex-row justify-content-between align-items-center w-full gap-2">
-                <div class="flex flex-column flex-1 min-w-0">
-                    <span class="span-body-name">{{item.fullName}}</span>
-                    <div class="flex align-items-center gap-2 mt-1 flex-wrap">
-                        <span class="nro-pill">N° {{item.nroInversion}}</span>
-                        <span class="celular-text" *ngIf="item.celular; else sinCelular">
-                            <i class="pi pi-phone"></i> {{item.celular}}
-                        </span>
-                        <ng-template #sinCelular>
-                            <span class="sin-celular-text">Sin número registrado</span>
-                        </ng-template>
+                                <div *ngIf="estadoWhatsapp.qrCode" class="same-device-hint">
+                                    <i class="pi pi-info-circle"></i>
+                                    <span *ngIf="estadoWhatsapp.pairingCode">¿Usas este mismo celular para WhatsApp?
+                                        Usa mejor el código: se ingresa directamente en tu WhatsApp, sin necesitar otro
+                                        dispositivo.</span>
+                                    <span *ngIf="!estadoWhatsapp.pairingCode">¿Usas este mismo celular para WhatsApp?
+                                        No podrás escanear su propia pantalla. Comparte o descarga esta imagen y ábrela
+                                        en otro dispositivo para escanearla con la cámara de WhatsApp.</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <p-toggleswitch [(ngModel)]="item.recordatorioActivo" [ngModelOptions]="{standalone: true}"
-                    [disabled]="!item.celular" (ngModelChange)="onToggle(item)">
-                    <ng-template #handle let-checked="checked">
-                        <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+            </p-tabPanel>
+
+            <!-- ============ MENSAJE AUTOMÁTICO ============ -->
+            <p-tabPanel header="Mensaje automático">
+                <div *ngIf="!estadoWhatsapp.vinculado" class="wa-warning mb-3">
+                    <i class="pi pi-exclamation-triangle"></i>
+                    <span>Vincula tu WhatsApp en la pestaña <strong>Conexión</strong> para que los recordatorios se
+                        envíen.</span>
+                </div>
+
+                <!-- Campaña de recordatorios -->
+                <div class="wa-card wa-campana mb-3">
+                    <div class="wa-section-head flex-1 min-w-0">
+                        <div class="wa-section-icon" [class.wa-section-icon-off]="!campanaActiva">
+                            <i class="pi" [ngClass]="campanaActiva ? 'pi-bell' : 'pi-pause'"></i>
+                        </div>
+                        <div class="flex flex-column min-w-0">
+                            <span class="wa-section-title">
+                                {{ campanaActiva ? 'Recordatorios activos' : 'Recordatorios en pausa' }}
+                            </span>
+                            <span class="wa-section-desc">
+                                {{ campanaActiva
+                                    ? 'Se enviarán automáticamente a los clientes que tengan el recordatorio activado.'
+                                    : 'No se enviará ningún recordatorio. Tu WhatsApp sigue vinculado.' }}
+                            </span>
+                        </div>
+                    </div>
+                    <p-toggleswitch [(ngModel)]="campanaActiva" [ngModelOptions]="{standalone: true}"
+                        [disabled]="guardandoCampana" (ngModelChange)="onToggleCampana()">
+                    </p-toggleswitch>
+                </div>
+
+                <div class="wa-config-grid">
+                    <div class="flex flex-column gap-3">
+                        <!-- Hora de envío -->
+                        <div class="wa-card">
+                            <div class="wa-section-head">
+                                <div class="wa-section-icon"><i class="pi pi-clock"></i></div>
+                                <div class="flex flex-column">
+                                    <span class="wa-section-title">Hora de envío</span>
+                                    <span class="wa-section-desc">Los recordatorios se envían todos los días a esta
+                                        hora.</span>
+                                </div>
+                            </div>
+                            <div class="flex align-items-center gap-2 mt-3">
+                                <p-calendar [(ngModel)]="horaSeleccionada" [ngModelOptions]="{standalone: true}"
+                                    [timeOnly]="true" [hourFormat]="'12'" [showIcon]="true" iconDisplay="input"
+                                    inputId="horaEnvioPicker" styleClass="hora-calendar">
+                                    <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                                        <i class="pi pi-clock hora-icon" (click)="clickCallBack($event)"></i>
+                                    </ng-template>
+                                </p-calendar>
+                                <button type="button" class="wa-btn wa-btn-sm wa-btn-primary"
+                                    [disabled]="!horaCambiada || guardandoHora" (click)="guardarHoraEnvio()">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mensaje -->
+                        <div class="wa-card">
+                            <div class="wa-section-head">
+                                <div class="wa-section-icon"><i class="pi pi-comment"></i></div>
+                                <div class="flex flex-column">
+                                    <span class="wa-section-title">Mensaje del recordatorio</span>
+                                    <span class="wa-section-desc">Usa <strong>{{ '{nombre}' }}</strong> para incluir el
+                                        nombre del cliente.</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-column gap-2 mt-3">
+                                <textarea pTextarea [(ngModel)]="mensajeEditado" [ngModelOptions]="{standalone: true}"
+                                    [maxlength]="mensajeMaxLength" rows="4" class="mensaje-textarea"
+                                    placeholder="Escribe el mensaje que recibirán tus clientes"></textarea>
+                                <div class="flex align-items-center justify-content-between gap-2">
+                                    <div class="flex align-items-center gap-2 flex-wrap">
+                                        <span
+                                            class="mensaje-counter">{{mensajeEditado.length}}/{{mensajeMaxLength}}</span>
+                                        <button *ngIf="mostrarRestablecerMensaje" type="button" class="link-btn link-btn-muted"
+                                            [disabled]="guardandoMensaje" (click)="restablecerMensaje()">
+                                            <i class="pi pi-replay"></i> Restablecer mensaje sugerido
+                                        </button>
+                                    </div>
+                                    <button type="button" class="wa-btn wa-btn-sm wa-btn-primary"
+                                        [disabled]="!mensajeCambiado || !mensajeEditado.trim() || guardandoMensaje"
+                                        (click)="guardarMensaje()">
+                                        Guardar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vista previa -->
+                    <div class="wa-preview">
+                        <span class="wa-preview-label">Vista previa</span>
+                        <div class="wa-chat">
+                            <div class="wa-bubble">
+                                <span class="wa-bubble-text">{{ mensajePreview }}</span>
+                                <span class="wa-bubble-time">{{ horaPreview }} <i
+                                        class="pi pi-check"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+
+            <!-- ============ COMPROBANTE ============ -->
+            <p-tabPanel header="Comprobante">
+                <div *ngIf="!estadoWhatsapp.vinculado" class="wa-warning mb-3">
+                    <i class="pi pi-exclamation-triangle"></i>
+                    <span>Vincula tu WhatsApp en la pestaña <strong>Conexión</strong> para poder enviar
+                        comprobantes.</span>
+                </div>
+
+                <div class="wa-config-grid">
+                    <div class="wa-card">
+                        <div class="wa-section-head">
+                            <div class="wa-section-icon"><i class="pi pi-file"></i></div>
+                            <div class="flex flex-column">
+                                <span class="wa-section-title">Mensaje del comprobante</span>
+                                <span class="wa-section-desc">Acompaña al comprobante del préstamo que se envía al
+                                    cliente. Usa <strong>{{ '{nombre}' }}</strong> para incluir su nombre.</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-column gap-2 mt-3">
+                            <textarea pTextarea [(ngModel)]="mensajeComprobanteEditado"
+                                [ngModelOptions]="{standalone: true}" [maxlength]="mensajeMaxLength" rows="4"
+                                class="mensaje-textarea"
+                                placeholder="Escribe el mensaje que acompañará al comprobante"></textarea>
+                            <div class="flex align-items-center justify-content-between gap-2">
+                                <div class="flex align-items-center gap-2 flex-wrap">
+                                    <span
+                                        class="mensaje-counter">{{mensajeComprobanteEditado.length}}/{{mensajeMaxLength}}</span>
+                                    <button *ngIf="mostrarRestablecerMensajeComprobante" type="button"
+                                        class="link-btn link-btn-muted" [disabled]="guardandoMensajeComprobante"
+                                        (click)="restablecerMensajeComprobante()">
+                                        <i class="pi pi-replay"></i> Restablecer mensaje sugerido
+                                    </button>
+                                </div>
+                                <button type="button" class="wa-btn wa-btn-sm wa-btn-primary"
+                                    [disabled]="!mensajeComprobanteCambiado || !mensajeComprobanteEditado.trim() || guardandoMensajeComprobante"
+                                    (click)="guardarMensajeComprobante()">
+                                    Guardar
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="rule-banner mt-3 mb-0">
+                            <i class="pi pi-info-circle"></i>
+                            <span>Puedes desactivar el envío del comprobante para un cliente puntual desde la pestaña
+                                <strong>Clientes</strong>.</span>
+                        </div>
+                    </div>
+
+                    <!-- Vista previa -->
+                    <div class="wa-preview">
+                        <span class="wa-preview-label">Vista previa</span>
+                        <div class="wa-chat">
+                            <div class="wa-bubble">
+                                <div class="wa-doc">
+                                    <i class="pi pi-file-pdf"></i>
+                                    <div class="flex flex-column min-w-0">
+                                        <span class="wa-doc-name">Comprobante.pdf</span>
+                                        <span class="wa-doc-meta">PDF</span>
+                                    </div>
+                                </div>
+                                <span class="wa-bubble-text">{{ mensajeComprobantePreview }}</span>
+                                <span class="wa-bubble-time">{{ horaPreview }} <i
+                                        class="pi pi-check"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+
+            <!-- ============ CLIENTES ============ -->
+            <p-tabPanel header="Clientes">
+                <div class="flex flex-column md:flex-row gap-2 mb-3">
+                    <div class="wa-segment">
+                        <button type="button" [class.active]="tipoSeleccionado === 'DIARIO'"
+                            (click)="tipoSeleccionado = 'DIARIO'">
+                            Diario <span class="wa-count">{{listaDiarioFiltrada.length}}</span>
+                        </button>
+                        <button type="button" [class.active]="tipoSeleccionado === 'SEMANAL'"
+                            (click)="tipoSeleccionado = 'SEMANAL'">
+                            Semanal <span class="wa-count">{{listaSemanalFiltrada.length}}</span>
+                        </button>
+                    </div>
+
+                    <div class="search-box flex-1">
+                        <i class="pi pi-search search-icon"></i>
+                        <input type="text" [(ngModel)]="filtroTexto" [ngModelOptions]="{standalone: true}"
+                            placeholder="Buscar por nombre o N° inversión" class="search-input" />
+                        <i *ngIf="filtroTexto" class="pi pi-times-circle search-clear" (click)="filtroTexto=''"></i>
+                    </div>
+                </div>
+
+                <div class="rule-banner">
+                    <i class="pi pi-info-circle"></i>
+                    <span *ngIf="tipoSeleccionado === 'DIARIO'">Se envía el mismo día de la cuota, si el cliente aún no
+                        ha pagado.</span>
+                    <span *ngIf="tipoSeleccionado === 'SEMANAL'">Se envía un día antes y el mismo día de la
+                        cuota.</span>
+                </div>
+
+                <div class="wa-list" *ngIf="listaSeleccionada.length > 0">
+                    <ng-container *ngFor="let item of listaSeleccionada">
+                        <ng-container *ngTemplateOutlet="filaRecordatorio; context: { item: item }"></ng-container>
+                    </ng-container>
+                </div>
+                <div *ngIf="listaSeleccionada.length == 0" class="mb-3">
+                    <app-list-empty-none></app-list-empty-none>
+                </div>
+            </p-tabPanel>
+        </p-tabview>
+    </div>
+
+    <!-- Fila de cliente -->
+    <ng-template #filaRecordatorio let-item="item">
+        <div class="recordatorio-card">
+            <div class="wa-avatar">{{ (item.fullName || '?').charAt(0) }}</div>
+            <div class="flex flex-column flex-1 min-w-0">
+                <span class="span-body-name">{{item.fullName}}</span>
+                <div class="flex align-items-center gap-2 mt-1 flex-wrap">
+                    <span class="nro-pill">N° {{item.nroInversion}}</span>
+                    <span class="celular-text" *ngIf="item.celular; else sinCelular">
+                        <i class="pi pi-phone"></i> {{item.celular}}
+                    </span>
+                    <ng-template #sinCelular>
+                        <span class="sin-celular-text">Sin número registrado</span>
                     </ng-template>
-                </p-toggleswitch>
+                </div>
+            </div>
+            <div class="wa-switches">
+                <label class="wa-switch">
+                    <span class="wa-switch-label">Recordatorio</span>
+                    <p-toggleswitch [(ngModel)]="item.recordatorioActivo" [ngModelOptions]="{standalone: true}"
+                        [disabled]="!item.celular" (ngModelChange)="onToggle(item)">
+                        <ng-template #handle let-checked="checked">
+                            <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                        </ng-template>
+                    </p-toggleswitch>
+                </label>
+                <label class="wa-switch">
+                    <span class="wa-switch-label">Comprobante</span>
+                    <p-toggleswitch [(ngModel)]="item.comprobanteActivo" [ngModelOptions]="{standalone: true}"
+                        [disabled]="!item.celular" (ngModelChange)="onToggleComprobante(item)">
+                        <ng-template #handle let-checked="checked">
+                            <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                        </ng-template>
+                    </p-toggleswitch>
+                </label>
             </div>
         </div>
     </ng-template>
@@ -202,31 +387,16 @@
 
 <p-confirmDialog #desvincular_whatsapp key="desvincular_whatsapp">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div class="border-circle confirm-icon-danger inline-flex justify-content-center align-items-center h-4rem w-4rem">
-                <i class="pi pi-ban"></i>
-            </div>
-            <span class="font-bold mb-2 mt-3 txt-red">
-                {{ message.header }}
+        <div class="wa-pop">
+            <span class="wa-pop-ico"><i class="pi pi-sign-out"></i></span>
+            <span class="wa-pop-titulo">{{ message.header }}</span>
+            <span class="wa-pop-desc">
+                <b>{{ message.message }}</b>
+                Dejarás de enviar recordatorios automáticos hasta que vincules nuevamente.
             </span>
-            <span class="flex flex-column gap-2 mb-3 txt-label">
-                <strong>{{ message.message }}</strong>
-                <span>Dejarás de enviar recordatorios automáticos hasta que vincules nuevamente.</span>
-            </span>
-            <div class="flex align-items-center gap-2 mt-4">
-                <button
-                    pButton
-                    label="Cancelar"
-                    (click)="onReject()"
-                    class="p-button-outlined w-8rem ">
-                </button>
-                <button
-                    severity="danger"
-                    pButton
-                    label="Desvincular"
-                    (click)="onAccept()"
-                    class=" w-8rem">
-                </button>
+            <div class="wa-pop-btns">
+                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                <button pButton severity="danger" label="Desvincular" (click)="onAccept()"></button>
             </div>
         </div>
     </ng-template>

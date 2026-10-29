@@ -1,5 +1,203 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Ionic: solo core + structure. No se importan normalize/typography para no cambiar el estilo
+   de los componentes PrimeNG / PrimeFlex existentes. */
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/structure.css";
+
+:root {
+  /* Tema Ionic alineado con la paleta de la app (primary = emerald de PrimeNG) */
+  --ion-color-primary: #10b981;
+  --ion-color-primary-rgb: 16, 185, 129;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #0ea371;
+  --ion-color-primary-tint: #28c08e;
+  --ion-background-color: #ffffff;
+  --ion-text-color: #374151;
+  --ion-font-family: "Inter var", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --app-bg: #ffffff;
+}
+
+/* ============================================================ */
+/* HOJA "MÁS OPCIONES" (barra inferior) - fintech mobile light   */
+/* ============================================================ */
+ion-action-sheet.mas-sheet {
+  --background: #ffffff;
+  --backdrop-opacity: .35;
+  --button-color: var(--gray-700);
+  --button-background-activated: color-mix(in srgb, var(--blue-400) 8%, #fff);
+  --button-background-activated-opacity: 1;
+  --button-background-selected: transparent;
+
+  .action-sheet-wrapper {
+    max-width: 550px;
+  }
+
+  .action-sheet-container {
+    padding: 0;
+  }
+
+  .action-sheet-group {
+    margin: 0;
+    border-radius: 0;
+    background: #fff;
+    backdrop-filter: none;
+  }
+
+  /* Grupo principal: esquinas redondeadas + agarrador */
+  .action-sheet-group:first-child {
+    position: relative;
+    padding: 22px 12px 4px;
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -12px 32px -16px rgba(15, 23, 42, .25);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      width: 38px;
+      height: 4px;
+      margin-left: -19px;
+      border-radius: 999px;
+      background: var(--gray-200);
+    }
+  }
+
+  .action-sheet-title {
+    height: auto;
+    min-height: 0;
+    padding: 4px 10px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--gray-500);
+    background: transparent;
+    border: none;
+  }
+
+  .action-sheet-button {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 10px;
+    border-radius: 14px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-700);
+    background: transparent;
+  }
+
+  .action-sheet-button-inner {
+    justify-content: flex-start;
+  }
+
+  /* ion-icon fuerza content-box: 20px + 9px de padding = círculo de 38px */
+  .action-sheet-icon {
+    box-sizing: content-box !important;
+    width: 20px;
+    height: 20px;
+    padding: 9px;
+    margin: 0 14px 0 0;
+    border-radius: 50%;
+    font-size: 20px;
+    color: var(--blue-400);
+    background: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  }
+
+  /* Cerrar sesión: acento rojo suave, separado del resto */
+  .action-sheet-destructive {
+    position: relative;
+    margin-top: 6px;
+    color: var(--red-500);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 62px;
+      right: 10px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .action-sheet-icon {
+      color: var(--red-500);
+      background: color-mix(in srgb, var(--red-500) 10%, #fff);
+    }
+  }
+
+  /* Cancelar: botón tipo píldora gris */
+  .action-sheet-group-cancel {
+    padding: 6px 16px calc(14px + var(--ion-safe-area-bottom, 0px));
+    border-top: none;
+  }
+
+  .action-sheet-cancel {
+    height: 50px;
+    min-height: 50px;
+    border-radius: 14px;
+    font-weight: 600;
+    color: var(--gray-500);
+    background: var(--gray-50);
+
+    .action-sheet-button-inner {
+      justify-content: center;
+    }
+  }
+}
+
+/* ============================================================ */
+/* LAYOUT CON IONIC                                              */
+/* ============================================================ */
+
+/* La app sigue siendo una columna centrada de máx. 550px (en escritorio); ion-app la llena. */
+html,
+body {
+  height: 100%;
+}
+
+app-root {
+  display: block;
+  position: relative;
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* Las pantallas existentes no usan <ion-content>: dentro de ion-router-outlet cada una es una
+   .ion-page (posición absoluta), así que el scroll lo hace la propia página. contain:none hace
+   que los elementos position:fixed (botones flotantes, overlays) no se muevan con el scroll. */
+ion-router-outlet > .ion-page:not(app-tabs) {
+  display: block;
+  contain: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  padding: .5rem .3rem calc(.5rem + var(--ion-safe-area-bottom, 0px));
+  background: var(--app-bg);
+}
+
+/* Dentro de las pestañas el borde inferior lo da la barra (ya incluye la zona segura). */
+app-tabs ion-router-outlet > .ion-page {
+  padding-bottom: .5rem;
+}
+
+/* Botón flotante: sobre la barra "home" de iOS / gestos de Android. Al estar dentro del
+   ion-router-outlet queda referido a su área, o sea, encima de la barra de pestañas. */
+.btn-float {
+  bottom: calc(20px + var(--ion-safe-area-bottom, 0px)) !important;
+}
+
+app-tabs .btn-float {
+  bottom: 16px !important;
+}
+
+/* "Ir al inicio" sobra donde hay barra de pestañas (la pestaña Inicio hace lo mismo). */
+app-tabs .btn-float[routerlink="/inicio"] {
+  display: none !important;
+}
+
 :root {
   // Radios y sombras (usados por .auth-card, botones, inputs, etc.)
   --radius-sm: 10px;
@@ -114,6 +312,8 @@ app-root {
   max-width: 550px;
 }
 
+/* structure.css de Ionic pone body en display:block: el centrado lo hace margin:auto de app-root. */
+
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap'); */
 
 body {
@@ -124,7 +324,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: .3rem;
+  /* El espacio lateral ahora lo da cada página (ver "LAYOUT CON IONIC"); la zona segura, Ionic. */
+  padding: 0;
   /* margin-top: 1.4rem; */
 }
 
@@ -227,17 +428,12 @@ small {}
   grid-template-columns: 1fr;
 }
 
-//titulo coloreado
+//titulo de pantalla (fintech mobile light): sólido y compacto; el color de marca queda en héroes, íconos y botones
 .label-title {
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-  /* Degradado de colores */
-  -webkit-background-clip: text;
-  /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text;
-  /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent;
-  /* Hacer el color del texto transparente para WebKit */
-  font-weight: 600;
+  color: color-mix(in srgb, var(--blue-400) 28%, var(--gray-600)); // gris azulado, no negro
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
   margin-top: 5px;
 }
 
@@ -301,6 +497,8 @@ small {}
   transform: translateX(-50%);
   width: 88%;
   max-width: 550px;
+  /* Encima del contenido que se desplaza por debajo (el brillo de p-skeleton usa z-index: 1) */
+  z-index: 10;
 }
 
 .div-float {
@@ -449,6 +647,98 @@ small {}
 /* ESTILO PARA WEB */
 .p-dialog {
   max-width: 600px;
+}
+
+/* ===== Calendario (p-datepicker) en toda la app: fintech mobile light ===== */
+.p-datepicker-panel:not(.p-datepicker-panel-inline) {
+  padding: 12px 12px 10px;
+  border: 0;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, .06), 0 18px 40px -16px rgba(15, 23, 42, .28);
+}
+
+.p-datepicker-header {
+  padding: 2px 2px 10px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.p-datepicker-title {
+  gap: 4px;
+
+  .p-datepicker-select-month,
+  .p-datepicker-select-year {
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 700;
+    color: var(--gray-700);
+    text-transform: capitalize;
+
+    &:hover { background: var(--gray-100); color: var(--gray-700); }
+  }
+}
+
+.p-datepicker-prev-button,
+.p-datepicker-next-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: var(--blue-400);
+
+  &:not(:disabled):hover { background: color-mix(in srgb, var(--blue-400) 10%, #fff); color: var(--blue-400); }
+}
+
+.p-datepicker-weekday {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-400);
+}
+
+.p-datepicker-day {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: var(--gray-700);
+
+  &:not(.p-datepicker-day-selected):not(.p-disabled):hover { background: var(--gray-100); color: var(--gray-700); }
+  &.p-disabled { color: var(--gray-300); opacity: 1; }
+}
+
+.p-datepicker-other-month .p-datepicker-day { color: var(--gray-300); }
+
+/* Hoy: anillo azul. Seleccionado: círculo con el degradado de la app */
+.p-datepicker-today > .p-datepicker-day:not(.p-datepicker-day-selected) {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--blue-400);
+  color: var(--blue-400);
+  font-weight: 700;
+}
+
+.p-datepicker-day-selected,
+.p-datepicker-today > .p-datepicker-day-selected {
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 14px -6px color-mix(in srgb, var(--blue-400) 80%, transparent);
+}
+
+.p-datepicker-month,
+.p-datepicker-year {
+  border-radius: 12px;
+  text-transform: capitalize;
+
+  &.p-datepicker-month-selected,
+  &.p-datepicker-year-selected {
+    background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+    color: #fff;
+  }
+}
+
+.p-datepicker-buttonbar {
+  padding-top: 8px;
+  border-top: 1px solid var(--gray-100);
+
+  .p-button { border-radius: 10px; font-weight: 600; }
 }
 
 //PADDING
@@ -613,4 +903,1003 @@ input.p-inputtext,
 
 .input-with-icon {
   padding-left: 2.25rem !important;
+}
+
+/* ============================================================ */
+/* PANTALLAS DE FLUJO (registrar préstamo: cliente, nuevo cliente, confirmar) */
+.flujo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.flujo-card {
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.flujo-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--primary-500);
+
+  .pi {
+    color: var(--blue-400);
+    font-size: 14px;
+  }
+}
+
+.flujo-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-600);
+  margin-bottom: 6px;
+}
+
+.flujo-opcional {
+  font-weight: 400;
+  color: var(--gray-400);
+}
+
+.flujo-hint {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--gray-500);
+  background: color-mix(in srgb, var(--blue-400) 10%, #fff);
+  border-radius: 12px;
+  padding: 10px 12px;
+
+  .pi {
+    color: var(--blue-400);
+    margin-top: 2px;
+  }
+}
+
+.flujo-error {
+  display: block;
+  margin-top: 4px;
+  color: #ef4444;
+  font-size: 12px;
+}
+
+/* Avatar con iniciales en el degradado del tema */
+.flujo-avatar {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary-500), var(--blue-400));
+}
+
+/* ============================================================ */
+/* ACCESO Y REGISTRO (validar documento, registro, datos personales; el login usa lg-* con el mismo look)
+   Estilo limpio (sin hero): logo suelto, título grande a la izquierda, campos rellenos sobre el fondo,
+   brillo de marca muy suave arriba y el degradado reservado al botón principal. */
+.au {
+  --au-ink: var(--gray-700);
+  --au-muted: var(--gray-500);
+  --au-blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  position: relative;
+  isolation: isolate; // el brillo (z-index:-1) queda detrás del contenido pero sobre el fondo de la página
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 8px 10px 16px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -40px -40px auto;
+    height: 320px;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 70% at 90% 10%, color-mix(in srgb, var(--blue-400) 16%, transparent), transparent 70%),
+      radial-gradient(55% 60% at 5% 0%, color-mix(in srgb, var(--primary-500) 12%, transparent), transparent 70%);
+  }
+}
+
+.au-volver {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px 7px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--au-blue-soft);
+  color: var(--blue-400);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .pi { font-size: 13px; }
+}
+
+/* Encabezado (antes hero): sin fondo, alineado a la izquierda */
+.au-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: 6px;
+}
+
+.au-logo {
+  width: 56px;
+  height: 56px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.au-titulo {
+  margin: 16px 0 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  color: color-mix(in srgb, var(--blue-400) 28%, var(--gray-600));
+}
+
+.au-sub {
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  color: var(--au-muted);
+}
+
+/* Pasos del registro: barrita fina bajo el título */
+.au-pasos {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 6px;
+  width: 100%;
+  margin-top: 18px;
+
+  span {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--gray-200);
+
+    &.on { background: linear-gradient(90deg, var(--blue-400), var(--primary-500)); }
+  }
+}
+
+.au-paso-text {
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--au-muted);
+}
+
+/* Formulario: directo sobre el fondo (sin tarjeta) */
+.au-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.au-card-titulo {
+  margin: 0 0 2px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--au-ink);
+}
+
+.au-texto {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--au-muted);
+
+  b { color: var(--au-ink); }
+}
+
+.au-label {
+  display: block;
+  margin: 10px 0 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--au-muted);
+}
+
+/* Campos rellenos (sin borde) que se marcan en azul al enfocarlos */
+.au input.p-inputtext,
+.au .p-select,
+.au .cel-pais {
+  min-height: 52px;
+  border: 1.5px solid transparent !important;
+  border-radius: 14px !important;
+  background: var(--gray-100);
+  box-shadow: none !important;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+
+.au input.p-inputtext:focus,
+.au .p-select.p-focus,
+.au .cel-pais:focus-within {
+  border-color: var(--blue-400) !important;
+  background: #fff;
+}
+
+/* El componente de celular fija su propio fondo: se fuerza el relleno del estilo */
+.au .cel-pais { background: var(--gray-100) !important; }
+.au .cel-pais:focus-within { background: #fff !important; }
+
+/* Piezas internas del celular: transparentes dentro del contenedor relleno */
+.au .cel-pais .p-select {
+  min-height: 0;
+  border: 0 !important;
+  border-right: 1px solid var(--gray-200) !important;
+  border-radius: 0 !important;
+  background: transparent;
+}
+
+.au .cel-pais .cel-pais-input {
+  background: transparent;
+}
+
+/* Solo los campos directos del formulario van a todo el ancho (no los internos de app-celular-pais) */
+.au-card > p-select {
+  width: 100%;
+}
+
+.au .p-select .p-select-label {
+  display: flex;
+  align-items: center;
+}
+
+.au .p-inputotp {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  width: 100%;
+
+  .p-inputtext {
+    width: 100%;
+    height: 3.25rem;
+    padding: 0;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.au-ayuda {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--au-muted);
+
+  .pi { font-size: 12px; margin-top: 2px; color: var(--blue-400); }
+
+  &.au-error { color: var(--red-500); .pi { color: var(--red-500); } }
+}
+
+/* Chip informativo (documento, código único...) */
+.au-chip {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--au-blue-soft);
+  color: var(--blue-400);
+  font-size: 13.5px;
+  font-weight: 600;
+
+  .pi { font-size: 14px; }
+}
+
+.au-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--blue-400);
+  cursor: pointer;
+}
+
+.au-pie {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--au-muted);
+}
+
+/* Botones de acción en línea (Atrás / Siguiente) */
+.au-acciones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+
+  &.au-acciones-una { grid-template-columns: 1fr; }
+}
+
+.au-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 50px;
+  border: 0;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  box-shadow: 0 10px 20px -12px color-mix(in srgb, var(--blue-400) 80%, transparent);
+  transition: transform .12s ease, opacity .15s ease;
+
+  &:active:not(:disabled) { transform: scale(.98); }
+
+  &:disabled {
+    background: var(--gray-200);
+    color: var(--gray-400);
+    box-shadow: none;
+    cursor: default;
+  }
+
+  &.au-btn-sec {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    box-shadow: none;
+  }
+
+  .pi { font-size: 14px; }
+}
+
+/* Checkbox de política */
+.au-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--gray-50);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--gray-600);
+
+  p { margin: 0; }
+}
+
+/* Popups del flujo (renderizan en body) */
+.au-pop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(88vw, 360px);
+  padding: 26px 20px 20px;
+  border-radius: 24px;
+  background: #fff;
+  text-align: center;
+}
+
+.au-pop-ico {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--blue-400) 70%, transparent);
+
+  .pi { font-size: 22px; }
+
+  &.au-pop-ico-sello {
+    background: #fff;
+    box-shadow: 0 6px 18px -8px rgba(15, 23, 42, .3);
+    img { width: 46px; height: 46px; object-fit: contain; }
+  }
+}
+
+.au-pop-titulo {
+  margin: 6px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.au-pop-texto {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--gray-500);
+
+  b { color: var(--gray-700); }
+}
+
+.au-pop-resumen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--blue-400) 7%, #fff);
+  text-align: left;
+}
+
+.au-pop-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  font-size: 13.5px;
+  color: var(--gray-700);
+  word-break: break-word;
+
+  & + & { border-top: 1px solid color-mix(in srgb, var(--blue-400) 12%, #fff); }
+
+  .pi { flex-shrink: 0; font-size: 13px; color: var(--blue-400); }
+}
+
+.au-pop-codigo {
+  margin-top: 4px;
+  padding: 8px 18px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--primary-500) 10%, #fff);
+  color: var(--primary-500);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+
+.au-pop .au-acciones {
+  width: 100%;
+  margin-top: 14px;
+}
+/* ============================================================ */
+/* DIÁLOGOS DINÁMICOS CON DISEÑO PROPIO (mensaje genérico, activar huella)
+   El contenido dibuja su propio título e ícono: se oculta el encabezado de PrimeNG. */
+.p-dialog:has(app-message-pop-up),
+.p-dialog:has(app-biometric-activation),
+.p-dialog:has(app-update-app) {
+  max-width: 360px !important;
+  border: 0;
+  border-radius: 24px !important;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -20px rgba(15, 23, 42, .35);
+
+  .p-dialog-header { display: none; }
+  .p-dialog-content { padding: 22px 20px 20px !important; border-radius: 24px; }
+}
+
+
+/* ============================================================ */
+/* ADMINISTRADOR (inicio, inversores, perfil del inversor, códigos únicos, configuración)
+   Estilo fintech mobile light: tarjetas blancas, filas con ícono en círculo, chips de estado. */
+.adm {
+  --adm-ink: var(--gray-700);
+  --adm-muted: var(--gray-500);
+  --adm-blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  --adm-sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4px 2px 0;
+}
+
+.adm-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.adm-desc {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--adm-muted);
+}
+
+.adm-seccion {
+  margin: 6px 6px -4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--adm-muted);
+}
+
+.adm-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: var(--adm-sombra);
+  padding: 4px 16px;
+}
+
+/* Cabecera de tarjeta tocable (lista desplegable) */
+.adm-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  .adm-card-titulo { flex: 1; }
+  > .pi { color: var(--adm-muted); font-size: 14px; }
+}
+
+.adm-card-titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--adm-ink);
+}
+
+/* Fila etiqueta / valor */
+.adm-fila {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  color: inherit;
+  text-decoration: none;
+
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 48px;
+    right: 0;
+    height: 1px;
+    background: var(--gray-100);
+  }
+}
+
+a.adm-fila,
+button.adm-fila {
+  width: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.adm-ico {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--adm-blue-soft);
+  color: var(--blue-400);
+
+  .pi { font-size: 14px; }
+
+  &.adm-ico-grad {
+    background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+    color: #fff;
+  }
+}
+
+.adm-label {
+  flex-shrink: 0;
+  font-size: 13.5px;
+  color: var(--adm-muted);
+}
+
+.adm-valor {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--adm-ink);
+  word-break: break-word;
+}
+
+/* Texto de dos líneas dentro de una fila de lista */
+.adm-texto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  b {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--adm-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  small {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--adm-muted);
+  }
+}
+
+.adm-lado {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  text-align: right;
+
+  b { font-size: 14px; font-weight: 700; color: var(--adm-ink); }
+  small { font-size: 11.5px; color: var(--adm-muted); }
+}
+
+.adm-chevron {
+  flex-shrink: 0;
+  color: var(--gray-300);
+  font-size: 14px;
+}
+
+/* Chips de estado */
+.adm-chip {
+  --c: var(--blue-400);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--c) 12%, #fff);
+  color: var(--c);
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  .pi { font-size: 10px; }
+
+  &.adm-verde { --c: var(--primary-500); }
+  &.adm-naranja { --c: var(--orange-500); }
+  &.adm-rojo { --c: var(--red-500); }
+  &.adm-gris { --c: var(--gray-500); }
+}
+
+/* Avatar con iniciales */
+.adm-avatar {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+
+  &.adm-avatar-lg {
+    width: 76px;
+    height: 76px;
+    font-size: 26px;
+    box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--blue-400) 70%, transparent);
+  }
+}
+
+/* Cabecera de perfil (avatar centrado) */
+.adm-perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px 18px;
+
+  h2 {
+    margin: 12px 0 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--adm-ink);
+    word-break: break-word;
+  }
+
+  > span:not(.adm-avatar) { margin-top: 2px; font-size: 13.5px; color: var(--adm-muted); }
+}
+
+.adm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+/* Buscador en píldora */
+.adm-buscar {
+  position: relative;
+
+  > .pi-search {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    pointer-events: none;
+  }
+
+  > .pi-times-circle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    cursor: pointer;
+  }
+
+  input.p-inputtext {
+    width: 100%;
+    height: 48px;
+    padding-left: 44px;
+    border: 0;
+    border-radius: 999px !important;
+    background: #fff;
+    box-shadow: var(--adm-sombra);
+  }
+}
+
+/* Filtros en píldoras */
+.adm-filtros {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px;
+
+  &::-webkit-scrollbar { display: none; }
+
+  button {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--gray-100);
+    color: var(--gray-600);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.on {
+      background: #fff;
+      color: var(--blue-400);
+      box-shadow: 0 2px 8px -2px rgba(15, 23, 42, .18);
+    }
+  }
+}
+
+.adm-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 16px;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--adm-muted);
+
+  .adm-ico { width: 46px; height: 46px; }
+}
+
+.adm-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 0 14px;
+}
+
+.adm-ver-todo {
+  display: block;
+  padding: 12px 0 14px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--blue-400);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Interruptor (checkbox + label), misma lógica que antes */
+.adm-toggle-input { display: none; }
+
+.adm-toggle {
+  position: relative;
+  display: block;
+  width: 46px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--gray-300);
+  cursor: pointer;
+  transition: background-color .2s ease;
+
+  span {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .25);
+    transition: left .2s ease;
+  }
+}
+
+.adm-toggle-input:checked + .adm-toggle {
+  background: var(--primary-500);
+
+  span { left: 21px; }
+}
+
+/* Botón principal en línea */
+.adm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled { background: var(--gray-200); color: var(--gray-400); cursor: default; }
+
+  &.adm-btn-sec { background: var(--gray-100); color: var(--gray-600); }
+  &.adm-btn-suave { background: var(--adm-blue-soft); color: var(--blue-400); }
+
+  .pi { font-size: 14px; }
+}
+
+/* ===== Popups del administrador (se dibujan en <body>) ===== */
+.adm-pop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(88vw, 360px);
+  padding: 26px 20px 20px;
+  border-radius: 24px;
+  background: #fff;
+  text-align: center;
+}
+
+.adm-pop-ico {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--blue-400) 70%, transparent);
+
+  .pi { font-size: 22px; }
+}
+
+.adm-pop-titulo {
+  margin: 6px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.adm-pop-sub {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+.adm-pop-resumen {
+  width: 100%;
+  margin-top: 6px;
+  padding: 2px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--blue-400) 6%, #fff);
+  text-align: left;
+
+  .adm-ico { background: #fff; }
+  .adm-fila + .adm-fila::before { background: color-mix(in srgb, var(--blue-400) 12%, #fff); }
+}
+
+.adm-pop-label {
+  align-self: flex-start;
+  margin-top: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gray-500);
+}
+
+.adm-pop-input {
+  width: 100%;
+  height: 48px;
+  border: 1.5px solid transparent !important;
+  border-radius: 14px !important;
+  background: var(--gray-100);
+  box-shadow: none !important;
+
+  &:focus { border-color: var(--blue-400) !important; background: #fff; }
+}
+
+.adm-pop-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+
+  &.adm-pop-btns-una { grid-template-columns: 1fr; }
+}
+
+/* Correo pendiente editable: se mantiene pulsado para cambiarlo */
+.adm-editable {
+  margin: 6px -8px;
+  padding: 9px 8px;
+  border: 1.5px dashed color-mix(in srgb, var(--blue-400) 55%, #fff);
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+
+  &::before { display: none; }
 }

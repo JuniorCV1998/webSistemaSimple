@@ -1,6 +1,6 @@
 package com.ssimple.app;
 
-import  android.os.Bundle;
+import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.getcapacitor.BridgeActivity;
@@ -20,4 +20,3 @@ public class MainActivity extends BridgeActivity {
     settings.setSupportZoom(false);          // Desactiva zoom por completo
   }
 }
-

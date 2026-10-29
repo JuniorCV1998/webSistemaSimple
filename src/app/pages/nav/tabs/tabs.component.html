@@ -1,0 +1,12 @@
+<ion-tabs (ionTabsDidChange)="onTabsDidChange($event)">
+    <ion-tab-bar slot="bottom" (ionTabButtonClick)="onTabClick($any($event))">
+        <ion-tab-button *ngFor="let t of tabs" [tab]="t.tab">
+            <ion-icon [icon]="seleccionada === t.tab ? t.iconActivo : t.icon" aria-hidden="true"></ion-icon>
+            <ion-label>{{ t.label }}</ion-label>
+        </ion-tab-button>
+        <ion-tab-button [tab]="tabMas">
+            <ion-icon [icon]="iconMas" aria-hidden="true"></ion-icon>
+            <ion-label>Más</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+</ion-tabs>

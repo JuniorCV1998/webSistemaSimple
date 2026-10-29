@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogService } from 'primeng/dynamicdialog';
-import { InputNumber } from 'primeng/inputnumber';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -13,13 +13,14 @@ import { Constantes } from '../../../../core/constant/Constantes';
 import { AdminService } from '../../../../core/services/admin/admin.service';
 import { BiometriaConfigCardComponent } from '../../shared/biometria-config-card/biometria-config-card.component';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
+import { SystemService } from '../../../../core/services/system/system.service';
 import { ErrorGeneralComponent } from '../../../system/errores/error-general/error-general.component';
 
 @Component({
   selector: 'app-configuracion-admin',
   standalone: true,
-  imports: [ToastModule, FormsModule, InputNumber, ErrorGeneralComponent, CommonModule, LoadingComponent,
-    ToggleSwitch, ButtonModule, MessageModule, BiometriaConfigCardComponent
+  imports: [ToastModule, FormsModule, ErrorGeneralComponent, CommonModule, LoadingComponent,
+    ToggleSwitch, ButtonModule, MessageModule, BiometriaConfigCardComponent, RouterLink
   ],
   providers: [ConfirmationService, MessageService,],
   templateUrl: './configuracion-admin.component.html',
@@ -51,6 +52,7 @@ export default class ConfiguracionAdminComponent {
     private adminService: AdminService,
     public dialogService: DialogService,
     private messageService: MessageService,
+    private systemService: SystemService,
   ) { }
 
   ngOnInit() {
@@ -114,6 +116,15 @@ export default class ConfiguracionAdminComponent {
   }
 
 
+  /** Periodo de prueba: entre 1 y 3 meses (mismo rango que tenía el input numérico). */
+  cambiarMesesPrueba(delta: number) {
+    const actual = Number(this.periodTest.value) || 0;
+    const nuevo = Math.min(3, Math.max(1, actual + delta));
+    if (nuevo === actual) return;
+    this.periodTest.value = nuevo;
+    this.onValueChange('MES_FREE', nuevo);
+  }
+
   updateConfigAdmin() {
     this.loadingComponent.show();
     this.adminService.updateConfiguracionAdmin(this.changedValues).pipe(
@@ -137,6 +148,8 @@ export default class ConfiguracionAdminComponent {
         life: 3000
       };
       this.messageService.add(messageData);
+      // Los meses de prueba (MES_FREE) se muestran en el login: que no use el valor en caché
+      this.systemService.refrescarAjustesPublicos();
 
       // Refrescar valores originales
       this.changedValues.forEach(change => {

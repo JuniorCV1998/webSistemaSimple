@@ -1,29 +1,88 @@
-.custom-banner-codigo-unico {
-    flex: 1;
-    margin: 5px;
-    padding: 10px;
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);
-    text-align: center;
-    border-radius: 8px;
-    min-width: 30px;
-    align-items: center;
+/* Tarjeta de configuración: estilo fintech mobile light (igual que .cf-card de configuracion-inversor) */
+.bc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
 }
 
-.txt-span {
-    font-size: 13px;
-    text-align: left;
+.bc-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.bc-ico {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--blue-400) 12%, #fff);
 }
 
 .biometria-icon {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
+  width: 24px;
+  height: 24px;
 }
 
-.confirmar-biometria {
-    background: var(--primary-50, #ecfdf5);
-    border-radius: var(--radius-sm);
-    padding: 10px;
+.bc-head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bc-titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.bc-desc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--gray-500);
+}
+
+.bc-confirmar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--primary-500) 7%, #fff);
+}
+
+.bc-confirmar-fila {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bc-input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: none !important;
+  border-radius: 14px !important;
+  background: #fff;
+
+  &:focus {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent) !important;
+  }
+}
+
+.bc-btn {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50% !important;
 }

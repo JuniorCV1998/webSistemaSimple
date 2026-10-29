@@ -86,5 +86,15 @@ export class AdminService {
   updateConfiguracionAdmin(request: any){
       return this.http.post(this.baseUrl+this.baseComponent+'update-config-admin', request);
   }
-  
+
+  /* AJUSTES DEL SISTEMA: contacto, enlaces, planes de membresía y oferta */
+
+  getAjustesSistema(){
+    return this.http.get(this.baseUrl+this.baseComponent+'ajustes-sistema');
+  }
+
+  updateAjustesSistema(request: any){
+    return this.http.put(this.baseUrl+this.baseComponent+'ajustes-sistema', request);
+  }
+
 }

@@ -1,172 +1,452 @@
-.whatsapp-status-card {
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    background: var(--gray-50, #f9fafb);
+/* Colores del tema del sistema (primario verde, secundario azul). La vista previa del chat
+   mantiene los colores de WhatsApp porque imita cómo lo verá el cliente. */
+$wa-green: var(--primary-500);
+$wa-green-dark: var(--p-emerald-600);
+$blue: var(--blue-400);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$ink: var(--gray-700);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+
+/* Estilo fintech mobile light: pestañas en píldora, tarjetas blancas sin borde con sombra suave */
+.wa-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 4px 2px 0;
 }
 
-::ng-deep .mensaje-accordion {
-    .p-accordionpanel {
-        border: none;
-        background: var(--gray-50, #f9fafb);
-        border-radius: var(--radius-sm);
-        overflow: hidden;
-    }
+/* ===== Encabezado ===== */
+.wa-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 4px;
+    margin-bottom: 12px;
+}
 
-    .p-accordionheader {
-        background: transparent;
-        border: none;
-        padding: 12px 14px;
-        border-radius: var(--radius-sm);
-    }
+.wa-subtitle {
+    font-size: 13.5px;
+    color: var(--gray-500);
+    margin: 0;
+    line-height: 1.45;
+}
 
-    .p-accordionheader:hover,
-    .p-accordionheader:not(.p-disabled):hover {
+/* ===== Pestañas como segmento en píldora ===== */
+.wa-panel {
+    background: transparent;
+}
+
+::ng-deep .wa-tabview {
+    .p-tablist-tab-list {
+        gap: 2px;
+        padding: 4px;
+        border: none;
+        border-radius: 999px;
         background: var(--gray-100);
     }
 
-    .p-accordioncontent-content {
-        background: transparent;
+    .p-tablist-content {
+        overflow: hidden;
+    }
+
+    .p-tablist-active-bar {
+        display: none;
+    }
+
+    .p-tab {
+        flex: 1 1 0;
+        min-width: 0;
+        justify-content: center;
+        padding: 9px 12px;
         border: none;
-        padding: 0 14px 14px;
+        border-radius: 999px;
+        background: transparent;
+        font-weight: 600;
+        font-size: 13.5px;
+        text-align: center;
+        color: var(--gray-500);
+        white-space: nowrap;
+        transition: background .15s, color .15s;
+    }
+
+    .p-tab:not(.p-tab-active):hover {
+        color: $ink;
+    }
+
+    .p-tab-active {
+        background: #fff;
+        color: $blue;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, .12);
+    }
+
+    .p-tabpanels {
+        padding: 14px 0 0;
+        background: transparent;
     }
 }
 
+/* En celular las 4 pestañas se reparten el ancho y el texto largo
+   ("Mensaje automático") baja a 2 líneas, para que ninguna quede fuera de la vista. */
+@media (max-width: 576px) {
+    ::ng-deep .wa-tabview {
+        .p-tablist-tab-list {
+            border-radius: 18px;
+        }
+
+        .p-tab {
+            padding: 8px 4px;
+            border-radius: 14px;
+            font-size: 12px;
+            line-height: 1.2;
+            white-space: normal;
+        }
+    }
+}
+
+/* ===== Tarjetas ===== */
+.wa-card {
+    border-radius: 20px;
+    padding: 16px;
+    background: #fff;
+    box-shadow: $sombra;
+}
+
+.wa-card-conexion {
+    max-width: 680px;
+}
+
+/* ===== Conexión ===== */
+.wa-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.wa-status-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    i {
+        font-size: 1.4rem;
+    }
+}
+
+.wa-status-icon-off {
+    background: var(--gray-100);
+
+    i {
+        color: var(--gray-400);
+    }
+}
+
+.wa-status-icon-on {
+    background: linear-gradient(135deg, var(--primary-500), var(--blue-400));
+    box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--primary-500) 80%, transparent);
+
+    i {
+        color: #fff;
+    }
+}
+
+.wa-status-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: $ink;
+}
+
+.wa-status-desc {
+    font-size: 13px;
+    color: var(--gray-500);
+    line-height: 1.45;
+
+    strong {
+        color: var(--gray-700);
+    }
+}
+
+.wa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 999px;
+}
+
+.wa-badge-on {
+    background: var(--primary-50);
+    color: var(--p-emerald-700);
+}
+
+.wa-badge-off {
+    background: var(--gray-100);
+    color: var(--gray-500);
+}
+
 .status-dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
     flex-shrink: 0;
 }
 
 .status-dot-on {
-    background: #25d366;
-    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.18);
+    background: $wa-green;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
 }
 
 .status-dot-off {
     background: var(--gray-400);
 }
 
-.status-text {
-    font-size: 13px;
+.wa-link-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 18px;
+}
+
+.wa-field-label {
+    font-size: 12.5px;
     font-weight: 600;
     color: var(--gray-700);
+}
+
+.wa-optional {
+    font-weight: 400;
+    color: var(--gray-400);
+}
+
+.wa-field-hint {
+    font-size: 11.5px;
+    color: var(--gray-400);
+    line-height: 1.4;
+}
+
+.numero-vincular-row {
+    display: flex;
+    align-items: stretch;
+    height: 48px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--gray-50, #f9fafb);
+
+    &:focus-within {
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent);
+    }
+}
+
+.numero-vincular-prefijo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 6px 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-500);
+    background: transparent;
+    flex-shrink: 0;
+
+    i {
+        font-size: .75rem;
+    }
+}
+
+.numero-vincular-input {
+    width: 100%;
+    border: none;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    color: var(--gray-700);
+    background: transparent;
+    outline: none;
+
+    &::placeholder {
+        color: var(--gray-400);
+    }
+
+    &:disabled {
+        color: var(--gray-400);
+    }
+}
+
+/* ===== Botones ===== */
+.wa-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    align-self: stretch;
+    margin-top: 12px;
+    padding: 13px 18px;
+    border-radius: 14px;
+    font-size: 14.5px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background .15s, opacity .15s;
+
+    i {
+        font-size: 1rem;
+    }
+
+    &:disabled {
+        opacity: .5;
+        cursor: default;
+    }
+}
+
+.wa-btn-sm {
+    margin-top: 0;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    align-self: auto;
+}
+
+.wa-btn-primary {
+    background: $wa-green;
+    color: #fff;
+
+    &:not(:disabled):hover {
+        background: $wa-green-dark;
+    }
+}
+
+.wa-btn-danger-outline {
+    width: 100%;
+    background: color-mix(in srgb, var(--red-500) 8%, #fff);
+    color: var(--red-500);
+    margin-top: 18px;
+
+    &:not(:disabled):hover {
+        background: color-mix(in srgb, var(--red-500) 13%, #fff);
+    }
 }
 
 .link-btn {
     background: transparent;
     border: none;
-    color: #25d366;
+    color: $wa-green;
     font-weight: 700;
     font-size: 13px;
+    font-family: inherit;
     cursor: pointer;
-    padding: 4px 4px;
+    padding: 4px;
     white-space: nowrap;
+
+    &:active {
+        opacity: .7;
+    }
+
+    &:disabled {
+        color: var(--gray-400);
+        cursor: default;
+    }
 }
 
-.link-btn:active {
-    opacity: .7;
+.link-btn-muted {
+    color: var(--gray-500);
+    font-weight: 600;
+    font-size: 12px;
+    padding: 2px 0;
+
+    i {
+        font-size: .7rem;
+    }
+
+    &:hover {
+        color: $wa-green;
+    }
 }
 
-.link-btn:disabled {
-    color: var(--gray-400);
-    cursor: default;
-    opacity: 1;
+/* ===== Vinculando (QR) ===== */
+.wa-linking-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
 }
 
-.link-btn-danger {
+.wa-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--gray-600);
+    background: var(--gray-100);
+    padding: 3px 10px;
+    border-radius: 999px;
+
+    i {
+        font-size: .75rem;
+    }
+}
+
+.wa-countdown-low {
     color: var(--red-500);
-}
-
-.confirm-icon-danger {
     background: var(--red-50);
 }
 
-.confirm-icon-danger i {
-    color: var(--red-500);
-    font-size: 1.6rem;
-}
-
-::ng-deep .p-dialog {
-    width: 90%;
-    max-width: 550px;
-}
-
-.numero-vincular-row {
+.wa-linking-body {
     display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.wa-qr-col {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.numero-vincular-icon {
-    color: var(--gray-400);
-    font-size: .8rem;
+    gap: 6px;
     flex-shrink: 0;
 }
 
-.numero-vincular-prefijo {
-    font-size: 12.5px;
-    font-weight: 600;
-    color: var(--gray-500);
-    flex-shrink: 0;
+.wa-steps-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
 }
 
-.numero-vincular-input {
-    width: 100%;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    padding: 8px 10px;
-    font-size: 12.5px;
-    color: var(--gray-700);
-    background: #fff;
-    outline: none;
-}
-
-.numero-vincular-input:focus {
-    border-color: var(--primary-500);
-    box-shadow: 0 0 0 1px var(--primary-500);
-}
-
-.numero-vincular-input::placeholder {
-    color: var(--gray-400);
-}
-
-.numero-vincular-input:disabled {
-    background: var(--gray-50, #f9fafb);
-    color: var(--gray-400);
+@media (max-width: 576px) {
+    .wa-linking-body {
+        flex-direction: column;
+        align-items: stretch;
+    }
 }
 
 .qr-image {
-    width: 190px;
-    height: 190px;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-card);
+    width: 200px;
+    height: 200px;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
     background: #fff;
     padding: 8px;
 }
 
-.qr-divider {
+.wa-steps {
+    margin: 0;
+    padding-left: 20px;
     display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 220px;
-    color: var(--gray-400);
-    font-size: 11.5px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--gray-600);
+    line-height: 1.45;
 
-.qr-divider::before,
-.qr-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--gray-200);
-}
-
-.qr-divider span {
-    padding: 0 8px;
+    strong {
+        color: var(--gray-700);
+    }
 }
 
 .pairing-code-box {
@@ -174,10 +454,9 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    width: 100%;
-    background: #fff;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-card);
+    background: var(--gray-50, #f9fafb);
+    border: 1px dashed var(--gray-300);
+    border-radius: 12px;
     padding: 12px 14px;
     text-align: center;
 }
@@ -192,112 +471,172 @@
     font-size: 22px;
     font-weight: 800;
     letter-spacing: 3px;
-    color: var(--gray-700);
+    color: $wa-green;
 }
 
 .pairing-code-hint {
     font-size: 11px;
     color: var(--gray-500);
     line-height: 1.4;
-    max-width: 260px;
-}
-
-.qr-countdown {
-    font-size: 12px;
-    color: var(--gray-500);
 }
 
 .same-device-hint {
     display: flex;
     align-items: flex-start;
-    gap: 6px;
-    background: #fff;
-    border-radius: var(--radius-sm);
-    padding: 8px 10px;
-    margin-top: 4px;
+    gap: 8px;
+    background: var(--blue-50, #eff6ff);
+    border-radius: 10px;
+    padding: 10px 12px;
+
+    i {
+        font-size: .85rem;
+        color: var(--blue-500);
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    span {
+        font-size: 12px;
+        color: var(--gray-600);
+        line-height: 1.45;
+    }
 }
 
-.same-device-hint i {
-    font-size: .8rem;
-    color: var(--blue-500);
-    margin-top: 2px;
+/* ===== Mensaje automático ===== */
+.wa-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: var(--yellow-50, #fefce8);
+    border: none;
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: var(--gray-700);
+    line-height: 1.45;
+
+    i {
+        color: var(--yellow-600, #ca8a04);
+        margin-top: 2px;
+    }
+}
+
+.wa-config-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .wa-config-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.wa-section-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.wa-section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: $blue-soft;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+
+    i {
+        color: $blue;
+        font-size: 1rem;
+    }
 }
 
-.same-device-hint span {
-    font-size: 11.5px;
-    color: var(--gray-600);
-    line-height: 1.4;
-    text-align: left;
+.wa-section-icon-off {
+    background: var(--gray-100);
+
+    i {
+        color: var(--gray-400);
+    }
+}
+
+.wa-campana {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.wa-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: $ink;
+}
+
+.wa-section-desc {
+    font-size: 12.5px;
+    color: var(--gray-500);
+    line-height: 1.45;
+
+    strong {
+        color: var(--gray-700);
+    }
 }
 
 .mensaje-textarea {
     width: 100%;
     resize: vertical;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    padding: 8px 10px;
-    font-size: 12.5px;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 13.5px;
     font-family: inherit;
     color: var(--gray-700);
-    background: #fff;
+    background: var(--gray-50, #f9fafb);
     outline: none;
-}
 
-.mensaje-textarea:focus {
-    border-color: var(--primary-500);
-    box-shadow: 0 0 0 1px var(--primary-500);
-}
+    &:focus {
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent);
+    }
 
-.mensaje-textarea::placeholder {
-    color: var(--gray-400);
-}
-
-.mensaje-hint {
-    font-size: 11px;
-    color: var(--gray-500);
-    line-height: 1.4;
-}
-
-.mensaje-hint strong {
-    color: var(--gray-600);
+    &::placeholder {
+        color: var(--gray-400);
+    }
 }
 
 .mensaje-counter {
-    font-size: 11px;
+    font-size: 11.5px;
     color: var(--gray-400);
 }
 
-.hora-row {
-    flex-wrap: nowrap;
-}
-
-.hora-label {
-    white-space: nowrap;
-}
-
 .hora-icon {
-    color: var(--blue-500);
+    color: $wa-green;
     font-size: .95rem;
 }
 
 ::ng-deep .hora-calendar {
     .p-datepicker-input {
-        width: 92px;
-        border-radius: var(--radius-sm);
-        font-size: 12px;
-        font-weight: 600;
+        width: 130px;
+        height: 44px;
+        border: none;
+        border-radius: 14px;
+        background: var(--gray-50, #f9fafb);
+        font-size: 14px;
+        font-weight: 700;
         color: var(--gray-700);
-        padding: 6px 26px 6px 8px;
+        padding: 8px 32px 8px 14px;
+        box-shadow: none;
     }
 
     .p-datepicker-input:enabled:focus {
-        border-color: var(--primary-500);
-        box-shadow: 0 0 0 1px var(--primary-500);
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent);
     }
 
     .p-datepicker-input-icon {
-        color: var(--blue-500);
+        color: $wa-green;
     }
 
     .p-datepicker-input-icon-container {
@@ -310,7 +649,7 @@
 }
 
 ::ng-deep .p-datepicker-time-picker button {
-    color: var(--primary-500);
+    color: $wa-green;
 }
 
 ::ng-deep .p-datepicker-time-picker span {
@@ -318,11 +657,133 @@
     color: var(--gray-700);
 }
 
-.intro-text {
-    font-size: 13px;
+/* Vista previa estilo chat de WhatsApp */
+.wa-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wa-preview-label {
+    font-size: 12px;
+    font-weight: 700;
     color: var(--gray-500);
-    margin: 0 auto;
-    max-width: 320px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.wa-chat {
+    background: #efeae2;
+    border-radius: 14px;
+    padding: 18px 14px;
+    min-height: 160px;
+}
+
+.wa-bubble {
+    position: relative;
+    background: #d9fdd3;
+    border-radius: 10px 0 10px 10px;
+    padding: 8px 10px 6px;
+    margin-left: auto;
+    max-width: 92%;
+    width: fit-content;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .08);
+}
+
+.wa-bubble-text {
+    display: block;
+    font-size: 13.5px;
+    color: #111b21;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.wa-doc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, .05);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 6px;
+    min-width: 200px;
+
+    i {
+        font-size: 1.6rem;
+        color: #e53935;
+    }
+}
+
+.wa-doc-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111b21;
+}
+
+.wa-doc-meta {
+    font-size: 11px;
+    color: #667781;
+}
+
+.wa-bubble-time {
+    display: block;
+    text-align: right;
+    font-size: 10.5px;
+    color: #667781;
+    margin-top: 2px;
+
+    i {
+        font-size: .65rem;
+        color: #53bdeb;
+        margin-left: 2px;
+    }
+}
+
+/* ===== Clientes ===== */
+.wa-segment {
+    display: flex;
+    background: var(--gray-100);
+    border-radius: 999px;
+    padding: 4px;
+    flex-shrink: 0;
+
+    button {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: none;
+        background: transparent;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: inherit;
+        color: var(--gray-500);
+        cursor: pointer;
+    }
+
+    button.active {
+        background: #fff;
+        color: $blue;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+    }
+}
+
+.wa-count {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--gray-200);
+    color: var(--gray-600);
+}
+
+.wa-segment button.active .wa-count {
+    background: var(--blue-50);
+    color: var(--blue-500);
 }
 
 .search-box {
@@ -333,110 +794,133 @@
 
 .search-icon {
     position: absolute;
-    left: 12px;
-    font-size: .8rem;
+    left: 16px;
+    font-size: .85rem;
     color: var(--gray-400);
     pointer-events: none;
 }
 
 .search-input {
     width: 100%;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    padding: 10px 32px;
-    font-size: 13px;
+    height: 44px;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 40px;
+    font-size: 13.5px;
     color: var(--gray-700);
     background: #fff;
+    box-shadow: $sombra;
     outline: none;
-}
 
-.search-input:focus {
-    border-color: var(--primary-500);
-    box-shadow: 0 0 0 1px var(--primary-500);
-}
+    &:focus {
+        box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent), $sombra;
+    }
 
-.search-input::placeholder {
-    color: var(--gray-400);
+    &::placeholder {
+        color: var(--gray-400);
+    }
 }
 
 .search-clear {
     position: absolute;
-    right: 12px;
+    right: 16px;
     font-size: .85rem;
     color: var(--gray-400);
     cursor: pointer;
 }
 
-/* Banner de contexto dentro de cada pestaña (Diario / Semanal) */
 .rule-banner {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    background: var(--gray-50, #f9fafb);
-    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--blue-400) 8%, #fff);
+    border-radius: 14px;
     padding: 10px 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+
+    i {
+        font-size: .85rem;
+        color: var(--blue-500);
+        margin-top: 1px;
+        flex-shrink: 0;
+    }
+
+    span {
+        font-size: 12.5px;
+        color: var(--gray-600);
+        line-height: 1.4;
+    }
 }
 
-.rule-banner i {
-    font-size: .85rem;
-    color: var(--blue-500);
-    margin-top: 1px;
-    flex-shrink: 0;
-}
-
-.rule-banner span {
-    font-size: 12.5px;
-    color: var(--gray-600);
-    line-height: 1.4;
-}
-
-/* Estilo del p-tabview para que combine con las tarjetas de la app */
-::ng-deep .recordatorios-tabview {
-    .p-tablist-tab-list {
-        border-color: var(--gray-200);
-        background: transparent;
-        justify-content: center;
-    }
-
-    .p-tab {
-        padding: 0.7rem 1rem;
-        font-weight: 600;
-        font-size: 13.5px;
-        color: var(--gray-500);
-        border-color: transparent;
-        background: transparent;
-    }
-
-    .p-tab-active {
-        color: var(--primary-500);
-    }
-
-    .p-tablist-active-bar {
-        background-color: var(--primary-500);
-    }
-
-    .p-tabpanels {
-        padding: 1rem 0 0;
-        background: transparent;
-    }
-
-    .p-tabview-left-icon {
-        margin-right: 6px;
-    }
+.wa-list {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: $sombra;
 }
 
 .recordatorio-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     width: 100%;
-    padding: 12px 14px;
-    background: #fff;
-    box-shadow: var(--shadow-card);
-    border-radius: var(--radius-sm);
+    padding: 10px;
+    background: transparent;
+}
+
+/* Separador que empieza después del avatar */
+.wa-list > .recordatorio-card:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 62px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
+}
+
+.wa-switches {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.wa-switch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.wa-switch-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+.wa-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    /* Mismo avatar que la lista de clientes */
+    background: linear-gradient(135deg, $blue, $wa-green);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .span-body-name {
-    color: var(--gray-700);
-    font-size: 13.5px;
+    color: $ink;
+    font-size: 14.5px;
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -463,15 +947,80 @@
     font-size: 12px;
     color: var(--gray-500);
     white-space: nowrap;
-}
 
-.celular-text i {
-    font-size: .75rem;
-    margin-right: 2px;
+    i {
+        font-size: .75rem;
+        margin-right: 2px;
+    }
 }
 
 .sin-celular-text {
     font-size: 11.5px;
     color: var(--gray-400);
     font-style: italic;
+}
+
+/* ===== Diálogo "Desvincular" (mismo formato que los pop ups de Pagos pendientes) ===== */
+.wa-pop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 28px 22px 22px;
+    border-radius: 24px;
+    background: #fff;
+    text-align: center;
+}
+
+.wa-pop-ico {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--red-500);
+    background: color-mix(in srgb, var(--red-500) 10%, #fff);
+
+    i {
+        font-size: 24px;
+    }
+}
+
+.wa-pop-titulo {
+    margin-top: 6px;
+    font-size: 17px;
+    font-weight: 700;
+    color: $ink;
+}
+
+.wa-pop-desc {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--gray-500);
+
+    b {
+        color: $ink;
+    }
+}
+
+.wa-pop-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+
+    button {
+        justify-content: center;
+        border-radius: 14px;
+    }
+}
+
+::ng-deep .p-dialog {
+    width: 90%;
+    max-width: 550px;
 }

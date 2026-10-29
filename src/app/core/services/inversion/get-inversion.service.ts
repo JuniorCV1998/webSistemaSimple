@@ -138,4 +138,41 @@ export class GetInversionService {
     return this.http.post(this.baseUrl + this.baseComponent + 'actualizarMensajeWhatsapp', null, { params });
   }
 
+  /** Pausa/reanuda la campaña de recordatorios sin desvincular el WhatsApp. */
+  actualizarCampanaWhatsapp(activar: boolean) {
+    const params = new HttpParams()
+      .set('activar', activar);
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarCampanaWhatsapp', null, { params });
+  }
+
+  /** Guarda la plantilla del mensaje que acompaña al comprobante. Soporta "{nombre}". Máximo 500 caracteres. */
+  actualizarMensajeComprobanteWhatsapp(mensaje: string) {
+    const params = new HttpParams()
+      .set('mensaje', mensaje);
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarMensajeComprobanteWhatsapp', null, { params });
+  }
+
+  /** Activa/desactiva el envío del comprobante por WhatsApp para una inversión puntual. */
+  actualizarEnvioComprobanteWhatsapp(idInversion: number, activar: boolean) {
+    const params = new HttpParams()
+      .set('idInversion', Number(idInversion))
+      .set('activar', activar);
+    return this.http.post(this.baseUrl + this.baseComponent + 'actualizarEnvioComprobanteWhatsapp', null, { params });
+  }
+
+  /** PDF del comprobante generado en el backend (binario application/pdf). */
+  getComprobantePdf(idInversion: number) {
+    const params = new HttpParams()
+      .set('idInversion', Number(idInversion));
+    return this.http.get(this.baseUrl + this.baseComponent + 'comprobantePdf', { params, responseType: 'blob' });
+  }
+
+  /**
+   * Envía el comprobante al celular del cliente. Si se manda "imagenBase64" (sin el prefijo data:)
+   * se reenvía esa imagen; si no, el backend genera el PDF y lo envía como documento.
+   */
+  enviarComprobanteWhatsapp(body: { idInversion: number; imagenBase64?: string | null; mimeType?: string | null; mensaje?: string | null }) {
+    return this.http.post(this.baseUrl + this.baseComponent + 'enviarComprobanteWhatsapp', body);
+  }
+
 }

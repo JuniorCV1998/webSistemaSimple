@@ -1,309 +1,663 @@
-/* Encabezado con acceso a configurar recordatorios WhatsApp */
-.header-row {
-    position: relative;
+/* Pagos pendientes: estilo fintech mobile light (ver confirm-inv / inicio) */
+$ink: var(--gray-700);
+$muted: var(--gray-500);
+$blue: var(--blue-400);
+$green: var(--primary-500);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$green-soft: color-mix(in srgb, var(--primary-500) 12%, #fff);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+
+.cr {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4px 2px 0;
 }
 
-.whatsapp-config-btn {
+.cr-titulo {
+  padding: 0 4px;
+}
+
+/* ===== Banda compacta (monto recaudado) ===== */
+.cr-banda {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 14px 14px 12px;
+  border: none;
+  border-radius: 20px;
+  font: inherit;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 0% 130%, rgba(255, 255, 255, .18) 0 45%, transparent 46%),
+    radial-gradient(70% 120% at 90% -10%, rgba(255, 255, 255, .22), transparent 70%),
+    linear-gradient(120deg,
+      color-mix(in srgb, var(--primary-500) 85%, var(--blue-400)) 0%,
+      var(--blue-400) 100%);
+  box-shadow: 0 12px 24px -14px color-mix(in srgb, var(--blue-400) 75%, transparent);
+  transition: transform .12s;
+
+  &:active {
+    transform: scale(.99);
+  }
+}
+
+.cr-banda-ico {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .25);
+
+  .pi {
+    font-size: 16px;
+  }
+}
+
+.cr-banda-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cr-banda-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cr-banda-monto {
+  flex: 0 0 auto;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+
+.cr-banda-flecha {
+  font-size: 13px;
+  opacity: .8;
+}
+
+/* ===== Acciones en píldoras ===== */
+.cr-acciones {
+  display: flex;
+  gap: 8px;
+}
+
+.cr-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: $sombra;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: $blue;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .12s;
+
+  &:active {
+    transform: scale(.96);
+  }
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+
+/* ===== Secciones ===== */
+.cr-seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 4px -2px;
+}
+
+.cr-seccion-ico {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .pi {
+    font-size: 12px;
+  }
+}
+
+.cr-ico-verde {
+  color: $green;
+  background: $green-soft;
+}
+
+.cr-ico-azul {
+  color: $blue;
+  background: $blue-soft;
+}
+
+.cr-seccion-titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: $ink;
+}
+
+.cr-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: $blue;
+  background: $blue-soft;
+  border-radius: 999px;
+  padding: 1px 9px;
+}
+
+.cr-info {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--gray-400);
+  cursor: pointer;
+
+  .pi {
+    font-size: 15px;
+  }
+}
+
+/* ===== Tarjeta de lista ===== */
+.cr-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px;
+  box-shadow: $sombra;
+}
+
+.cr-vacio {
+  padding: 8px;
+}
+
+.cr-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s, transform .12s;
+
+  &:active {
+    background: color-mix(in srgb, var(--blue-400) 6%, #fff);
+    transform: scale(.99);
+  }
+
+  & + &::before {
+    content: '';
     position: absolute;
-    top: -2px;
-    right: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    border: none;
-    background: #e9fbf1;
-    color: #25d366;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform .12s ease;
+    top: 0;
+    left: 58px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
+  }
 }
 
-.whatsapp-config-btn:active {
-    transform: scale(0.92);
+.cr-item-estatico {
+  cursor: default;
+
+  &:active {
+    background: transparent;
+    transform: none;
+  }
 }
 
-.whatsapp-badge {
-    color: #25d366;
-    font-size: .85rem;
+.cr-num {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: $green;
+  background: $green-soft;
 }
 
-/* Estilo para la lista */
-.custom-banner-detail-body {
-    width: 100%;
-    padding: 12px 14px;
-    background: #fff;
-    box-shadow: var(--shadow-card);
-    color: var(--gray-500);
-    text-align: left;
-    border-radius: var(--radius-sm);
-    align-items: center;
-    height: auto;
-    cursor: pointer;
-    transition: transform .12s ease, box-shadow .12s ease;
+.cr-num-azul {
+  color: $blue;
+  background: $blue-soft;
 }
 
-.custom-banner-detail-body:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 8px -4px rgba(16, 24, 40, 0.18);
+.cr-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
-.span-body-name {
-    color: var(--gray-700);
-    font-size: 13.5px;
-    font-weight: 600;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.cr-nombre {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: $ink;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
 }
 
-.span-body-amount {
-    color: var(--primary-500);
-    font-size: 14px;
-    font-weight: 700;
-    white-space: nowrap;
+.cr-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-/* Inversión con cuotas atrasadas: único acento, minimalista, sobre el propio monto */
-.span-body-amount.span-body-amount-leve {
-    color: var(--orange-500);
+.cr-derecha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
 }
 
-.span-body-amount.span-body-amount-severo {
-    color: var(--red-500);
+.cr-monto {
+  flex: 0 0 auto;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: $green;
+  white-space: nowrap;
 }
 
-.min-w-0 {
-    min-width: 0;
+/* Cuotas atrasadas: acento sobre el propio monto */
+.cr-monto-leve {
+  color: var(--orange-500);
 }
 
-/* Pill de cuotas pagadas */
+.cr-monto-severo {
+  color: var(--red-500);
+}
+
+.cr-cartilla {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $blue;
+  background: $blue-soft;
+  cursor: pointer;
+
+  .pi {
+    font-size: 12px;
+  }
+}
+
 .cuota-pill {
-    display: inline-block;
-    width: fit-content;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 999px;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
 }
 
 .cuota-pill-pending {
-    background: var(--gray-100);
-    color: var(--gray-500);
+  background: var(--gray-100);
+  color: $muted;
 }
 
 .cuota-pill-ok {
-    background: var(--primary-50, #ecfdf5);
-    color: var(--primary-500);
-}
-
-/* Encabezados de sección (Diario / Semanal) */
-.section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--gray-700);
-}
-
-.section-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    flex-shrink: 0;
-}
-
-.section-icon i {
-    font-size: .85rem;
-}
-
-.section-icon-diario {
-    background: var(--primary-50, #ecfdf5);
-}
-
-.section-icon-diario i {
-    color: var(--primary-500);
-}
-
-.section-icon-semanal {
-    background: var(--blue-50, #eff6ff);
-}
-
-.section-icon-semanal i {
-    color: var(--blue-500);
-}
-
-.info-icon {
-    font-size: .95rem;
-    color: var(--blue-500);
-    cursor: pointer;
-}
-
-.info-icon-light {
-    color: rgba(255, 255, 255, 0.85);
-}
-
-/* Botón "Copiar" */
-.copy-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: transparent;
-    border: none;
-    padding: 4px 6px;
-    color: var(--gray-500);
-    font-size: 13px;
-    cursor: pointer;
-    border-radius: var(--radius-sm);
-    transition: background-color .15s ease;
-}
-
-.copy-chip:active {
-    background: var(--gray-100);
-}
-
-.copy-chip i {
-    font-size: .9rem;
-}
-
-.total-chip {
-    font-size: 13px;
-    color: var(--gray-600);
-}
-
-::ng-deep .card .p-element {
-    font-size: 10px;
-    padding: 8px;
-}
-
-::ng-deep .toast .p-element {
-    font-size: 15px;
-    width: 50px;
-}
-
-/* ESTILO DE CONFIRMA DIALOG */
-.pi-user,
-.pi-sort-numeric-up-alt {
-    font-size: 1.2rem;
-}
-
-.user-confirm {
-    color: var(--gray-500);
-    font-weight: 500;
-}
-
-.message-confirm {
-    font-size: 15px;
-}
-
-.item-txt {
-    font-size: 12px !important;
-    padding: 0 !important;
+  background: $green-soft;
+  color: $green;
 }
 
 .proxima-fecha {
-    display: inline-block;
-    white-space: nowrap;
-    padding: 3px 7px;
-    background: var(--primary-100);
-    color: var(--primary-800);
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: $blue;
+  background: $blue-soft;
+
+  .pi {
+    font-size: 10px;
+  }
 }
 
-/* Tarjeta hero "Monto recaudado" */
-.amount-rec {
-    padding: 14px 16px;
-    border-radius: var(--radius-md);
-    background: linear-gradient(135deg, var(--primary-500), var(--blue-500));
-    box-shadow: var(--shadow-card);
-    color: #fff;
+.whatsapp-badge {
+  color: #25d366;
+  font-size: .85rem;
 }
 
-.amount-rec-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.2);
-    flex-shrink: 0;
+.cr-ver-mas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-top: 1px solid var(--gray-100);
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $blue;
+  cursor: pointer;
+
+  .pi {
+    font-size: .75rem;
+  }
 }
 
-.amount-rec-icon .pi-wallet {
-    color: #fff;
-    font-size: 1rem;
+.cr-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px 6px;
+  border-top: 1px solid var(--gray-100);
 }
 
-.amount-rec-label {
-    font-weight: 600;
-    font-size: 13.5px;
+.cr-copiar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--gray-50);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $muted;
+  cursor: pointer;
+
+  &:active {
+    background: var(--gray-100);
+  }
 }
 
-.amount-rec-value {
-    font-weight: 700;
-    font-size: 15px;
+.cr-total {
+  font-size: 13px;
+  color: $muted;
+
+  b {
+    color: $ink;
+  }
+}
+
+/* ===== Diálogos (sin cambios) ===== */
+::ng-deep .card .p-element {
+  font-size: 10px;
+  padding: 8px;
+}
+
+::ng-deep .toast .p-element {
+  font-size: 15px;
+  width: 50px;
+}
+
+.pi-user,
+.pi-sort-numeric-up-alt {
+  font-size: 1.2rem;
+}
+
+.user-confirm {
+  color: var(--gray-500);
+  font-weight: 500;
 }
 
 .pi-money-bill {
-    color: var(--primary-500);
-    font-size: 1.1rem;
+  color: var(--primary-500);
+  font-size: 1.1rem;
 }
 
-/* Enviar a cartilla de inversion */
 .pi-window-maximize {
-    color: var(--primary-400);
-    font-size: 1rem;
-    cursor: pointer;
+  color: var(--primary-400);
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-/* POP UP DE CONFIRMACION */
 ::ng-deep .p-dialog {
-    width: 90%;
-    max-width: 550px;
+  width: 90%;
+  max-width: 550px;
 }
 
+/* Pop up "¿Qué es el Monto recaudado?" */
+.mr-pop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 22px 22px;
+  border-radius: 24px;
+  background: #fff;
+  text-align: center;
+}
 
-/* Botón ver más / ver menos */
-.ver-mas-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--primary-50, #ecfdf5);
-    color: var(--primary-500);
+.mr-pop-ico {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary-500), var(--blue-400));
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--blue-400) 80%, transparent);
+
+  .pi {
+    font-size: 24px;
+  }
+}
+
+.mr-pop-titulo {
+  margin-top: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: $ink;
+}
+
+.mr-pop-desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: $muted;
+}
+
+.mr-pop-btn {
+  width: 100%;
+  margin-top: 10px;
+  justify-content: center;
+  border-radius: 14px;
+}
+
+/* Pop up "Pagar cuota" (mismo formato que mr-pop) */
+.pc-sello {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: #fff;
+  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, .3), 0 0 0 1px var(--gray-100);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.pc-cliente {
+  margin-top: -6px;
+  font-size: 13px;
+  color: $muted;
+  text-transform: capitalize;
+}
+
+.pc-resumen {
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--blue-400) 5%, #fff);
+  text-align: left;
+}
+
+.pc-fila {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 54px;
+    right: 10px;
+    border-top: 1px solid color-mix(in srgb, var(--blue-400) 12%, #fff);
+  }
+}
+
+.pc-fila-ico {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $blue;
+  background: #fff;
+
+  .pi {
+    font-size: 12px;
+    color: $blue;
+  }
+}
+
+.pc-fila-label {
+  flex: 1;
+  font-size: 13.5px;
+  color: $muted;
+}
+
+.pc-fila-valor {
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+}
+
+.pc-monto {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.pc-cartilla {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $blue;
+  background: $blue-soft;
+  cursor: pointer;
+
+  .pi {
+    font-size: 11px;
+  }
+}
+
+.pc-fecha-label {
+  align-self: flex-start;
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $muted;
+}
+
+/* El confirmDialog se dibuja en <body>: sin :host para que el selector lo alcance */
+::ng-deep .pc-pop p-datepicker {
+  display: block;
+  width: 100%;
+}
+
+::ng-deep .pc-pop .pc-fecha {
+  display: flex;
+  width: 100%;
+
+  .p-datepicker-input {
+    flex: 1;
+    width: 100%;
+    height: 46px;
     border: none;
-    border-radius: 999px;
-    padding: 6px 16px;
-    font-size: 12.5px;
+    border-radius: 14px 0 0 14px;
+    background: var(--gray-50);
     font-weight: 600;
-    cursor: pointer;
-    transition: transform .12s ease, background-color .15s ease;
+    color: $ink;
+    box-shadow: none;
+  }
+
+  .p-datepicker-dropdown {
+    border: none;
+    border-radius: 0 14px 14px 0;
+    color: $blue;
+    background: var(--gray-50);
+  }
 }
 
-.ver-mas-btn:active {
-    transform: scale(0.96);
-    background: var(--primary-100);
+.pc-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+
+  button {
+    justify-content: center;
+    border-radius: 14px;
+  }
 }
 
-.ver-mas-btn i {
-    font-size: .75rem;
-}
-
-/* Estilos para el modal de monto recaudado, mas historial de montos diarios */
-.link-cobros-diarios{
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-}
 .span-desc {
-    color: var(--gray-500);
-    font-size: 13px;
-    text-align: center;
+  color: var(--gray-500);
+  font-size: 13px;
+  text-align: center;
 }
-/* Efecto punto radar */

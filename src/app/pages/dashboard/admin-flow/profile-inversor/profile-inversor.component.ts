@@ -17,6 +17,9 @@ import { ToastModule } from 'primeng/toast';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { ButtonModule } from 'primeng/button';
 import { TempDataService } from '../../../../core/services/temp-data.service';
+import { celularParaMostrar, etiquetaDocumento } from '../../../../core/utils/documento-pais';
+import { SystemService } from '../../../../core/services/system/system.service';
+import { PlanPublico, nombrePlan, nombrePlanContratado, solesCorto } from '../../../../core/utils/membresia';
 
 @Component({
   selector: 'app-profile-inversor',
@@ -77,6 +80,16 @@ export default class ProfileInversorComponent {
 
   currency: string | null = null;
 
+  /* Planes vigentes (Ajustes del sistema): duraciones a elegir y monto sugerido */
+  planes: PlanPublico[] = [];
+  opcionesMeses: number[] = [1, 3, 6, 12];
+
+  /* Plan contratado e historial de pagos de la membresía */
+  verHistorial = false;
+  nombrePlan = nombrePlan;
+  nombrePlanContratado = nombrePlanContratado;
+  solesCorto = solesCorto;
+
   constructor(
     private confirmationService: ConfirmationService,
     private adminService: AdminService,
@@ -84,9 +97,16 @@ export default class ProfileInversorComponent {
     private router: Router,
     public dialogService: DialogService,
     private messageService: MessageService,
-    private tempDataService: TempDataService
+    private tempDataService: TempDataService,
+    private systemService: SystemService
   ) {
     this.currency = this.tempDataService.getConstant('currency') || 'S/';
+    this.systemService.ajustesPublicos().subscribe(a => {
+      this.planes = a.planes;
+      if (a.planes.length) this.opcionesMeses = a.planes.map(p => p.meses);
+      // Monto sugerido para la duración inicial (la fecha se calcula al abrir el popup, con los datos del inversor)
+      if (this.montoPago === null) this.montoPago = this.planes.find(p => p.meses === this.meses)?.precioFinal ?? null;
+    });
   }
 
   ngOnInit() {
@@ -288,6 +308,20 @@ export default class ProfileInversorComponent {
     });
   }
 
+  /** Días vigentes que se conservan al extender (ACT/PEX); si ya venció, el nuevo periodo arranca hoy. */
+  get diasQueSeSuman(): number {
+    const m = this.inversorData?.membresia;
+    return m && (m.codMembresia === 'ACT' || m.codMembresia === 'PEX') ? Number(m.diasRestantes) || 0 : 0;
+  }
+
+  /** Elige la duración y precarga el monto con el precio vigente del plan (editable). */
+  elegirMeses(m: number) {
+    this.meses = m;
+    this.actualizarNuevaFecha();
+    const plan = this.planes.find(p => p.meses === m);
+    if (plan) this.montoPago = plan.precioFinal;
+  }
+
   incrementar() {
     if (this.meses + this.meses <= 12) {
       this.meses += this.meses;
@@ -302,6 +336,32 @@ export default class ProfileInversorComponent {
 
   formatNumberEspaciado(numero: string): string {
     return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  get nombreCompleto(): string {
+    const p = this.inversorData?.persona || {};
+    if (p.codTipoDoc === '06') return p.razonSocial || '';
+    return [p.nombres, p.apellidoPaterno, p.apellidoMaterno].filter(Boolean).join(' ');
+  }
+
+  get iniciales(): string {
+    const p = this.inversorData?.persona || {};
+    const base = p.codTipoDoc === '06' ? (p.razonSocial || '') : `${p.nombres || ''} ${p.apellidoPaterno || ''}`;
+    return base.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((s: string) => s[0]).join('').toUpperCase();
+  }
+
+  /* Color según estado de la membresía: ACT verde, PEX naranja, VEN rojo */
+  get claseMembresia(): string {
+    const cod = this.inversorData?.membresia?.codMembresia;
+    return cod === 'VEN' ? 'adm-rojo' : cod === 'PEX' ? 'adm-naranja' : 'adm-verde';
+  }
+
+  get etiquetaDoc(): string {
+    return etiquetaDocumento(this.inversorData?.persona?.codTipoDoc);
+  }
+
+  get celularMostrar(): string {
+    return celularParaMostrar(this.inversorData?.persona?.celular, this.inversorData?.persona?.codPais);
   }
 
   // Método para verificar si todos los campos obligatorios están llenos

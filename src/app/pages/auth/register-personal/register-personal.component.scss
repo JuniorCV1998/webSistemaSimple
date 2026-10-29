@@ -1,41 +1,88 @@
-#i_image{
-    color: var(--blue-400);
-    font-size: 4rem;
-}
-#i_info{
-    font-size: .8rem;
-    color: var(--blue-400);
-}
-#p_body{
-    font-size: 12px;
-    text-align: justify;
-    color: var(--gray-450);
-}
-#p_pie{
-    font-size: 10px;
-    font-weight: bold;
-}
-:host ::ng-deep p-card div{
-    padding: 6px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+/* Estilos de la pantalla: clases globales .au-* (styles.scss) */
+
+/* POP UP DE CONFIRMACION */
+::ng-deep .p-dialog {
+  width: 90%;
+  max-width: 550px;
 }
 
-  /* POP UP DE CONFIRMACION */
-  ::ng-deep .p-dialog{
-    width: 90%;
-    max-width: 550px;
+/* Apellidos lado a lado */
+.au-dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Datos que vienen del documento: solo lectura (sin relleno, borde punteado) */
+input.au-bloqueado {
+  background: transparent;
+  border: 1.5px dashed var(--gray-300) !important;
+  color: var(--gray-500);
+  pointer-events: none;
+}
+
+.au-check p-checkbox {
+  margin-top: 1px;
+}
+
+/* ===== Términos y Política de Privacidad ===== */
+.tyc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--gray-600);
+
+  h2 {
+    margin: 22px 0 4px;
+    padding-top: 14px;
+    border-top: 1px solid var(--gray-100);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-800);
   }
 
-  /* Estilo para la data por confirmar */
-  .confirm-date i{
-    color: var(--blue-400);
+  h3 {
+    margin: 16px 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-700);
   }
-  .confirm-date div{
-    border-bottom: 1px dashed var(--gray-400);
+
+  p { margin: 6px 0; }
+
+  ul {
+    margin: 6px 0;
+    padding-left: 18px;
+
+    li { margin: 4px 0; }
+    li::marker { color: var(--primary-500); }
   }
-  .nro-document{
-    color: var(--gray-500);
-    font-weight: bold;
-  }
+
+  b { color: var(--gray-700); }
+}
+
+.tyc-fecha {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-500);
+}
+
+.tyc-correo {
+  font-weight: 600;
+  color: var(--blue-400);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.tyc-aceptar {
+  width: 100%;
+}
+
+/* Enlace a los términos: en línea con el resto del texto */
+.au-check a.au-link {
+  text-decoration: none;
+}

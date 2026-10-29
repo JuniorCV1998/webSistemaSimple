@@ -1,206 +1,159 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="adm">
 
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Datos del Inversor</div>
-    </div>
+    <div class="text-2xl label-title adm-head">Datos del inversor</div>
 
-    <!-- Datos Personales -->
-    <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2">
-            <span class="block mb-2">Datos Personales</span>
+    <!-- Cabecera -->
+    <section class="adm-card adm-perfil">
+        <span class="adm-avatar adm-avatar-lg">{{iniciales}}</span>
+        <h2>{{nombreCompleto}}</h2>
+        <span *ngIf="inversorData?.persona?.nombreComercial">{{inversorData?.persona?.nombreComercial}}</span>
+        <div class="adm-chips">
+            <span class="adm-chip adm-gris">
+                <i class="pi pi-id-card"></i>
+                <ng-container *ngIf="inversorData?.persona?.codTipoDoc; else sinDoc">{{etiquetaDoc}} · {{inversorData?.persona?.nroDocumento}}</ng-container>
+                <ng-template #sinDoc>Sin documento</ng-template>
+            </span>
+            <span *ngIf="inversorData.codUnico" class="adm-chip"><i class="pi pi-qrcode"></i>{{inversorData.codUnico}}</span>
+            <span class="adm-chip" [ngClass]="statusActivo ? 'adm-verde' : 'adm-rojo'">
+                <i class="pi" [ngClass]="statusActivo ? 'pi-check-circle' : 'pi-ban'"></i>{{statusActivo ? 'Acceso activo' : 'Bloqueado'}}
+            </span>
         </div>
-        <div class="user-header">
-            <div class="user-avatar">
-                <i class='pi pi-user'></i>
-            </div>
- 
-            <div>
-                <h2 *ngIf="inversorData?.persona?.codTipoDoc==='01' || inversorData?.persona?.codTipoDoc===null"
-                    class="user-name">{{inversorData?.persona?.nombres+' '+inversorData?.persona?.apellidoPaterno+'
-                    '+inversorData?.persona?.apellidoMaterno}}</h2>
-                <h2 *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-name">
-                    {{inversorData?.persona?.razonSocial}}</h2>
-                <span
-                    class="text-gray-500 font-medium line-height-3 w-full">{{inversorData?.persona?.nombreComercial}}</span>
-                <div class="flex flex-row justify-content-start align-items-center gap-2">
-                    <i class="pi pi-id-card icon-span"></i>
-                    <p *ngIf="inversorData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
-                        <strong>{{inversorData?.persona?.nroDocumento}}</strong>
-                    </p>
-                    <p *ngIf="inversorData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
-                    <p *ngIf="inversorData?.persona?.codTipoDoc==='06'" class="user-subtitle">RUC •
-                        <strong>{{inversorData?.persona?.nroDocumento}}</strong>
-                    </p>
+    </section>
+
+    <!-- Datos personales -->
+    <span class="adm-seccion">Datos personales</span>
+    <section class="adm-card">
+        <div class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-phone"></i></span>
+            <span class="adm-label">Celular</span>
+            <span class="adm-valor">{{celularMostrar || '—'}}</span>
+        </div>
+        <div class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-map-marker"></i></span>
+            <span class="adm-label">Dirección</span>
+            <span class="adm-valor">{{inversorData?.persona?.direccion || '—'}}</span>
+        </div>
+    </section>
+
+    <!-- Cuenta -->
+    <span class="adm-seccion">Cuenta</span>
+    <section class="adm-card">
+        <div class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-at"></i></span>
+            <span class="adm-label">Correo</span>
+            <span class="adm-valor">{{inversorData.correo}}</span>
+        </div>
+        <div class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-lock-open"></i></span>
+            <span class="adm-label">Acceso</span>
+            <span class="adm-valor">
+                <input type="checkbox" [checked]="statusActivo" (change)="onToggleChange($event)" id="customToggle"
+                    class="adm-toggle-input">
+                <label for="customToggle" class="adm-toggle" aria-label="Acceso del inversor"><span></span></label>
+            </span>
+        </div>
+    </section>
+
+    <!-- Membresía -->
+    <span class="adm-seccion">Membresía</span>
+    <section class="adm-card pi-mem">
+        <div class="pi-mem-top">
+            <span class="adm-ico adm-ico-grad pi-mem-ico"><i class="pi pi-star-fill"></i></span>
+            <span class="pi-mem-plan">
+                <small>Plan contratado</small>
+                <b>{{ nombrePlanContratado(inversorData.membresia) }}</b>
+            </span>
+            <span class="adm-chip" [ngClass]="claseMembresia">
+                <i class="pi pi-circle-fill"></i>{{inversorData.membresia.descCodMembresia}}
+            </span>
+        </div>
+
+        <div class="pi-dias" [ngClass]="claseMembresia">
+            <b>{{inversorData.membresia.diasRestantes}}</b>
+            <span>días restantes · vence el {{inversorData.membresia.fechaVencimiento}}</span>
+        </div>
+
+        <div class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-check-circle"></i></span>
+            <span class="adm-label">Activación</span>
+            <span class="adm-valor">{{inversorData.membresia.fechaActivacion}}</span>
+        </div>
+        <div *ngIf="inversorData.membresia.fechaActualizacion!==''" class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-refresh"></i></span>
+            <span class="adm-label">Actualización</span>
+            <span class="adm-valor">{{inversorData.membresia.fechaActualizacion}}</span>
+        </div>
+        <div *ngIf="inversorData.membresia.planActual as plan" class="adm-fila">
+            <span class="adm-ico"><i class="pi pi-wallet"></i></span>
+            <span class="adm-label">Último pago</span>
+            <span class="adm-valor">{{currency}} {{ solesCorto(plan.montoPagado) }} · {{ plan.fechaPago }}</span>
+        </div>
+
+        <!-- Historial de pagos de membresía -->
+        <ng-container *ngIf="inversorData.membresia.historialPagos?.length">
+            <button type="button" class="pi-hist-toggle" (click)="verHistorial = !verHistorial" [attr.aria-expanded]="verHistorial">
+                <i class="pi pi-history"></i>Historial de pagos ({{ inversorData.membresia.historialPagos.length }})
+                <i class="pi" [ngClass]="verHistorial ? 'pi-angle-up' : 'pi-angle-down'"></i>
+            </button>
+            <div *ngIf="verHistorial" class="pi-hist">
+                <div *ngFor="let pago of inversorData.membresia.historialPagos" class="pi-hist-fila">
+                    <span class="pi-hist-texto">
+                        <b>Plan {{ nombrePlan(pago.meses) }}</b>
+                        <small>{{ pago.fechaPago }}<ng-container *ngIf="pago.usuarioAccion"> · por {{ pago.usuarioAccion }}</ng-container></small>
+                    </span>
+                    <span class="pi-hist-precio">
+                        <s *ngIf="pago.precioLista != null && pago.precioLista !== pago.montoPagado">{{currency}} {{ solesCorto(pago.precioLista) }}</s>
+                        <b class="pi-hist-monto">{{currency}} {{ solesCorto(pago.montoPagado) }}</b>
+                    </span>
                 </div>
             </div>
-            
-        </div>
+        </ng-container>
 
-        <div class="flex flex-column gap-2 user-info ">
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-phone icon-span-gray"></i>
-                <span
-                    class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(inversorData?.persona?.celular)}}</span>
-            </div>
-            <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{'jose@oexample.com'}}</span>
-            </div> -->
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-map-marker icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{inversorData.persona.direccion}}</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Datos de la Cuenta -->
-    <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2">
-            <span class="block mb-2">Datos de la Cuenta</span>
-        </div>
-
-        <div class="flex flex-column gap-2 user-info ">
-            <div class="flex flex-row justify-content-between align-items-center gap-2">
-                <!-- <i class="pi pi-phone icon-span-gray"></i> -->
-                <label class="w-6  text-gray-500 font-medium line-height-3 w-full">Código Único</label>
-                <span class="flex w-6 labelCodUnico justify-content-end"><b>{{inversorData.codUnico}}</b></span>
-            </div>
-            <div class="flex flex-row justify-content-between align-items-center gap-2">
-                <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{inversorData.correo}}</span>
-            </div>
-            <div class="flex flex-row justify-content-between align-items-center gap-2">
-                <label class="w-5  text-gray-500 font-medium line-height-3 w-full">Acceso</label>
-                <div class="toggle">
-                    <input type="checkbox" [checked]="statusActivo" (change)="onToggleChange($event)" id="customToggle"
-                        class="toggle-input">
-                    <label for="customToggle" class="toggle-label">
-                        <span class="toggle-handle">
-                            <i class="pi pi-times"></i>
-                        </span>
-                    </label>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- Datos de la Membresia -->
-    <div class="user-card mb-5">
-        <div class="flex flex-row justify-content-between w-full mb-3">
-            <span class="block w-10 line-height-3">Datos de la Membresía</span>
-            <div class="w-2 text-center" (click)="updateMembresiaService()">
-                <i class="pi pi-pen-to-square icon-span-blue"></i>
-            </div>
-        </div>
-
-        <div class="flex flex-column gap-2 user-info">
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <!-- <i class="pi pi-calendar icon-span-gray"></i> -->
-                <label class="w-8  text-gray-500 font-medium line-height-3 w-full">Tipo de Membresía</label>
-                <span class="w-7 labelCodUnico"><b>{{inversorData.membresia.descTipoMembresia}}</b></span>
-            </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Estado de Membresía</label>
-                <span class="w-4" [ngClass]="{
-                    'txt-green': inversorData.membresia.codMembresia === 'ACT',
-                    'txt-orange': inversorData.membresia.codMembresia === 'PEX',
-                    'txt-red': inversorData.membresia.codMembresia === 'VEN'
-                }"><b>{{inversorData.membresia.descCodMembresia}}</b></span>
-            </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Días restantes</label>
-                <span class="w-4" [ngClass]="{
-                    'txt-green': inversorData.membresia.codMembresia === 'ACT',
-                    'txt-orange': inversorData.membresia.codMembresia === 'PEX',
-                    'txt-red': inversorData.membresia.codMembresia === 'VEN'
-                }"><b>{{inversorData.membresia.diasRestantes}}</b></span>
-            </div>
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Vencimiento</label>
-                </div>
-                <span class="w-6 text-center" [ngClass]="{
-                    'txt-green': inversorData.membresia.codMembresia === 'ACT',
-                    'txt-orange': inversorData.membresia.codMembresia === 'PEX',
-                    'txt-red': inversorData.membresia.codMembresia === 'VEN'
-                }"><b>{{inversorData.membresia.fechaVencimiento}}</b></span>
-            </div>
-            <div *ngIf="inversorData.membresia.fechaActualizacion!==''"
-                class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Actualización</label>
-                </div>
-                <span
-                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActualizacion}}</span>
-            </div>
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Activación</label>
-                </div>
-                <span
-                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{inversorData.membresia.fechaActivacion}}</span>
-            </div>
-        </div>
-    </div>
+        <button type="button" class="adm-btn pi-extender" (click)="updateMembresiaService()">
+            <i class="pi pi-calendar-plus"></i> Extender membresía
+        </button>
+    </section>
 
     <p-confirmDialog #update_membresia key="update_membresia">
         <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-            <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                <!-- <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <i class="pi pi-sync icon-span font-bold" style="font-size: 20px;"></i>
-                    </div> -->
-                <span class="font-bold mb-1 mt-4 labelCodUnico" style="font-size: 20px;">
-                    {{ message.header }}
-                </span>
+            <div class="adm-pop">
+                <span class="adm-pop-ico"><i class="pi pi-calendar-plus"></i></span>
+                <h3 class="adm-pop-titulo">Extender membresía</h3>
+                <span class="adm-pop-sub">{{nombreCompleto}}</span>
 
-                <div class="card flex flex-column align-items-center gap-2 p-2 rounded shadow-md bg-white w-80">
-                    <h3 class="text-lg font-semibold text-gray-500">Extender Membresía</h3>
-                    <!-- Slider -->
-                    <input type="range" min="1" max="3" (ngModelChange)="actualizarNuevaFecha()" step="1"
-                        [(ngModel)]="meses" class="slider">
-                    <!-- Meses seleccionados -->
-                    <p class="text-gray-500 text-center">
-                        <strong>{{ meses }}</strong> mes{{ meses > 1 ? 'es' : '' }} adicional
-                    </p>
-                    <!-- Monto a pagar -->
-                    <h3 class="text-lg font-semibold text-gray-500">Monto a recaudar ({{currency}})</h3>
-                    <div class="flex w-full flex-column align-items-center justify-content-center mb-3 gap-2">
-                        <p-inputNumber [(ngModel)]="montoPago" id="monto" [minFractionDigits]="2"
-                            [maxFractionDigits]="2" mode="decimal" autocomplete="off" placeholder="Ingrese monto"
-                            class="w-full w-8" [min]="1" [max]="100000" />
-                        <span *ngIf="montoPago !== null && montoPago < 1" class="input-fail">El monto no puede ser menor
-                            a {{currency}} {{1 | formatNumber}}.</span>
-                        <span *ngIf="montoPago !== null && montoPago > 100000" class="input-fail">El monto no puede ser
-                            mayor a {{currency}} {{100000 | formatNumber}}.</span>
-                    </div>
-                    <!-- Fecha calculada -->
-                    <div class="flex flex-column bg-gray-100 rounded-lg p-2 w-full text-center">
-                        <span class="text-sm text-gray-500">Nueva fecha de vencimiento</span><br>
-                        <strong class="labelCodUnico">{{ nuevaFechaStr }}</strong>
-                    </div>
+                <span class="adm-pop-label">Meses adicionales</span>
+                <div class="pi-meses">
+                    <button *ngFor="let m of opcionesMeses" type="button" [class.on]="meses === m"
+                        (click)="elegirMeses(m)">
+                        {{ m === 12 ? '1 año' : m === 1 ? '1 mes' : m + ' meses' }}
+                    </button>
                 </div>
 
+                <label for="monto" class="adm-pop-label">Monto a recaudar ({{currency}})</label>
+                <p-inputNumber [(ngModel)]="montoPago" inputId="monto" [minFractionDigits]="2" [maxFractionDigits]="2"
+                    mode="decimal" autocomplete="off" placeholder="0.00" [min]="1" [max]="100000"
+                    class="pi-monto" inputStyleClass="adm-pop-input" />
+                <small *ngIf="montoPago !== null && montoPago < 1" class="pi-error">
+                    El monto no puede ser menor a {{currency}} {{1 | formatNumber}}.</small>
+                <small *ngIf="montoPago !== null && montoPago > 100000" class="pi-error">
+                    El monto no puede ser mayor a {{currency}} {{100000 | formatNumber}}.</small>
 
-                <!-- <span class="flex flex-column gap-3 mb-3 txt-label">
-                        <strong class="text-center w-full">{{ message.message }}</strong>
-                        <ul>
-                            <li class="mb-1">Ya no se podrán registrar más cuotas de pago.</li>
-                            <li class="mb-1">La inversión no será considerada en el cálculo de rentabilidad.</li>
-                            <li class="mb-1">El historial asociado a esta inversión se perderá.</li>
-                        </ul>
-                        <strong class="text-center w-full">¿Desea continuar?</strong>
-                    </span> -->
-                <div class="flex align-items-center gap-2 mt-4">
-                    <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                    </button>
-                    <button [ngClass]="{
-                    'btn-disabled': !isFormValid() }" [disabled]="!isFormValid()" severity="success" pButton
-                        label="Actualizar" (click)="onAccept()" class=" w-8rem">
-                    </button>
+                <div class="adm-pop-resumen">
+                    <div class="adm-fila">
+                        <span class="adm-ico"><i class="pi pi-calendar"></i></span>
+                        <span class="adm-label">Nuevo vencimiento</span>
+                        <span class="adm-valor pi-nueva-fecha">{{ nuevaFechaStr }}</span>
+                    </div>
+                </div>
+                <!-- El backend suma los meses al vencimiento actual si aún le quedan días (ACT/PEX) -->
+                <small *ngIf="diasQueSeSuman > 0" class="pi-nota">
+                    <i class="pi pi-info-circle"></i>Se suman a los {{ diasQueSeSuman }} {{ diasQueSeSuman === 1 ? 'día' : 'días' }}
+                    que le quedan{{ inversorData.membresia.enPrueba ? ' de prueba gratis' : '' }}.
+                </small>
+
+                <div class="adm-pop-btns">
+                    <button type="button" class="adm-btn adm-btn-sec" (click)="onReject()">Cancelar</button>
+                    <button type="button" class="adm-btn" [disabled]="!isFormValid()" (click)="onAccept()">Actualizar</button>
                 </div>
             </div>
         </ng-template>

@@ -1,106 +1,83 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="pf">
 
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Perfil</div>
-    </div>
+    <div class="text-2xl label-title pf-titulo">Perfil</div>
 
-    <!-- Datos Personales -->
-    <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2 justify-content-between align-items-center">
-            <span class="block mb-2">Datos Personales</span>
-            <i *ngIf="!editando && perfil!=='CLI'" class="pi pi-pencil editar-icon" (click)="toggleEditar()"></i>
-            <i *ngIf="editando && perfil!=='CLI'" class="pi pi-times editar-icon" (click)="toggleEditar()"></i>
+    <!-- Cabecera: avatar + nombre -->
+    <section class="pf-card pf-head">
+        <button *ngIf="perfil!=='CLI'" type="button" class="pf-editar" [class.pf-editar-on]="editando"
+            (click)="toggleEditar()" [attr.aria-label]="editando ? 'Cancelar edición' : 'Editar datos'">
+            <i class="pi" [ngClass]="editando ? 'pi-times' : 'pi-pencil'"></i>
+        </button>
+
+        <div class="pf-avatar">{{iniciales}}</div>
+
+        <h2 class="pf-nombre">{{nombreCompleto}}</h2>
+        <span *ngIf="usuarioData?.persona?.nombreComercial" class="pf-comercial">{{usuarioData?.persona?.nombreComercial}}</span>
+
+        <div class="pf-chips">
+            <span class="pf-chip">
+                <i class="pi pi-id-card"></i>
+                <ng-container *ngIf="usuarioData?.persona?.codTipoDoc; else sinDoc">{{etiquetaDoc}} · {{usuarioData?.persona?.nroDocumento}}</ng-container>
+                <ng-template #sinDoc>Sin documento</ng-template>
+            </span>
+            <span *ngIf="usuarioData.codUnico" class="pf-chip pf-chip-azul">
+                <i class="pi pi-qrcode"></i>{{usuarioData.codUnico}}
+            </span>
         </div>
-        <div class="user-header">
-            <div class="user-avatar">
-                <i class='pi pi-user'></i>
-            </div>
-            <div>
-                <h2 *ngIf="usuarioData?.persona?.codTipoDoc==='01' || usuarioData?.persona?.codTipoDoc===null"
-                    class="user-name">{{usuarioData?.persona?.nombres+' '+usuarioData?.persona?.apellidoPaterno+'
-                    '+usuarioData?.persona?.apellidoMaterno}}</h2>
-                <h2 *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-name">
-                    {{usuarioData?.persona?.razonSocial}}</h2>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{usuarioData?.persona?.nombreComercial}}</span>
-                <div class="flex flex-row justify-content-start align-items-center gap-2">
-                    <i class="pi pi-id-card icon-span"></i>
-                    <p *ngIf="usuarioData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
-                        <strong>{{usuarioData?.persona?.nroDocumento}}</strong>
-                    </p>
-                    <p *ngIf="usuarioData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
-                    <p *ngIf="usuarioData?.persona?.codTipoDoc==='06'" class="user-subtitle">RUC •
-                        <strong>{{usuarioData?.persona?.nroDocumento}}</strong>
-                    </p>
-                </div>
+    </section>
 
+    <!-- Datos personales -->
+    <span class="pf-seccion">Datos personales</span>
+    <section class="pf-card">
+        <ng-container *ngIf="!editando">
+            <div class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-phone"></i></span>
+                <span class="pf-label">Celular</span>
+                <span class="pf-valor">{{celularMostrar || '—'}}</span>
             </div>
-        </div>
+            <div class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-map-marker"></i></span>
+                <span class="pf-label">Dirección</span>
+                <span class="pf-valor">{{usuarioData?.persona?.direccion || '—'}}</span>
+            </div>
+        </ng-container>
 
-        <div *ngIf="!editando" class="flex flex-column gap-2 user-info ">
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-phone icon-span-gray"></i>
-                <span
-                    class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(usuarioData?.persona?.celular)}}</span>
-            </div>
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-map-marker icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{usuarioData?.persona?.direccion}}</span>
-            </div>
-        </div>
+        <div *ngIf="editando" class="pf-edit">
+            <label class="pf-edit-label">Celular</label>
+            <app-celular-pais inputId="celular-edit" [(codPais)]="formEdit.codPais" [(celular)]="formEdit.celular" />
 
-        <div *ngIf="editando" class="flex flex-column gap-2 edit-panel">
-            <label class="edit-label">Celular</label>
-            <div class="relative w-full">
-                <i class="pi pi-phone input-icon-left"></i>
-                <input [(ngModel)]="formEdit.celular" [ngModelOptions]="{standalone: true}" appNroCelular
-                    maxlength="11" placeholder="9** *** ***" pInputText class="w-full input-with-icon">
-            </div>
-            <small *ngIf="!celularValido" class="input-fail"><i class="pi pi-info-circle"></i> El celular debe tener
-                9 dígitos.</small>
-
-            <label class="edit-label mt-2">Dirección</label>
+            <label class="pf-edit-label mt-2">Dirección</label>
             <div class="relative w-full">
                 <i class="pi pi-map-marker input-icon-left"></i>
                 <input [(ngModel)]="formEdit.direccion" [ngModelOptions]="{standalone: true}"
                     placeholder="Dirección" pInputText class="w-full input-with-icon">
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Datos de la Cuenta -->
-    <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2">
-            <span class="block mb-2">Datos de la Cuenta</span>
-        </div>
+    <!-- Cuenta -->
+    <span class="pf-seccion">Cuenta</span>
+    <section class="pf-card">
+        <ng-container *ngIf="!editando">
+            <div class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-at"></i></span>
+                <span class="pf-label">Correo</span>
+                <span class="pf-valor">{{usuarioData.correo}}</span>
+            </div>
+            <div *ngIf="usuarioData.contrasena !== null" class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-key"></i></span>
+                <span class="pf-label">Contraseña</span>
+                <span class="pf-valor">{{usuarioData.contrasena}}</span>
+            </div>
+            <div class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-calendar"></i></span>
+                <span class="pf-label">Registro</span>
+                <span class="pf-valor">{{usuarioData.fechaRegistro}}</span>
+            </div>
+        </ng-container>
 
-        <div *ngIf="!editando" class="flex flex-column gap-2 user-info ">
-            <div class="flex flex-row justify-content-between align-items-center gap-2">
-                <!-- <i class="pi pi-phone icon-span-gray"></i> -->
-                <label class="w-6 text-gray-500 font-medium line-height-3 w-full">Código Único</label>
-                <span class="flex w-6 labelCodUnico justify-content-end"><b>{{usuarioData.codUnico}}</b></span>
-            </div>
-            <div class="flex flex-row justify-content-between align-items-center gap-2">
-                <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.correo}}</span>
-            </div>
-            <div *ngIf="usuarioData.contrasena !== null"
-                class="flex flex-row justify-content-between align-items-center gap-2">
-                <i class="pi pi-key icon-span-gray"></i>
-                <span
-                    class="text-gray-500 font-medium line-height-3 justify-content-end">{{usuarioData.contrasena}}</span>
-            </div>
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Registro</label>
-                </div>
-                <span
-                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.fechaRegistro}}</span>
-            </div>
-        </div>
-
-        <div *ngIf="editando" class="flex flex-column gap-2 edit-panel">
-            <label class="edit-label">Nueva contraseña (opcional)</label>
+        <div *ngIf="editando" class="pf-edit">
+            <label class="pf-edit-label">Nueva contraseña (opcional)</label>
             <div class="relative w-full">
                 <i class="pi pi-lock input-icon-left"></i>
                 <input [(ngModel)]="formEdit.contrasena" [ngModelOptions]="{standalone: true}" [type]="passwordFieldType"
@@ -111,77 +88,56 @@
             <small *ngIf="!contrasenaValida" class="input-fail"><i class="pi pi-info-circle"></i> Debe contener
                 exactamente 6 dígitos numéricos.</small>
 
-            <div class="flex flex-row w-full gap-2 mt-3">
-                <p-button class="w-6" label="Cancelar" severity="secondary" outlined="true" styleClass="w-full"
+            <div class="pf-edit-botones">
+                <p-button label="Cancelar" severity="secondary" outlined="true" styleClass="w-full"
                     [disabled]="guardandoDatos" (onClick)="toggleEditar()" />
-                <p-button class="w-6" label="Guardar" icon="pi pi-check" styleClass="w-full"
+                <p-button label="Guardar" icon="pi pi-check" styleClass="w-full"
                     [disabled]="!puedeGuardar" [loading]="guardandoDatos" (onClick)="guardarDatos()" />
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Datos de la Membresia -->
-    <div class="user-card mb-5" *ngIf="perfil!=='CLI'">
-        <div class="flex flex-row justify-content-between w-full mb-3">
-            <span class="block w-10 line-height-3">Datos de la Membresía</span>
-        </div>
+    <!-- Membresía (no aplica al cliente) -->
+    <ng-container *ngIf="perfil!=='CLI'">
+        <span class="pf-seccion">Membresía</span>
+        <section class="pf-card pf-mem">
+            <div class="pf-mem-top">
+                <span class="pf-mem-ico"><i class="pi pi-star-fill"></i></span>
+                <span class="pf-mem-plan">
+                    <small>Tu plan</small>
+                    <b>{{ nombrePlanContratado(usuarioData.membresia) }}</b>
+                </span>
+                <span class="pf-estado" [ngClass]="claseMembresia">
+                    <i class="pi pi-circle-fill"></i>{{usuarioData.membresia.descCodMembresia}}
+                </span>
+            </div>
 
-        <div class="flex flex-column gap-2 user-info">
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <!-- <i class="pi pi-calendar icon-span-gray"></i> -->
-                <label class="w-8  text-gray-500 font-medium line-height-3 w-full">Tipo de Membresía</label>
-                <span class="w-7 labelCodUnico"><b>{{usuarioData.membresia.descTipoMembresia}}</b></span>
+            <div class="pf-dias" [ngClass]="claseMembresia">
+                <b>{{usuarioData.membresia.diasRestantes}}</b>
+                <span>días restantes · vence el {{usuarioData.membresia.fechaVencimiento}}</span>
             </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Estado de Membresía</label>
-                <span class="w-4" [ngClass]="{
-                    'txt-green': usuarioData.membresia.codMembresia === 'ACT',
-                    'txt-orange': usuarioData.membresia.codMembresia === 'PEX',
-                    'txt-red': usuarioData.membresia.codMembresia === 'VEN'
-                }"><b>{{usuarioData.membresia.descCodMembresia}}</b></span>
+
+            <div class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-check-circle"></i></span>
+                <span class="pf-label">Activación</span>
+                <span class="pf-valor">{{usuarioData.membresia.fechaActivacion}}</span>
             </div>
-            <div class="flex flex-row w-full justify-content-start align-items-center gap-2">
-                <label class="w-8 text-gray-500 font-medium line-height-3 w-full">Días restantes</label>
-                <span class="w-4" [ngClass]="{
-                    'txt-green': usuarioData.membresia.codMembresia === 'ACT',
-                    'txt-orange': usuarioData.membresia.codMembresia === 'PEX',
-                    'txt-red': usuarioData.membresia.codMembresia === 'VEN'
-                }"><b>{{usuarioData.membresia.diasRestantes}}</b></span>
+            <div *ngIf="usuarioData.membresia.fechaActualizacion!==''" class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-refresh"></i></span>
+                <span class="pf-label">Actualización</span>
+                <span class="pf-valor">{{usuarioData.membresia.fechaActualizacion}}</span>
             </div>
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Vencimiento</label>
-                </div>
-                <span class="w-6 text-center" [ngClass]="{
-                    'txt-green': usuarioData.membresia.codMembresia === 'ACT',
-                    'txt-orange': usuarioData.membresia.codMembresia === 'PEX',
-                    'txt-red': usuarioData.membresia.codMembresia === 'VEN'
-                }"><b>{{usuarioData.membresia.fechaVencimiento}}</b></span>
+            <div *ngIf="usuarioData.membresia.planActual as plan" class="pf-fila">
+                <span class="pf-ico"><i class="pi pi-wallet"></i></span>
+                <span class="pf-label">Último pago</span>
+                <span class="pf-valor">S/ {{ solesCorto(plan.montoPagado) }} · {{ plan.fechaPago }}</span>
             </div>
-            <div *ngIf="usuarioData.membresia.fechaActualizacion!==''"
-                class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Actualización</label>
-                </div>
-                <span
-                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.membresia.fechaActualizacion}}</span>
-            </div>
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1 mb-3">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Activación</label>
-                </div>
-                <span
-                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{usuarioData.membresia.fechaActivacion}}</span>
-            </div>
-            <div class="text-center">
-                <button pButton pRipple label="Renovar" (click)="dialogRenovar.abrir()" severity="secondary"
-                    class="mb-1 shiny-text border-colors label-title"></button>
-            </div>
-        </div>
-    </div>
+
+            <button pButton pRipple type="button" class="pf-renovar" (click)="dialogRenovar.abrir()">
+                <i class="pi pi-replay"></i><span>Renovar membresía</span>
+            </button>
+        </section>
+    </ng-container>
 
     <div style="height: 60px;"></div>
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
@@ -189,6 +145,7 @@
 </div>
 
 <app-dialog-renovar-membresia #dialogRenovar
+    [documento]="usuarioData?.persona?.nroDocumento ? usuarioData.persona : null"
     (onSeleccion)="solicitarPorWhatsapp($event)"></app-dialog-renovar-membresia>
 
 <app-loading></app-loading>

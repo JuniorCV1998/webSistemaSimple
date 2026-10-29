@@ -12,18 +12,21 @@ import { TabViewModule } from 'primeng/tabview';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToggleSwitch } from 'primeng/toggleswitch';
-import { catchError, finalize, forkJoin, of } from 'rxjs';
+import { catchError, finalize, forkJoin, of, switchMap } from 'rxjs';
 import { NroCelularDirective } from '../../../components/directives/nro-celular.directive';
 import { Constantes } from '../../../core/constant/Constantes';
 import { GetInversionService } from '../../../core/services/inversion/get-inversion.service';
 import { EstadoWhatsapp, RecordatorioWhatsappItem } from '../../../interfaces/recordatorio-whatsapp/recordatorio-whatsapp';
 import { ListEmptyNoneComponent } from '../../../components/resources/list-empty-none/list-empty-none.component';
 import { LoadingComponent } from '../../modal/loading/loading.component';
+import { CelularPaisComponent } from '../../../components/resources/celular-pais/celular-pais.component';
+import { COD_PAIS_PERU, PAISES, celularLimpio, celularValido } from '../../../core/utils/documento-pais';
 
 const QR_EXPIRA_SEGUNDOS = 45;
 const POLLING_INTERVALO_MS = 4000;
 const ESTADO_WATCH_INTERVALO_MS = 25000;
 const MENSAJE_DEFECTO = 'Hola {nombre}, este es un recordatorio de tu pago de hoy con Sistema Simple Pay.';
+const MENSAJE_COMPROBANTE_DEFECTO = 'Hola {nombre}, te enviamos el comprobante de tu préstamo con Sistema Simple Pay.';
 const MENSAJE_MAX_LENGTH = 500;
 
 @Component({
@@ -31,7 +34,7 @@ const MENSAJE_MAX_LENGTH = 500;
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, ButtonModule, CalendarModule, TabViewModule, ToastModule,
     ToggleSwitch, ListEmptyNoneComponent, LoadingComponent, InputTextModule, NroCelularDirective, ConfirmDialogModule,
-    TextareaModule, AccordionModule],
+    TextareaModule, AccordionModule, CelularPaisComponent],
   providers: [MessageService, ConfirmationService],
   templateUrl: './recordatorios-whatsapp.component.html',
   styleUrl: './recordatorios-whatsapp.component.scss'
@@ -52,6 +55,13 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
     return this.filtrarLista(this.listaSemanal);
   }
 
+  /** Pestaña "Clientes": segmento Diario / Semanal seleccionado. */
+  tipoSeleccionado: 'DIARIO' | 'SEMANAL' = 'DIARIO';
+
+  get listaSeleccionada(): RecordatorioWhatsappItem[] {
+    return this.tipoSeleccionado === 'DIARIO' ? this.listaDiarioFiltrada : this.listaSemanalFiltrada;
+  }
+
   private filtrarLista(lista: RecordatorioWhatsappItem[]): RecordatorioWhatsappItem[] {
     const texto = this.filtroTexto.trim().toLowerCase();
     if (!texto) return lista;
@@ -68,6 +78,7 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
   segundosRestantesQr: number = 0;
   /** Número opcional que el inversor puede ingresar antes de vincular (solo tiene efecto la primera vez). */
   numeroParaVincular: string = '';
+  codPaisVincular: string = COD_PAIS_PERU;
   private pollingHandle: any = null;
   private cuentaRegresivaHandle: any = null;
   private estadoWatchHandle: any = null;
@@ -80,6 +91,13 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
   horaEnvio: string = '09:00';
   horaSeleccionada: Date = this.horaStringToDate('09:00');
   guardandoHora: boolean = false;
+
+  /** Hora de la burbuja de vista previa ("9:00 a. m."). Sin DatePipe: el locale "es" no está registrado. */
+  get horaPreview(): string {
+    const h = this.horaSeleccionada.getHours();
+    const m = String(this.horaSeleccionada.getMinutes()).padStart(2, '0');
+    return `${h % 12 || 12}:${m} ${h < 12 ? 'a. m.' : 'p. m.'}`;
+  }
 
   get horaCambiada(): boolean {
     return this.dateToHoraString(this.horaSeleccionada) !== this.horaEnvio;
@@ -95,6 +113,117 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
     return this.mensajeEditado.trim() !== this.mensaje;
   }
 
+  /** Vista previa del mensaje con un nombre de ejemplo en lugar de {nombre}. */
+  get mensajePreview(): string {
+    return this.previewConNombre(this.mensajeEditado);
+  }
+
+  /* Campaña de recordatorios (pausar sin desvincular) */
+  campanaActiva: boolean = true;
+  guardandoCampana: boolean = false;
+
+  /* Mensaje que acompaña al comprobante */
+  mensajeComprobante: string = MENSAJE_COMPROBANTE_DEFECTO;
+  mensajeComprobanteEditado: string = MENSAJE_COMPROBANTE_DEFECTO;
+  guardandoMensajeComprobante: boolean = false;
+
+  get mensajeComprobanteCambiado(): boolean {
+    return this.mensajeComprobanteEditado.trim() !== this.mensajeComprobante;
+  }
+
+  get mensajeComprobantePreview(): string {
+    return this.previewConNombre(this.mensajeComprobanteEditado);
+  }
+
+  /* Restablecer el mensaje sugerido: el default real lo tiene el backend. Enviar mensaje="" borra el
+     mensaje personalizado y getConfiguracionWhatsapp vuelve a devolver el default (no se usa el texto
+     de respaldo de este archivo, para no dejar textos viejos guardados en BD si el default cambia). */
+  mensajePersonalizado: boolean = true;
+  mensajeComprobantePersonalizado: boolean = true;
+
+  get mostrarRestablecerMensaje(): boolean {
+    return this.mensajePersonalizado || this.mensajeCambiado;
+  }
+
+  get mostrarRestablecerMensajeComprobante(): boolean {
+    return this.mensajeComprobantePersonalizado || this.mensajeComprobanteCambiado;
+  }
+
+  restablecerMensaje(): void {
+    // Solo hay cambios sin guardar sobre el default: basta con descartarlos.
+    if (!this.mensajePersonalizado) {
+      this.mensajeEditado = this.mensaje;
+      return;
+    }
+    this.guardandoMensaje = true;
+    this.loadingComponent.show();
+    this.getInversionService.actualizarMensajeWhatsapp('').pipe(
+      switchMap(() => this.getInversionService.getConfiguracionWhatsapp()),
+      finalize(() => {
+        this.guardandoMensaje = false;
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: (resp: any) => {
+        const config = resp && resp.data;
+        this.aplicarMensaje(config && config.mensaje ? config.mensaje : MENSAJE_DEFECTO);
+        this.mensajePersonalizado = this.esPersonalizado(config, 'mensaje');
+        this.messageService.add({ severity: 'success', summary: 'Listo', detail: 'Mensaje restablecido.', life: 2000 });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+          detail: 'No se pudo restablecer el mensaje.', life: 3000
+        });
+      }
+    });
+  }
+
+  restablecerMensajeComprobante(): void {
+    if (!this.mensajeComprobantePersonalizado) {
+      this.mensajeComprobanteEditado = this.mensajeComprobante;
+      return;
+    }
+    this.guardandoMensajeComprobante = true;
+    this.loadingComponent.show();
+    this.getInversionService.actualizarMensajeComprobanteWhatsapp('').pipe(
+      switchMap(() => this.getInversionService.getConfiguracionWhatsapp()),
+      finalize(() => {
+        this.guardandoMensajeComprobante = false;
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: (resp: any) => {
+        const config = resp && resp.data;
+        this.aplicarMensajeComprobante(config && config.mensajeComprobante ? config.mensajeComprobante : MENSAJE_COMPROBANTE_DEFECTO);
+        this.mensajeComprobantePersonalizado = this.esPersonalizado(config, 'mensajeComprobante');
+        this.messageService.add({ severity: 'success', summary: 'Listo', detail: 'Mensaje del comprobante restablecido.', life: 2000 });
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+          detail: 'No se pudo restablecer el mensaje del comprobante.', life: 3000
+        });
+      }
+    });
+  }
+
+  /** ¿El inversor guardó su propio texto? Usa "<campo>Personalizado" o "<campo>Defecto" de
+   *  getConfiguracionWhatsapp; si el backend no envía ninguno, se asume personalizado (botón visible). */
+  private esPersonalizado(config: any, campo: 'mensaje' | 'mensajeComprobante'): boolean {
+    if (!config) return true;
+    const flag = config[campo + 'Personalizado'];
+    if (typeof flag === 'boolean') return flag;
+    const defecto = config[campo + 'Defecto'];
+    if (typeof defecto === 'string' && config[campo]) return config[campo] !== defecto;
+    return true;
+  }
+
+  private previewConNombre(mensaje: string): string {
+    const texto = mensaje.trim() || 'Escribe el mensaje que recibirán tus clientes';
+    return texto.replace(/\{nombre\}/g, 'Juan Pérez');
+  }
+
   private horaStringToDate(hora: string): Date {
     const [h, m] = hora.split(':').map(Number);
     const fecha = new Date();
@@ -108,19 +237,28 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
     return `${h}:${m}`;
   }
 
-  /** "51921754924" -> "+51 921 754 924" (código de país de 2 dígitos + resto agrupado de a 3). */
+  /**
+   * "51921754924" -> "+51 921 754 924". El código de país se reconoce con la lista de países
+   * (1 a 3 dígitos, el más largo que coincida); si no coincide ninguno, se asume de 2 dígitos.
+   */
   formatNumeroVinculado(numero: string | null): string {
     if (!numero) return '';
-    const codigoPais = numero.slice(0, 2);
-    const resto = numero.slice(2).replace(/(\d{3})(?=\d)/g, '$1 ');
+    const codigoPais = PAISES.map(p => p.codPais)
+      .filter(cod => numero.startsWith(cod))
+      .sort((a, b) => b.length - a.length)[0] ?? numero.slice(0, 2);
+    const resto = numero.slice(codigoPais.length).replace(/(\d{3})(?=\d)/g, '$1 ');
     return `+${codigoPais} ${resto}`;
   }
 
-  /** El backend espera el número completo con código de país (ej. "51921754924"), pero el
-   *  input solo captura el número local peruano de 9 dígitos: se le antepone "51" aquí. */
+  /** Número escrito pero con formato inválido para el país elegido (vacío es válido: solo QR). */
+  get numeroVincularInvalido(): boolean {
+    return !!celularLimpio(this.numeroParaVincular) && !celularValido(this.numeroParaVincular, this.codPaisVincular);
+  }
+
+  /** El backend espera el número completo con código de país y sin "+" ni espacios (ej. "51921754924"). */
   private numeroConCodigoPais(): string | undefined {
-    const local = this.numeroParaVincular.replace(/\s+/g, '');
-    return local ? `51${local}` : undefined;
+    const local = celularLimpio(this.numeroParaVincular);
+    return local ? `${this.codPaisVincular}${local}` : undefined;
   }
 
   constructor(
@@ -170,6 +308,60 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
       const config = configResp && configResp.data;
       this.aplicarHora((config && config.horaEnvio) ? config.horaEnvio : this.horaEnvio);
       this.aplicarMensaje((config && config.mensaje) ? config.mensaje : this.mensaje);
+      this.aplicarMensajeComprobante((config && config.mensajeComprobante) ? config.mensajeComprobante : this.mensajeComprobante);
+      this.mensajePersonalizado = this.esPersonalizado(config, 'mensaje');
+      this.mensajeComprobantePersonalizado = this.esPersonalizado(config, 'mensajeComprobante');
+      if (config && typeof config.campanaActiva === 'boolean') this.campanaActiva = config.campanaActiva;
+    });
+  }
+
+  /** Activa/desactiva el envío del comprobante por WhatsApp para una inversión puntual. */
+  onToggleComprobante(item: RecordatorioWhatsappItem): void {
+    const activar = item.comprobanteActivo;
+    this.loadingComponent.show();
+    this.getInversionService.actualizarEnvioComprobanteWhatsapp(item.idInversion, activar).pipe(
+      finalize(() => this.loadingComponent.hide())
+    ).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success', summary: 'Listo',
+          detail: activar ? 'Envío de comprobante activado.' : 'Envío de comprobante desactivado.', life: 2000
+        });
+      },
+      error: () => {
+        item.comprobanteActivo = !activar;
+        this.messageService.add({
+          severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+          detail: 'No se pudo actualizar el envío del comprobante.', life: 3000
+        });
+      }
+    });
+  }
+
+  /** Pausa/reanuda los recordatorios automáticos sin desvincular el WhatsApp. */
+  onToggleCampana(): void {
+    const activar = this.campanaActiva;
+    this.guardandoCampana = true;
+    this.loadingComponent.show();
+    this.getInversionService.actualizarCampanaWhatsapp(activar).pipe(
+      finalize(() => {
+        this.guardandoCampana = false;
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success', summary: 'Listo',
+          detail: activar ? 'Recordatorios reanudados.' : 'Recordatorios pausados.', life: 2000
+        });
+      },
+      error: () => {
+        this.campanaActiva = !activar;
+        this.messageService.add({
+          severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+          detail: 'No se pudo actualizar la campaña de recordatorios.', life: 3000
+        });
+      }
     });
   }
 
@@ -522,6 +714,7 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
     ).subscribe({
       next: () => {
         this.aplicarMensaje(nuevoMensaje);
+        this.mensajePersonalizado = true;
         this.messageService.add({ severity: 'success', summary: 'Listo', detail: 'Mensaje actualizado.', life: 2000 });
       },
       error: () => {
@@ -529,6 +722,37 @@ export default class RecordatoriosWhatsappComponent implements OnDestroy {
         this.messageService.add({
           severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
           detail: 'No se pudo actualizar el mensaje.', life: 3000
+        });
+      }
+    });
+  }
+
+  private aplicarMensajeComprobante(mensaje: string): void {
+    this.mensajeComprobante = mensaje;
+    this.mensajeComprobanteEditado = mensaje;
+  }
+
+  guardarMensajeComprobante(): void {
+    const nuevoMensaje = this.mensajeComprobanteEditado.trim();
+    if (!this.mensajeComprobanteCambiado || !nuevoMensaje) return;
+    this.guardandoMensajeComprobante = true;
+    this.loadingComponent.show();
+    this.getInversionService.actualizarMensajeComprobanteWhatsapp(nuevoMensaje).pipe(
+      finalize(() => {
+        this.guardandoMensajeComprobante = false;
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: () => {
+        this.aplicarMensajeComprobante(nuevoMensaje);
+        this.mensajeComprobantePersonalizado = true;
+        this.messageService.add({ severity: 'success', summary: 'Listo', detail: 'Mensaje del comprobante actualizado.', life: 2000 });
+      },
+      error: () => {
+        this.mensajeComprobanteEditado = this.mensajeComprobante;
+        this.messageService.add({
+          severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+          detail: 'No se pudo actualizar el mensaje del comprobante.', life: 3000
         });
       }
     });

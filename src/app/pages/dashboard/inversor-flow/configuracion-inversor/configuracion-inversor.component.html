@@ -3,186 +3,162 @@
 </div>
 
 <ng-template #listaNormal>
-    <div>
-        <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
-            <div class="text-center mb-4">
-                <div class="text-2xl mb-3 label-title">Configurar mi App</div>
-            </div>
+    <div class="cf">
+        <div class="cf-head">
+            <div class="text-2xl label-title">Configurar mi App</div>
+            <span class="cf-desc">Personaliza cómo trabajas y cómo te ven tus clientes.</span>
+        </div>
 
-            <!-- <div class="text-center mb-5">
-            <span class="text-gray-500 font-medium line-height-3">¿Qué hacemos hoy?</span>
-        </div> -->
+        <!-- Seguridad -->
+        <div class="cf-seccion">Seguridad</div>
+        <app-biometria-config-card></app-biometria-config-card>
 
-            <app-biometria-config-card></app-biometria-config-card>
+        <!-- Préstamos -->
+        <div class="cf-seccion">Préstamos</div>
 
-            <div
-                class="flex flex-column align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-2">
-                <div class="flex flex-column w-full justify-content-center gap-2">
-                    <div class="flex flex-row justify-content-start align-items-left gap-2">
-                        <i class="pi bx bx-coin icon-span"></i>
-                        <span class="block">Moneda de trabajo</span>
-                    </div>
-                    <span class="txt-span" [ngClass]="webPublic.value==null?'txt-red-':''">Selecciona la moneda con la
-                        que deseas trabajar. El símbolo elegido se mostrará también a tus clientes.</span>
-                </div>
-                <div class="flex flex-column w-7 justify-content-center gap-2 toggle">
-                    <p-select [options]="tipoMonedas" [(ngModel)]="selectedMoneda" optionLabel="codigo"
-                        (ngModelChange)="updateConfigField('moneda')" placeholder="Tipo Moneda" class="w-full">
-
-                        <!-- Plantilla para mostrar cada opción -->
-                        <ng-template let-moneda pTemplate="item">
-                            {{ moneda.codigo }} - {{ moneda.simbolo }}
-                        </ng-template>
-
-                        <!-- Plantilla para mostrar la selección actual -->
-                        <ng-template let-moneda pTemplate="selectedItem">
-                            {{ moneda?.codigo }} - {{ moneda?.simbolo }}
-                        </ng-template>
-
-                    </p-select>
-                </div>
-                <span style="font-size: 13px; text-align: center;">
-                    <ng-container *ngIf="selectedMoneda && selectedMoneda.nombre; else mensajePorDefecto">
-                        La moneda seleccionada es el <strong>{{ selectedMoneda.nombre }} ({{ selectedMoneda.simbolo
-                            }})</strong>.
-                    </ng-container>
-
-                    <ng-template #mensajePorDefecto>
-                        Si no configuras una moneda, se usará por defecto el <strong>Sol Peruano (S/)</strong>.
-                    </ng-template>
+        <!-- Moneda -->
+        <section class="cf-card">
+            <div class="cf-card-head">
+                <span class="cf-ico"><i class="pi bx bx-coin"></i></span>
+                <span class="cf-head-text">
+                    <span class="cf-titulo">Moneda de trabajo</span>
+                    <span class="cf-texto">El símbolo elegido se mostrará también a tus clientes.</span>
                 </span>
             </div>
 
-            <div
-                class="flex flex-column align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-1">
-                <div class="flex flex-column w-full justify-content-center gap-2">
-                    <div class="flex flex-row justify-content-start align-items-left gap-2">
-                        <i class="pi pi-arrow-right-arrow-left icon-span"></i>
-                        <span class="block">Límites</span>
-                    </div>
-                    <span class="txt-span mb-1" [ngClass]="periodTest.value==null?'txt-red-':''">Establece los rangos
-                        máximos
-                        y mínimos permitidos para tus montos e intereses al momento de crear una inversión.</span>
-                    <div class="flex flex-column justify-content-start align-items-left gap-3 mb-4">
-                        <span class="block text-left">Monto</span>
-                        <!-- (change)="updateSelectMonto(selectedMonto.idMonto)" -->
-                        <input type="range" min="0" [max]="montoLimits.length - 1"
-                            (ngModelChange)="updateConfigField('monto')" step="1" [(ngModel)]="montoIndex"
-                            (input)="onSliderChange(1)" class="slider">
-                        <div class="flex justify-content-between align-items-center w-full">
-                            <strong>{{currency}} {{ selectedMonto?.montoMax | formatNumber }}</strong>
-                            <span class="txt-span">Máximo: {{currency}} {{montoMaximo | formatNumber}}</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-column justify-content-start align-items-left gap-3">
-                        <span class="block text-left">Interés</span>
-                        <input type="range" min="0" [max]="interesLimits.length - 1"
-                            (ngModelChange)="updateConfigField('interes')" step="1" [(ngModel)]="interesIndex"
-                            (input)="onSliderChange(2)" class="slider">
-                        <div class="flex justify-content-between align-items-center w-full">
-                            <strong>{{ selectedInteres?.interesMax }}%</strong>
-                            <span class="txt-span">Máximo: {{interesMaximo}}%</span>
-                        </div>
-                    </div>
-                </div>
+            <p-select [options]="tipoMonedas" [(ngModel)]="selectedMoneda" optionLabel="codigo"
+                (ngModelChange)="updateConfigField('moneda')" placeholder="Tipo de moneda" class="w-full cf-select">
+                <ng-template let-moneda pTemplate="item">
+                    {{ moneda.codigo }} - {{ moneda.simbolo }}
+                </ng-template>
+                <ng-template let-moneda pTemplate="selectedItem">
+                    {{ moneda?.codigo }} - {{ moneda?.simbolo }}
+                </ng-template>
+            </p-select>
+
+            <span class="cf-nota">
+                <i class="pi pi-info-circle"></i>
+                <span>
+                    <ng-container *ngIf="selectedMoneda && selectedMoneda.nombre; else mensajePorDefecto">
+                        Trabajas en <b>{{ selectedMoneda.nombre }} ({{ selectedMoneda.simbolo }})</b>.
+                    </ng-container>
+                    <ng-template #mensajePorDefecto>
+                        Si no configuras una moneda, se usará el <b>Sol Peruano (S/)</b>.
+                    </ng-template>
+                </span>
+            </span>
+        </section>
+
+        <!-- Límites -->
+        <section class="cf-card">
+            <div class="cf-card-head">
+                <span class="cf-ico"><i class="pi pi-sliders-h"></i></span>
+                <span class="cf-head-text">
+                    <span class="cf-titulo">Límites</span>
+                    <span class="cf-texto">Montos e intereses máximos permitidos al crear un préstamo.</span>
+                </span>
             </div>
 
-            <!-- LOGO PERSONALIZADO -->
-            <div class="flex flex-row align-items-center justify-content-center custom-banner-codigo-unico mb-3 gap-1">
-                <div class="flex flex-column w-full justify-content-center gap-2">
+            <div class="cf-limite">
+                <div class="cf-limite-fila">
+                    <span class="cf-limite-label">Monto</span>
+                    <span class="cf-limite-valor">{{currency}} {{ selectedMonto?.montoMax | formatNumber }}</span>
+                </div>
+                <input type="range" min="0" [max]="montoLimits.length - 1"
+                    (ngModelChange)="updateConfigField('monto')" step="1" [(ngModel)]="montoIndex"
+                    (input)="onSliderChange(1)" class="slider" aria-label="Monto máximo">
+                <span class="cf-limite-max">Máximo: {{currency}} {{montoMaximo | formatNumber}}</span>
+            </div>
 
-                    <!-- Título e ícono -->
-                    <div class="flex flex-row justify-content-start align-items-left gap-2">
-                        <i class="pi pi-images icon-span"></i>
-                        <span class="block">Logos personalizados</span>
-                    </div>
+            <div class="cf-limite">
+                <div class="cf-limite-fila">
+                    <span class="cf-limite-label">Interés</span>
+                    <span class="cf-limite-valor">{{ selectedInteres?.interesMax }}%</span>
+                </div>
+                <input type="range" min="0" [max]="interesLimits.length - 1"
+                    (ngModelChange)="updateConfigField('interes')" step="1" [(ngModel)]="interesIndex"
+                    (input)="onSliderChange(2)" class="slider" aria-label="Interés máximo">
+                <span class="cf-limite-max">Máximo: {{interesMaximo}}%</span>
+            </div>
+        </section>
 
-                    <!-- Descripción -->
-                    <span class="txt-span" [ngClass]="mantenimiento.value==null ? 'txt-red-' : ''">
-                        Personaliza tu cuenta con tu propio logo o sello de cartilla para darle identidad a tu perfil.
+        <!-- Marca -->
+        <div class="cf-seccion">Tu marca</div>
+        <section class="cf-card">
+            <div class="cf-card-head">
+                <span class="cf-ico"><i class="pi pi-images"></i></span>
+                <span class="cf-head-text">
+                    <span class="cf-titulo">Logos personalizados</span>
+                    <span class="cf-texto">Usa tu propio logo o sello de cartilla para darle identidad a tu perfil.</span>
+                </span>
+            </div>
+
+            <div class="cf-logos">
+                <!-- Logo -->
+                <div class="cf-logo">
+                    <span class="cf-logo-label">Logo</span>
+                    <button type="button" class="upload-box" (click)="fileInput.click()">
+                        <img *ngIf="previewUrl; else placeholder" [src]="previewUrl" alt="Logo del inversor"
+                            class="preview-img" />
+                        <ng-template #placeholder>
+                            <span class="upload-vacio">
+                                <i class="pi pi-cloud-upload"></i>
+                                <span>Subir logo</span>
+                            </span>
+                        </ng-template>
+                    </button>
+                    <span *ngIf="selectedFileName" class="selected-file">
+                        <i class="pi pi-check-circle"></i>{{ selectedFileName }}
                     </span>
-
-                    <!-- Contenedor principal -->
-                    <div class="flex flex-column align-items-center justify-content-center mt-3 mb-2 gap-2">
-                        <span class="block">Logo</span>
-                        <!-- Zona de subida / vista previa -->
-                        <div class="upload-box" (click)="fileInput.click()">
-                            <img *ngIf="previewUrl; else placeholder" [src]="previewUrl" alt="Logo del inversor"
-                                class="preview-img" />
-                            <ng-template #placeholder>
-                                <div class="text-center text-blue-400">
-                                    <i class="pi pi-cloud-upload text-3xl mb-2"></i>
-                                    <p class="text-sm font-medium">Haz clic para subir tu logo</p>
-                                </div>
-                            </ng-template>
-                        </div>
-
-                        <!-- Nombre del archivo -->
-                        <div *ngIf="selectedFileName" class="selected-file mt-2">
-                            <i class="pi pi-check-circle text-green-500 mr-1"></i>
-                            {{ selectedFileName }}
-                        </div>
-
-                        <!-- Input oculto -->
-                        <input #fileInput type="file" accept=".png, .jpg, .jpeg, .svg"
-                            (change)="onFileSelected($event,'logo')" hidden />
-
-                        <!-- Botones -->
-                        <div class="flex gap-2" *ngIf="previewUrl">
-                            <button pButton icon="pi pi-refresh" label="Reemplazar"
-                                class="p-button-sm p-button-outlined" (click)="fileInput.click()"></button>
-
-                            <button pButton icon="pi pi-trash" label="Eliminar"
-                                class="p-button-sm p-button-danger p-button-outlined"
-                                (click)="removeImage('logo')"></button>
-                        </div>
+                    <input #fileInput type="file" accept=".png, .jpg, .jpeg, .svg"
+                        (change)="onFileSelected($event,'logo')" hidden />
+                    <div class="cf-logo-acciones" *ngIf="previewUrl">
+                        <button type="button" class="cf-mini" (click)="fileInput.click()" aria-label="Reemplazar logo">
+                            <i class="pi pi-refresh"></i>
+                        </button>
+                        <button type="button" class="cf-mini cf-mini-rojo" (click)="removeImage('logo')"
+                            aria-label="Eliminar logo">
+                            <i class="pi pi-trash"></i>
+                        </button>
                     </div>
+                </div>
 
-                    <!-- Checked -->
-                    <div class="flex flex-row justify-content-center align-items-center gap-2">
-                        <p-checkbox [(ngModel)]="checked" [binary]="true" />
-                        <span class="txt-span">Usar <strong>Logo</strong> como sello de cartilla.</span>
+                <!-- Sello -->
+                <div class="cf-logo" *ngIf="!checked">
+                    <span class="cf-logo-label">Sello</span>
+                    <button type="button" class="upload-box" (click)="fileInputSello.click()">
+                        <img *ngIf="previewUrlSello; else placeholderSello" [src]="previewUrlSello"
+                            alt="Sello del inversor" class="preview-img" />
+                        <ng-template #placeholderSello>
+                            <span class="upload-vacio">
+                                <i class="pi pi-cloud-upload"></i>
+                                <span>Subir sello</span>
+                            </span>
+                        </ng-template>
+                    </button>
+                    <span *ngIf="selectedFileNameSello" class="selected-file">
+                        <i class="pi pi-check-circle"></i>{{ selectedFileNameSello }}
+                    </span>
+                    <input #fileInputSello type="file" accept=".png, .jpg, .jpeg, .svg"
+                        (change)="onFileSelected($event, 'sello')" hidden />
+                    <div class="cf-logo-acciones" *ngIf="previewUrlSello">
+                        <button type="button" class="cf-mini" (click)="fileInputSello.click()"
+                            aria-label="Reemplazar sello">
+                            <i class="pi pi-refresh"></i>
+                        </button>
+                        <button type="button" class="cf-mini cf-mini-rojo" (click)="removeImage('sello')"
+                            aria-label="Eliminar sello">
+                            <i class="pi pi-trash"></i>
+                        </button>
                     </div>
-
-                    <!-- Contenedor secundario -->
-                    <div *ngIf="!checked" class="flex flex-column align-items-center justify-content-center mt-3 gap-2">
-                        <span class="block">Sello</span>
-                        <!-- Zona de subida / vista previa -->
-                        <div class="upload-box" (click)="fileInputSello.click()">
-                            <img *ngIf="previewUrlSello; else placeholderSello" [src]="previewUrlSello"
-                                alt="Sello del inversor" class="preview-img" />
-                            <ng-template #placeholderSello>
-                                <div class="text-center text-blue-400">
-                                    <i class="pi pi-cloud-upload text-3xl mb-2"></i>
-                                    <p class="text-sm font-medium">Haz clic para subir tu sello</p>
-                                </div>
-                            </ng-template>
-                        </div>
-
-                        <!-- Nombre del archivo -->
-                        <div *ngIf="selectedFileNameSello" class="selected-file mt-2">
-                            <i class="pi pi-check-circle text-green-500 mr-1"></i>
-                            {{ selectedFileNameSello }}
-                        </div>
-
-                        <!-- Input oculto -->
-                        <input #fileInputSello type="file" accept=".png, .jpg, .jpeg, .svg"
-                            (change)="onFileSelected($event, 'sello')" hidden />
-
-                        <!-- Botones -->
-                        <div class="flex gap-2" *ngIf="previewUrlSello">
-                            <button pButton icon="pi pi-refresh" label="Reemplazar"
-                                class="p-button-sm p-button-outlined" (click)="fileInputSello.click()"></button>
-
-                            <button pButton icon="pi pi-trash" label="Eliminar"
-                                class="p-button-sm p-button-danger p-button-outlined"
-                                (click)="removeImage('sello')"></button>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </div>
+
+            <label class="cf-check">
+                <p-checkbox [(ngModel)]="checked" [binary]="true" />
+                <span>Usar el <b>logo</b> como sello de cartilla</span>
+            </label>
+        </section>
     </div>
 
     <div *ngIf="hasChanges" style="height: 50px;"></div>
@@ -192,6 +168,11 @@
 </ng-template>
 
 <app-loading></app-loading>
+
+<!-- Recortador: acomoda cualquier imagen (ancha, alta o grande) dentro del cuadro del logo/sello -->
+<app-recortar-imagen *ngIf="recorte" [src]="recorte.url" [nombre]="recorte.tipo"
+    [titulo]="recorte.tipo === 'logo' ? 'Ajusta tu logo' : 'Ajusta tu sello'"
+    (listo)="onRecorteListo($event)" (cancelado)="cerrarRecorte()" />
 
 <div>
     <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />

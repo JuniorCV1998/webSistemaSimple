@@ -5,7 +5,7 @@ import { MessageService } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-import { catchError, finalize, of } from 'rxjs';
+import { catchError, finalize, of, Subscription } from 'rxjs';
 import { InversionVehService } from '../../../core/services/inversion-veh/inversion-veh.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
 import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
@@ -20,7 +20,9 @@ import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
 })
 export default class InicioComponent {
 
-  pendiente: boolean = true;
+  /** Filtro de estadoDeuda: P = Pendiente, F = Finalizado (pagó todas sus cuotas), C = Cerrado (cierre manual). */
+  estado: 'P' | 'F' | 'C' = 'P';
+  get pendiente(): boolean { return this.estado === 'P'; }
   isLoading: boolean = false;
   forSkeleton: number = 5;
 
@@ -57,24 +59,29 @@ export default class InicioComponent {
   }
   
   ngAfterViewInit(): void {
-    
+
     this.tempDataService.clear();
   }
 
-  changeOpen(estado: boolean){
-    if(this.pendiente == estado) return;
-    else{
-      this.pendiente = estado;
-      this.getInversionesVehiculares();
-    }
+  ngOnDestroy(): void {
+    this.consulta?.unsubscribe();
+  }
+
+  changeOpen(estado: 'P' | 'F' | 'C'){
+    if(this.estado == estado) return;
+    this.estado = estado;
+    this.getInversionesVehiculares();
   }
 
 
+    /** Consulta en curso: al cambiar de pestaña se cancela, así una respuesta tardía no pisa la lista nueva. */
+    private consulta?: Subscription;
+
     getInversionesVehiculares(){
       /* this.loadingComponent.show(); */
+      this.consulta?.unsubscribe();
       this.isLoading = true;
-      const status = this.pendiente?"P":"C";
-      this.inversionVehService.getInversionesVehList(status).pipe(
+      this.consulta = this.inversionVehService.getInversionesVehList(this.estado).pipe(
         finalize(() => {
           //this.loadingComponent.hide();
           this.isLoading = false; // Cambia a falso cuando termine

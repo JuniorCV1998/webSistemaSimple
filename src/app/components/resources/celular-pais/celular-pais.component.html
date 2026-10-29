@@ -1,0 +1,25 @@
+<div class="cel-pais" [class.cel-pais-disabled]="disabled" [class.cel-pais-invalido]="invalido && mostrarError">
+    <p-select class="cel-pais-select" [options]="paises" [ngModel]="codPais" (ngModelChange)="onPaisChange($event)"
+        optionValue="codPais" optionLabel="nombre" [filter]="true" filterBy="nombre,codPais"
+        filterPlaceholder="Buscar país" appendTo="body" [disabled]="disabled" panelStyleClass="cel-pais-panel"
+        ariaLabel="Código de país">
+        <ng-template #selectedItem>
+            <span class="cel-pais-sel">
+                <span class="cel-pais-flag">{{ paisSeleccionado?.bandera }}</span>+{{ codPais }}
+            </span>
+        </ng-template>
+        <ng-template #item let-pais>
+            <span class="cel-pais-item">
+                <span class="cel-pais-flag">{{ pais.bandera }}</span>
+                <span class="cel-pais-nombre">{{ pais.nombre }}</span>
+                <span class="cel-pais-cod">+{{ pais.codPais }}</span>
+            </span>
+        </ng-template>
+    </p-select>
+    <input [id]="inputId" class="cel-pais-input" type="tel" inputmode="numeric" autocomplete="tel-national"
+        [value]="celular || ''" (input)="onInput($event)" [disabled]="disabled"
+        [attr.maxlength]="esPeru ? 11 : 15" [placeholder]="textoPlaceholder">
+</div>
+<small *ngIf="mostrarError && invalido" class="cel-pais-error">
+    <i class="pi pi-info-circle"></i> {{ mensajeError }}
+</small>

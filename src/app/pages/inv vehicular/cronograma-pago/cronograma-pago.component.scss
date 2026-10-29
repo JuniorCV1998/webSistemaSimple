@@ -1,110 +1,295 @@
-.span-subtitulo {
-  color: var(--gray-500);
-  font-size: 13px;
-}
+/* Cronograma de pago: estilo fintech mobile light (tarjetas blancas + íconos en círculo, sin hero) */
+$ink: var(--gray-700);
+$muted: var(--gray-500);
+$blue: var(--blue-400);
+$green: var(--primary-500);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$green-soft: color-mix(in srgb, var(--primary-500) 12%, #fff);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
 
-.resumen-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  background: var(--gray-50);
-  border-radius: var(--radius-sm);
-  padding: 0.75rem 1rem;
-}
-
-.resumen-item {
+.cp {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4px 2px 0;
 }
 
-.resumen-label {
-  font-size: 0.68rem;
-  color: var(--gray-500);
-  font-weight: 600;
-  text-transform: uppercase;
+.cp-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
 }
 
-.resumen-valor {
-  font-size: 0.9rem;
-  color: var(--gray-700);
-  font-weight: 500;
-}
-
-/* Grupos por mes */
-.grupo-mes {
-  background: #fff;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-}
-
-.grupo-header {
-  padding: 8px 12px;
-  background: var(--gray-50);
-  border-bottom: 1px solid var(--gray-200);
-}
-
-.grupo-titulo {
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--gray-700);
+.cp-desc {
+  font-size: 13.5px;
+  color: $muted;
   text-transform: capitalize;
 }
 
-.grupo-monto {
-  font-weight: 600;
-  font-size: 12px;
-  color: var(--primary-500);
-}
-
-/* Tabla */
-.table-wrapper {
-  overflow-x: auto;
-}
-
-.custom-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.8rem;
-}
-
-.custom-table thead th {
-  background: #fff;
-  font-weight: 600;
-  padding: 6px 10px;
-  border-bottom: 1px solid #e0e0e0;
-  text-align: left;
-  color: var(--gray-500);
-  font-size: 0.72rem;
-}
-
-.custom-table tbody td {
-  padding: 6px 10px;
-  border-bottom: 1px solid #f0f0f0;
-  white-space: nowrap;
-  color: var(--gray-700);
-}
-
-.custom-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.estado-chip {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8px;
+.cp-card {
+  padding: 6px;
   border-radius: 20px;
+  background: #fff;
+  box-shadow: $sombra;
+}
+
+/* ===== Resumen ===== */
+.cp-resumen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 8px;
+  padding: 10px;
+}
+
+.cp-dato {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 6px 4px;
+}
+
+.cp-dato-ico {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $blue;
+  background: $blue-soft;
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+.cp-dato-ico-verde {
+  color: $green;
+  background: $green-soft;
+}
+
+.cp-dato-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cp-dato-label {
+  font-size: 11.5px;
+  color: $muted;
+  line-height: 1.35;
+}
+
+.cp-dato-valor {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: $ink;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cp-placa {
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.cp-progreso {
+  grid-column: 1 / -1;
+  padding: 6px 4px 2px;
+}
+
+.cp-barra {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue-400), var(--primary-500));
+    transition: width .4s ease;
+  }
+}
+
+/* ===== Descarga ===== */
+.cp-descarga {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.cp-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 2px 10px;
+  border-bottom: 1px solid var(--gray-100);
+  cursor: pointer;
+}
+
+.cp-switch-titulo {
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+}
+
+.cp-btn {
+  width: 100%;
+  justify-content: center;
+  border-radius: 14px;
+}
+
+/* ===== Lista por mes ===== */
+.cp-seccion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 6px 4px -4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $muted;
+  text-transform: capitalize;
+}
+
+.cp-subtotal {
+  font-size: 12px;
+  font-weight: 700;
+  color: $ink;
+}
+
+.cp-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 58px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
+  }
+}
+
+.cp-item-proxima {
+  background: color-mix(in srgb, var(--blue-400) 6%, #fff);
+
+  &::before,
+  & + .cp-item::before {
+    display: none;
+  }
+}
+
+.cp-nro {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $muted;
+  background: var(--gray-100);
+
+  .pi {
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+.cp-nro-pagado {
+  color: $green;
+  background: $green-soft;
+}
+
+.cp-item-proxima .cp-nro {
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+}
+
+.cp-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cp-cuota {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+}
+
+.cp-chip-proxima {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 999px;
+  color: $blue;
+  background: $blue-soft;
+}
+
+.cp-fecha {
+  font-size: 12px;
+  color: $muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cp-derecha {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex: 0 0 auto;
+}
+
+.cp-monto {
+  font-size: 14px;
+  font-weight: 700;
+  color: $ink;
   white-space: nowrap;
 }
 
-.estado-pagado {
-  background: #e6f9ef;
-  color: var(--primary-500);
+.cp-estado {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 999px;
 }
 
-.estado-pendiente {
+.cp-estado-pagado {
+  color: $green;
+  background: $green-soft;
+}
+
+.cp-estado-pendiente {
+  color: $muted;
   background: var(--gray-100);
-  color: var(--gray-500);
 }
 
 .btn-subir-arriba {

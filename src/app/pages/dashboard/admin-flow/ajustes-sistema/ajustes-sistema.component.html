@@ -1,0 +1,209 @@
+<div class="adm">
+    <div class="adm-head">
+        <div class="text-2xl label-title">Ajustes del sistema</div>
+        <span class="adm-desc">Datos de contacto, enlaces y planes que ven tus inversores en la app.</span>
+    </div>
+
+    <div *ngIf="sinServicio" class="as-aviso">
+        <i class="pi pi-info-circle"></i>
+        <span>Vista previa: se muestran los valores actuales de la app. Guardar estará disponible cuando el
+            servicio esté listo.</span>
+    </div>
+
+    <!-- ===== Contacto y soporte ===== -->
+    <span class="adm-seccion">Contacto y soporte</span>
+    <section class="adm-card as-card">
+        <div class="as-campo">
+            <label class="as-label" for="as-wsp"><i class="pi pi-whatsapp"></i>WhatsApp de soporte</label>
+            <div class="as-tel">
+                <select [(ngModel)]="ajustes.contacto.whatsappCodPais" aria-label="Código de país">
+                    <option value="51">+51</option>
+                    <option value="57">+57</option>
+                    <option value="56">+56</option>
+                    <option value="593">+593</option>
+                    <option value="52">+52</option>
+                    <option value="1">+1</option>
+                </select>
+                <input id="as-wsp" type="tel" inputmode="numeric" [value]="ajustes.contacto.whatsappNumero"
+                    (input)="onNumeroInput($event)" placeholder="920605673">
+                <button type="button" class="as-probar" [disabled]="!whatsappValido" (click)="probarWhatsapp()">Probar</button>
+            </div>
+            <small *ngIf="!whatsappValido" class="as-error">Ingresa un celular válido (9 dígitos, empieza con 9).</small>
+            <small class="as-uso">Se usa en Renovar membresía, Usuario sin acceso, Mantenimiento y Actualizar app.</small>
+        </div>
+
+        <div class="as-campo">
+            <label class="as-label" for="as-correo"><i class="pi pi-envelope"></i>Correo de la empresa</label>
+            <input id="as-correo" type="email" class="as-input" [(ngModel)]="ajustes.contacto.correo"
+                (ngModelChange)="ajustes.contacto.correo = $event.trim().toLowerCase()" placeholder="empresa@gmail.com">
+            <small *ngIf="!correoValido" class="as-error">Ingresa un correo válido.</small>
+            <small class="as-uso">Se muestra en Código manual y en la Política de privacidad.</small>
+        </div>
+
+        <div class="as-campo">
+            <label class="as-label" for="as-horario"><i class="pi pi-clock"></i>Horario de atención
+                <span class="as-opc">Opcional</span></label>
+            <input id="as-horario" type="text" class="as-input" maxlength="60" [(ngModel)]="ajustes.contacto.horario"
+                placeholder="Lun a Sáb · 9:00 a. m. – 7:00 p. m.">
+            <small class="as-uso">Aparece junto al botón de WhatsApp para que sepan cuándo responderás.</small>
+        </div>
+    </section>
+
+    <!-- ===== Enlaces ===== -->
+    <span class="adm-seccion">Enlaces de la app</span>
+    <section class="adm-card as-card">
+        <div class="as-campo">
+            <label class="as-label" for="as-play"><i class="pi pi-android"></i>Google Play</label>
+            <div class="as-url">
+                <input id="as-play" type="url" class="as-input" [(ngModel)]="ajustes.enlaces.urlPlayStore"
+                    placeholder="https://play.google.com/store/apps/details?id=...">
+                <button type="button" class="as-ir" [disabled]="!urlValida(ajustes.enlaces.urlPlayStore)"
+                    (click)="abrir(ajustes.enlaces.urlPlayStore)" aria-label="Abrir enlace"><i class="pi pi-external-link"></i></button>
+            </div>
+            <small *ngIf="!urlValida(ajustes.enlaces.urlPlayStore)" class="as-error">Debe empezar con https://</small>
+            <small class="as-uso">Se comparte al crear un código único y en Actualizar app.</small>
+        </div>
+
+        <div class="as-campo">
+            <label class="as-label" for="as-apple"><i class="pi pi-apple"></i>App Store
+                <span class="as-opc">Opcional</span></label>
+            <div class="as-url">
+                <input id="as-apple" type="url" class="as-input" [(ngModel)]="ajustes.enlaces.urlAppStore"
+                    placeholder="https://apps.apple.com/...">
+                <button type="button" class="as-ir" [disabled]="!urlValida(ajustes.enlaces.urlAppStore)"
+                    (click)="abrir(ajustes.enlaces.urlAppStore)" aria-label="Abrir enlace"><i class="pi pi-external-link"></i></button>
+            </div>
+            <small *ngIf="!urlValida(ajustes.enlaces.urlAppStore, true)" class="as-error">Debe empezar con https://</small>
+            <small class="as-uso">Cuando publiques en iPhone, los usuarios de iOS verán este enlace.</small>
+        </div>
+    </section>
+
+    <!-- ===== Planes de membresía ===== -->
+    <div class="as-seccion-fila">
+        <span class="adm-seccion">Planes de membresía</span>
+        <button type="button" class="as-sugeridos" (click)="aplicarSugeridos()"><i class="pi pi-sparkles"></i>Usar sugeridos</button>
+    </div>
+    <section class="adm-card as-card as-planes">
+        <div *ngFor="let plan of ajustes.planes" class="as-plan" [class.as-plan-off]="!plan.activo">
+            <div class="as-plan-head">
+                <b>{{ nombre(plan.meses) }} <small>· {{ duracion(plan.meses) }}</small></b>
+                <button type="button" class="as-estrella" [class.on]="plan.destacado" [disabled]="!plan.activo"
+                    (click)="marcarDestacado(plan)" [attr.aria-pressed]="plan.destacado" aria-label="Marcar como recomendado">
+                    <i class="pi" [ngClass]="plan.destacado ? 'pi-star-fill' : 'pi-star'"></i>
+                    {{ plan.destacado ? 'Recomendado' : 'Recomendar' }}
+                </button>
+                <p-toggleswitch [(ngModel)]="plan.activo" (ngModelChange)="onActivoChange(plan)" />
+            </div>
+            <div class="as-plan-body">
+                <div class="as-precio">
+                    <span>S/</span>
+                    <input type="number" inputmode="decimal" min="0" step="0.5" [(ngModel)]="plan.precio"
+                        [disabled]="!plan.activo" placeholder="0.00" [attr.aria-label]="'Precio ' + nombre(plan.meses)">
+                </div>
+                <div class="as-plan-info" *ngIf="plan.precio">
+                    <small>S/ {{ soles(porMes(plan)) }} por mes</small>
+                    <span *ngIf="ahorroPct(plan) > 0" class="adm-chip adm-verde">Ahorra {{ ahorroPct(plan) }}%</span>
+                    <span *ngIf="ahorroPct(plan) < 0" class="adm-chip adm-naranja">Más caro que el mensual</span>
+                </div>
+            </div>
+            <small *ngIf="plan.activo && !(plan.precio! > 0)" class="as-error">Ingresa el precio del plan.</small>
+
+            <!-- Beneficios propios del plan -->
+            <button *ngIf="plan.activo" type="button" class="as-ben-toggle" (click)="alternarBeneficios(plan)"
+                [attr.aria-expanded]="planAbierto === plan.meses">
+                <i class="pi pi-gift"></i>
+                {{ plan.beneficios.length ? plan.beneficios.length + (plan.beneficios.length === 1 ? ' beneficio extra' : ' beneficios extra') : 'Agregar beneficios extra' }}
+                <i class="pi as-ben-flecha" [ngClass]="planAbierto === plan.meses ? 'pi-angle-up' : 'pi-angle-down'"></i>
+            </button>
+            <div *ngIf="plan.activo && planAbierto === plan.meses" class="as-lista">
+                <span *ngFor="let b of plan.beneficios; let i = index" class="as-item">
+                    <i class="pi pi-plus-circle"></i><span>{{ b }}</span>
+                    <button type="button" (click)="quitar(plan.beneficios, i)" aria-label="Quitar"><i class="pi pi-times"></i></button>
+                </span>
+                <div *ngIf="plan.beneficios.length < maxItems" class="as-agregar">
+                    <input type="text" maxlength="45" class="as-input" [(ngModel)]="nuevoBeneficio[plan.meses]"
+                        (keydown.enter)="agregarBeneficio(plan)" placeholder="Ej. Prioridad en soporte">
+                    <button type="button" (click)="agregarBeneficio(plan)" [disabled]="!nuevoBeneficio[plan.meses]?.trim()"
+                        aria-label="Agregar"><i class="pi pi-plus"></i></button>
+                </div>
+            </div>
+        </div>
+        <small *ngIf="!planesValidos && ajustes.planes" class="as-error as-error-pie">Debe haber al menos un plan activo con precio.</small>
+    </section>
+
+    <!-- ===== Qué incluye ===== -->
+    <span class="adm-seccion">Todos los planes incluyen</span>
+    <section class="adm-card as-card">
+        <p class="as-ayuda">Lo que más convence: escribe beneficios concretos que tu app sí cumple.</p>
+        <div class="as-lista">
+            <span *ngFor="let item of ajustes.incluye; let i = index" class="as-item">
+                <i class="pi pi-check-circle as-item-ok"></i><span>{{ item }}</span>
+                <button type="button" (click)="quitar(ajustes.incluye, i)" aria-label="Quitar"><i class="pi pi-times"></i></button>
+            </span>
+            <div *ngIf="ajustes.incluye.length < maxItems" class="as-agregar">
+                <input type="text" maxlength="45" class="as-input" [(ngModel)]="nuevoIncluye" (keydown.enter)="agregarIncluye()"
+                    placeholder="Ej. Recordatorios de cobro por WhatsApp">
+                <button type="button" (click)="agregarIncluye()" [disabled]="!nuevoIncluye.trim()" aria-label="Agregar"><i
+                        class="pi pi-plus"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Oferta ===== -->
+    <span class="adm-seccion">Oferta por tiempo limitado</span>
+    <section class="adm-card as-card">
+        <div class="adm-fila">
+            <span class="adm-ico" [class.adm-ico-grad]="ajustes.oferta.activa"><i class="pi pi-tag"></i></span>
+            <span class="adm-texto">
+                <b>Activar oferta</b>
+                <small>Aplica un descuento a todos los planes hasta la fecha que elijas.</small>
+            </span>
+            <p-toggleswitch [(ngModel)]="ajustes.oferta.activa" />
+        </div>
+
+        <ng-container *ngIf="ajustes.oferta.activa">
+            <div class="as-dos">
+                <div class="as-campo">
+                    <label class="as-label" for="as-pct">Descuento</label>
+                    <div class="as-sufijo">
+                        <input id="as-pct" type="number" inputmode="numeric" min="5" max="50" class="as-input"
+                            [(ngModel)]="ajustes.oferta.porcentaje" placeholder="20">
+                        <span>%</span>
+                    </div>
+                </div>
+                <div class="as-campo">
+                    <label class="as-label" for="as-fin">Válida hasta</label>
+                    <p-datepicker [(ngModel)]="fechaFin" (ngModelChange)="onFechaFinChange($event)" [minDate]="minFechaFin"
+                        [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy" inputId="as-fin"
+                        appendTo="body" [readonlyInput]="true" placeholder="dd/mm/aaaa" class="as-fecha" />
+                </div>
+            </div>
+            <small *ngIf="!ofertaValida" class="as-error">El descuento va de 5% a 50% y la fecha no puede ser pasada.</small>
+            <div class="as-campo">
+                <label class="as-label" for="as-txt">Texto de la oferta <span class="as-opc">Opcional</span></label>
+                <input id="as-txt" type="text" class="as-input" maxlength="40" [(ngModel)]="ajustes.oferta.texto"
+                    placeholder="Precio de lanzamiento">
+            </div>
+        </ng-container>
+    </section>
+
+    <!-- ===== Vista previa ===== -->
+    <span class="adm-seccion">Así lo verá el inversor</span>
+    <section class="as-preview">
+        <app-planes-membresia *ngIf="vistaPrevia.planes.length; else sinPlanes" [ajustes]="vistaPrevia"
+            [(seleccionado)]="planPrevio"></app-planes-membresia>
+        <ng-template #sinPlanes>
+            <div class="adm-vacio">No hay planes activos.</div>
+        </ng-template>
+    </section>
+
+    <div style="height: 90px;"></div>
+</div>
+
+<div *ngIf="hayCambios" class="as-barra">
+    <button type="button" class="adm-btn adm-btn-sec" (click)="descartar()">Descartar</button>
+    <button type="button" class="adm-btn" [disabled]="!formularioValido" (click)="guardar()">Guardar cambios</button>
+</div>
+
+<app-loading></app-loading>
+<p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />

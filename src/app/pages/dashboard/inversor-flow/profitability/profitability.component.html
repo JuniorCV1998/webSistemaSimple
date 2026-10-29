@@ -1,104 +1,93 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="rt">
 
-    <div class="text-center mb-3">
-        <div class="text-2xl mb-2 label-title">Rentabilidad</div>
-        <p class="intro-text">Resumen de tu rentabilidad según el período seleccionado. Se actualiza diariamente.</p>
+    <div class="rt-head">
+        <div class="text-2xl label-title">Rentabilidad</div>
+        <span class="rt-desc">Resumen según el período seleccionado. Se actualiza diariamente.</span>
     </div>
 
     <ng-container *ngIf="rentabilidadService; else errorTemplate">
 
         <!-- Selector de período -->
-        <div class="periodo-toggle mb-4">
-            <button type="button" class="periodo-btn" [class.active]="actual" (click)="changeOpen(true)">Mes
-                actual</button>
-            <button type="button" class="periodo-btn" [class.active]="!actual" (click)="changeOpen(false)">Últ. 6
-                meses</button>
+        <div class="rt-segment">
+            <button type="button" [class.active]="actual" (click)="changeOpen(true)">Mes actual</button>
+            <button type="button" [class.active]="!actual && meses == 6" (click)="changeOpen(false, 6)">6 meses</button>
+            <button type="button" [class.active]="!actual && meses == 12" (click)="changeOpen(false, 12)">12 meses</button>
         </div>
 
-        <!-- KPI del período vigente -->
-        <div class="kpi-grid mb-4" *ngIf="filaActual as fila">
-            <div class="kpi-card">
-                <div class="kpi-icon kpi-icon-primary"><i class="pi pi-wallet"></i></div>
-                <span class="kpi-label">Capital invertido</span>
-                <span class="kpi-value">{{currency}}{{fila.capitalInvertido}}</span>
+        <!-- Hero: rentabilidad del período vigente -->
+        <section class="rt-hero" *ngIf="filaActual as fila">
+            <span class="rt-hero-pill">
+                <i class="pi pi-calendar"></i> {{ actual ? fila.fecha : fila.nombreMes }}
+            </span>
+            <span class="rt-hero-label">{{ actual ? 'Rentabilidad' : 'Rentabilidad acumulada' }}</span>
+            <span class="rt-hero-monto">
+                <small>{{currency}}</small>
+                {{ (actual ? fila.rentabilidadObtenida : fila.rentabilidadAcumulada) | formatNumber }}
+            </span>
+
+            <div class="rt-hero-stats">
+                <div class="rt-stat">
+                    <span class="rt-stat-ico"><i class="pi pi-wallet"></i></span>
+                    <span class="rt-stat-text">
+                        <span class="rt-stat-label">Capital invertido</span>
+                        <span class="rt-stat-valor">{{currency}} {{ fila.capitalInvertido | formatNumber }}</span>
+                    </span>
+                </div>
+                <div class="rt-stat">
+                    <span class="rt-stat-ico"><i class="pi pi-money-bill"></i></span>
+                    <span class="rt-stat-text">
+                        <span class="rt-stat-label">Cobrado</span>
+                        <span class="rt-stat-valor">{{currency}} {{ fila.montoCobrado | formatNumber }}</span>
+                    </span>
+                </div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-icon kpi-icon-blue"><i class="pi pi-money-bill"></i></div>
-                <span class="kpi-label">Cobrado</span>
-                <span class="kpi-value">{{currency}}{{fila.montoCobrado}}</span>
+        </section>
+
+        <!-- Gráfico -->
+        <div class="rt-seccion">
+            <span class="rt-seccion-titulo">Evolución</span>
+        </div>
+        <section class="rt-card rt-chart">
+            <p-chart type="bar" [data]="data" [options]="options" height="240px" />
+        </section>
+
+        <!-- Detalle por período -->
+        <div class="rt-seccion">
+            <span class="rt-seccion-titulo">Detalle por {{ actual ? 'día' : 'mes' }}</span>
+            <span class="rt-count">{{ rentabilidadData.length }}</span>
+        </div>
+        <section class="rt-card">
+            <div class="rt-item" *ngFor="let row of rentabilidadData" [class.rt-item-actual]="row.mesActual">
+                <span class="rt-ico"><i class="pi" [ngClass]="actual ? 'pi-calendar' : 'pi-chart-bar'"></i></span>
+                <span class="rt-item-text">
+                    <span class="rt-periodo">
+                        {{ actual ? row.fecha : row.nombreMes }}
+                        <span *ngIf="row.mesActual" class="rt-chip">{{ actual ? 'Hoy' : 'Actual' }}</span>
+                    </span>
+                    <span class="rt-sub">
+                        {{ row.inversionesRegistradas }} inv. · Capital {{currency}} {{ row.capitalInvertido | formatNumber }}
+                    </span>
+                    <span class="rt-sub">Cobrado {{currency}} {{ row.montoCobrado | formatNumber }}</span>
+                    <span *ngIf="!actual && row.mesActual" class="rt-sub rt-proy">
+                        Proyectada {{currency}} {{ row.rentabilidadProyectada | formatNumber }}
+                    </span>
+                </span>
+                <span class="rt-monto"
+                    [class.rt-monto-cero]="!(actual ? row.rentabilidadObtenida : row.rentabilidadAcumulada)">
+                    {{currency}} {{ (actual ? row.rentabilidadObtenida : row.rentabilidadAcumulada) | formatNumber }}
+                </span>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-icon kpi-icon-green"><i class="pi pi-chart-line"></i></div>
-                <span class="kpi-label">{{ actual ? 'Rentabilidad' : 'Rentab. acumulada' }}</span>
-                <span
-                    class="kpi-value">{{currency}}{{ actual ? fila.rentabilidadObtenida : fila.rentabilidadAcumulada }}</span>
-            </div>
-        </div>
+        </section>
 
-        <!-- GRÁFICOS -->
-        <div class="section-card mb-3">
-            <span class="section-title">Evolución</span>
-            <p-chart type="line" [data]="data" [options]="options" class="h-[26rem] block" />
-        </div>
-
-        <!-- TABLA -->
-        <div class="section-card mb-3">
-            <span class="section-title">Detalle por {{ actual ? 'día' : 'mes' }}</span>
-            <!-- Diario -->
-            <p-table *ngIf="actual" [value]="rentabilidadData" styleClass="compact-table">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Día</th>
-                        <th>Inv.</th>
-                        <th>Capital</th>
-                        <th>Cobrado</th>
-                        <th>Rentab.</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-row>
-                    <tr [class.current]="row.mesActual">
-                        <td>{{ row.fecha}}</td>
-                        <td>{{ row.inversionesRegistradas }}</td>
-                        <td>{{currency}}{{ row.capitalInvertido }}</td>
-                        <td>{{currency}}{{ row.montoCobrado }}</td>
-                        <td>{{currency}}{{ row.rentabilidadObtenida }}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <!-- Mes -->
-            <p-table *ngIf="!actual" [value]="rentabilidadData" styleClass="compact-table">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Mes</th>
-                        <th>Inv.</th>
-                        <th>Capital</th>
-                        <th>Cobrado</th>
-                        <th>Rent. Proy.</th>
-                        <th>Rentab.</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-row>
-                    <tr [class.current]="row.mesActual">
-                        <td>{{ row.nombreMes}}</td>
-                        <td>{{ row.inversionesRegistradas }}</td>
-                        <td>{{currency}}{{ row.capitalInvertido }}</td>
-                        <td>{{currency}}{{ row.montoCobrado }}</td>
-                        <td *ngIf="row.mesActual">{{currency}}{{ row.rentabilidadProyectada }}</td>
-                        <td *ngIf="!row.mesActual">-</td>
-                        <td>{{currency}}{{ row.rentabilidadAcumulada }}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-        </div>
-
-        <!-- TERMINOS A CONOCER -->
-        <div class="tip-banner mb-8" (click)="modalTerminos()">
-            <div class="tip-icon"><i class="pi pi-lightbulb"></i></div>
-            <span class="tip-text">Te aclaramos algunos términos</span>
-            <i class="pi pi-chevron-right tip-chevron"></i>
-        </div>
+        <!-- Términos -->
+        <button type="button" class="rt-tip" (click)="modalTerminos()">
+            <span class="rt-tip-ico"><i class="pi pi-lightbulb"></i></span>
+            <span class="rt-tip-text">
+                <span class="rt-tip-titulo">Te aclaramos algunos términos</span>
+                <span class="rt-tip-sub">Capital, cobrado y rentabilidad</span>
+            </span>
+            <i class="pi pi-angle-right rt-tip-flecha"></i>
+        </button>
     </ng-container>
 
     <ng-template #errorTemplate>
@@ -125,34 +114,43 @@
 </div>
 
 <p-confirmDialog #terminos key="terminos">
-    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div
-                class="border-circle terminos-icon inline-flex justify-content-center align-items-center h-4rem w-4rem">
-                <i class="pi pi-lightbulb"></i>
-            </div>
-            <span class="font-bold mt-3 mb-3 terminos-title">{{ message.header }}</span>
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept">
+        <div class="tm-pop">
+            <span class="tm-pop-ico"><i class="pi pi-lightbulb"></i></span>
+            <span class="tm-pop-titulo">{{ message.header }}</span>
 
-            <div class="flex flex-column gap-3 w-full">
-                <div class="terminos-item">
-                    <span class="terminos-item-label">Inv.</span>
-                    <span class="terminos-item-desc">Inversiones registradas en el período.</span>
+            <div class="tm-lista">
+                <div class="tm-item">
+                    <span class="tm-item-ico"><i class="pi pi-hashtag"></i></span>
+                    <span class="tm-item-text">
+                        <b>Inv.</b>
+                        <span>Inversiones registradas en el período.</span>
+                    </span>
                 </div>
-                <div class="terminos-item">
-                    <span class="terminos-item-label">Capital</span>
-                    <span class="terminos-item-desc">Monto total invertido.</span>
+                <div class="tm-item">
+                    <span class="tm-item-ico"><i class="pi pi-wallet"></i></span>
+                    <span class="tm-item-text">
+                        <b>Capital</b>
+                        <span>Monto total invertido.</span>
+                    </span>
                 </div>
-                <div class="terminos-item">
-                    <span class="terminos-item-label">Cobrado</span>
-                    <span class="terminos-item-desc">Total de dinero recibido por pagos.</span>
+                <div class="tm-item">
+                    <span class="tm-item-ico"><i class="pi pi-money-bill"></i></span>
+                    <span class="tm-item-text">
+                        <b>Cobrado</b>
+                        <span>Total de dinero recibido por pagos.</span>
+                    </span>
                 </div>
-                <div class="terminos-item">
-                    <span class="terminos-item-label">Rentab.</span>
-                    <span class="terminos-item-desc">Ganancia generada por las inversiones.</span>
+                <div class="tm-item">
+                    <span class="tm-item-ico"><i class="pi pi-chart-line"></i></span>
+                    <span class="tm-item-text">
+                        <b>Rentabilidad</b>
+                        <span>Ganancia generada por las inversiones.</span>
+                    </span>
                 </div>
             </div>
 
-            <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem mt-4"></button>
+            <button pButton label="Entendido" (click)="onAccept()" class="tm-pop-btn"></button>
         </div>
     </ng-template>
 </p-confirmDialog>

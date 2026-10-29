@@ -1,17 +1,18 @@
 
-import { Keyboard } from '@capacitor/keyboard';
 import { App as CapacitorApp } from '@capacitor/app';
 import { NavegationComponent } from './pages/nav/navegation/navegation.component';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, take } from 'rxjs';
 import { MaintenanceSocketService } from './core/services/mantenimiento/maintenance-socket.service';
-import { StatusBar, Style } from '@capacitor/status-bar';
-import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+import { initBarrasSistema, initTeclado, ocultarSplash } from './core/ionic/native';
+import { Capacitor } from '@capacitor/core';
+import { IntroAppComponent } from './components/intro-app/intro-app.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [NavegationComponent],
+  imports: [NavegationComponent, IntroAppComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -19,25 +20,36 @@ export class AppComponent implements OnInit {
   title = 'WebSistemaSimple';
   confetti: boolean = false;
 
+  /** Intro de marca: solo al abrir la app en el celular (en web, con ?intro para revisarla). */
+  mostrarIntro = Capacitor.isNativePlatform() || new URLSearchParams(location.search).has('intro');
+  primeraPantallaLista = false;
+
   constructor(
     private router: Router,
     private maintenanceSocketService: MaintenanceSocketService
   ) {
-    this.initStatusBar();
-  }
-
-  private async initStatusBar() {
-    // Barra superior
-    await StatusBar.setOverlaysWebView({ overlay: false });
-    await StatusBar.setStyle({ style: Style.Light });
-
-    // Barra inferior
-    await EdgeToEdge.enable(); // activa el edge-to-edge
-  }
+    initBarrasSistema();  }
 
   ngOnInit() {
     // Habilita desplazamiento automático con teclado
-    Keyboard.setScroll({ isDisabled: false });
+    initTeclado();
+
+    // En el celular, la intro de marca reemplaza al splash nativo apenas Angular pinta
+    // (launchAutoHide=false en capacitor.config.ts) y se retira cuando la primera pantalla
+    // terminó de navegar. Sin intro, el splash se queda hasta ese momento.
+    if (this.mostrarIntro) setTimeout(() => ocultarSplash(), 60);
+    this.router.events.pipe(
+      filter(ev => ev instanceof NavigationEnd),
+      take(1)
+    ).subscribe(() => setTimeout(() => {
+      this.primeraPantallaLista = true;
+      ocultarSplash();
+    }, 150));
+    // Respaldo: si la primera navegación falla, ni el splash ni la intro deben quedarse para siempre.
+    setTimeout(() => {
+      this.primeraPantallaLista = true;
+      ocultarSplash();
+    }, 5000);
 
     CapacitorApp.addListener('backButton', () => {
       const currentUrl = this.router.url.split('?')[0];

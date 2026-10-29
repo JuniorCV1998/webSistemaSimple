@@ -1,80 +1,57 @@
+<div *ngIf="!isLoading" class="il">
 
-<div *ngIf="!isLoading">
-    <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
-        <div class="text-center mb-4"> <!--  text-2xl mb-3 label-title -->
-            <div id="div_line_bootom" class=" text-2xl mb-3 label-title">Lista de inversiones</div>
-        </div>
-
-
-        <div class="flex flex-row w-full justify-content-between mb-3">
-            <span class="text-gray-500 font-medium line-height-3 w-full">{{descripcion}}</span>
-        </div>
-
-        <div class="flex flex-column w-full justify-content-center gap-4 mb-2 align-items-center">
-            <!-- <i class="pi pi-filter w-1"></i> -->
-            <p-inputGroup>
-                <input class="w-6" type="text" placeholder="Buscar por nombre o cód. op." pInputText appLetrasNumerosGuiones [(ngModel)]="value" (input)="filtrarInversiones()" />
-                <p-inputGroupAddon (click)="clearFilter()" class="sin-estilo">
-                    <i class="pi pi-eraser"></i>
-                </p-inputGroupAddon>
-            </p-inputGroup>
-
-            <div class="flex flex-row w-full justify-content-center items-center gap-2 mb-4">
-                <span class="w-3 tag" (click)="changeOpen(true)" [ngClass]="open?'success':''">Abierto</span>
-                <span class="w-3 tag" (click)="changeOpen(false)" [ngClass]="!open?'success':''">Cerrado</span>
-            </div>
-        </div>
-
-        <!-- Tabla de lista de ivnersioens -->
-        <div class="flex flex-column justify-content-between" [ngClass]="{'card': listaInv.length >= 8}">
-            <ng-template [ngIf]="totalListCount==0">
-                <app-list-empty></app-list-empty>
-            </ng-template>
-            <ng-template [ngIf]="totalListCount!=0">
-
-                <table>
-                    <tbody id="object">
-                    <tr *ngFor="let object of listPaginador; let i = index">
-                            <td class="w-2 text-center p-1">
-                              <p-avatar 
-                                        label="{{object.avatar}}" 
-                                        [style]="getAvatarStyle()" 
-                                        styleClass="mr-2"
-                                        shape="circle"/>
-                            </td> 
-
-                            <td class="w-9 p-2">
-                                <span class="nombre-txt">{{object.nombres + ' '+object.apellidoPaterno + ' ' + object.apellidoMaterno}}</span>
-                                <div class="flex flex-row justify-content-between gap-2">
-                                    <span class="fecha-txt">{{object.fechaModificacion}}</span>
-                                    <span class="nroInversion-txt">#{{object.nroInversion}}<span class="cuota-sem" *ngIf="object.nroCuota==4"> S</span></span>
-                                </div>
-                            </td>
-
-                            <td class="w-1 text-center cursor-pointer" (click)="abrirCartilla(object.idInversion)">
-                                <i class="pi pi-window-maximize" [ngClass]="object.estadoDeuda=='P'?'pi pi-window-maximize':'pi pi-window-maximize-gray'"></i>
-                            </td>
-                    </tr>
-                    </tbody>
-                </table>
-            
-            </ng-template>
-            
-            <ng-template [ngIf]="totalListCount!=0">
-                <div class="flex flex-row w-full justify-content-end align-items-center pagination gap-3" *ngIf="paginas > 1">
-                    <div class="flex flex-row justify-content-between w-full">
-                        <span>{{totalListCount}} registros</span>
-                        <span>Página {{paginaActual}} de {{paginas}}</span>
-                    </div>
-                    <button id="prevBtn" class="no-decoracion" [disabled]="!isBack" (click)="paginaAnterior()"><i class="pi pi-angle-double-left"></i></button>
-                    <button id="nextBtn" class="no-decoracion" [disabled]="!isNext" (click)="siguientePagina()"><i class="pi pi-angle-double-right"></i></button>
-                </div>
-            </ng-template>
-        </div>
+    <div class="il-head">
+        <span class="text-2xl label-title">Inversiones</span>
+        <span *ngIf="descripcion" class="il-desc">{{descripcion}}</span>
     </div>
+
+    <!-- Buscador tipo píldora -->
+    <div class="il-search">
+        <i class="pi pi-search il-search-icon"></i>
+        <input type="text" placeholder="Buscar por nombre o cód. op." pInputText appLetrasNumerosGuiones
+            [(ngModel)]="value" (input)="filtrarInversiones()" class="w-full" />
+        <i *ngIf="value" class="pi pi-times-circle il-search-clear" (click)="clearFilter()"></i>
+    </div>
+
+    <!-- Abierto / Cerrado -->
+    <div class="il-segment">
+        <button type="button" [class.active]="open" (click)="changeOpen(true)">Abiertas</button>
+        <button type="button" [class.active]="!open" (click)="changeOpen(false)">Cerradas</button>
+    </div>
+
+    <section class="il-card">
+        <app-list-empty *ngIf="totalListCount==0"></app-list-empty>
+
+        <ng-container *ngIf="totalListCount!=0">
+            <button type="button" *ngFor="let object of listPaginador" class="il-item"
+                [class.il-item-cerrada]="object.estadoDeuda!='P'" (click)="abrirCartilla(object.idInversion)">
+                <span class="il-avatar">{{object.avatar}}</span>
+                <span class="il-item-text">
+                    <span class="il-nombre">{{object.nombres + ' '+object.apellidoPaterno + ' ' + object.apellidoMaterno}}</span>
+                    <span class="il-fecha">{{object.fechaModificacion}}</span>
+                </span>
+                <span class="il-derecha">
+                    <span class="il-nro">#{{object.nroInversion}}</span>
+                    <span *ngIf="object.nroCuota==4" class="il-sem">Semanal</span>
+                </span>
+                <i class="pi pi-angle-right il-flecha"></i>
+            </button>
+
+            <div *ngIf="paginas > 1" class="il-paginador">
+                <span class="il-pag-info">{{totalListCount}} registros · Pág. {{paginaActual}} de {{paginas}}</span>
+                <span class="il-pag-btns">
+                    <button type="button" [disabled]="!isBack" (click)="paginaAnterior()" aria-label="Página anterior">
+                        <i class="pi pi-angle-left"></i>
+                    </button>
+                    <button type="button" [disabled]="!isNext" (click)="siguientePagina()" aria-label="Página siguiente">
+                        <i class="pi pi-angle-right"></i>
+                    </button>
+                </span>
+            </div>
+        </ng-container>
+    </section>
+
     <div style="height: 60px;"></div>
 </div>
 
-<app-loading *ngIf="isLoading"></app-loading> 
+<app-loading *ngIf="isLoading"></app-loading>

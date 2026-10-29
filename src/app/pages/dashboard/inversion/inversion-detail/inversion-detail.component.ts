@@ -18,20 +18,20 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { Message, MessageModule } from 'primeng/message';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { TextareaModule } from 'primeng/textarea';
 import { TwoDigitsPipe } from '../../../../core/pipes/two-digits.pipe';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { DatePicker } from 'primeng/datepicker';
+import { generarImagenComprobante } from '../../../../core/utils/comprobante-imagen.util';
 
 @Component({
   selector: 'app-inversion-detail',
   standalone: true,
   imports: [ButtonModule, CommonModule, ToastModule, TabMenuModule, ConfirmDialogModule, CalendarModule, FormsModule,
     LoadingComponent, CarouselModule, FloatLabelModule, TextareaModule, CheckboxModule, FormatNumberPipe,
-    TwoDigitsPipe, DatePicker, Message, RouterLink
+    TwoDigitsPipe, DatePicker, RouterLink
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './inversion-detail.component.html',
@@ -207,8 +207,26 @@ export default class InversionDetailComponent {
     });
   }
 
+  cuotaAPagar: number = 0;
+
+  get nombreCompleto(): string {
+    const p = this.objInvDetail?.persona ?? {};
+    return [p.nombres, p.apellidoPaterno, p.apellidoMaterno].filter(Boolean).join(' ');
+  }
+
+  get iniciales(): string {
+    const p = this.objInvDetail?.persona ?? {};
+    return ((p.nombres || '').trim().charAt(0) + (p.apellidoPaterno || '').trim().charAt(0)).toUpperCase();
+  }
+
+  get porcentajePagado(): number {
+    const total = this.objInvDetail?.nroCuotas || 0;
+    return total ? Math.round((this.objInvDetail.ctasPagadas || 0) * 100 / total) : 0;
+  }
+
   confirmCuota(nroCuota: number): Promise<boolean> {
     this.date = new Date();
+    this.cuotaAPagar = nroCuota;
     return new Promise((resolve) => {
       this.confirmationService.confirm({
         key: 'cdpago',
@@ -549,6 +567,120 @@ export default class InversionDetailComponent {
 
   trackByObj(index: number, obj: any): any {
     return obj.id || index;
+  }
+
+  /* COMPROBANTE (PDF generado en el backend / envío por WhatsApp) */
+
+  enviandoComprobante: boolean = false;
+
+  /** Descarga el PDF con el JWT (vía HttpClient + blob, no como link plano). En web lo abre en una
+   *  pestaña nueva; en Android/iOS el WebView no abre blobs, así que se escribe a disco y se
+   *  abre el diálogo nativo de compartir (mismo patrón que cronograma-pdf.util.ts). */
+  verComprobante(): void {
+    if (!this.idInversion) return;
+    this.loadingComponent.show();
+    this.getInversionService.getComprobantePdf(this.idInversion).pipe(
+      finalize(() => this.loadingComponent.hide())
+    ).subscribe({
+      next: (blob: Blob) => this.abrirPdf(blob, `comprobante-${this.idInversion}.pdf`),
+      error: () => {
+        this.messageService.add({
+          severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+          detail: 'No se pudo generar el comprobante.', life: 3000
+        });
+      }
+    });
+  }
+
+  private async abrirPdf(blob: Blob, fileName: string): Promise<void> {
+    const { Capacitor } = await import('@capacitor/core');
+
+    if (!Capacitor.isNativePlatform()) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      return;
+    }
+
+    try {
+      const { Filesystem, Directory } = await import('@capacitor/filesystem');
+      const { Share } = await import('@capacitor/share');
+
+      const base64Data = await this.blobToBase64(blob);
+      const written = await Filesystem.writeFile({
+        path: fileName,
+        data: base64Data,
+        directory: Directory.Cache,
+      });
+
+      await Share.share({
+        title: fileName,
+        url: written.uri,
+        dialogTitle: 'Guardar o compartir comprobante',
+      });
+    } catch (err) {
+      this.messageService.add({
+        severity: 'error', summary: Constantes.MSG_SERVICE_ERROR,
+        detail: 'No se pudo abrir el comprobante.', life: 3000
+      });
+    }
+  }
+
+  private blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(String(reader.result).split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  /** Envía al celular del cliente la imagen tipo comprobante (cartilla + detalle). Si la imagen no
+   *  se pudo generar, se manda sin ella y el backend cae a su PDF. */
+  async enviarComprobanteWhatsapp(): Promise<void> {
+    if (!this.idInversion || this.enviandoComprobante) return;
+    this.enviandoComprobante = true;
+    this.loadingComponent.show();
+
+    let imagenBase64: string | null = null;
+    try {
+      imagenBase64 = await generarImagenComprobante({ invDetail: this.objInvDetail, currency: this.currency || 'S/' });
+    } catch (err) {
+      imagenBase64 = null;
+    }
+
+    this.getInversionService.enviarComprobanteWhatsapp({
+      idInversion: this.idInversion,
+      imagenBase64,
+      mimeType: imagenBase64 ? 'image/png' : null
+    }).pipe(
+      finalize(() => {
+        this.enviandoComprobante = false;
+        this.loadingComponent.hide();
+      })
+    ).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success', summary: 'Listo', detail: 'Comprobante enviado por WhatsApp.', life: 2500
+        });
+      },
+      error: (error) => {
+        // 400: regla de negocio (envío desactivado para el cliente, WhatsApp no vinculado, sin celular):
+        // el backend manda el motivo en "descripcion".
+        const detalle = error.status === 400 && error.error?.descripcion
+          ? error.error.descripcion
+          : 'No se pudo enviar el comprobante.';
+        this.messageService.add({
+          severity: error.status === 400 ? 'warn' : 'error',
+          summary: error.status === 400 ? 'No se envió' : Constantes.MSG_SERVICE_ERROR,
+          detail: detalle, life: 4000
+        });
+      }
+    });
   }
 
 

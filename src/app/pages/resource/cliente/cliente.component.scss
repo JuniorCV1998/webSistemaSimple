@@ -1,40 +1,238 @@
-.span-nombre{
-    font-weight: 700;
-    color: var(--gray-500);
-    font-size: 15px;
-    text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+/* Estilo fintech mobile light (ver confirm-inv / confirm-inversion, clases fx-*) */
+
+/* Buscador tipo píldora */
+.cl-search {
+  position: relative;
+
+  input {
+    padding-left: 2.6rem;
+    padding-right: 2.6rem;
+    height: 46px;
+    border: none !important;
+    border-radius: 999px !important;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .18);
+
+    &:focus {
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent),
+        0 8px 24px -12px rgba(15, 23, 42, .18) !important;
+    }
   }
-.span-desc{
-    color: var(--gray-500);
-    font-size: 14px;
-    text-align: left;
+}
+
+.cl-search-icon,
+.cl-search-clear {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+}
+
+.cl-search-icon {
+  left: 16px;
+  pointer-events: none;
+}
+
+.cl-search-clear {
+  right: 16px;
+  cursor: pointer;
+}
+
+/* "Nuevo cliente": tarjeta con el degradado del tema y dunas */
+.cl-nuevo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  padding: 18px 16px;
+  border: none;
+  border-radius: 22px;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  background:
+    radial-gradient(140% 70% at 0% 125%, rgba(255, 255, 255, .20) 0 48%, transparent 49%),
+    radial-gradient(120% 65% at 100% 120%, rgba(255, 255, 255, .14) 0 50%, transparent 51%),
+    radial-gradient(80% 80% at 90% 0%, rgba(255, 255, 255, .25), transparent 70%),
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--blue-400) 85%, #fff) 0%,
+      var(--blue-400) 40%,
+      color-mix(in srgb, var(--primary-500) 80%, var(--blue-400)) 100%);
+  box-shadow: 0 14px 30px -16px color-mix(in srgb, var(--blue-400) 70%, transparent);
+  transition: transform .15s;
+
+  &:active {
+    transform: scale(.98);
   }
-  .span-empty{
-    color: var(--gray-500);
-    font-size: 14px;
-    text-align: center;
-  }
-  .pi-angle-right{
-    font-size: 18px;
-    color: var(--primary-500);
-  }
-  .pi-search-minus{
-    font-size: 30px;
-    color: var(--gray-500);
-  }
-  .container-cliente{
-    border-bottom: solid 1px var(--gray-200);
-    padding: 10px;
+}
+
+.cl-nuevo-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 18px;
+  flex: 0 0 auto;
+}
+
+.cl-nuevo-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.cl-nuevo-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cl-nuevo-desc {
+  font-size: 12.5px;
+  opacity: .9;
+}
+
+.cl-nuevo .cl-chevron {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(255, 255, 255, .22);
+}
+
+/* Título de sección fuera de la tarjeta */
+.cl-seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 4px -4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+}
+
+.cl-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue-400);
+  background: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  border-radius: 999px;
+  padding: 1px 9px;
+}
+
+/* Lista de clientes: tarjeta blanca con sombra suave */
+.cl-lista {
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+}
+
+.cl-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.cl-item-btn {
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s;
+
+  &:active,
+  &:hover {
+    background: color-mix(in srgb, var(--blue-400) 6%, #fff);
   }
 
-  .pi-user-plus{
-    font-size: 20px;
+  & + & {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 64px;
+      right: 10px;
+      border-top: 1px solid var(--gray-100);
+    }
   }
 
-  a{
-    color: var(--blue-500);
-    cursor: pointer;
+  .flujo-avatar {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
   }
+}
+
+.cl-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cl-nombre {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.cl-celular {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gray-500);
+
+  .pi {
+    font-size: 11px;
+    color: var(--gray-400);
+  }
+}
+
+.cl-chevron {
+  color: var(--gray-400);
+  font-size: 15px;
+}
+
+.cl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px 22px;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--gray-500);
+
+  .pi {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--blue-400);
+    background: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  }
+}

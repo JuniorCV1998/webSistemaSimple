@@ -1,6 +1,7 @@
 <div class="flex flex-column justify-content-center align-items-center" style="margin-top: 2rem;">
     <div class="">
-        <h2 class="text-1xl text-center font-bold txt-red mb-8">{{ header }}</h2>
+        <!-- Al cliente no le corresponde la membresía (es del inversor): solo ve el mensaje -->
+        <h2 *ngIf="!esCliente" class="text-1xl text-center font-bold txt-red mb-8">{{ header }}</h2>
 
         <div class="flex flex-column justify-content-center align-items-center mb-8">
             <lottie-player src="/public/system/without-access.json" background="transparent" speed="1" loop autoplay
@@ -16,7 +17,7 @@
                 styleClass="h-full message-small" />
         </div>
 
-        <div class="text-center">
+        <div *ngIf="puedeRenovar" class="text-center">
             <button pButton pRipple label="Renovar" (click)="dialogRenovar.abrir()" severity="secondary"
                 class="mb-1 shiny-text border-colors label-title"></button>
         </div>

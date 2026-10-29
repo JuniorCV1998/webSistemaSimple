@@ -8,7 +8,8 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { Location } from '@angular/common';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
-import { catchError, finalize, of } from 'rxjs';
+import { catchError, finalize, of, switchMap } from 'rxjs';
+import { generarImagenComprobante } from '../../../../core/utils/comprobante-imagen.util';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Constantes } from '../../../../core/constant/Constantes';
@@ -68,6 +69,16 @@ export default class InversionRegisteredComponent {
     "codOperacion": ""
 };
 
+  get nombreCompleto(): string {
+    const o = this.objInversion;
+    return [o.nombres, o.apellidoPaterno, o.apellidoMaterno].filter(Boolean).join(' ');
+  }
+
+  get iniciales(): string {
+    const o = this.objInversion;
+    return ((o.nombres?.[0] || '') + (o.apellidoPaterno?.[0] || '')).toUpperCase();
+  }
+
   ngOnInit(): void{
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
@@ -101,6 +112,7 @@ export default class InversionRegisteredComponent {
     subscribe((resp: any)=> { 
       if(resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==1) {
         this.objInversion = resp.data;
+        this.enviarComprobanteAutomatico();
       }
       else if (resp.codigoMessage==Constantes.STATUS_SUCCESS_RI && resp.totalRecord==0){
         this.show(resp.message, Constantes.MSG_SIN_REGISTROS,);
@@ -110,6 +122,60 @@ export default class InversionRegisteredComponent {
       }
     }
   );}
+
+  /**
+   * Recién registrada la inversión (confetti=true), le envía al cliente por WhatsApp la imagen tipo
+   * comprobante (cartilla + detalle). Corre en segundo plano, sin bloquear la pantalla, y solo si el
+   * inversor tiene WhatsApp vinculado: si no lo usa, no se le muestra ningún aviso.
+   * Se marca en sessionStorage para no reenviarlo si recarga esta pantalla.
+   */
+  private enviarComprobanteAutomatico(): void {
+    if (!this.confetti || !this.idInversion) return;
+    const claveEnviado = 'comprobanteEnviado_' + this.idInversion;
+    if (sessionStorage.getItem(claveEnviado)) return;
+    sessionStorage.setItem(claveEnviado, '1');
+    const idInversion = this.idInversion;
+
+    this.getInversionService.getEstadoWhatsapp().pipe(
+      catchError(() => of(null)),
+      switchMap((estado: any) => estado?.data?.vinculado
+        ? this.getInversionService.getInversionesDetail(idInversion).pipe(catchError(() => of(null)))
+        : of(null))
+    ).subscribe(async (detalle: any) => {
+      if (!detalle?.data) return;
+
+      let imagenBase64: string | null = null;
+      try {
+        imagenBase64 = await generarImagenComprobante({ invDetail: detalle.data, currency: this.currency || 'S/' });
+      } catch (err) {
+        imagenBase64 = null; // sin imagen el backend envía su PDF
+      }
+
+      this.getInversionService.enviarComprobanteWhatsapp({
+        idInversion,
+        imagenBase64,
+        mimeType: imagenBase64 ? 'image/png' : null
+      }).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success', summary: 'Comprobante enviado',
+            detail: 'Se envió el comprobante al cliente por WhatsApp.', life: 3000
+          });
+        },
+        error: (error) => {
+          // 400: el cliente no tiene celular o tiene desactivado el envío; el backend manda el motivo.
+          this.messageService.add({
+            severity: error.status === 400 ? 'info' : 'warn',
+            summary: 'Comprobante no enviado',
+            detail: error.status === 400 && error.error?.descripcion
+              ? error.error.descripcion
+              : 'No se pudo enviar el comprobante por WhatsApp.',
+            life: 4000
+          });
+        }
+      });
+    });
+  }
 
   show(message: string, header: string) {
     const ref = this.dialogService.open(MessagePopUpComponent, {

@@ -1,22 +1,118 @@
+/* Renovar membresía: popup fintech mobile light. Los planes vienen de app-planes-membresia. */
 
-.plan-btn {
-  border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff) padding-box,
-              linear-gradient(90deg, var(--primary-500), var(--blue-500)) border-box;
-  border-radius: 12px;
-  color: var(--text-color);
+.rm-pop {
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, 380px);
+  max-height: min(88vh, 760px);
+  border-radius: 24px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.rm-cabecera {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 22px 20px 6px;
+  text-align: center;
+}
+
+.rm-ico {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--blue-400) 70%, transparent);
+
+  i { font-size: 20px; }
+}
+
+.rm-titulo {
+  margin: 12px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.rm-sub {
+  margin: 3px 0 0;
+  font-size: 13.5px;
+  color: var(--gray-500);
+}
+
+/* Solo la lista se desplaza; cabecera y botones quedan fijos */
+.rm-cuerpo {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px 6px;
+}
+
+.rm-cargando {
+  display: grid;
+  place-items: center;
+  padding: 36px 0;
+  color: var(--blue-400);
+
+  .pi { font-size: 22px; }
+}
+
+.rm-pie {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 16px 16px;
+  box-shadow: 0 -10px 18px -16px rgba(15, 23, 42, .3);
+}
+
+.rm-botones {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 10px;
+}
+
+.rm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  border-radius: 14px;
+  border: 0;
+  font: inherit;
+  font-size: 15px;
   font-weight: 600;
-  transition: 0.3s ease;
-  height: 4rem;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: .45;
+    cursor: default;
+  }
 }
 
-.plan-btn:hover {
-  transform: scale(1.03);
+.rm-btn-sec {
+  background: var(--gray-100);
+  color: var(--gray-600);
 }
 
-.plan-btn.selected {
-  background: linear-gradient(90deg, var(--primary-500), var(--blue-500));
-  color: #fff !important;
-  border-color: transparent;
-  border: none;
+.rm-btn-wa {
+  background: #22c55e;
+  color: #fff;
+}
+
+.rm-horario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gray-500);
+
+  .pi { font-size: 11px; }
 }

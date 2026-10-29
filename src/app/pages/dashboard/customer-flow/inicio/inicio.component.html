@@ -1,139 +1,115 @@
-<div>
-    <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+<div class="ci">
 
-        <!-- SALUDO -->
-        <div class="home-header mb-4">
-            <div class="flex flex-row justify-content-between align-items-center">
-                <div class="flex flex-column">
-                    <span class="greeting">Hola, {{nombreUsuario}}</span>
-                    <span class="subtitle">¡Mantén tus préstamos al día!</span>
-                </div>
-                <div class="refresh-btn" id="icono-actualizar" tabindex="0" (click)="refrescarTodo()">
-                    <i class="pi pi-sync"></i>
-                </div>
-            </div>
+    <!-- Saludo -->
+    <header class="ci-saludo">
+        <span class="ci-saludo-text">
+            <span class="ci-hola">Hola, {{nombreUsuario}}</span>
+            <span class="ci-sub">¡Mantén tus préstamos al día!</span>
+        </span>
+        <button type="button" class="ci-refresh" id="icono-actualizar" (click)="refrescarTodo()" aria-label="Actualizar">
+            <i class="pi pi-sync"></i>
+        </button>
+    </header>
+
+    <!-- Hero: saldo pendiente -->
+    <section class="ci-hero">
+        <span class="ci-hero-label">Saldo pendiente</span>
+        <span class="ci-saldo">
+            <ng-container *ngIf="!skeletonShow; else cargando"><small>{{currency}}</small>{{saldoPendiente | formatNumber}}</ng-container>
+            <ng-template #cargando><i class="pi pi-spin pi-spinner ci-saldo-spin"></i></ng-template>
+        </span>
+        <span class="ci-pill">
+            <i class="pi pi-wallet"></i>
+            {{enCurso.length}} {{enCurso.length === 1 ? 'préstamo en curso' : 'préstamos en curso'}}
+        </span>
+
+        <div *ngIf="cuotasTotales > 0" class="ci-progreso">
+            <div class="ci-barra"><span [style.width.%]="porcentajePagado"></span></div>
+            <span class="ci-progreso-text">{{cuotasPagadas}} de {{cuotasTotales}} cuotas pagadas</span>
+        </div>
+    </section>
+
+    <!-- Préstamos -->
+    <span class="ci-seccion">Préstamos</span>
+
+    <section *ngIf="skeletonShow" class="ci-card ci-skeleton">
+        <p-skeleton *ngFor="let item of [].constructor(3)" height="3.4rem" borderRadius="14px" />
+    </section>
+
+    <ng-container *ngIf="!skeletonShow">
+        <section *ngIf="data.length > 0" class="ci-card"
+            [ngClass]="{'ci-lista-scroll': permisoVehicular && data.length > 3}">
+            <a *ngFor="let inversion of data" class="ci-item" [class.ci-item-fin]="inversion.estadoDeuda !== 'P'"
+                [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: inversion.idInversion}">
+                <span class="ci-item-ico">
+                    <ng-container *ngIf="inversion.estadoDeuda === 'P'; else check">#{{inversion.nroInversion}}</ng-container>
+                    <ng-template #check><i class="pi pi-check"></i></ng-template>
+                </span>
+
+                <span class="ci-item-cuerpo">
+                    <span class="ci-item-top">
+                        <b>Inversión #{{inversion.nroInversion}}</b>
+                        <span class="ci-item-monto">{{currency}} {{inversion.monto | formatNumber}}</span>
+                    </span>
+
+                    <small *ngIf="inversion.estadoDeuda === 'P'">
+                        {{inversion.nroCuotas - inversion.ctasPagadas}} cuotas pendientes · {{currency}} {{inversion.valorCuota | formatNumber}} c/u
+                    </small>
+                    <small *ngIf="inversion.estadoDeuda === 'C'">Culminada el {{inversion.fechaActualizacion}}</small>
+
+                    <span *ngIf="inversion.estadoDeuda === 'P'" class="ci-item-barra">
+                        <span [style.width.%]="avance(inversion)"></span>
+                    </span>
+
+                    <small *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''" class="ci-item-fechas">
+                        <i class="pi pi-calendar"></i>{{inversion.fechaInicio}} → {{inversion.fechaFin}}
+                    </small>
+                </span>
+
+                <i class="pi pi-angle-right ci-chevron"></i>
+            </a>
+        </section>
+
+        <section *ngIf="data.length === 0" class="ci-card ci-vacio">
+            <span class="ci-vacio-ico"><i class="pi pi-wallet"></i></span>
+            <span>Aún no tienes préstamos con un inversor.</span>
+        </section>
+    </ng-container>
+
+    <!-- Financiamiento vehicular -->
+    <ng-container *ngIf="permisoVehicular">
+        <div class="ci-seccion-fila">
+            <span class="ci-seccion">Financiamiento vehicular</span>
+            <a [routerLink]="['/vehicular/inicio']" class="ci-ver-todo">Ver todo <i class="pi pi-angle-right"></i></a>
         </div>
 
-        <!-- SECCIÓN PRÉSTAMOS -->
-        <div *ngIf="permisoVehicular" class="section-titulo mb-2">Préstamos</div>
+        <section *ngIf="skeletonShowVehicular" class="ci-card ci-skeleton">
+            <p-skeleton *ngFor="let item of [].constructor(2)" height="3.4rem" borderRadius="14px" />
+        </section>
 
-        <ng-template [ngIf]="skeletonShow">
-            <div class="flex flex-row w-full" style="min-width: 300px;">
-                <div class="w-full">
-                    <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex flex-column mb-2">
-                        <p-skeleton class="w-full" height="4.5rem" />
-                    </div>
-                </div>
-            </div>
-        </ng-template>
+        <ng-container *ngIf="!skeletonShowVehicular">
+            <section *ngIf="dataVehicular.length > 0" class="ci-card">
+                <a *ngFor="let inversion of dataVehicular" class="ci-item" [routerLink]="['/vehicular/inversiondetalle']"
+                    [queryParams]="{ idInversionVeh: inversion.idInversionVeh }">
+                    <span class="ci-item-ico ci-item-ico-car"><i class="pi pi-car"></i></span>
+                    <span class="ci-item-cuerpo">
+                        <b class="ci-trunc">{{inversion.fullName}}</b>
+                        <small class="ci-trunc">{{inversion.descripcion}}</small>
+                        <span class="ci-colores">
+                            <span [style.background-color]="inversion.color1"></span>
+                            <span [style.background-color]="inversion.color2"></span>
+                            <small *ngIf="inversion.fechaActualizado">{{inversion.fechaActualizado}}</small>
+                        </span>
+                    </span>
+                    <i class="pi pi-angle-right ci-chevron"></i>
+                </a>
+            </section>
 
-        <!-- INVERSION PENDIENTE -->
-        <ng-template [ngIf]="!skeletonShow">
-            <div [ngClass]="{'prestamos-lista': permisoVehicular && data.length > 3}">
-                <div class="prestamo-card mb-3" *ngFor="let inversion of data"
-                    [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: inversion.idInversion}">
-                    <div class="flex flex-row w-full align-items-start gap-2">
-                        <div class="flex flex-column w-full">
-                            <div class="flex flex-row w-full justify-content-between align-items-center mb-2">
-                                <div class="flex align-items-center gap-2">
-                                    <span class="status-dot"
-                                        [ngClass]="inversion.estadoDeuda === 'P' ? 'status-dot-on' : 'status-dot-off'"></span>
-                                    <span class="span-nro-inv">Inversión #{{inversion.nroInversion}}</span>
-                                </div>
-                                <span class="span-monto">{{currency}} {{inversion.monto | formatNumber}}</span>
-                            </div>
+            <section *ngIf="dataVehicular.length === 0" class="ci-card ci-vacio">
+                <span class="ci-vacio-ico"><i class="pi pi-car"></i></span>
+                <span>No tienes financiamiento vehicular pendiente.</span>
+            </section>
+        </ng-container>
+    </ng-container>
 
-                            <div *ngIf="inversion.estadoDeuda === 'P'" class="flex flex-row w-full gap-2">
-                                <div class="flex flex-column w-6 gap-1">
-                                    <span class="span-cuotas-label">Pendiente</span>
-                                    <span class="span-cuotas-value">{{inversion.nroCuotas - inversion.ctasPagadas}}
-                                        cuotas</span>
-                                </div>
-                                <div class="flex flex-column w-6 gap-1">
-                                    <span class="span-cuotas-label">De</span>
-                                    <span class="span-cuotas-value">{{currency}} {{inversion.valorCuota |
-                                        formatNumber}}</span>
-                                </div>
-                            </div>
-                            <div *ngIf="inversion.estadoDeuda === 'C'" class="flex flex-row w-full gap-2">
-                                <div class="flex flex-column gap-1">
-                                    <span class="span-cuotas-label">Fecha culminada</span>
-                                    <span class="span-cuotas-value">{{inversion.fechaActualizacion}}</span>
-                                </div>
-                            </div>
-
-                            <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''"
-                                class="prestamo-divider"></div>
-
-                            <div *ngIf="inversion.fechaInicio!=='' && inversion.fechaFin!==''"
-                                class="flex flex-row w-full gap-2">
-                                <div class="flex flex-column w-6 gap-1">
-                                    <span class="span-cuotas-label">Fecha inicio</span>
-                                    <span class="span-cuotas-value">{{inversion.fechaInicio}}</span>
-                                </div>
-                                <div class="flex flex-column w-6 gap-1">
-                                    <span class="span-cuotas-label">Fecha fin</span>
-                                    <span class="span-cuotas-value">{{inversion.fechaFin}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <i class="pi pi-chevron-right prestamo-chevron"></i>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="data.length === 0" class="empty-state mb-3">
-                <i class="pi pi-wallet empty-state-icon"></i>
-                <span class="span-empty">Aún no tienes préstamos con un inversor.</span>
-            </div>
-        </ng-template>
-
-        <!-- SECCIÓN FINANCIAMIENTO VEHICULAR -->
-        <ng-template [ngIf]="permisoVehicular">
-            <div class="flex flex-row w-full justify-content-between align-items-center section-titulo mb-2 mt-2">
-                <span>Financiamiento vehicular</span>
-                <a [routerLink]="['/vehicular/inicio']" class="link-ver-todos">Ver todo <i
-                        class="pi pi-chevron-right"></i></a>
-            </div>
-
-            <ng-template [ngIf]="skeletonShowVehicular">
-                <div class="flex flex-row w-full" style="min-width: 300px;">
-                    <div class="w-full">
-                        <div *ngFor="let item of [].constructor(2); let i = index" class="flex flex-column mb-2">
-                            <p-skeleton class="w-full" height="4.5rem" />
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
-
-            <ng-template [ngIf]="!skeletonShowVehicular">
-                <div *ngFor="let inversion of dataVehicular"
-                    [routerLink]="['/vehicular/inversiondetalle']"
-                    [queryParams]="{ idInversionVeh: inversion.idInversionVeh }"
-                    class="flex flex-row w-full justify-content-between gap-2 mb-3 align-items-center vehicular-card">
-                    <div class="flex align-items-center gap-3 min-w-0">
-                        <div class="vehicular-icon">
-                            <i class="pi pi-car"></i>
-                        </div>
-                        <div class="flex flex-column gap-1 min-w-0">
-                            <span class="span-nombre">{{inversion.fullName}}</span>
-                            <span class="span-desc">{{inversion.descripcion}}</span>
-                            <div class="flex flex-row align-items-center gap-2">
-                                <div class="flex w-3rem color1" [ngStyle]="{'background-color': inversion.color1}">
-                                </div>
-                                <div class="flex w-3rem color2" [ngStyle]="{'background-color': inversion.color2}">
-                                </div>
-                                <span class="span-fecha">{{inversion.fechaActualizado}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <i class="pi pi-chevron-right vehicular-chevron"></i>
-                </div>
-                <div *ngIf="dataVehicular.length === 0" class="empty-state mb-3">
-                    <i class="pi pi-car empty-state-icon"></i>
-                    <span class="span-empty">No tienes financiamiento vehicular pendiente.</span>
-                </div>
-            </ng-template>
-        </ng-template>
-
-    </div>
 </div>

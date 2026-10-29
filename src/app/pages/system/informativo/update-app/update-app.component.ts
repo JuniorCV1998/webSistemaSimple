@@ -6,11 +6,12 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { DialogRenovarMembresiaComponent } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
+import { DialogRenovarMembresiaComponent, SolicitudRenovacion } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
 import { SystemService } from '../../../../core/services/system/system.service';
 import { App } from '@capacitor/app';
 import { Observable } from 'rxjs';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { navegacionActual } from '../../../../core/ionic/page-host.component';
 
 @Component({
   selector: 'app-update-app',
@@ -42,7 +43,7 @@ export class UpdateAppComponent {
     private ref: DynamicDialogRef,
     private config: DynamicDialogConfig,
   ) {
-    const navigation = this.router.getCurrentNavigation();
+    const navigation = navegacionActual(this.router);
     const state = navigation?.extras?.state as { respVersion?: any };
 
     if (state?.respVersion) {
@@ -72,16 +73,14 @@ export class UpdateAppComponent {
         this.urlPlayStore = response[0].descripcion;
       },
       error: err => {
-        this.urlPlayStore = 'https://play.google.com/store/apps/details?id=com.ssimplepay.app';
+        this.urlPlayStore = 'https://play.google.com/store/apps/details?id=com.ssimple.app';
       }
     });
   }
 
-  solicitarPorWhatsapp(opcion: any) {
-    const mensaje = encodeURIComponent(
-      `¡Hola! Me gustaría renovar mi membresía con el plan de ${opcion.label} por S/${opcion.precio}.`
-    );
-    window.open(`https://wa.me/51${this.nroCelular}?text=${mensaje}`, '_blank');
+  /** El modal arma el mensaje y el enlace con el WhatsApp configurado por el admin. */
+  solicitarPorWhatsapp(solicitud: SolicitudRenovacion) {
+    window.open(solicitud.enlace, '_blank');
   }
 
   continuar() {

@@ -142,7 +142,7 @@ export default class InversoresInversionesComponent {
     }
 
     this.listaInversores = this.listaInversoresRecovery.filter((item: any) => {
-      const persona = item.persona;
+      const persona = item.persona ?? {};
       const textoBuscado = `
           ${persona.nombres} 
           ${persona.apellidoPaterno} 
@@ -168,7 +168,21 @@ export default class InversoresInversionesComponent {
     this.filtrarInversor();
   }
 
-  formatNumberEspaciado(numero: string): string {
+  /** Nombre a mostrar; tolera persona null (p. ej. tipos de documento que el backend no mapea). */
+  nombreInversor(persona: any): string {
+    if (!persona) return 'Inversor sin datos';
+    if (persona.codTipoDoc === '06') return persona.razonSocial || '';
+    return [persona.nombres, persona.apellidoPaterno, persona.apellidoMaterno].filter(Boolean).join(' ');
+  }
+
+  iniciales(persona: any): string {
+    const base = persona?.codTipoDoc === '06'
+      ? (persona?.razonSocial || '')
+      : `${persona?.nombres || ''} ${persona?.apellidoPaterno || ''}`;
+    return base.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((s: string) => s[0]).join('').toUpperCase();
+  }
+
+  formatNumberEspaciado(numero: string | null | undefined): string {
     if (numero != null) return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     else return ""
   }

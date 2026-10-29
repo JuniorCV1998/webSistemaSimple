@@ -1,253 +1,307 @@
-<div>
-    <div class="auth-card auth-fade-in">
-        <div class="comp_volver">
-            <!-- <a href="/registrar"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
-            <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i>
-                <p>Volver</p>
-            </a>
+<div class="au auth-fade-in">
+
+    <button type="button" class="au-volver" (click)="volver()"><i class="pi pi-angle-left"></i>Volver</button>
+
+    <section class="au-hero">
+        <div class="au-logo"><img src="public/logos/logo_ssimple.png" alt="Sistema Simple"></div>
+        <h1 class="au-titulo">¡Estamos en la recta final!</h1>
+        <span class="au-sub">Completa tus datos para activar tu cuenta</span>
+        <div class="au-pasos"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
+        <span class="au-paso-text">Paso 4 de 4 · Datos</span>
+    </section>
+
+    <section class="au-card">
+        <span class="au-chip"><i class="pi pi-id-card"></i>{{etiquetaDoc}} · {{personaActual.nroDocumento}}</span>
+
+        <!-- Persona natural -->
+        <ng-container *ngIf="isClienteNatural">
+            <small *ngIf="nombresEditables" class="au-ayuda mt-2">
+                <i class="pi pi-info-circle"></i>Escribe tus nombres y apellidos tal como figuran en tu documento.
+            </small>
+            <label for="nombres" class="au-label">Nombres</label>
+            <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off"
+                placeholder="Nombres" pInputText appSoloLetras class="w-full" [class.au-bloqueado]="!nombresEditables">
+
+            <div class="au-dos">
+                <div>
+                    <label for="apellidop" class="au-label">Apellido paterno</label>
+                    <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text"
+                        autocomplete="off" placeholder="Paterno" pInputText appSoloLetras class="w-full"
+                        [class.au-bloqueado]="!nombresEditables">
+                </div>
+                <div>
+                    <label for="apellidom" class="au-label">Apellido materno</label>
+                    <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text"
+                        autocomplete="off" placeholder="Materno" pInputText appSoloLetras class="w-full"
+                        [class.au-bloqueado]="!nombresEditables">
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- Persona jurídica -->
+        <ng-container *ngIf="!isClienteNatural">
+            <label for="razon" class="au-label">Razón social</label>
+            <input id="razon" [(ngModel)]="objPersonaJuridica.razonSocial" [maxlength]="25" type="text"
+                autocomplete="off" placeholder="Razón social" pInputText appSoloLetras class="w-full au-bloqueado">
+
+            <label for="comercial" class="au-label">Nombre comercial</label>
+            <input id="comercial" [(ngModel)]="objPersonaJuridica.nombreComercial" [maxlength]="20" type="text"
+                autocomplete="off" placeholder="Nombre comercial" pInputText appSoloLetras class="w-full">
+        </ng-container>
+
+        <label for="celular" class="au-label">Celular</label>
+        <app-celular-pais inputId="celular" [(codPais)]="personaActual.codPais" [(celular)]="personaActual.celular" />
+
+        <label for="direccion" class="au-label">Dirección</label>
+        <input *ngIf="isClienteNatural" id="direccion" [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text"
+            autocomplete="off" placeholder="Dirección" pInputText class="w-full">
+        <input *ngIf="!isClienteNatural" id="direccion" [(ngModel)]="objPersonaJuridica.direccion" [maxlength]="60"
+            type="text" autocomplete="off" placeholder="Dirección" pInputText class="w-full au-bloqueado">
+
+        <label class="au-check">
+            <p-checkbox [(ngModel)]="checked" [binary]="true" />
+            <p>He leído y acepto los
+                <a class="au-link" href="" role="button"
+                    (click)="$event.preventDefault(); $event.stopPropagation(); showDialog()">Términos y Condiciones y la
+                    Política de Privacidad</a>
+                y confirmo que soy mayor de 18 años de edad.
+            </p>
+        </label>
+
+        <div class="au-acciones au-acciones-una">
+            <button type="button" class="au-btn" (click)="registrarInversor()" [disabled]="!isFormValid()">
+                <i class="pi pi-check"></i> Registrarme
+            </button>
         </div>
-        <div class="text-center mb-4">
-            <img src="public/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
-            <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3">¡Estamos en la recta final!</div>
-        </div>
+    </section>
 
-        <div class="mb-4">
-            <div class="flex flex-row align-items-center justify-content-center mb-4">
-                <div class="flex flex-row justify-content-center align-items-center gap-4 w-full">
-                    <!-- <label for="apellidop" class="block  font-medium mb-2">Núm. de Documento</label> -->
-                    <i class="pi pi-id-card icon-span"></i>
-                    <span *ngIf="isClienteNatural" class="nro-document">{{objPersona.nroDocumento}}</span>
-                    <span *ngIf="!isClienteNatural" class="nro-document">{{objPersonaJuridica.nroDocumento}}</span>
-                </div>
-            </div>
+</div>
 
-            <!-- Persona natural -->
-            <div *ngIf="isClienteNatural">
-                <label for="nombres" class="block font-medium mb-2">Nombres</label>
-                <input id="nombres" [(ngModel)]="objPersona.nombres" [maxlength]="25" type="text" autocomplete="off"
-                    placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3 btn-disabled">
+<!-- TERMINOS Y CONDICIONES -->
+<p-dialog header="Términos y Política de Privacidad" [(visible)]="visible" [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false"
+    [resizable]="false">
+    <div class="tyc">
+        <span class="tyc-fecha">Última actualización: 28 de octubre de 2026</span>
 
-                <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                    <div class="flex flex-column w-full">
-                        <label for="apellidop" class="block font-medium mb-2">Apellido paterno</label>
-                        <input id="apellidop" [(ngModel)]="objPersona.apellidoPaterno" [maxlength]="20" type="text"
-                            autocomplete="off" placeholder="Apellido paterno" pInputText appSoloLetras
-                            class="w-full mb-3 btn-disabled">
-                    </div>
+        <p>
+            Bienvenido(a) a <b>SSIMPLE PAY</b> (Sistema Simple). Al crear tu cuenta aceptas estos Términos y
+            Condiciones y nuestra Política de Privacidad. Léelos con atención; si no estás de acuerdo, no uses la
+            aplicación.
+        </p>
 
-                    <div class="flex flex-column w-full">
-                        <label for="apellidom" class="block font-medium mb-2">Apellido materno</label>
-                        <input id="apellidom" [(ngModel)]="objPersona.apellidoMaterno" [maxlength]="20" type="text"
-                            autocomplete="off" placeholder="Apellido materno" pInputText appSoloLetras
-                            class="w-full mb-3 btn-disabled">
-                    </div>
-                </div>
-            </div>
+        <!-- ===== TÉRMINOS ===== -->
+        <h2>Términos y Condiciones</h2>
 
-            <!-- Persona juridica -->
+        <h3>1. Qué es SSIMPLE PAY</h3>
+        <p>
+            SSIMPLE PAY es una herramienta digital para que prestamistas independientes (“inversores”) registren y
+            administren los préstamos que otorgan a sus clientes: registro de clientes, cronogramas de cuotas diarias
+            y semanales, registro de cobros, cartillas de pago, reportes de cobranza y rentabilidad, crédito
+            vehicular y recordatorios por WhatsApp.
+        </p>
+        <p>
+            <b>SSIMPLE PAY no otorga préstamos</b>, no presta ni recibe dinero, no intermedia operaciones y no es
+            una entidad financiera. Los préstamos son acordados únicamente entre el inversor y su cliente; la
+            aplicación solo registra la información que el inversor ingresa. Los montos, cuotas e intereses que
+            muestra la app se calculan con esos datos y son referenciales.
+        </p>
 
-            <div *ngIf="!isClienteNatural">
+        <h3>2. Cuentas y acceso</h3>
+        <ul>
+            <li><b>Inversor:</b> crea su cuenta, registra a sus clientes y sus préstamos.</li>
+            <li><b>Cliente:</b> su cuenta la crea su inversor y le permite consultar sus préstamos, cuotas y pagos.</li>
+            <li>Debes ser mayor de 18 años y registrar datos reales y vigentes.</li>
+            <li>Tu clave de 6 dígitos es personal. Eres responsable de lo que se haga con tu cuenta; si crees que
+                alguien más la conoce, cámbiala o contáctanos.</li>
+            <li>El ingreso con huella es opcional: la huella la valida tu propio celular y nunca llega a nosotros.</li>
+        </ul>
 
-                <label for="nombres" class="block  font-medium mb-2">Razón Social</label>
-                <input id="nombres" [(ngModel)]="objPersonaJuridica.razonSocial" [maxlength]="25" type="text"
-                    autocomplete="off" placeholder="Razón Social" pInputText appSoloLetras
-                    class="w-full mb-3 btn-disabled">
+        <h3>3. Responsabilidades del inversor</h3>
+        <ul>
+            <li>Cumplir las normas que apliquen a su actividad de préstamo (tasas de interés, cobranza y
+                protección al consumidor, entre otras).</li>
+            <li>Contar con la autorización de sus clientes para registrar sus datos personales en la app y para
+                contactarlos por WhatsApp.</li>
+            <li>Usar los datos de sus clientes solo para administrar sus préstamos, y mantenerlos correctos y
+                actualizados.</li>
+            <li>No usar la app para cobranzas abusivas, amenazas, acoso, mensajes masivos no solicitados ni ninguna
+                actividad ilegal.</li>
+        </ul>
+        <p>
+            SSIMPLE PAY no verifica la veracidad de la información que se registra ni participa en los acuerdos
+            entre inversor y cliente.
+        </p>
 
-                <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                    <div class="flex flex-column w-full">
-                        <label for="apellidop" class="block  font-medium mb-2">Nombre Comercial</label>
-                        <input id="apellidop" [(ngModel)]="objPersonaJuridica.nombreComercial" [maxlength]="20"
-                            type="text" autocomplete="off" placeholder="Nombre Comercial" pInputText appSoloLetras
-                            class="w-full mb-3">
-                    </div>
-                </div>
-            </div>
+        <h3>4. Membresía, prueba gratis y pagos</h3>
+        <ul>
+            <li>Al crear tu cuenta de inversor recibes un período de prueba gratis, con la duración vigente al
+                momento de tu registro.</li>
+            <li>Luego puedes contratar un plan (por ejemplo, de 1, 3, 6 o 12 meses) con los precios y ofertas que se
+                muestran en la app. La renovación se coordina por nuestro WhatsApp oficial.</li>
+            <li>Te avisaremos al ingresar cuando tu membresía esté por vencer. Al vencer, se bloquea el ingreso a la
+                app para ti y para tus clientes hasta que la renueves.</li>
+            <li>Tus datos no se borran cuando tu membresía vence: al renovar, continúas donde lo dejaste.</li>
+            <li>Los precios pueden cambiar; los cambios no afectan el período que ya pagaste.</li>
+        </ul>
 
-            <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                <div *ngIf="isClienteNatural" class="flex flex-column w-full">
-                    <label for="celular" class="block  font-medium mb-2">Celular</label>
-                    <input id="celular" [(ngModel)]="objPersona.celular" type="text" placeholder="Celular"
-                        autocomplete="off" pInputText appNroCelular class="w-full mb-3">
-                </div>
-                <div *ngIf="!isClienteNatural" class="flex flex-column w-full">
-                    <label for="celular" class="block  font-medium mb-2">Celular</label>
-                    <input id="celular" [(ngModel)]="objPersonaJuridica.celular" type="text" placeholder="Celular"
-                        autocomplete="off" pInputText appNroCelular class="w-full mb-3">
-                </div>
-                <div *ngIf="isClienteNatural" class="flex flex-column w-full">
-                    <label for="direccion" class="block  font-medium mb-2">Dirección</label>
-                    <input id="direccion" [(ngModel)]="objPersona.direccion" [maxlength]="60" type="text"
-                        autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3">
-                </div>
-                <div *ngIf="!isClienteNatural" class="flex flex-column w-full">
-                    <label for="direccion" class="block  font-medium mb-2">Dirección</label>
-                    <input id="direccion" [(ngModel)]="objPersonaJuridica.direccion" [maxlength]="60" type="text"
-                        autocomplete="off" placeholder="Dirección" pInputText class="w-full mb-3 btn-disabled">
-                </div>
-            </div>
+        <h3>5. Recordatorios por WhatsApp</h3>
+        <ul>
+            <li>Es una función opcional. Para usarla, el inversor vincula <b>su propia cuenta de WhatsApp</b> y los
+                recordatorios de pago y comprobantes se envían desde su número, en su nombre, a sus clientes.</li>
+            <li>El inversor es responsable de ese envío: de tener la autorización de sus clientes y de respetar las
+                condiciones de uso de WhatsApp. Puede desvincular su número en cualquier momento.</li>
+            <li>La entrega de los mensajes depende de WhatsApp y de la conexión del celular vinculado, por lo que no
+                podemos garantizarla.</li>
+        </ul>
 
-            <div class="flex flex-row gap-3 align-items-center justify-content-center">
-                <p-checkbox [(ngModel)]="checked" [binary]="true" />
-                <p>He leído y acepto la
-                    <a class="font-medium no-underline text-blue-400 cursor-pointer" (click)="showDialog()">Política de
-                        Privacidad</a>
-                    y confirmo que soy mayor de 18 años de edad.
-                </p>
-            </div>
+        <h3>6. Disponibilidad y actualizaciones</h3>
+        <p>
+            Trabajamos para que la app esté siempre disponible, pero puede haber interrupciones por mantenimiento,
+            fallas técnicas o de terceros. Algunas versiones pueden requerir que actualices la app desde la tienda
+            para seguir usándola.
+        </p>
 
-            <!-- <div class="card flex justify-content-center">
-                    
-                    <p-card>
-                        <i id="i_image" class="pi pi-image"></i>
-                        <div class="flex flex-column w-9">
-                            <p id="p_body" class="m-0"><i id="i_info" class="pi pi-info-circle"></i> Puedes añadir o editar una imagen de tu negocio para que los clientes lo visualicen después de iniciar sesión en la aplicación.</p>
-                            <p id="p_pie" class="w-full">Inicio > Mi cuenta > Imagen de Inversor.</p>
-                        </div>
-                        
-                    </p-card>
-                </div> -->
+        <h3>7. Limitación de responsabilidad</h3>
+        <p>
+            SSIMPLE PAY no se responsabiliza por préstamos impagos, desacuerdos entre inversores y clientes, ni por
+            pérdidas derivadas de datos incorrectos, del mal uso de la app o del uso indebido de una cuenta por parte
+            de terceros.
+        </p>
 
-            <div style="height: 40px;"></div>
-            <button [ngClass]="{
-                'btn-disabled': !isFormValid()
-              }" pButton pRipple label="Registrarme" (click)="registrarInversor()" [disabled]="!isFormValid()"
-                class="btn-float"></button>
-        </div>
+        <h3>8. Suspensión de cuentas</h3>
+        <p>
+            Podemos suspender o cerrar cuentas que incumplan estos términos, que se usen para actividades ilegales o
+            que afecten a otros usuarios.
+        </p>
+
+        <!-- ===== PRIVACIDAD ===== -->
+        <h2>Política de Privacidad</h2>
+
+        <p>
+            Protegemos tus datos personales conforme a la Ley N.° 29733, Ley de Protección de Datos Personales del
+            Perú, y su reglamento.
+        </p>
+
+        <h3>1. Datos que tratamos</h3>
+        <ul>
+            <li><b>De tu cuenta:</b> tipo y número de documento (DNI, carné de extranjería, pasaporte o RUC),
+                nombres y apellidos o razón social y nombre comercial, dirección, celular con código de país, correo
+                electrónico y clave de acceso.</li>
+            <li><b>De los clientes que registra un inversor:</b> los mismos datos de identificación y contacto.</li>
+            <li><b>De los préstamos:</b> montos, intereses, cuotas, fechas, pagos registrados y, en crédito
+                vehicular, la placa, descripción y colores del vehículo.</li>
+            <li><b>De personalización:</b> el logo, el sello y la moneda que eliges.</li>
+            <li><b>Técnicos:</b> la versión de la app instalada, para avisarte cuando haya una actualización.</li>
+        </ul>
+        <p>No recopilamos tu huella digital, tu ubicación ni tus contactos.</p>
+
+        <h3>2. Para qué los usamos</h3>
+        <ul>
+            <li>Crear y administrar tu cuenta y permitir el acceso a tus clientes.</li>
+            <li>Brindar las funciones de la app: cronogramas, cobros, cartillas, reportes y recordatorios.</li>
+            <li>Gestionar tu membresía y su renovación.</li>
+            <li>Enviarte avisos sobre tu cuenta, tu membresía y las actualizaciones de la app.</li>
+            <li>Cumplir obligaciones legales.</li>
+        </ul>
+        <p>No usamos tus datos para publicidad y no los vendemos.</p>
+
+        <h3>3. Datos de los clientes del inversor</h3>
+        <p>
+            El inversor decide qué datos de sus clientes registra y para qué; SSIMPLE PAY los almacena y procesa por
+            encargo suyo, solo para brindarle el servicio. Si eres cliente y quieres revisar o corregir tus datos,
+            puedes pedirlo a tu inversor o escribirnos.
+        </p>
+
+        <h3>4. Con quién los compartimos</h3>
+        <ul>
+            <li>Con proveedores tecnológicos que nos ayudan a operar la app, como los servidores donde se aloja, el
+                almacenamiento de imágenes (Google Firebase) y el servicio que conecta los recordatorios con
+                WhatsApp. Solo los usan para prestar ese servicio.</li>
+            <li>Con autoridades, cuando una ley o un proceso legal lo exija.</li>
+        </ul>
+
+        <h3>5. Cuánto tiempo los conservamos</h3>
+        <p>
+            Mientras tu cuenta exista. Si tu membresía vence, conservamos tus datos para que puedas retomar tu
+            cuenta al renovar. Puedes pedir la eliminación de tu cuenta y tus datos escribiéndonos; algunos datos
+            podrían conservarse el tiempo que exija la ley.
+        </p>
+
+        <h3>6. Seguridad</h3>
+        <p>
+            Aplicamos medidas razonables para proteger tu información: acceso con clave o huella, conexiones
+            cifradas y acceso restringido a los datos. Ningún sistema es 100 % seguro, por lo que no podemos
+            garantizar una seguridad absoluta.
+        </p>
+
+        <h3>7. Tus derechos</h3>
+        <p>
+            Puedes ejercer tus derechos de acceso, rectificación, cancelación y oposición (derechos ARCO)
+            escribiéndonos al correo de contacto. Responderemos dentro de los plazos que establece la ley. Si no
+            estás conforme con la respuesta, puedes acudir a la Autoridad Nacional de Protección de Datos
+            Personales.
+        </p>
+
+        <h3>8. Menores de edad</h3>
+        <p>La app no está dirigida a menores de 18 años y no recopilamos sus datos de forma intencional.</p>
+
+        <h3>9. Cambios</h3>
+        <p>
+            Podemos actualizar estos términos y esta política. Publicaremos la nueva versión en la app con su fecha
+            de actualización y, si el cambio es importante, te lo avisaremos.
+        </p>
+
+        <h3>10. Contacto</h3>
+        <p>
+            Para cualquier consulta sobre estos términos o tus datos, escríbenos a
+            <a class="tyc-correo" [href]="'mailto:' + userEmail">{{ userEmail }}</a>.
+        </p>
     </div>
 
-    <!-- TERMINOS Y CONDICIONES -->
-    <p-dialog header="Política de Privacidad" [(visible)]="visible" [modal]="true"
-        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false"
-        [resizable]="false">
-        <p>
-            Actualizado: 31 de enero de 2025<br><br>
+    <ng-template pTemplate="footer">
+        <button type="button" class="au-btn tyc-aceptar" (click)="aceptarTerminos()">
+            <i class="pi pi-check"></i> Leí y acepto
+        </button>
+    </ng-template>
+</p-dialog>
+<!-- FIN TERMINOS Y CONDICIONES -->
 
-            <b>1. Introducción</b><br><br>
+<p-confirmDialog #cd key="cd">
+    <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
+        <div class="au-pop">
+            <span *ngIf="confirmCase" class="au-pop-ico"><i class="pi pi-user-plus"></i></span>
+            <span *ngIf="!confirmCase" class="au-pop-ico au-pop-ico-sello"><img [src]="pathSello" alt=""></span>
 
-            En Sistema Simple, nos comprometemos a proteger la privacidad y la seguridad de los datos personales de
-            nuestros usuarios. <br>Esta política de privacidad explica cómo recopilamos, utilizamos, almacenamos y
-            protegemos la información personal que nos proporcionas al utilizar nuestra aplicación.
-            <br><br>
-            Nuestra aplicación permite a los usuarios gestionar sus préstamos personales, visualizar su historial de
-            pagos y consultar detalles sobre sus cuotas. No otorgamos préstamos directamente ni actuamos como entidad
-            financiera.
-            <br><br>
-            <b>2. Datos que recopilamos</b><br><br>
+            <h3 class="au-pop-titulo">{{ message.header }}</h3>
+            <p class="au-pop-texto">{{ message.message }}</p>
 
-            Al registrarte y utilizar nuestra aplicación, recopilamos los siguientes datos personales:
-            <br><br>
-            Nombre completo,
-            Apellido,
-            Dirección,
-            Número de celular,
-            Correo electrónico.<br><br>
+            <div *ngIf="!confirmCase" class="au-pop-resumen">
+                <div class="au-pop-fila"><i class="pi pi-at"></i><span>{{ correo }}</span></div>
+            </div>
 
-            Estos datos se recopilan cuando creas una cuenta y se utilizan exclusivamente para la gestión de préstamos y
-            la administración de la información relacionada con los mismos.
-            <br><br>
-            <b>3. Uso de la información</b><br><br>
-
-            La información que recopilamos es utilizada exclusivamente para los siguientes fines:<br><br>
-
-            Gestionar los préstamos realizados a tus clientes.<br>
-            Registrar y almacenar los datos para facilitar el acceso a la información relacionada con los préstamos.<br>
-            Proveerte con una experiencia personalizada y eficiente en la aplicación.<br><br>
-
-            <b>4. Almacenamiento de la información</b><br><br>
-
-            Tu información personal será almacenada en nuestros servidores de manera segura. Tomamos las medidas
-            necesarias para proteger tus datos de accesos no autorizados, alteración o eliminación.
-            <br><br>
-            <b>5. No validación de la información</b><br><br>
-
-            Es importante tener en cuenta que no validamos la veracidad de los datos proporcionados. La aplicación
-            únicamente almacena y organiza la información tal como se introduce, sin verificar si los datos son
-            correctos o reales. Es responsabilidad del usuario proporcionar datos precisos y completos.
-            <br><br>
-            <b>6. Compartición de la información</b><br><br>
-
-            No compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con las leyes
-            o regulaciones aplicables, o si es requerido por un proceso legal.
-            <br><br>
-
-            <b>7. Seguridad de los datos</b><br><br>
-
-            Implementamos medidas de seguridad razonables para proteger tu información personal. Sin embargo, ninguna
-            transmisión de datos a través de Internet o sistema de almacenamiento electrónico es completamente segura,
-            por lo que no podemos garantizar la seguridad absoluta de tus datos.
-            <br><br>
-            <b>8. Cambios en esta política de privacidad</b><br><br>
-
-            Nos reservamos el derecho de actualizar o modificar esta política de privacidad en cualquier momento.
-            Cualquier cambio será publicado en esta página, y la fecha de la última actualización será indicada al
-            inicio de la política.
-            <br><br>
-            <b>9. Contacto</b><br><br>
-
-            Si tienes alguna pregunta o inquietud sobre esta política de privacidad o cómo manejamos tus datos, no dudes
-            en contactarnos a través de:
-            <br><br>
-            <a class="font-medium no-underline text-blue-400 cursor-pointer"> {{userEmail}} </a>
-        </p>
-    </p-dialog>
-    <!-- 7. Retención de los datos<br><br>
-
-            Retendremos tus datos personales mientras sea necesario para los fines descritos en esta política o hasta que tu cuenta sea eliminada. Puedes eliminar tu cuenta y los datos asociados en cualquier momento a través de las opciones dentro de la aplicación.
-            <br><br> -->
-    <!-- FIN TERMINOS Y CONDICIONES -->
-
-    <p-confirmDialog #cd key="cd">
-        <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
-            <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                <div *ngIf="!confirmCase"
-                    class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                    <img [src]="pathSello" width="100" height="100">
+            <div *ngIf="confirmCase" class="au-pop-resumen">
+                <div class="au-pop-fila">
+                    <i class="pi pi-user"></i>
+                    <span *ngIf="isClienteNatural">{{ objPersona.nombres+" "+objPersona.apellidoPaterno+" "+objPersona.apellidoMaterno }}</span>
+                    <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.razonSocial }}</span>
                 </div>
-                <span class="font-bold text-2xl block mb-2 mt-4">
-                    {{ message.header }}
-                </span>
-                <p class="mb-3">{{ message.message }}</p>
-                <div *ngIf="!confirmCase" class="flex flex-column w-full align-items-left confirm-date">
-                    <div class="flex flex-row gap-2 p-3 align-items-center">
-                        <span>Correo:</span>
-                        <span style="color: var(--blue-500);">{{ correo }}</span>
-                    </div>
-                </div>
-                <div *ngIf="confirmCase" class="flex flex-column w-full align-items-left confirm-date">
-                    <div class="flex flex-row gap-2 p-3 align-items-center">
-                        <i class="pi pi-user"></i>
-                        <span *ngIf="isClienteNatural" >{{ objPersona.nombres+" "+objPersona.apellidoPaterno+"
-                            "+objPersona.apellidoMaterno}}</span>
-                        <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.razonSocial}}</span>
-                    </div>
-                    <div class="flex flex-row gap-2 p-3 align-items-center">
-                        <i class="pi pi-at"></i>
-                        <span>{{ correo }}</span>
-                    </div>
-                    <div class="flex flex-row gap-2 p-3 align-items-center">
-                        <i class="pi pi-phone"></i>
-                        <span *ngIf="isClienteNatural">{{ objPersona.celular }}</span>
-                        <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.celular}}</span>
-                    </div>
-                    <div class="flex flex-row gap-2 p-3 align-items-center">
-                        <i class="pi pi-map-marker"></i>
-                        <span *ngIf="isClienteNatural">{{ objPersona.direccion }}</span>
-                        <span *ngIf="!isClienteNatural">{{ objPersonaJuridica.direccion}}</span>
-                    </div>
-                </div>
-
-                <div *ngIf="confirmCase" class="flex align-items-center gap-2 mt-4">
-                    <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                    </button>
-                    <button pButton label="Confirmar" (click)="onAccept()" class="w-8rem">
-                    </button>
-                </div>
-                <div *ngIf="!confirmCase" class="flex align-items-center gap-2 mt-4">
-                    <button pButton label="Aceptar" (click)="onAccept()" class="w-8rem">
-                    </button>
+                <div class="au-pop-fila"><i class="pi pi-at"></i><span>{{ correo }}</span></div>
+                <div class="au-pop-fila"><i class="pi pi-phone"></i><span>{{ celularMostrar }}</span></div>
+                <div class="au-pop-fila">
+                    <i class="pi pi-map-marker"></i>
+                    <span>{{ isClienteNatural ? objPersona.direccion : objPersonaJuridica.direccion }}</span>
                 </div>
             </div>
-        </ng-template>
-    </p-confirmDialog>
-    <app-loading></app-loading>
-</div>
+
+            <div *ngIf="confirmCase" class="au-acciones">
+                <button type="button" class="au-btn au-btn-sec" (click)="onReject()">Cancelar</button>
+                <button type="button" class="au-btn" (click)="onAccept()">Confirmar</button>
+            </div>
+            <div *ngIf="!confirmCase" class="au-acciones au-acciones-una">
+                <button type="button" class="au-btn" (click)="onAccept()">Ir a iniciar sesión</button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+<app-loading></app-loading>

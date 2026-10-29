@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { transicionFade } from '../../../core/ionic/transiciones';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputOtpModule } from 'primeng/inputotp';
@@ -14,17 +16,19 @@ import { CodigoUnicoService } from '../../../core/services/codigo-unico/codigo-u
 import { catchError, finalize, of, throwError } from 'rxjs';
 import { SelectModule } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
-import { SoloNumerosDirective } from '../../../components/directives/solo-numeros.directive';
 import { Constantes } from '../../../core/constant/Constantes';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { SystemService } from '../../../core/services/system/system.service';
+import { textoPrueba as textoMesesPrueba } from '../../../core/utils/membresia';
+import { TIPOS_DOC_DEFECTO, TipoDocumento, limpiarNroDocumento, mensajeNroDocumento, nroDocumentoValido, reglaDocumento } from '../../../core/utils/documento-pais';
 
 @Component({
   selector: 'app-validate-public',
   standalone: true,
   imports: [ButtonModule, InputTextModule, CheckboxModule, PasswordModule, CommonModule, InputOtpModule, FormsModule,
-    LoadingComponent, RouterModule, SelectModule, MessageModule, SoloNumerosDirective, ToastModule, ConfirmDialogModule],
+    LoadingComponent, RouterModule, SelectModule, MessageModule, ToastModule, ConfirmDialogModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './validate-public.component.html',
   styleUrl: './validate-public.component.scss'
@@ -63,6 +67,8 @@ export default class ValidatePublicComponent {
     private codigoUnicoService: CodigoUnicoService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
+    private systemService: SystemService,
+    private navCtrl: NavController,
   ) { }
 
   cliente: any = {};
@@ -70,25 +76,31 @@ export default class ValidatePublicComponent {
   cliJuridico: ClienteJuridico = {};
 
 
-  tipoDocs: any[] = [ /* Aún no existe servicio back para esta lista */
-    {
-      "codigo": "01",
-      "descripcionAbrev": "DNI",
-      "descripcion": "DOCUMENTO NACIONAL DE IDENTIDAD"
-    },
-    /* {
-         "codigo": "04",
-          "descripcionAbrev": "CARNÉ EXT.",
-        "descripcion": "CARNÉ DE EXTRANJERÍA"
-    }, */
-    {
-      "codigo": "06",
-      "descripcionAbrev": "RUC",
-      "descripcion": "REG. ÚNICO DE CONTRIBUYENTES (1)"
-    }
-  ];
+  tipoDocs: TipoDocumento[] = TIPOS_DOC_DEFECTO;
+
+  ngOnInit(): void {
+    this.systemService.tiposDocumento().subscribe(lista => this.tipoDocs = lista);
+    this.systemService.ajustesPublicos().subscribe(a => this.textoPrueba = textoMesesPrueba(a.mesesPrueba));
+  }
+
+  /** "Tu primer mes es gratis": meses de prueba configurados por el admin. */
+  textoPrueba = '';
+
+  get reglaDoc() {
+    return reglaDocumento(this.selectedTipoDoc?.codigo);
+  }
+
+  onNroDocumentoInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const limpio = limpiarNroDocumento(this.selectedTipoDoc?.codigo, input.value);
+    if (input.value !== limpio) input.value = limpio;
+    this.nroDocumento = limpio;
+    this.showMessage = false;
+  }
 
   buscarCliente(tipoDocumento: string, nroDocumento: string) {
+    // Cada consulta parte limpia: un error anterior no debe quedarse pegado si esta sale bien
+    this.limpiarMensaje();
     this.cargando = true;
     this.codigoUnicoService.buscarCliente(tipoDocumento, nroDocumento).pipe(
       /* delay(3000), */
@@ -106,12 +118,13 @@ export default class ValidatePublicComponent {
         return throwError(() => error);
       })
     ).subscribe((resp: any) => {
-      if (resp?.codTipoDoc === "01") {
-        this.cliNatural = resp;
-        this.cliente = this.cliNatural;
-      } else if (resp?.codTipoDoc === "06") {
+      // DNI, carné de extranjería y pasaporte son persona natural (los dos últimos llegan sin nombres)
+      if (resp?.codTipoDoc === "06") {
         this.cliJuridico = resp;
         this.cliente = this.cliJuridico;
+      } else if (resp?.codTipoDoc) {
+        this.cliNatural = resp;
+        this.cliente = this.cliNatural;
       }
       this.documentoVerificado = true;
 
@@ -126,6 +139,7 @@ export default class ValidatePublicComponent {
   }
 
   validarCorreoExistente(correo: string) {
+    this.limpiarMensaje();
     this.cargando = true;
     this.codigoUnicoService.correoExistente(correo).pipe(
       finalize(() => this.cargando = false),
@@ -182,6 +196,7 @@ export default class ValidatePublicComponent {
           this.respCodigoUnico();
           return of(null);
         } else {
+          this.showMessage = true;
           this.severity = 'error';
           this.message = Constantes.MSG_ERROR_SERVICIO;
           return throwError(() => error);
@@ -226,6 +241,20 @@ export default class ValidatePublicComponent {
   }
 
 
+  /* El popup del código único vive en <body>: se cierra antes de navegar para que no quede flotando
+     sobre la pantalla siguiente (Ionic mantiene viva esta página en su pila). */
+  irARegistro() {
+    this.confirmationService.close();
+    this.router.navigate(['/registrar']);
+  }
+
+  /** Cuenta ya activa: al login con su correo cargado (aunque haya otras cuentas guardadas). */
+  irALogin() {
+    this.confirmationService.close();
+    if (this.data?.data?.descripcion) sessionStorage.setItem('emailCreate', this.data.data.descripcion);
+    this.navCtrl.navigateRoot('/login', { animation: transicionFade });
+  }
+
   validarDatos() {
 
   }
@@ -233,6 +262,10 @@ export default class ValidatePublicComponent {
   onTipoDocChange() {
     this.showMessage = false;
     this.nroDocumento = ""; // limpia el campo
+  }
+
+  get mensajeNroDoc(): string {
+    return mensajeNroDocumento(this.selectedTipoDoc?.codigo);
   }
 
   isFormValid(): boolean {
@@ -247,18 +280,7 @@ export default class ValidatePublicComponent {
   }
 
   isDocumentoValido(): boolean {
-    if (!this.selectedTipoDoc || !this.nroDocumento) {
-      return false;
-    }
-    // Suponiendo que el tipoDoc tiene un código: "01" = DNI, "02" = RUC
-    if (this.selectedTipoDoc.codigo === "01") {
-      return this.nroDocumento.length === 8;
-    }
-    if (this.selectedTipoDoc.codigo === "06") {
-      return this.nroDocumento.length === 11;
-    }
-
-    return false;
+    return nroDocumentoValido(this.selectedTipoDoc?.codigo, this.nroDocumento);
   }
 
   isCorreoValido(): boolean {
@@ -278,6 +300,10 @@ export default class ValidatePublicComponent {
 
   atras() {
     this.documentoVerificado = !this.documentoVerificado;
+    this.limpiarMensaje();
+  }
+
+  private limpiarMensaje() {
     this.showMessage = false;
     this.message = '';
   }

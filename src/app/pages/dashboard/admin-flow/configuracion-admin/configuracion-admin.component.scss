@@ -1,29 +1,66 @@
-  .custom-banner-codigo-unico {
-      flex: 1;
-      /* Permite que cada banner tome el mismo espacio disponible */
-      margin: 5px;
-      /* Espacio alrededor de cada banner */
-      padding: 10px;
-      background: #fff;
-      box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-      color: var(--gray-500);
-      /* Color del texto del banner */
-      text-align: center;
-      /* Centra el texto dentro del banner */
-      border-radius: 8px;
-      /* Bordes redondeados */
-      min-width: 30px;
-      align-items: center;
+/* Configurar mi App (admin): clases globales .adm-* (styles.scss) */
+
+.ca-fila {
+  padding: 13px 0;
+
+  .adm-texto small {
+    display: block;
+    line-height: 1.4;
+  }
+}
+
+.ca-error {
+  color: var(--red-500) !important;
+}
+
+/* Mantenimiento encendido: ícono en naranja como aviso */
+.ca-ico-alerta {
+  background: color-mix(in srgb, var(--orange-500) 14%, #fff);
+  color: var(--orange-500);
+}
+
+/* Contador de meses (1 a 3) */
+.ca-stepper {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--gray-100);
+
+  b {
+    min-width: 18px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-700);
   }
 
-  .icon-span {
-      font-size: 20px;
-  }
+  button {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    color: var(--blue-400);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, .12);
+    cursor: pointer;
 
-  .txt-span {
-      font-size: 13px;
-      text-align: left;
-  }
+    .pi { font-size: 11px; }
 
-  /* ACCESO, ACTIVO - INACTIVO */
-  
+    &:disabled {
+      color: var(--gray-300);
+      box-shadow: none;
+      cursor: default;
+    }
+  }
+}
+
+/* La tarjeta de huella trae su propio margen inferior */
+app-biometria-config-card {
+  display: block;
+  margin-bottom: -12px;
+}

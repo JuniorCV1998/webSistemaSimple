@@ -1,86 +1,122 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="cp">
 
-    <div class="text-center mb-4">
-        <div class="text-2xl mb-1 label-title">Cronograma de pago</div>
-        <span class="span-subtitulo">{{ invDetail.fullName }}</span>
+    <div class="cp-head">
+        <div class="text-2xl label-title">Cronograma de pago</div>
+        <span class="cp-desc">{{ invDetail.fullName }}</span>
     </div>
 
-    <div class="resumen-grid mb-3">
-        <div class="resumen-item">
-            <span class="resumen-label">Placa vehículo</span>
-            <span class="resumen-valor">{{ invDetail.placaVehiculo }}</span>
+    <!-- Resumen -->
+    <section class="cp-card cp-resumen">
+        <div class="cp-dato">
+            <span class="cp-dato-ico"><i class="pi pi-car"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-dato-label">Placa</span>
+                <span class="cp-dato-valor cp-placa">{{ invDetail.placaVehiculo || '—' }}</span>
+            </span>
         </div>
-        <div class="resumen-item">
-            <span class="resumen-label">Frecuencia</span>
-            <span class="resumen-valor">{{ invDetail.frecuencia }}</span>
+        <div class="cp-dato">
+            <span class="cp-dato-ico"><i class="pi pi-refresh"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-dato-label">Frecuencia</span>
+                <span class="cp-dato-valor">{{ invDetail.frecuencia | titlecase }}</span>
+            </span>
         </div>
-        <div class="resumen-item">
-            <span class="resumen-label">Fecha inicio</span>
-            <span class="resumen-valor">{{ invDetail.fechaInicio }}</span>
+        <div class="cp-dato">
+            <span class="cp-dato-ico"><i class="pi pi-calendar"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-dato-label">Inicio</span>
+                <span class="cp-dato-valor">{{ invDetail.fechaInicio }}</span>
+            </span>
         </div>
-        <div class="resumen-item">
-            <span class="resumen-label">Fecha fin</span>
-            <span class="resumen-valor">{{ invDetail.fechaFin }}</span>
+        <div class="cp-dato">
+            <span class="cp-dato-ico"><i class="pi pi-flag"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-dato-label">Fin</span>
+                <span class="cp-dato-valor">{{ invDetail.fechaFin }}</span>
+            </span>
         </div>
-        <div class="resumen-item">
-            <span class="resumen-label">N° de cuotas</span>
-            <span class="resumen-valor">{{ totalCuotas }}</span>
+        <div class="cp-dato">
+            <span class="cp-dato-ico"><i class="pi pi-list-check"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-dato-label">Cuotas</span>
+                <span class="cp-dato-valor">{{ cuotasPagadas }} de {{ totalCuotas }} pagadas</span>
+            </span>
         </div>
-        <div class="resumen-item" *ngIf="mostrarMontosAgregados">
-            <span class="resumen-label">Monto total</span>
-            <span class="resumen-valor">{{ currency }} {{ totalMonto | formatNumber }}</span>
+        <div class="cp-dato" *ngIf="mostrarMontosAgregados">
+            <span class="cp-dato-ico cp-dato-ico-verde"><i class="pi pi-wallet"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-dato-label">Monto total</span>
+                <span class="cp-dato-valor">{{ currency }} {{ totalMonto | formatNumber }}</span>
+            </span>
         </div>
-    </div>
 
-    <div class="flex justify-content-center mb-4">
+        <!-- Progreso -->
+        <div class="cp-progreso" *ngIf="totalCuotas">
+            <span class="cp-barra"><span [style.width.%]="cuotasPagadas * 100 / totalCuotas"></span></span>
+        </div>
+    </section>
+
+    <!-- Descarga -->
+    <section class="cp-card cp-descarga">
+        <label *ngIf="esInversor" class="cp-switch">
+            <span class="cp-dato-ico"><i class="pi pi-eye"></i></span>
+            <span class="cp-dato-text">
+                <span class="cp-switch-titulo">Mostrar totales</span>
+                <span class="cp-dato-label">Monto total y subtotal por mes, en pantalla y en el PDF.</span>
+            </span>
+            <p-toggleswitch [(ngModel)]="incluirTotales" />
+        </label>
+
         <button pButton label="Descargar PDF" icon="pi pi-file-pdf" [loading]="isGeneratingPdf"
-            [disabled]="isLoading" (click)="descargarPDF()" class="w-full lg:w-auto"></button>
-    </div>
+            [disabled]="isLoading" (click)="descargarPDF()" class="cp-btn"></button>
+    </section>
 
-    <ng-template [ngIf]="isLoading">
-        <div *ngFor="let item of [].constructor(8)" class="mb-2">
-            <p-skeleton height="2.25rem" />
+    <!-- Skeleton -->
+    <section *ngIf="isLoading" class="cp-card">
+        <div *ngFor="let item of [].constructor(6)" class="cp-item">
+            <p-skeleton shape="circle" size="36px" />
+            <div class="flex flex-column w-full gap-2">
+                <p-skeleton width="55%" height=".9rem" />
+                <p-skeleton width="30%" height=".75rem" />
+            </div>
+            <p-skeleton width="70px" height=".9rem" />
         </div>
-    </ng-template>
+    </section>
 
-    <div *ngIf="!isLoading">
-        <div *ngFor="let grupo of grupos" class="grupo-mes mb-3">
-            <div class="flex flex-row justify-content-between align-items-center grupo-header">
-                <span class="grupo-titulo">{{ grupo.label }}</span>
-                <span class="grupo-monto" *ngIf="mostrarMontosAgregados">{{ currency }} {{ grupo.montoGrupo | formatNumber }}</span>
+    <!-- Cuotas por mes -->
+    <ng-container *ngIf="!isLoading">
+        <ng-container *ngFor="let grupo of grupos">
+            <div class="cp-seccion">
+                <span>{{ grupo.label }}</span>
+                <span *ngIf="mostrarMontosAgregados" class="cp-subtotal">{{ currency }} {{ grupo.montoGrupo | formatNumber }}</span>
             </div>
-            <div class="table-wrapper">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>N° Cuota</th>
-                            <th>Fecha</th>
-                            <th>Días</th>
-                            <th>Monto</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let item of grupo.items">
-                            <td>{{ item.nroCuota | twoDigits }}</td>
-                            <td>{{ item.fechaCierre }}</td>
-                            <td>{{ item.diasCuota }}</td>
-                            <td>{{ currency }} {{ item.montoCuota | formatNumber }}</td>
-                            <td>
-                                <span class="estado-chip" [ngClass]="item.pagado ? 'estado-pagado' : 'estado-pendiente'">
-                                    {{ item.pagado ? 'Pagado' : 'Pendiente' }}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+            <section class="cp-card">
+                <div *ngFor="let item of grupo.items" class="cp-item"
+                    [class.cp-item-proxima]="item.nroCuota === proximaCuota">
+                    <span class="cp-nro" [class.cp-nro-pagado]="item.pagado">
+                        <i *ngIf="item.pagado" class="pi pi-check"></i>
+                        <ng-container *ngIf="!item.pagado">{{ item.nroCuota | twoDigits }}</ng-container>
+                    </span>
+                    <span class="cp-item-text">
+                        <span class="cp-cuota">
+                            Cuota {{ item.nroCuota | twoDigits }}
+                            <span *ngIf="item.nroCuota === proximaCuota" class="cp-chip-proxima">Próxima</span>
+                        </span>
+                        <span class="cp-fecha">{{ item.fechaCierre }} · {{ item.diasCuota }} días</span>
+                    </span>
+                    <span class="cp-derecha">
+                        <span class="cp-monto">{{ currency }} {{ item.montoCuota | formatNumber }}</span>
+                        <span class="cp-estado" [ngClass]="item.pagado ? 'cp-estado-pagado' : 'cp-estado-pendiente'">
+                            {{ item.pagado ? 'Pagado' : 'Pendiente' }}
+                        </span>
+                    </span>
+                </div>
+            </section>
+        </ng-container>
+    </ng-container>
 
     <div style="height: 20px;"></div>
 
     <button *ngIf="mostrarBotonSubir" pButton icon="pi pi-arrow-up" (click)="irArriba()"
         class="btn-subir-arriba p-button-rounded" aria-label="Subir arriba"></button>
-
 </div>

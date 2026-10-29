@@ -24,9 +24,9 @@ npx cap open android
 npx cap add ios
 npx cap open ios
 
-/* CORREO CAMBIOS NEUVOS IMPLEMENTADOS LUEGO DE CORRER EL APK */
+/* CORREO CAMBIOS NUEVOS IMPLEMENTADOS LUEGO DE CORRER EL APK */
 ng build --configuration production
-npx cap sync 
+npx cap sync android
 Run: Android studio
 
 

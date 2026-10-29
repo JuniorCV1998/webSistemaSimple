@@ -1,309 +1,385 @@
-.user-card {
+/* Datos del cliente: estilo fintech mobile light (mismo patrón que el Perfil, clases pf-*) */
+$ink: var(--gray-700);
+$muted: var(--gray-500);
+$blue: var(--blue-400);
+$green: var(--primary-500);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+
+.cd {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4px 2px 0;
+}
+
+.cd-titulo {
+  padding: 0 4px;
+}
+
+.cd-card {
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
+  border-radius: 20px;
+  box-shadow: $sombra;
+  padding: 6px 16px;
 }
 
-.user-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.user-avatar {
-  display: flex;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-
-}
-
-.pi-user {
-  font-size: 40px;
+.cd-seccion {
+  margin: 8px 6px -2px;
+  font-size: 13px;
   font-weight: 600;
-  color: white;
+  color: $muted;
 }
 
-span {
-  display: block;
-  max-width: 100%;
-  word-break: break-word;
-  /* Rompe palabras largas */
-  white-space: normal;
-  /* Permite saltos de línea */
+/* ===== Cabecera ===== */
+.cd-head {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px 18px;
 }
 
-.user-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.user-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #1a1f2c;
-  margin: 0;
-}
-
-.span-nombre {
-  font-weight: 700;
-  color: var(--gray-500);
-  font-size: 16px;
-  text-align: left;
-}
-
-.span-desc {
-  color: var(--gray-500);
-  font-size: 14px;
-  text-align: left;
-}
-
-.input-fail {
-  color: red;
-  font-size: 12px;
-}
-
-.editar-icon {
-  color: var(--primary-500);
-  font-size: 15px;
-  cursor: pointer;
-  padding: 6px;
+.cd-editar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
   border-radius: 50%;
-  transition: background-color 0.15s ease;
+  background: $blue-soft;
+  color: $blue;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+
+  &.cd-editar-on {
+    background: var(--gray-100);
+    color: $muted;
+  }
 }
 
-.editar-icon:active {
-  background-color: var(--gray-100);
+.cd-avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, $blue, $green);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--blue-400) 70%, transparent);
 }
 
-.edit-panel {
-  padding-top: 4px;
+.cd-nombre {
+  margin: 12px 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: $ink;
+  word-break: break-word;
 }
 
-.edit-label {
+.cd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary-500) 12%, #fff);
+  color: $green;
   font-size: 12.5px;
   font-weight: 600;
-  color: var(--gray-500);
+
+  i { font-size: 12px; }
+
+  &.cd-chip-off {
+    background: color-mix(in srgb, var(--red-500) 10%, #fff);
+    color: var(--red-500);
+  }
 }
 
+/* ===== Filas ===== */
+.cd-fila {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
 
-
-/* ACCESO, ACTIVO - INACTIVO */
-.toggle {
-  display: inline-block;
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 48px;
+    right: 0;
+    height: 1px;
+    background: var(--gray-100);
+  }
 }
 
-/* ocultamos el checkbox */
+.cd-ico {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: $blue-soft;
+  color: $blue;
+
+  i { font-size: 14px; }
+}
+
+.cd-label {
+  flex-shrink: 0;
+  font-size: 13.5px;
+  color: $muted;
+}
+
+.cd-valor {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+  word-break: break-word;
+}
+
+/* Copiar credenciales: píldora tenue bajo correo/contraseña */
+.cd-copiar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 2px 0 6px;
+  padding: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: $blue-soft;
+  color: $blue;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &.cd-copiado {
+    background: color-mix(in srgb, var(--primary-500) 12%, #fff);
+    color: $green;
+  }
+}
+
+/* Interruptor de acceso (misma lógica: checkbox + label) */
 .toggle-input {
   display: none;
 }
 
 .toggle-label {
-  display: block;
-  width: 50px;
-  height: 26px;
-  background-color: #e53935;
-  /* rojo apagado */
-  border-radius: 50px;
   position: relative;
+  display: block;
+  width: 46px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--gray-300);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color .2s ease;
 }
 
-/* handle (el círculo) */
 .toggle-handle {
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-radius: 50%;
   position: absolute;
-  top: 4px;
-  left: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: #e53935;
-  transition: all 0.3s ease;
-}
-
-/* cuando está activo (checked) */
-.toggle-input:checked+.toggle-label {
-  background-color: #4caf50;
-  /* verde */
-}
-
-.toggle-input:checked+.toggle-label .toggle-handle {
-  left: 26px;
-  color: #4caf50;
-}
-
-/* cambiar icono dinámicamente */
-.toggle-input:checked+.toggle-label .toggle-handle i::before {
-  content: "\e909";
-  /* código unicode pi-check */
-}
-
-.toggle-input:not(:checked)+.toggle-label .toggle-handle i::before {
-  content: "\e90b";
-  /* código unicode pi-times */
-}
-
-/* ACTUALZIAR MEMBRESIA */
-.slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-  border-radius: 6px;
-  outline: none;
-  cursor: pointer;
-}
-
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: #6366f1;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .25);
+  transition: left .2s ease;
+}
+
+.toggle-input:checked + .toggle-label {
+  background: $green;
+}
+
+.toggle-input:checked + .toggle-label .toggle-handle {
+  left: 21px;
+}
+
+/* ===== Edición ===== */
+.cd-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.cd-edit-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $muted;
+}
+
+.cd-edit-botones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+
+  ::ng-deep .p-button { border-radius: 14px; }
+}
+
+.input-fail {
+  color: var(--red-500);
+  font-size: 12px;
+}
+
+/* ===== Inversiones del cliente ===== */
+.cd-inv {
+  margin-top: 8px;
+  padding: 6px 16px;
+}
+
+.cd-inv-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
-  transition: background 0.2s ease-in-out;
 }
 
-.slider::-webkit-slider-thumb:hover {
-  background: #4338ca;
-}
-
-/* Mostra inversiones del cliente */
-.custom-banner-4 {
+.cd-inv-titulo {
   flex: 1;
-  /* Permite que cada banner tome el mismo espacio disponible */
-  margin: 5px;
-  /* Espacio alrededor de cada banner */
-  padding: 15px;
-  /* Espacio dentro de cada banner */
-  /* background: linear-gradient(to right, var(--primary-500), white); */
-  /* Color de fondo del banner */
-  background: #fff;
-  box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-  /* color: var(--primary-500); */
-  /* Color del texto del banner */
-  text-align: center;
-  /* Centra el texto dentro del banner */
-  border-radius: 8px;
-  /* Bordes redondeados */
-  min-width: 30px;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: auto;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: $ink;
 }
 
-.custom-banner-active {
-  flex: 1;
-  /* Permite que cada banner tome el mismo espacio disponible */
-  margin: 0px;
-  /* Espacio alrededor de cada banner */
-  padding: 10px;
-  /* Espacio dentro de cada banner */
-  background: var(--primary-500);
-  background: #fff;
-  box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-  color: var(--gray-500);
-  /* Color del texto del banner */
-  text-align: center;
-  /* Centra el texto dentro del banner */
-  border-radius: 8px;
-  /* Bordes redondeados */
-  min-width: 300px;
-  align-items: center;
+.cd-flecha {
+  color: $muted;
+  font-size: 14px;
 }
 
-.custom-banner-passive {
-  flex: 1;
-  /* Permite que cada banner tome el mismo espacio disponible */
-  margin: 0px;
-  /* Espacio alrededor de cada banner */
-  padding: 10px;
-  /* Espacio dentro de cada banner */
-  background: var(--primary-500);
-  background: #fff;
-  box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2);
-  color: var(--gray-500);
-  /* Color del texto del banner */
-  text-align: center;
-  /* Centra el texto dentro del banner */
-  border-radius: 8px;
-  /* Bordes redondeados */
-  min-width: 300px;
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-}
+.cd-item {
+  position: relative;
 
-/* Estilo de los elementos */
-.span-nro-inv {
-  font-size: .8rem;
-  text-align: left;
-  color: var(--primary-500);
-}
-
-.span-nro-inv-culm {
-  font-size: .8rem;
-  text-align: left;
-  color: var(--gray-500);
-}
-
-.span-monto {
-  font-size: .8rem;
-  text-align: left;
-  font-weight: 800;
-}
-
-.span-fecha-creacion {
-  font-size: .8rem;
-  text-align: left;
-}
-
-.span-cuotas {
-  font-size: .8rem;
-  text-align: left;
-}
-
-.linea-bottom {
-  border-bottom: 1px solid var(--gray-400);
-  opacity: .4;
-}
-
-/* Estilo de los iconos */
-.pi-inv-off {
-  color: var(--primary-500);
-  font-weight: 500;
-}
-.pi-window-maximize{
-  font-size: .8rem;
-}
-.pi-inv-on {
-  color: var(--gray-400);
-  font-weight: 500;
-}
-
-  .span-empty{
-    color: var(--gray-500);
-    font-size: 14px;
-    text-align: center;
-    margin-top: 5px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 48px;
+    right: 0;
+    height: 1px;
+    background: var(--gray-100);
   }
+}
+
+.cd-item-fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  cursor: pointer;
+}
+
+.cd-item-num {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, $blue, $green);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+
+  i { font-size: 13px; }
+
+  .cd-item-fin & {
+    background: var(--gray-100);
+    color: var(--gray-400);
+  }
+}
+
+.cd-item-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  b { font-size: 14px; font-weight: 600; color: $ink; }
+  small { font-size: 12px; color: $muted; }
+}
+
+.cd-item-monto {
+  font-size: 14px;
+  font-weight: 700;
+  color: $ink;
+  white-space: nowrap;
+
+  .cd-item-fin & { color: $muted; }
+}
+
+.cd-item-ir {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: $blue-soft;
+  color: $blue;
+  text-decoration: none;
+
+  i { font-size: 13px; }
+}
+
+.cd-item-detalle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+  margin: 0 0 12px 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--gray-50);
+
+  div { display: flex; flex-direction: column; gap: 2px; }
+  small { font-size: 11.5px; color: $muted; }
+  b { font-size: 13px; font-weight: 600; color: $ink; }
+}
+
+.cd-vacio {
+  margin: 4px 0 14px;
+  text-align: center;
+  font-size: 13.5px;
+  color: $muted;
+}
+
+.cd-head-skel {
+  gap: 12px;
+  padding-top: 28px;
+}
+
+.cd-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0 14px;
+}

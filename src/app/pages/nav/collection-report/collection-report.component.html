@@ -1,138 +1,126 @@
-<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-    <div class="text-center mb-4 header-row">
-        <div id="div_line_bootom" class=" text-2xl mb-3 label-title">Pagos pendientes</div>
-        <button type="button" class="whatsapp-config-btn" routerLink="/reporte/recordatorios-whatsapp"
-            aria-label="Configurar recordatorios WhatsApp">
-            <i class="pi pi-whatsapp"></i>
+<div *ngIf="!isLoading" class="cr">
+
+    <div class="text-2xl label-title cr-titulo">Pagos pendientes</div>
+
+    <!-- Banda compacta: monto recaudado -->
+    <button type="button" class="cr-banda" (click)="questionMondoRecaudado()">
+        <span class="cr-banda-ico"><i class="pi pi-wallet"></i></span>
+        <span class="cr-banda-text">
+            <span class="cr-banda-label">Monto recaudado</span>
+        </span>
+        <span class="cr-banda-monto">{{currency}} {{data.amountCharged | formatNumber}}</span>
+        <i class="pi pi-angle-right cr-banda-flecha"></i>
+    </button>
+
+    <!-- Accesos como píldoras -->
+    <nav class="cr-acciones">
+        <a class="cr-accion" routerLink="/reporte/reporte-cobranza">
+            <i class="pi pi-history"></i> Historial
+        </a>
+    </nav>
+
+    <!-- ===== Diario ===== -->
+    <div class="cr-seccion">
+        <span class="cr-seccion-ico cr-ico-verde"><i class="pi pi-calendar"></i></span>
+        <span class="cr-seccion-titulo">Diario</span>
+        <span *ngIf="data.reportDiario.lista.length" class="cr-count">{{data.reportDiario.lista.length}}</span>
+        <button type="button" class="cr-info" (click)="modalDiario()" aria-label="¿Qué es diario?">
+            <i class="pi pi-question-circle"></i>
         </button>
     </div>
 
-    <div class="flex flex-column w-full gap-2 justify-content-center mb-4">
-        <div class="flex flex-row w-full align-items-center justify-content-between mb-2">
-            <div class="flex flex-row align-items-center gap-2">
-                <span class="section-icon section-icon-diario"><i class="pi pi-calendar"></i></span>
-                <span class="section-title">Diario</span>
-            </div>
-            <i class="pi pi-question-circle info-icon" (click)="modalDiario()"></i>
-        </div>
+    <section class="cr-card" *ngIf="data.reportDiario.lista.length > 0">
+        <button type="button" class="cr-item"
+            *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : (data.reportDiario.lista | slice:0:5)); let i = index"
+            (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota, item.nroInversion, item.nroCuotas)">
+            <span class="cr-num">{{i + 1}}</span>
+            <span class="cr-item-text">
+                <span class="cr-nombre">{{item.fullName}}</span>
+                <span class="cr-meta">
+                    <span class="cuota-pill" [ngClass]="item.actualizado==1?'cuota-pill-ok':'cuota-pill-pending'">
+                        Cuota {{ item.ctasPagadas | twoDigits }}
+                    </span>
+                    <i *ngIf="item.recordatorioActivo" class="pi pi-whatsapp whatsapp-badge"
+                        aria-label="Recordatorio automático activado"></i>
+                </span>
+            </span>
+            <span class="cr-monto"
+                [ngClass]="{'cr-monto-severo': item.ctasAtrasadas>=3, 'cr-monto-leve': item.ctasAtrasadas>0 && item.ctasAtrasadas<3}">
+                {{currency}} {{item.valorCuota | formatNumber}}
+            </span>
+        </button>
 
-        <div class="flex flex-column align-items-center mb-3" *ngIf="data.reportDiario.lista.length > 0">
-            <div *ngFor="let item of (mostrarTodo ? data.reportDiario.lista : (data.reportDiario.lista | slice:0:5)); let i = index"
-                (click)="pagarCuota(item.idInversion, item.ctasPagadas, item.fullName, item.valorCuota, item.nroInversion, item.nroCuotas)"
-                class="custom-banner-detail-body mb-2">
-                <div class="flex flex-row justify-content-between align-items-center w-full gap-2">
-                    <div class="flex flex-column flex-1 min-w-0">
-                        <span class="span-body-name">{{i + 1}}. {{item.fullName}}</span>
-                        <div class="flex align-items-center gap-2 mt-1">
-                            <span class="cuota-pill"
-                                [ngClass]="item.actualizado==1?'cuota-pill-ok':'cuota-pill-pending'">
-                                # {{ item.ctasPagadas | twoDigits }}
-                            </span>
-                            <i *ngIf="item.recordatorioActivo" class="pi pi-whatsapp whatsapp-badge"
-                                aria-label="Recordatorio automático activado"></i>
-                        </div>
-                    </div>
-                    <div class="flex flex-column align-items-end gap-1 flex-shrink-0">
-                        <span class="span-body-amount"
-                            [ngClass]="{'span-body-amount-severo': item.ctasAtrasadas>=3, 'span-body-amount-leve': item.ctasAtrasadas>0 && item.ctasAtrasadas<3}">
-                            {{currency}} {{item.valorCuota | formatNumber}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex flex-row w-full paddin-5 justify-content-between align-items-center mt-1">
-                <button type="button" class="copy-chip" (click)="onLongPress(1)">
-                    <i class="pi pi-clone"></i>
-                    <span>Copiar</span>
-                </button>
-                <span class="total-chip"><b>Total</b>&nbsp;{{data.reportDiario.totalCuotas | formatNumber}}</span>
-            </div>
-        </div>
-        <div *ngIf="data.reportDiario.lista.length == 0" class="mb-3">
-            <app-list-empty-none></app-list-empty-none>
-        </div>
+        <button *ngIf="data.reportDiario.lista.length > 5" type="button" class="cr-ver-mas" (click)="toggleMostrar()">
+            {{ mostrarTodo ? 'Ver menos' : 'Ver más' }}
+            <i class="pi" [ngClass]="mostrarTodo ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+        </button>
 
-
-        <div class="flex flex-column align-items-center mb-1" *ngIf="data.reportDiario.lista.length > 0">
-            <!-- Mostrar el botón solo si hay más de 5 registros -->
-            <button *ngIf="data.reportDiario.lista.length > 5" type="button" class="ver-mas-btn mb-3"
-                (click)="toggleMostrar()">
-                <span>{{ mostrarTodo ? 'Ver menos' : 'Ver más' }}</span>
-                <i class="pi" [ngClass]="mostrarTodo ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+        <div class="cr-pie">
+            <button type="button" class="cr-copiar" (click)="onLongPress(1)">
+                <i class="pi pi-clone"></i> Copiar lista
             </button>
-            <div class="flex flex-row w-full justify-content-between align-items-center amount-rec">
-                <div class="flex align-items-center gap-2">
-                    <span class="amount-rec-icon"><i class="pi pi-wallet"></i></span>
-                    <span class="amount-rec-label">Monto recaudado</span>
-                </div>
-                <div class="flex align-items-center gap-2">
-                    <span class="amount-rec-value">{{currency}} {{data.amountCharged | formatNumber}}</span>
-                    <i class="pi pi-question-circle info-icon info-icon-light" (click)="questionMondoRecaudado()"></i>
-                </div>
-            </div>
+            <span class="cr-total">Total <b>{{currency}} {{data.reportDiario.totalCuotas | formatNumber}}</b></span>
         </div>
+    </section>
+    <div *ngIf="data.reportDiario.lista.length == 0" class="cr-card cr-vacio">
+        <app-list-empty-none></app-list-empty-none>
     </div>
 
-    <div class="flex flex-column w-full gap-2 justify-content-center mb-3">
+    <!-- ===== Semanal ===== -->
+    <div class="cr-seccion">
+        <span class="cr-seccion-ico cr-ico-azul"><i class="pi pi-refresh"></i></span>
+        <span class="cr-seccion-titulo">Semanal</span>
+        <span *ngIf="data.reportSemanal.length" class="cr-count">{{data.reportSemanal.length}}</span>
+        <button type="button" class="cr-info" (click)="modalSemanal()" aria-label="¿Qué es semanal?">
+            <i class="pi pi-question-circle"></i>
+        </button>
+    </div>
 
-        <div class="flex flex-row w-full align-items-center justify-content-between mb-2">
-            <div class="flex flex-row align-items-center gap-2">
-                <span class="section-icon section-icon-semanal"><i class="pi pi-refresh"></i></span>
-                <span class="section-title">Semanal</span>
-            </div>
-            <i class="pi pi-question-circle info-icon" (click)="modalSemanal()"></i>
+    <section class="cr-card" *ngIf="data.reportSemanal.length > 0">
+        <div class="cr-item cr-item-estatico"
+            *ngFor="let item of (mostrarTodoS ? data.reportSemanal : (data.reportSemanal | slice:0:5)); let i = index">
+            <span class="cr-num cr-num-azul">{{i + 1}}</span>
+            <span class="cr-item-text">
+                <span class="cr-nombre">{{item.fullName}}</span>
+                <span class="cr-meta">
+                    <span class="proxima-fecha"><i class="pi pi-calendar"></i> {{item.proximaFecha}}</span>
+                    <span class="cuota-pill cuota-pill-pending">Cuota {{ item.ctasPagadas | twoDigits}}</span>
+                    <i *ngIf="item.recordatorioActivo" class="pi pi-whatsapp whatsapp-badge"
+                        aria-label="Recordatorio automático activado"></i>
+                </span>
+            </span>
+            <span class="cr-derecha">
+                <span class="cr-monto"
+                    [ngClass]="{'cr-monto-severo': item.ctasAtrasadas>=3, 'cr-monto-leve': item.ctasAtrasadas>0 && item.ctasAtrasadas<3}">
+                    {{currency}} {{item.valorCuota | formatNumber}}
+                </span>
+                <a class="cr-cartilla" [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
+                    aria-label="Abrir cartilla">
+                    <i class="pi pi-external-link"></i>
+                </a>
+            </span>
         </div>
 
-        <div class="flex flex-column align-items-center" *ngIf="data.reportSemanal.length > 0">
+        <button *ngIf="data.reportSemanal.length > 5" type="button" class="cr-ver-mas" (click)="toggleMostrarS()">
+            {{ mostrarTodoS ? 'Ver menos' : 'Ver más' }}
+            <i class="pi" [ngClass]="mostrarTodoS ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+        </button>
 
-            <div *ngFor="let item of (mostrarTodoS ? data.reportSemanal : (data.reportSemanal | slice:0:5)); let i = index"
-                class="custom-banner-detail-body mb-2">
-                <div class="flex flex-row justify-content-between align-items-center w-full gap-2">
-                    <div class="flex flex-column flex-1 min-w-0">
-                        <span class="span-body-name">{{i + 1}}. {{item.fullName}}</span>
-                        <div class="flex align-items-center gap-2 mt-1">
-                            <span class="proxima-fecha">Próximo: {{item.proximaFecha}}</span>
-                            <span class="cuota-pill cuota-pill-pending"># {{ item.ctasPagadas | twoDigits}}</span>
-                            <i *ngIf="item.recordatorioActivo" class="pi pi-whatsapp whatsapp-badge"
-                                aria-label="Recordatorio automático activado"></i>
-                        </div>
-                    </div>
-                    <div class="flex flex-column align-items-end gap-1 flex-shrink-0">
-                        <span class="span-body-amount"
-                            [ngClass]="{'span-body-amount-severo': item.ctasAtrasadas>=3, 'span-body-amount-leve': item.ctasAtrasadas>0 && item.ctasAtrasadas<3}">
-                            {{currency}} {{item.valorCuota | formatNumber}}
-                        </span>
-                        <div class="flex align-items-center gap-2">
-                            <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: item.idInversion}"
-                                class="pi pi-window-maximize"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-row w-full paddin-5 justify-content-between align-items-center mt-1">
-                <button type="button" class="copy-chip" (click)="onLongPress(2)">
-                    <i class="pi pi-clone"></i>
-                    <span>Copiar</span>
-                </button>
-            </div>
-
-
-            <button *ngIf="data.reportSemanal.length > 5" type="button" class="ver-mas-btn mt-2"
-                (click)="toggleMostrarS()">
-                <span>{{ mostrarTodoS ? 'Ver menos' : 'Ver más' }}</span>
-                <i class="pi" [ngClass]="mostrarTodoS ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+        <div class="cr-pie">
+            <button type="button" class="cr-copiar" (click)="onLongPress(2)">
+                <i class="pi pi-clone"></i> Copiar lista
             </button>
         </div>
-        <div *ngIf="data.reportSemanal.length == 0">
-            <app-list-empty-none></app-list-empty-none>
-        </div>
+    </section>
+    <div *ngIf="data.reportSemanal.length == 0" class="cr-card cr-vacio">
+        <app-list-empty-none></app-list-empty-none>
     </div>
 
     <div style="height: 70px;"></div>
 
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="mb-1 btn-float"></button>
 </div>
+
 
 <app-loading></app-loading>
 
@@ -142,111 +130,76 @@
 
 <p-confirmDialog #cd key="cd">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                <img [src]="pathSello" width="100" height="100">
-            </div>
-            <span class="font-bold text-2xl block mb-3 mt-4">
-                {{ message.header }}
-            </span>
-            <div class="flex flex-row w-full justify-content-start gap-2 user-confirm mb-3">
-                <i class="pi pi-user icon-span"></i>
-                <span>&nbsp;&nbsp;{{clienteSeleccionado}}</span>
-            </div>
-            <div class="flex flex-row w-full justify-content-center align-items-center gap-2 user-confirm mb-3">
-                <div class="flex flex-row w-full justify-content-start gap-2 user-confirm">
-                    <img src="assets/images/dashboard/money.png" height="25">
-                    <span>{{message.message}}</span>
+        <div class="mr-pop pc-pop">
+            <span class="pc-sello"><img [src]="pathSello" alt="Sello"></span>
+            <span class="mr-pop-titulo">{{ message.header }}</span>
+            <span class="pc-cliente">{{ clienteSeleccionado }}</span>
+
+            <div class="pc-resumen">
+                <div class="pc-fila">
+                    <span class="pc-fila-ico"><i class="pi pi-hashtag"></i></span>
+                    <span class="pc-fila-label">Cuota</span>
+                    <span class="pc-fila-valor">{{ cuotaSeleccionada | twoDigits }}</span>
                 </div>
-                <div class="flex flex-row w-full justify-content-start gap-2 user-confirm">
-                    <i class="pi pi-sort-numeric-up-alt icon-span"></i>
-                    <span>Inversión:</span>
-                    <span>&nbsp;&nbsp;{{nroInversion}}</span>
+                <div class="pc-fila">
+                    <span class="pc-fila-ico"><i class="pi pi-briefcase"></i></span>
+                    <span class="pc-fila-label">Inversión</span>
+                    <span class="pc-fila-valor">#{{ nroInversion }}</span>
+                    <a class="pc-cartilla" href="" (click)="$event.preventDefault(); abrirCartilla(onReject)"
+                        aria-label="Abrir cartilla">
+                        <i class="pi pi-external-link"></i>
+                    </a>
                 </div>
-            </div>
-            <div class="flex flex-row w-full justify-content-center align-items-center gap-2 user-confirm mb-5">
-                <div class="flex flex-row w-8 justify-content-start user-confirm">
-                    <i class="pi pi-money-bill"></i>
-                    <span>&nbsp;&nbsp;Monto: {{currency}} {{valorCuota | formatNumber}}</span>
-                </div>
-                <div class="flex flex-row w-4 justify-content-end user-confirm">
-                    <i [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: IdInversion}"
-                        class="pi pi-window-maximize"></i>
+                <div class="pc-fila">
+                    <span class="pc-fila-ico"><i class="pi pi-money-bill"></i></span>
+                    <span class="pc-fila-label">Monto</span>
+                    <span class="pc-fila-valor pc-monto">{{ currency }} {{ valorCuota | formatNumber }}</span>
                 </div>
             </div>
 
-            <!-- <p class="mb-2 message-confirm">{{ message.message }}</p> -->
-            <div class="flex flex-column">
-                <p-datepicker [(ngModel)]="date" [showIcon]="true" [showOnFocus]="true" [touchUI]="false"
-                    [dateFormat]="'dd/mm/yy'" [showTime]="true" inputId="fecha" />
-            </div>
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                </button>
-                <button pButton label="Pagar" (click)="onAccept()" class="w-8rem">
-                </button>
+            <label class="pc-fecha-label" for="fecha">Fecha y hora del pago</label>
+            <!-- readonlyInput: en el celular no abre el teclado (que cerraba el calendario); el toque abre el calendario -->
+            <p-datepicker [(ngModel)]="date" [showIcon]="true" [showOnFocus]="true" [touchUI]="false"
+                [readonlyInput]="true" [dateFormat]="'dd/mm/yy'" [showTime]="true" inputId="fecha" styleClass="pc-fecha" />
 
+            <div class="pc-btns">
+                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                <button pButton label="Pagar" (click)="onAccept()"></button>
             </div>
         </div>
     </ng-template>
 </p-confirmDialog>
 
 <p-confirmDialog #montorecaudado key="montorecaudado">
-    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept">
+        <div class="mr-pop">
+            <span class="mr-pop-ico"><i class="pi pi-wallet"></i></span>
+            <span class="mr-pop-titulo">{{ message.header }}</span>
+            <span class="mr-pop-desc">{{ message.message }}</span>
 
-            <div class="flex flex-column w-full justify-content-center align-items-center gap-3">
-                <span class=" font-bold text-1xl block">
-                    {{ message.header }}
-                </span>
-                <span class="span-desc">{{ message.message}}</span>
-                <a class="link-cobros-diarios no-underline text-blue-500 cursor-pointer" [routerLink]="['/reporte/reporte-cobranza']">Ver historial de cobros anteriores</a>
-            </div>
-
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
-                </button>
-
-            </div>
+            <button pButton label="Entendido" (click)="onAccept()" class="mr-pop-btn"></button>
         </div>
     </ng-template>
 </p-confirmDialog>
 
 <p-confirmDialog #diario key="diario">
-    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-
-            <div class="flex flex-column w-full justify-content-center align-items-center gap-3">
-                <span class=" font-bold text-1xl block">
-                    {{ message.header }}
-                </span>
-                <span class="span-desc">{{ message.message}}</span>
-            </div>
-
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
-                </button>
-
-            </div>
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept">
+        <div class="mr-pop">
+            <span class="mr-pop-ico"><i class="pi pi-calendar"></i></span>
+            <span class="mr-pop-titulo">{{ message.header }}</span>
+            <span class="mr-pop-desc">{{ message.message }}</span>
+            <button pButton label="Entendido" (click)="onAccept()" class="mr-pop-btn"></button>
         </div>
     </ng-template>
 </p-confirmDialog>
 
 <p-confirmDialog #semanal key="semanal">
-    <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div class="flex flex-column w-full justify-content-center align-items-center gap-3">
-                <span class=" font-bold text-1xl block">
-                    {{ message.header }}
-                </span>
-                <span class="span-desc">{{ message.message}}</span>
-            </div>
-
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cerrar" (click)="onAccept()" class="w-8rem">
-                </button>
-
-            </div>
+    <ng-template pTemplate="headless" let-message let-onAccept="onAccept">
+        <div class="mr-pop">
+            <span class="mr-pop-ico"><i class="pi pi-refresh"></i></span>
+            <span class="mr-pop-titulo">{{ message.header }}</span>
+            <span class="mr-pop-desc">{{ message.message }}</span>
+            <button pButton label="Entendido" (click)="onAccept()" class="mr-pop-btn"></button>
         </div>
     </ng-template>
 </p-confirmDialog>

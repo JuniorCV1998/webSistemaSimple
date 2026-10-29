@@ -1,6 +1,9 @@
 import { ApplicationConfig, importProvidersFrom, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouteReuseStrategy } from '@angular/router';
+import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
 import { routes } from './app.routes';
+import { transicionPagina } from './core/ionic/transiciones';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
@@ -23,6 +26,16 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+
+    /* Ionic: modo "ios" en iPhone/iPad y "md" (Material) en Android. En la web Ionic lo detecta
+       solo (iOS -> ios, resto -> md). El botón atrás de Android lo maneja app.component.ts, por
+       eso se apaga el de Ionic (si no, cada toque retrocedería dos veces). */
+    provideIonicAngular({
+      mode: Capacitor.getPlatform() === 'ios' ? 'ios' : Capacitor.getPlatform() === 'android' ? 'md' : undefined,
+      hardwareBackButton: false,
+      navAnimation: transicionPagina, // misma transición en todas las plataformas (core/ionic/transiciones.ts)
+    }),
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideClientHydration(),
     provideAnimationsAsync(),
     provideHttpClient(
@@ -50,6 +63,24 @@ export const appConfig: ApplicationConfig = {
           colorScheme: 'light',  // fuerza el modo claro
           primary: 'emerald'        // color primario base (puede ser 'indigo', 'emerald', etc.)
         }
+      },
+      // Textos de PrimeNG en español (calendarios: meses, días, "Hoy", "Borrar")
+      translation: {
+        dayNames: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
+        dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
+        dayNamesMin: ['D', 'L', 'M', 'X', 'J', 'V', 'S'],
+        monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
+        monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'set', 'oct', 'nov', 'dic'],
+        firstDayOfWeek: 1,
+        today: 'Hoy',
+        clear: 'Borrar',
+        dateFormat: 'dd/mm/yy',
+        weekHeader: 'Sem',
+        chooseDate: 'Elegir fecha',
+        prevMonth: 'Mes anterior',
+        nextMonth: 'Mes siguiente',
+        prevYear: 'Año anterior',
+        nextYear: 'Año siguiente',
       }
     }),
 

@@ -61,11 +61,11 @@ export class InicioComponent {
     if (decodedToken) {
 
       const codTipoDoc = sessionStorage.getItem('codTipoDoc');
-      if (codTipoDoc === "01" || codTipoDoc === null || codTipoDoc === "" || codTipoDoc === "null") {
+      if (codTipoDoc === "06") {
+        this.nombreUsuario = sessionStorage.getItem('nombreComercial') ?? sessionStorage.getItem('razonSocial') ?? "";
+      } else {
         const fullName = decodedToken.nombre.split(" ");
         this.nombreUsuario = fullName[0];
-      } else if (sessionStorage.getItem('codTipoDoc') === "06") {
-        this.nombreUsuario = sessionStorage.getItem('nombreComercial') ?? sessionStorage.getItem('razonSocial') ?? "";
       }
     }
   }

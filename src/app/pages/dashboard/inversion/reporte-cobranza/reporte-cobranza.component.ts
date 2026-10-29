@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -32,10 +32,12 @@ export default class ReporteCobranzaComponent {
     // Dialog
     dialogVisible = false;
     cobranzaSeleccionada: any[] = [];
+    diaSeleccionado: any = null;
 
     constructor(
         private tempDataService: TempDataService,
         private getInversionService: GetInversionService,
+        private router: Router,
     ) {
         this.currency = this.tempDataService.getConstant('currency') || 'S/';
     }
@@ -45,8 +47,23 @@ export default class ReporteCobranzaComponent {
     }
 
     openDialog(cobrosDelDia: any) {
+        this.diaSeleccionado = cobrosDelDia;
         this.cobranzaSeleccionada = cobrosDelDia.cobranza;
         this.dialogVisible = true;
+    }
+
+    /* Se cierra el modal y se navega cuando terminó su animación de salida,
+       si no el modal (vive en <body>) queda encima de la pantalla siguiente. */
+    abrirCartilla(idInversion: number) {
+        this.dialogVisible = false;
+        setTimeout(() => {
+            this.router.navigate(['/inversion/cartilla'], { queryParams: { idInversion } });
+        }, 200);
+    }
+
+    iniciales(nombre: string): string {
+        const partes = (nombre || '').trim().split(/\s+/).filter(p => p);
+        return ((partes[0]?.[0] || '') + (partes[1]?.[0] || '')).toUpperCase();
     }
 
     getListCobranza() {

@@ -94,6 +94,12 @@ export default class ListaClientesComponent {
     else return ""
   }
 
+  iniciales(persona: any): string {
+    const a = (persona?.nombres || '').trim().charAt(0);
+    const b = (persona?.apellidoPaterno || '').trim().charAt(0);
+    return (a + b).toUpperCase();
+  }
+
   cleanFiltroFunct() {
     this.busqueda = '';
     this.filtrarCliente();

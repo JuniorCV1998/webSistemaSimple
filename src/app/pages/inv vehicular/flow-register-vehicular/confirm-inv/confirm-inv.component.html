@@ -1,147 +1,85 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="flujo fx">
 
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Confirmar inversión</div>
-    </div>
+    <app-flow-steps [pasos]="PASOS_VEHICULAR" [actual]="3" titulo="Revisa y confirma"
+        /> <!-- subtitulo="Verifica que todo esté correcto antes de registrar."  -->
 
-    <!-- DATOS DEL CLIENTE  -->
+    <!-- Hero tipo "saldo" con el degradado del tema -->
+    <section class="fx-hero">
+        <span class="fx-hero-label">Monto por día</span>
+        <span class="fx-hero-monto"><small>{{currency}}</small>{{response.montoDiario | formatNumber}}</span>
+        <span class="fx-pill">Inversión vehicular</span>
 
-    <div class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
-        <div class="flex flex-row w-full gap-2">
-            <div class="flex flex-row w-full">
-                <span class="span-padre">Cliente</span>
+        <div class="fx-accesos">
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-car"></i></span>
+                <span class="fx-acceso-label fx-placa">{{response.placa}}</span>
+            </div>
+            <div class="fx-acceso">
+                <span class="fx-circulo">
+                    <span class="fx-dot" [style.background]="response.color1"></span>
+                    <span class="fx-dot fx-dot-2" [style.background]="response.color2"></span>
+                </span>
+                <span class="fx-acceso-label">Colores</span>
+            </div>
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-sync"></i></span>
+                <span class="fx-acceso-label">{{response.frecuencia | titlecase}}</span>
+            </div>
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-clock"></i></span>
+                <span class="fx-acceso-label">{{response.duracionPago}} meses</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line" [ngClass]="response.idUsuario==null?'':'mb-5'">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Nombre</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-desc">{{response.persona.nombres+' '+response.persona.apellidoPaterno+' '+response.persona.apellidoMaterno}}</span>
-        </div>
-    </div>
-
-    <div *ngIf="response.idUsuario==null">
-        <div *ngIf="response.persona.celular!=''" class="flex flex-row w-full justify-content-center gap-2 container-line">
-            <div class="flex flex-column w-5 gap-1">
-                <span class="span-2">Celular</span>
-            </div>
-            <div class="flex flex-column w-7 gap-1">
-                <span class="span-1">{{formatNumberEspaciado(response.persona.celular)}}</span>
+    <!-- Cliente -->
+    <section class="fx-card">
+        <div class="fx-cliente">
+            <span class="fx-avatar">{{iniciales}}</span>
+            <div class="fx-cliente-text">
+                <span class="fx-nombre">{{nombreCompleto}}</span>
+                <span class="fx-sub">{{response.idUsuario!=null ? 'Cliente registrado' : 'Cliente nuevo'}}</span>
             </div>
         </div>
-    
-        <div class="flex flex-row w-full justify-content-center gap-2 container-line mb-5">
-            <div class="flex flex-column w-5 gap-1">
-                <span class="span-2">Dirección</span>
+        <ng-container *ngIf="response.idUsuario==null">
+            <div *ngIf="response.persona.celular" class="fx-fila">
+                <span class="fx-ico"><i class="pi pi-phone"></i></span>
+                <span class="fx-k">Celular</span>
+                <span class="fx-v">{{formatNumberEspaciado(response.persona.celular)}}</span>
             </div>
-            <div class="flex flex-column w-7 gap-1">
-                <span class="span-desc">{{response.persona.direccion}}</span>
+            <div *ngIf="response.persona.direccion" class="fx-fila">
+                <span class="fx-ico"><i class="pi pi-map-marker"></i></span>
+                <span class="fx-k">Dirección</span>
+                <span class="fx-v">{{response.persona.direccion}}</span>
             </div>
-        </div>
-    </div>
+        </ng-container>
+    </section>
 
-    <!-- DATOS DEL VEHICULO  -->
+    <!-- Periodo de pagos -->
+    <section class="fx-card fx-periodo">
+        <div class="fx-periodo-item">
+            <span class="fx-k">Inicio</span>
+            <span class="fx-fecha">{{response.fechaInicio}}</span>
+        </div>
+        <span class="fx-periodo-flecha"><i class="pi pi-arrow-right"></i></span>
+        <div class="fx-periodo-item fx-derecha">
+            <span class="fx-k">Fin</span>
+            <span class="fx-fecha">{{response.fechaFin}}</span>
+        </div>
+    </section>
 
-    <div class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
-        <div class="flex flex-row w-full gap-2">
-            <div class="flex flex-row w-full">
-                <span class="span-padre">Inversión Vehicular</span>
-            </div>
+    <!-- Descripción -->
+    <section *ngIf="response.descripcion" class="fx-card">
+        <div class="fx-fila">
+            <span class="fx-ico"><i class="pi pi-align-left"></i></span>
+            <span class="fx-k">Descripción</span>
+            <span class="fx-v">{{response.descripcion}}</span>
         </div>
-    </div>
+    </section>
 
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Monto por día</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{currency}} {{response.montoDiario | formatNumber}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Duración de pago</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.duracionPago}} meses</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Frecuencia de pago</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.frecuencia}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Placa de Vehículo</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.placa}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Fecha inicio</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.fechaInicio}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Fecha fin</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.fechaFin}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Descripción</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-desc">{{response.descripcion}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Color principal</span>
-        </div>
-        <div class="flex flex-row justify-content-end w-7 gap-3">
-            <span class="span-2">{{response.color1}}</span>
-             <div class="cuadro-color" [style.backgroundColor]="response.color1"></div>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line mb-8">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Color secundario</span>
-        </div>
-        <div class="flex flex-row justify-content-end w-7 gap-3">
-            <span class="span-2">{{response.color2}}</span>
-            <div class="cuadro-color" [style.backgroundColor]="response.color2"></div>
-        </div>
-    </div>
-
-    <button pButton
-    pRipple label="Confirmar" (click)="registerInvTrue()" class="btn-float"></button>
+    <div style="height: 70px;"></div>
+    <button pButton pRipple label="Confirmar" (click)="registerInvTrue()" class="btn-float"></button>
 
     <app-loading></app-loading>
-    <div>
-        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
-    </div>
+    <!-- Los toasts los muestra el <p-toast> global de navegation (mismo MessageService raíz) -->
 </div>
-

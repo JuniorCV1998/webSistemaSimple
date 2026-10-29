@@ -1,14 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
+import { contenedorScroll, scrollArriba } from '../../../core/ionic/scroll';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
+import { FormsModule } from '@angular/forms';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { catchError, finalize, of } from 'rxjs';
 import { Constantes } from '../../../core/constant/Constantes';
 import { FormatNumberPipe } from '../../../core/pipes/format-number.pipe';
 import { TwoDigitsPipe } from '../../../core/pipes/two-digits.pipe';
 import { InversionVehService } from '../../../core/services/inversion-veh/inversion-veh.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
+import { navegacionActual } from '../../../core/ionic/page-host.component';
 
 interface CronogramaItem {
   nroCuota: number;
@@ -33,7 +37,7 @@ const MESES: Record<string, string> = {
 @Component({
   selector: 'app-cronograma-pago',
   standalone: true,
-  imports: [CommonModule, ButtonModule, SkeletonModule, FormatNumberPipe, TwoDigitsPipe],
+  imports: [CommonModule, ButtonModule, SkeletonModule, FormatNumberPipe, TwoDigitsPipe, FormsModule, ToggleSwitch],
   templateUrl: './cronograma-pago.component.html',
   styleUrl: './cronograma-pago.component.scss'
 })
@@ -58,8 +62,9 @@ export default class CronogramaPagoComponent {
     private router: Router,
     private inversionVehService: InversionVehService,
     private tempDataService: TempDataService,
+    private elRef: ElementRef<HTMLElement>,
   ) {
-    const navigation = this.router.getCurrentNavigation();
+    const navigation = navegacionActual(this.router);
     const state = navigation?.extras?.state as { invDetail?: any };
     if (state?.invDetail) this.invDetail = state.invDetail;
 
@@ -71,17 +76,49 @@ export default class CronogramaPagoComponent {
     this.pathLogo = logoGuardado && logoGuardado !== 'null' ? logoGuardado : 'public/logos/logo_ssimple.png';
   }
 
-  get mostrarMontosAgregados(): boolean {
+  /** Solo el inversor puede ver los totales (monto total y subtotal por mes). */
+  get esInversor(): boolean {
     return this.perfil === Constantes.PERFIL_INV;
   }
 
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    this.mostrarBotonSubir = window.scrollY > 400;
+  /** Interruptor del inversor para ocultar los totales en pantalla y en el PDF
+   *  (ej. para compartir el cronograma con el cliente). El cliente nunca los ve. */
+  incluirTotales: boolean = true;
+
+  get mostrarMontosAgregados(): boolean {
+    return this.esInversor && this.incluirTotales;
+  }
+
+  /** Primera cuota sin pagar: se resalta como "Próxima". */
+  get proximaCuota(): number | null {
+    for (const g of this.grupos) {
+      const item = g.items.find(i => !i.pagado);
+      if (item) return item.nroCuota;
+    }
+    return null;
+  }
+
+  get cuotasPagadas(): number {
+    return this.grupos.reduce((acc, g) => acc + g.items.filter(i => i.pagado).length, 0);
+  }
+
+  /* Con Ionic el scroll lo hace la página (.ion-page), no la ventana. */
+  private scrollCont: HTMLElement | null = null;
+  private readonly onScroll = () => {
+    this.mostrarBotonSubir = (this.scrollCont?.scrollTop ?? 0) > 400;
+  };
+
+  ngAfterViewInit(): void {
+    this.scrollCont = contenedorScroll(this.elRef.nativeElement);
+    this.scrollCont?.addEventListener('scroll', this.onScroll, { passive: true });
+  }
+
+  ngOnDestroy(): void {
+    this.scrollCont?.removeEventListener('scroll', this.onScroll);
   }
 
   irArriba() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollArriba(this.elRef.nativeElement);
   }
 
   ngOnInit(): void {

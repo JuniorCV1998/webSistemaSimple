@@ -7,6 +7,8 @@ export interface RecordatorioWhatsappItem {
     celular: string | null;
     tipoCobro: TipoCobro;
     recordatorioActivo: boolean;
+    /** Si se le envía el comprobante por WhatsApp a este cliente. Por defecto true. */
+    comprobanteActivo: boolean;
 }
 
 export interface EstadoWhatsapp {

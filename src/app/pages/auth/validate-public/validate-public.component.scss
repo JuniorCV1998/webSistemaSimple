@@ -1,3 +1,18 @@
-.name{
-    color: #02ca55;
+/* Estilos de la pantalla: clases globales .au-* (styles.scss) */
+
+/* Prueba gratis (MES_FREE) */
+.vp-regalo {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary-500) 12%, #fff);
+  color: var(--primary-500);
+  font-size: 12.5px;
+  font-weight: 700;
+
+  .pi { font-size: 12px; }
 }

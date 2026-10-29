@@ -13,7 +13,8 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
 import { catchError, finalize, of } from 'rxjs';
-import { NroCelularDirective } from '../../../../components/directives/nro-celular.directive';
+import { CelularPaisComponent } from '../../../../components/resources/celular-pais/celular-pais.component';
+import { COD_PAIS_PERU, celularLimpio, celularParaMostrar, celularValido } from '../../../../core/utils/documento-pais';
 import { SoloNumerosDirective } from '../../../../components/directives/solo-numeros.directive';
 import { Constantes } from '../../../../core/constant/Constantes';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
@@ -27,7 +28,7 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
   selector: 'app-cliente-detail',
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
-    TabMenuModule, FormatNumberPipe, ButtonModule, RouterModule, RouterLink, SkeletonModule, NroCelularDirective,
+    TabMenuModule, FormatNumberPipe, ButtonModule, RouterModule, RouterLink, SkeletonModule, CelularPaisComponent,
     SoloNumerosDirective, InputTextModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './cliente-detail.component.html',
@@ -72,7 +73,25 @@ export default class ClienteDetailComponent {
   editando: boolean = false;
   guardandoDatos: boolean = false;
   passwordFieldType: string = 'password';
-  formEdit = { celular: '', direccion: '', contrasena: '' };
+  formEdit = { celular: '', codPais: COD_PAIS_PERU, direccion: '', contrasena: '' };
+
+  get celularMostrar(): string {
+    return celularParaMostrar(this.clienteData?.persona?.celular, this.clienteData?.persona?.codPais);
+  }
+
+  get nombreCompleto(): string {
+    const p = this.clienteData?.persona || {};
+    return [p.nombres, p.apellidoPaterno, p.apellidoMaterno].filter(Boolean).join(' ');
+  }
+
+  get iniciales(): string {
+    const p = this.clienteData?.persona || {};
+    return [p.nombres, p.apellidoPaterno].filter(Boolean).map((s: string) => s.trim()[0]).join('').toUpperCase();
+  }
+
+  private get codPaisActual(): string {
+    return this.clienteData?.persona?.codPais || COD_PAIS_PERU;
+  }
 
 
   // Mostrar inversiones
@@ -108,7 +127,8 @@ export default class ClienteDetailComponent {
   }
 
   getClienteData() {
-    this.loadingComponent.show();
+    // La primera carga usa el esqueleto; el spinner a pantalla completa queda para las recargas
+    if (!this.isLoading) this.loadingComponent.show();
     this.inversoresService.getClienteDetail(this.idUsuario ?? 0).pipe(
       finalize(() => {
         this.loadingComponent.hide();
@@ -125,6 +145,8 @@ export default class ClienteDetailComponent {
       })
     ).
       subscribe((resp: any) => {
+        // Error ya avisado en catchError: se conservan los datos que había
+        if (!resp) return;
 
         this.clienteData = resp;
 
@@ -184,6 +206,7 @@ export default class ClienteDetailComponent {
   toggleEditar(): void {
     if (!this.editando) {
       this.formEdit.celular = this.clienteData?.persona?.celular || '';
+      this.formEdit.codPais = this.codPaisActual;
       this.formEdit.direccion = this.clienteData?.persona?.direccion || '';
       this.formEdit.contrasena = '';
       this.passwordFieldType = 'password';
@@ -196,8 +219,7 @@ export default class ClienteDetailComponent {
   }
 
   get celularValido(): boolean {
-    const limpio = this.formEdit.celular.replace(/\s+/g, '');
-    return limpio === '' || limpio.length === 9;
+    return celularLimpio(this.formEdit.celular) === '' || celularValido(this.formEdit.celular, this.formEdit.codPais);
   }
 
   get contrasenaValida(): boolean {
@@ -207,7 +229,8 @@ export default class ClienteDetailComponent {
   private hayCambios(): boolean {
     const celularActual = (this.clienteData?.persona?.celular || '').replace(/\s+/g, '');
     const direccionActual = (this.clienteData?.persona?.direccion || '').trim();
-    return this.formEdit.celular.replace(/\s+/g, '') !== celularActual
+    return celularLimpio(this.formEdit.celular) !== celularActual
+      || this.formEdit.codPais !== this.codPaisActual
       || this.formEdit.direccion.trim() !== direccionActual
       || this.formEdit.contrasena !== '';
   }
@@ -219,10 +242,13 @@ export default class ClienteDetailComponent {
   guardarDatos(): void {
     if (!this.puedeGuardar) return;
 
-    const body: { celular?: string; direccion?: string; contrasena?: string } = {};
+    const body: { celular?: string; codPais?: string; direccion?: string; contrasena?: string } = {};
     const celularActual = (this.clienteData?.persona?.celular || '').replace(/\s+/g, '');
-    const celularNuevo = this.formEdit.celular.replace(/\s+/g, '');
-    if (celularNuevo && celularNuevo !== celularActual) body.celular = celularNuevo;
+    const celularNuevo = celularLimpio(this.formEdit.celular);
+    if (celularNuevo && (celularNuevo !== celularActual || this.formEdit.codPais !== this.codPaisActual)) {
+      body.celular = celularNuevo;
+      body.codPais = this.formEdit.codPais;
+    }
 
     const direccionActual = (this.clienteData?.persona?.direccion || '').trim();
     const direccionNueva = this.formEdit.direccion.trim();

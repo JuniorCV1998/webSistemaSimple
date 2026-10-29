@@ -11,7 +11,8 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { ToastModule } from 'primeng/toast';
+import { FlowStepsComponent } from '../../../../components/resources/flow-steps/flow-steps.component';
+import { PASOS_VEHICULAR } from '../../../../core/utils/flujos';
 import { catchError, finalize, of } from 'rxjs';
 import { NroPlacaDirective } from '../../../../components/directives/nro-placa.directive';
 import { Constantes } from '../../../../core/constant/Constantes';
@@ -31,7 +32,7 @@ import { Select } from 'primeng/select';
   standalone: true,
   imports: [CommonModule, TabMenuModule, FormsModule, ButtonModule, InputTextModule,
     DropdownModule, NroPlacaDirective, InputNumberModule, CalendarModule, FloatLabelModule,
-    TextareaModule, ColorPickerModule, LoadingComponent, ToastModule, InputGroupModule, InputGroupAddonModule,
+    TextareaModule, ColorPickerModule, LoadingComponent, FlowStepsComponent, InputGroupModule, InputGroupAddonModule,
     DatePicker, FormatNumberPipe,Select
   ],
   templateUrl: './datos-inversion.component.html',
@@ -39,6 +40,8 @@ import { Select } from 'primeng/select';
 })
 
 export default class DatosInversionComponent {
+
+  readonly PASOS_VEHICULAR = PASOS_VEHICULAR;
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
 

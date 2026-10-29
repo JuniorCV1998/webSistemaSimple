@@ -1,5 +1,6 @@
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { scrollAlFinal } from '../../../../core/ionic/scroll';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -73,6 +74,7 @@ export default class InversionesListComponent {
       private route: ActivatedRoute,
       private loginService: LoginService,
       private viewportScroller: ViewportScroller,
+      private elRef: ElementRef<HTMLElement>,
     ){
       const decodedToken = this.loginService.getDecodedToken();
       if (decodedToken) {
@@ -198,10 +200,8 @@ export default class InversionesListComponent {
 
     scrollToBottom(): void {
       // Esperar a que la vista se haya cargado completamente
-      setTimeout(() => {
-        const scrollHeight = document.documentElement.scrollHeight;
-        this.viewportScroller.scrollToPosition([0, scrollHeight]);
-      }, 0);
+      // Con Ionic el scroll lo hace la página (.ion-page), no la ventana.
+      setTimeout(() => scrollAlFinal(this.elRef.nativeElement), 0);
     }
 
     renderizarTablaData(){

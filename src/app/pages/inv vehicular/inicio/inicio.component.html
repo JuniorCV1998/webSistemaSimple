@@ -1,72 +1,75 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Crédito Vehicular</div>
+<div class="vi">
+
+    <div class="vi-head">
+        <div class="text-2xl label-title">Crédito vehicular</div>
+        <span class="vi-desc">Tus inversiones en vehículos y lo recaudado en cada una.</span>
     </div>
 
-    <div class="flex flex-row w-full justify-content-between mb-5">
-        <span class="text-gray-500 font-medium line-height-3 text-left w-10">Tus inversiones vehiculares</span>
-        <i *ngIf="perfil=='INV'" class="pi pi-plus-circle icon-span w-2 text-center" (click)="selectClient()"></i>
+    <!-- Nueva inversión -->
+    <button *ngIf="perfil=='INV'" type="button" class="vi-nuevo" (click)="selectClient()">
+        <span class="vi-nuevo-ico"><i class="pi pi-car"></i></span>
+        <span class="vi-nuevo-text">
+            <span class="vi-nuevo-titulo">Nueva inversión vehicular</span>
+            <span class="vi-nuevo-desc">Elige al cliente y registra el vehículo</span>
+        </span>
+        <i class="pi pi-plus vi-nuevo-mas"></i>
+    </button>
+
+    <!-- Pendientes / Finalizados / Cerrados -->
+    <div class="vi-segment">
+        <button type="button" [class.active]="estado=='P'" (click)="changeOpen('P')">Pendientes</button>
+        <button type="button" [class.active]="estado=='F'" (click)="changeOpen('F')">Finalizados</button>
+        <button type="button" [class.active]="estado=='C'" (click)="changeOpen('C')">Cerrados</button>
     </div>
 
-    <div class="flex flex-row w-full justify-content-center gap-2 align-items-center" [ngClass]="listInvVehiculares.length==0?'mb-8':'mb-5'">
-        <span class="w-full button-style-none" (click)="changeOpen(true)" [ngClass]="pendiente?'button-style-primary':''">Pendientes</span>
-        <span class="w-full button-style-none" (click)="changeOpen(false)" [ngClass]="!pendiente?'button-style-danger':''">Cerrados</span>
-    </div>
-
-    <ng-template [ngIf]="!isLoading"> <!-- [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: inversion.idInversionVeh}" -->
-        <div *ngFor="let inversion of listInvVehiculares">
-            <div [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: inversion.idInversionVeh}" class="flex flex-row w-full justify-content-center gap-2 mb-3 align-items-center" [ngClass]="pendiente?'custom-banner-1':'custom-banner-2'">
-                <div class="flex flex-column w-2 gap-2">
-                    <div class="flex flex-column justify-content-center align-items-center">
-                        <i class="pi pi-car icon-span"></i>
-                    </div>
-                    <div class="flex flex-row justify-content-center">
-                        <div class="flex w-5 color1" [ngStyle]="{'background-color': inversion.color1}"></div>
-                        <div class="flex w-5 color2" [ngStyle]="{'background-color': inversion.color2}"></div>
-                    </div>
+    <section class="vi-card">
+        <!-- Skeleton -->
+        <ng-container *ngIf="isLoading">
+            <div *ngFor="let item of [].constructor(forSkeleton)" class="vi-item">
+                <p-skeleton shape="circle" size="44px" />
+                <div class="flex flex-column w-full gap-2">
+                    <p-skeleton width="65%" height="1rem" />
+                    <p-skeleton width="40%" height=".8rem" />
                 </div>
-                <div class="flex w-7 flex-column gap-1" [ngClass]="perfil=='INV'?'w-6':'w-10'">
-                    <span class="span-nombre">{{inversion.fullName}}</span>
-                    <span class="span-desc">{{inversion.descripcion}}</span>
-                    <span class="span-fecha">{{inversion.fechaActualizado}}</span>
-                </div>
-                <div *ngIf="perfil=='INV'" class="flex flex-column w-3 align-items-center gap-1">
-                    <span class="span-monto">{{currency}} {{inversion.totalPagado | formatNumber}}</span>
-                    <span class="span-desc">Recaudado</span>
-                </div>
+                <p-skeleton width="64px" height="1rem" />
             </div>
-        </div>
-        <div *ngIf="listInvVehiculares.length==0" class="flex flex-row justify-content-center align-items-center w-full">
-            <span class="w-8 span-empty" *ngIf="pendiente">Aún no tienes inversiones activas. <a *ngIf="perfil=='INV'" (click)="selectClient()">¡Agrega una haciendo clic aquí!</a></span>
-            <span class="w-8 span-empty" *ngIf="!pendiente">Aún no tienes inversiones cerradas.</span>
-        </div>
-    </ng-template>
-    
+        </ng-container>
 
-    <ng-template [ngIf]="isLoading">
-        <div class="flex flex-row w-full" style="min-width: 278px;">
-            <div class="w-full p-2">
-                <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-2 gap-2 row-skeleton">
-                    <p-skeleton class="w-3" height="3rem" />
-                    <div class="flex flex-column justify-content-center w-6 gap-1">
-                        <p-skeleton class="w-full" height="1rem" />
-                        <p-skeleton class="w-8" height="1rem" />
-                    </div>
-                    <div class="flex flex-column justify-content-center align-items-center w-4 gap-1">
-                        <p-skeleton class="w-8" height="1rem" />
-                        <p-skeleton class="w-6" height="1rem" />
-                    </div>
-                </div>
+        <ng-container *ngIf="!isLoading">
+            <button type="button" *ngFor="let inversion of listInvVehiculares" class="vi-item vi-item-btn"
+                [class.vi-item-cerrado]="estado=='C'" [class.vi-item-finalizado]="estado=='F'"
+                [routerLink]="['/vehicular/inversiondetalle']" [queryParams]="{ idInversionVeh: inversion.idInversionVeh }">
+                <span class="vi-ico">
+                    <i class="pi pi-car"></i>
+                    <span *ngIf="estado=='F'" class="vi-check"><i class="pi pi-check"></i></span>
+                    <span class="vi-colores">
+                        <span [ngStyle]="{'background-color': inversion.color1}"></span>
+                        <span [ngStyle]="{'background-color': inversion.color2}"></span>
+                    </span>
+                </span>
+                <span class="vi-item-text">
+                    <span class="vi-nombre">{{inversion.fullName}}</span>
+                    <span class="vi-sub">{{inversion.descripcion}}</span>
+                    <span *ngIf="inversion.fechaActualizado" class="vi-fecha">{{inversion.fechaActualizado}}</span>
+                </span>
+                <span *ngIf="perfil=='INV'" class="vi-derecha">
+                    <span class="vi-monto">{{currency}} {{inversion.totalPagado | formatNumber}}</span>
+                    <span class="vi-monto-label">Recaudado</span>
+                </span>
+            </button>
+
+            <div *ngIf="listInvVehiculares.length==0" class="vi-empty">
+                <i class="pi pi-car"></i>
+                <span *ngIf="estado=='P'">Aún no tienes inversiones activas.</span>
+                <span *ngIf="estado=='F'">Aún no tienes inversiones pagadas por completo.</span>
+                <span *ngIf="estado=='C'">Aún no tienes inversiones cerradas.</span>
             </div>
-        </div>
-    </ng-template>
-    
-    
+        </ng-container>
+    </section>
+
+    <div style="height: 30px;"></div>
+
     <div>
         <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
     </div>
-
 </div>
-
-<!-- label-title-green -- registrada -->

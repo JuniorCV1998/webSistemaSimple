@@ -51,6 +51,33 @@ export class InicioClientComponent {
     this.currency = this.tempDataService.getConstant('currency') || 'S/';
   }
 
+  /* Resumen para el hero: solo préstamos en curso */
+  get enCurso(): any[] {
+    return this.data.filter(i => i.estadoDeuda === 'P');
+  }
+
+  get saldoPendiente(): number {
+    return this.enCurso.reduce((t, i) =>
+      t + (Number(i.nroCuotas) - Number(i.ctasPagadas)) * Number(i.valorCuota || 0), 0);
+  }
+
+  get cuotasTotales(): number {
+    return this.enCurso.reduce((t, i) => t + Number(i.nroCuotas || 0), 0);
+  }
+
+  get cuotasPagadas(): number {
+    return this.enCurso.reduce((t, i) => t + Number(i.ctasPagadas || 0), 0);
+  }
+
+  get porcentajePagado(): number {
+    return this.cuotasTotales ? Math.round(this.cuotasPagadas * 100 / this.cuotasTotales) : 0;
+  }
+
+  avance(inversion: any): number {
+    const total = Number(inversion.nroCuotas) || 0;
+    return total ? Math.round(Number(inversion.ctasPagadas || 0) * 100 / total) : 0;
+  }
+
   ngAfterViewInit() {
     this.getInversionesClient();
     if (this.permisoVehicular) this.getInversionesVehiculares();

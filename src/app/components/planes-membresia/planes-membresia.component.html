@@ -1,0 +1,44 @@
+<div class="pm">
+    <div *ngIf="ajustes?.oferta as oferta" class="pm-oferta">
+        <span class="pm-oferta-ico"><i class="pi pi-bolt"></i></span>
+        <span class="pm-oferta-texto">
+            <b>{{ oferta.texto || 'Oferta especial' }} · {{ oferta.porcentaje }}% dscto.</b>
+            <small>Válido hasta el {{ fechaCorta(oferta.fechaFin) }}</small>
+        </span>
+    </div>
+
+    <div class="pm-lista" role="radiogroup">
+        <button *ngFor="let plan of planes" type="button" class="pm-plan" role="radio"
+            [class.pm-sel]="esSeleccionado(plan)" [class.pm-dest]="plan.destacado"
+            [attr.aria-checked]="esSeleccionado(plan)" (click)="elegir(plan)">
+
+            <span *ngIf="plan.destacado" class="pm-tag"><i class="pi pi-star-fill"></i>Mejor precio</span>
+
+            <span class="pm-fila">
+                <span class="pm-radio"><i class="pi pi-check"></i></span>
+                <span class="pm-nombre">
+                    <b>{{ nombre(plan.meses) }}</b>
+                    <small>S/ {{ soles(porMes(plan)) }} al mes</small>
+                </span>
+                <span class="pm-precio">
+                    <s *ngIf="ahorro(plan) > 0">S/ {{ solesCorto(plan.precioFinal + ahorro(plan)) }}</s>
+                    <b>S/ {{ solesCorto(plan.precioFinal) }}</b>
+                    <small>por {{ duracion(plan.meses) }}</small>
+                </span>
+            </span>
+
+            <span *ngIf="ahorro(plan) > 0 || plan.beneficios.length" class="pm-extra">
+                <span *ngIf="ahorro(plan) > 0" class="pm-ahorro">
+                    <i class="pi pi-arrow-down"></i>Ahorras S/ {{ solesCorto(ahorro(plan)) }}
+                    <ng-container *ngIf="mesesGratis(plan) >= 1"> · {{ mesesGratis(plan) === 1 ? '1 mes gratis' : mesesGratis(plan) + ' meses gratis' }}</ng-container>
+                </span>
+                <span *ngFor="let b of plan.beneficios" class="pm-beneficio"><i class="pi pi-plus-circle"></i>{{ b }}</span>
+            </span>
+        </button>
+    </div>
+
+    <div *ngIf="ajustes?.incluye?.length" class="pm-incluye">
+        <span class="pm-incluye-titulo">Todos los planes incluyen</span>
+        <span *ngFor="let item of ajustes!.incluye" class="pm-item"><i class="pi pi-check-circle"></i>{{ item }}</span>
+    </div>
+</div>

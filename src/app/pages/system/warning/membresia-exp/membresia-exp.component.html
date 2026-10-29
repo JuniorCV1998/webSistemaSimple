@@ -16,7 +16,7 @@
                 styleClass="h-full message-small" />
         </div>
 
-        <div class="text-center">
+        <div *ngIf="puedeRenovar" class="text-center">
             <button pButton pRipple label="Renovar" (click)="dialogRenovar.abrir()" severity="secondary"
                 class="mb-1 shiny-text border-colors label-title"></button>
         </div>

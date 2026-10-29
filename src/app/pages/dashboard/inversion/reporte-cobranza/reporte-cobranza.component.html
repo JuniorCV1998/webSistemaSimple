@@ -1,116 +1,95 @@
-<div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
+<div class="rc">
 
-    <div class="text-center mb-3">
-        <div id="div_line_bootom" class="text-2xl font-medium label-title">
-            Cobros realizados
-        </div>
+    <div class="rc-head">
+        <div class="text-2xl label-title">Cobros realizados</div>
+        <span class="rc-desc">Resumen diario de tus cobros de los últimos 30 días.</span>
     </div>
 
-    <div class="text-center">
-        <div class="valor-txt-detail mb-3 text-gray-500">Resumen diario de los cobros de los últimos 30 días.</div>
-    </div>
-
-    <ng-template [ngIf]="skeletonShow">
-        <div class="flex flex-row w-full" style="min-width: 300px;">
-            <div class="w-full">
-                <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex flex-column mb-2">
-                    <p-skeleton class="w-full" height="3rem" />
-                </div>
+    <!-- Skeleton -->
+    <section *ngIf="skeletonShow" class="rc-card">
+        <div *ngFor="let item of [].constructor(forSkeleton)" class="rc-skel">
+            <p-skeleton shape="circle" size="40px" />
+            <div class="rc-skel-text">
+                <p-skeleton width="55%" height="12px" />
+                <p-skeleton width="35%" height="10px" />
             </div>
+            <p-skeleton width="70px" height="14px" />
         </div>
-    </ng-template>
+    </section>
 
-    <div *ngIf="!skeletonShow && cobrosHistory.length > 0">
-        <div class="flex flex-column justify-content-center">
-
-            <div *ngFor="let cobrosDelDia of cobrosHistory"
-                class="flex flex-column align-items-center custom-banner-detail-body mb-1">
-
-                <div class="flex flex-row justify-content-center align-items-center mb-1 w-full"
-                    (click)="openDialog(cobrosDelDia)">
-
-                    <div class="flex w-1 align-items-center gap-3 p-1">
-                        <i class="pi pi-wallet"></i><!-- <span class="span-body-desc"><b>Monto recaudado</b></span> -->
-                    </div>
-
-                    <div class="flex flex-column align-items-center w-4">
-                        <b><span class="span-body-desc">{{ cobrosDelDia.fecha }}</span></b>
-                    </div>
-
-                    <div class="line-right"></div>
-
-                    <div class="flex flex-column w-3 align-items-center">
-                        <span class="span-body-desc">
-                            {{ cobrosDelDia.cobranza.length }} inv.
-                        </span>
-                    </div>
-
-                    <div class="line-right"></div>
-
-                    <div class="flex flex-column w-4 align-items-center">
-                        <span class="span-body-desc">
-                            <b>{{ currency }} {{ cobrosDelDia.totalMontoCobrado | formatNumber }}</b>
-                        </span>
-                    </div>
-                </div>
-            </div>
+    <!-- Lista por día -->
+    <ng-container *ngIf="!skeletonShow && cobrosHistory.length > 0">
+        <div class="rc-seccion">
+            <span class="rc-seccion-titulo">Por día</span>
+            <span class="rc-count">{{cobrosHistory.length}}</span>
         </div>
-    </div>
 
-    <div *ngIf="cobrosHistory.length == 0 && !skeletonShow">
+        <section class="rc-card">
+            <button type="button" class="rc-item" *ngFor="let cobrosDelDia of cobrosHistory"
+                (click)="openDialog(cobrosDelDia)">
+                <span class="rc-ico"><i class="pi pi-wallet"></i></span>
+                <span class="rc-item-text">
+                    <span class="rc-fecha">{{ cobrosDelDia.fecha }}</span>
+                    <span class="rc-sub">
+                        {{ cobrosDelDia.cobranza.length }}
+                        {{ cobrosDelDia.cobranza.length == 1 ? 'cobro' : 'cobros' }}
+                    </span>
+                </span>
+                <span class="rc-monto">{{ currency }} {{ cobrosDelDia.totalMontoCobrado | formatNumber }}</span>
+                <i class="pi pi-angle-right rc-flecha"></i>
+            </button>
+        </section>
+    </ng-container>
+
+    <div *ngIf="cobrosHistory.length == 0 && !skeletonShow" class="rc-card rc-vacio">
         <app-list-empty-none></app-list-empty-none>
     </div>
+</div>
 
-    <!-- UN SOLO DIALOG -->
-    <p-dialog header="Detalle" [(visible)]="dialogVisible" [modal]="true" [resizable]="false"
-        [style]="{ width: '95vw', maxHeight: '90vh' }" appendTo="body">
-
-        <div class="table-wrapper mb-3">
-
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <!-- <th>Monto</th> -->
-                        <th>Cuota</th>
-                        <th>Cuotas pagadas</th>
-                        <th>Total cobrado</th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr *ngFor="let item of cobranzaSeleccionada">
-                        <td class="text-ellipsis" style="max-width: 150px;">
-                            {{ item.fullName }}
-                        </td>
-                        <!-- <td>
-                            {{ currency }} {{ item.monto | formatNumber }}
-                        </td> -->
-                        <td>
-                            {{ currency }} {{ item.valorCuota | formatNumber }}
-                        </td>
-                        <td>
-                            {{ item.totalRegistros }}
-                        </td>
-                        <td>
-                            {{ currency }} {{ item.totalCobrado | formatNumber }}
-                        </td>
-                        <td *ngIf="item.estadoInversion=='A'"><i class="pi pi-window-maximize"
-                                [routerLink]="['/inversion/cartilla']"
-                                [queryParams]="{ idInversion: item.idInversion }"></i></td>
-                    </tr>
-                </tbody>
-            </table>
-
+<!-- Detalle del día -->
+<p-dialog [(visible)]="dialogVisible" [modal]="true" [resizable]="false" [draggable]="false"
+    [dismissableMask]="true" styleClass="rc-dialog" appendTo="body">
+  <ng-template pTemplate="headless">
+    <div class="rc-det">
+        <div class="rc-det-head">
+            <span class="rc-det-ico"><i class="pi pi-wallet"></i></span>
+            <span class="rc-det-text">
+                <span class="rc-det-titulo">{{ diaSeleccionado?.fecha }}</span>
+                <span class="rc-det-sub">
+                    {{ cobranzaSeleccionada.length }}
+                    {{ cobranzaSeleccionada.length == 1 ? 'cobro' : 'cobros' }}
+                </span>
+            </span>
+            <button type="button" class="rc-det-cerrar" (click)="dialogVisible = false" aria-label="Cerrar">
+                <i class="pi pi-times"></i>
+            </button>
         </div>
 
-        <ng-template pTemplate="footer">
-            <p-button label="Cerrar" (onClick)="dialogVisible = false">
-            </p-button>
-        </ng-template>
+        <div class="rc-det-lista">
+            <div class="rc-det-item" *ngFor="let item of cobranzaSeleccionada">
+                <span class="rc-avatar" [class.rc-avatar-cerrada]="item.estadoInversion != 'A'">
+                    {{ iniciales(item.fullName) }}
+                </span>
+                <span class="rc-item-text">
+                    <span class="rc-nombre">{{ item.fullName }}</span>
+                    <span class="rc-meta">
+                        <span class="rc-pill">{{ item.totalRegistros }}
+                            {{ item.totalRegistros == 1 ? 'cuota' : 'cuotas' }}</span>
+                        <span class="rc-sub">de {{ currency }} {{ item.valorCuota | formatNumber }}</span>
+                    </span>
+                </span>
+                <span class="rc-det-monto">{{ currency }} {{ item.totalCobrado | formatNumber }}</span>
+                <button *ngIf="item.estadoInversion == 'A'" type="button" class="rc-cartilla"
+                    (click)="abrirCartilla(item.idInversion)" aria-label="Abrir cartilla">
+                    <i class="pi pi-external-link"></i>
+                </button>
+            </div>
+        </div>
 
-    </p-dialog>
-
-
-</div>
+        <div class="rc-det-total">
+            <span>Total cobrado</span>
+            <b>{{ currency }} {{ diaSeleccionado?.totalMontoCobrado | formatNumber }}</b>
+        </div>
+    </div>
+  </ng-template>
+</p-dialog>

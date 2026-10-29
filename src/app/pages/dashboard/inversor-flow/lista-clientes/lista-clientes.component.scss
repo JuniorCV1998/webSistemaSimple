@@ -1,40 +1,194 @@
-.span-nombre{
-    font-weight: 700;
-    color: var(--gray-500);
-    font-size: 15px;
-    text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+/* Clientes: estilo fintech mobile light (ver resource/cliente) */
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+
+.lc {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4px 2px 0;
+}
+
+.lc-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.lc-desc {
+  font-size: 13.5px;
+  color: var(--gray-500);
+}
+
+/* Buscador tipo píldora */
+.lc-search {
+  position: relative;
+
+  input {
+    height: 46px;
+    padding-left: 2.6rem;
+    padding-right: 2.6rem;
+    border: none !important;
+    border-radius: 999px !important;
+    background: #fff;
+    box-shadow: $sombra;
+
+    &:focus {
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent), $sombra !important;
+    }
   }
-.span-desc{
-    color: var(--gray-500);
-    font-size: 14px;
-    text-align: left;
-  }
-  .span-empty{
-    color: var(--gray-500);
-    font-size: 14px;
-    text-align: center;
-  }
-  .pi-angle-right{
-    font-size: 18px;
-    color: var(--primary-500);
-  }
-  .pi-search-minus{
-    font-size: 30px;
-    color: var(--gray-500);
-  }
-  .container-cliente{
-    border-bottom: solid 1px var(--gray-200);
-    padding: 10px;
+}
+
+.lc-search-icon,
+.lc-search-clear {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+}
+
+.lc-search-icon {
+  left: 16px;
+  pointer-events: none;
+}
+
+.lc-search-clear {
+  right: 16px;
+  cursor: pointer;
+}
+
+.lc-seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 4px -4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+}
+
+.lc-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--blue-400);
+  background: $blue-soft;
+  border-radius: 999px;
+  padding: 1px 9px;
+}
+
+/* Lista */
+.lc-lista {
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px;
+  box-shadow: $sombra;
+}
+
+.lc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 14px;
+}
+
+.lc-item-btn {
+  position: relative;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s;
+
+  &:active,
+  &:hover {
+    background: color-mix(in srgb, var(--blue-400) 6%, #fff);
   }
 
-  .pi-user-plus{
-    font-size: 20px;
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 66px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
   }
+}
 
-  a{
-    color: var(--blue-500);
-    cursor: pointer;
+.lc-avatar {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+}
+
+.lc-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.lc-nombre {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.lc-celular {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--gray-500);
+
+  .pi {
+    font-size: 11px;
+    color: var(--gray-400);
   }
+}
+
+.lc-chevron {
+  color: var(--gray-400);
+  font-size: 15px;
+}
+
+.lc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px 22px;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--gray-500);
+
+  .pi {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--blue-400);
+    background: $blue-soft;
+  }
+}

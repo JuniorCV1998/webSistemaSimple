@@ -1,80 +1,67 @@
-<div>
-    <div class="auth-card auth-fade-in">
-        <div class="comp_volver">
-            <!-- <a href="/login"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
-            <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i>
-                <p>Volver</p>
-            </a>
+<div class="au auth-fade-in">
+
+    <button type="button" class="au-volver" (click)="volver()"><i class="pi pi-angle-left"></i>Volver</button>
+
+    <section class="au-hero">
+        <div class="au-logo"><img src="public/logos/logo_ssimple.png" alt="Sistema Simple"></div>
+        <h1 class="au-titulo">Crea tu clave</h1>
+        <span class="au-sub">La usarás para ingresar a la app</span>
+        <div class="au-pasos"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+        <span class="au-paso-text">Paso 3 de 4 · Clave</span>
+    </section>
+
+    <section class="au-card">
+        <label for="email1" class="au-label">Correo electrónico</label>
+        <div class="relative w-full">
+            <i class="pi pi-envelope input-icon-left"></i>
+            <input [(ngModel)]="objUser.correo" id="email1" type="email" inputmode="email" autocomplete="off"
+                (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="tucorreo@gmail.com" pInputText
+                class="w-full input-with-icon" (ngModelChange)="objUser.correo = $event.toLowerCase()">
         </div>
-        <div class="text-center mb-5">
-            <img src="public/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
-            <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3">Únete a nosotros</div>
+        <small *ngIf="isWriting" class="au-ayuda">
+            <i class="pi pi-info-circle"></i>Usaremos este correo para enviarte información sobre tu cuenta.
+        </small>
+
+        <label for="password1" class="au-label">Clave de 6 dígitos</label>
+        <div class="relative w-full">
+            <i class="pi pi-lock input-icon-left"></i>
+            <input [(ngModel)]="objUser.contrasena" id="password1" [maxlength]="6" inputmode="numeric" appSoloNumeros
+                (ngModelChange)="isValidPassword = validarContrasena(objUser.contrasena.trim())"
+                [type]="passwordFieldType" placeholder="••••••" (focus)="onFocus(2)" (blur)="onBlur(2)"
+                pInputText class="w-full input-with-icon">
+            <i class="pi input-icon-right" [ngClass]="passwordFieldType === 'password' ? 'pi-eye' : 'pi-eye-slash'"
+                (click)="togglePasswordVisibility(1)"></i>
         </div>
+        <small *ngIf="isWritingP || (!isValidPassword && objUser?.contrasena?.length > 0)" class="au-ayuda"
+            [class.au-error]="!isValidPassword && objUser?.contrasena?.length > 0">
+            <i class="pi pi-info-circle"></i>Debe tener exactamente 6 números.
+        </small>
 
-        <div>
-            <label for="email1" class="block font-medium mb-2">Correo electrónico</label>
-            <div class="relative w-full mb-3">
-                <i class="pi pi-envelope input-icon-left"></i>
-                <input [(ngModel)]="objUser.correo" id="email1" aria-describedby="email-help" type="text" autocomplete="off"
-                    (focus)="onFocus(1)" (blur)="onBlur(1)" placeholder="Dirección de correo electrónico" pInputText
-                    class="w-full input-with-icon" (ngModelChange)="objUser.correo = $event.toLowerCase()">
-            </div>
-            <small *ngIf="isWriting" id="email-help"><br><i class="pi pi-info-circle"></i> Recuerda que este correo será
-                usado para enviarte información respecto a tu cuenta.<br><br></small>
+        <label for="password2" class="au-label">Confirmar clave</label>
+        <div class="relative w-full">
+            <i class="pi pi-lock input-icon-left"></i>
+            <input [(ngModel)]="objUser.contrasena2" id="password2" [type]="passwordFieldType2" [maxlength]="6"
+                inputmode="numeric" appSoloNumeros placeholder="••••••" pInputText class="w-full input-with-icon">
+            <i class="pi input-icon-right" [ngClass]="passwordFieldType2 === 'password' ? 'pi-eye' : 'pi-eye-slash'"
+                (click)="togglePasswordVisibility(2)"></i>
+        </div>
+        <small *ngIf="objUser?.contrasena2?.length === 6 && objUser.contrasena2 !== objUser.contrasena" class="au-ayuda au-error">
+            <i class="pi pi-info-circle"></i>Las claves no coinciden.
+        </small>
 
-            <label for="password1" class="block  font-medium mb-2">Contraseña</label>
-            <div class="relative w-full mb-3">
-                <i class="pi pi-lock input-icon-left"></i>
-                <input [(ngModel)]="objUser.contrasena" id="password1" aria-describedby="pass-help" [maxlength]="6"
-                    appSoloNumeros (ngModelChange)="isValidPassword = validarContrasena(objUser.contrasena.trim())"
-                    [type]="passwordFieldType" placeholder="Contraseña" (focus)="onFocus(2)" (blur)="onBlur(2)"
-                    pInputText class="w-full input-with-icon">
-                <!-- Icono de ojo -->
-                <i id="iconPassword1" class="pi input-icon-right"
-                    [ngClass]="passwordFieldType === 'password' ? 'pi-eye' : 'pi-eye-slash'"
-                    (click)="togglePasswordVisibility(1)">
-                </i>
-            </div>
-            <small *ngIf="isWritingP || (!isValidPassword && objUser?.contrasena?.length > 0)"
-                [style.color]="!isValidPassword && objUser?.contrasena?.length > 0 ? 'red' : 'inherit'"
-                id="pass-help"><i class="pi pi-info-circle"></i> Debe contener exactamente 6 caracteres
-                numéricos.<br><br></small>
+        <label class="au-label">Código único</label>
+        <p-inputOtp [(ngModel)]="codigoUnico" [integerOnly]="true" [length]="6" (input)="onInputChange()" />
+        <span class="au-chip mt-2" [class.au-chip-ok]="codigoUnico.length == 6">
+            <i class="pi" [ngClass]="codigoUnico.length == 6 ? 'pi-check-circle' : 'pi-qrcode'"></i>SS - {{valueShow}}
+        </span>
 
-            <!-- <p-password formControlName="value" [feedback]="true" [toggleMask]="true"/> -->
-            <label for="password2" class="block font-medium mb-2">Confirmar contraseña</label>
-            <div class="relative w-full mb-3">
-                <i class="pi pi-lock input-icon-left"></i>
-                <input [(ngModel)]="objUser.contrasena2" id="password2" [type]="passwordFieldType2" [maxlength]="6"
-                    appSoloNumeros placeholder="Confirmar contraseña" pInputText class="w-full input-with-icon">
-                <!-- Icono de ojo -->
-                <i id="iconPassword1" class="pi input-icon-right"
-                    [ngClass]="passwordFieldType2 === 'password' ? 'pi-eye' : 'pi-eye-slash'"
-                    (click)="togglePasswordVisibility(2)">
-                </i>
-            </div>
-
-            <label ngClass="labelCodUnico" for="codUnico" class="block  font-medium mb-2"><b>Código Único</b></label>
-            <p-inputOtp [(ngModel)]="codigoUnico" [integerOnly]="true" [length]="6" class="w-full mb-2"
-                (input)="onInputChange()" />
-            <small [ngClass]="{
-                'labelCodUnico': codigoUnico.length == 6
-              }" class="codUnico-help">SS - {{valueShow}}</small>
-
-            <!-- <div class="flex align-items-center justify-content-center mb-6">
-                <div class="flex align-items-center">
-                    <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>
-                    <label for="rememberme1">Acuérdate de mí</label>
-                </div>
-                <p-checkbox value="terminos" inputId="ny"/>
-                <label id="terminos_condiciones">He leído y acepto los <a class="terminos_condiciones">términos y condiciones de uso.</a></label>
-            </div> -->
-            <div style="height: 80px;"></div>
-            <button [ngClass]="{ 'btn-disabled': !isFormValid() }" pButton pRipple (click)="validarDatos()"
-                [disabled]="!isFormValid()" class="btn-float">
-                <span pButtonLabel>Continuar</span>
+        <div class="au-acciones au-acciones-una">
+            <button type="button" class="au-btn" (click)="validarDatos()" [disabled]="!isFormValid()">
+                Continuar <i class="pi pi-arrow-right"></i>
             </button>
-
         </div>
-    </div>
-    <app-loading></app-loading>
+    </section>
+
 </div>
+
+<app-loading></app-loading>

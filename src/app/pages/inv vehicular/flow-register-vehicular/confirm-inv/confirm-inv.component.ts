@@ -3,7 +3,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ToastModule } from 'primeng/toast';
+import { FlowStepsComponent } from '../../../../components/resources/flow-steps/flow-steps.component';
+import { PASOS_VEHICULAR } from '../../../../core/utils/flujos';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
@@ -16,11 +17,13 @@ import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 @Component({
   selector: 'app-confirm-inv',
   standalone: true,
-  imports: [LoadingComponent, ToastModule, CommonModule, ButtonModule,FormatNumberPipe],
+  imports: [LoadingComponent, CommonModule, ButtonModule, FormatNumberPipe, FlowStepsComponent],
   templateUrl: './confirm-inv.component.html',
   styleUrl: './confirm-inv.component.scss'
 })
 export default class ConfirmInvComponent {
+
+  readonly PASOS_VEHICULAR = PASOS_VEHICULAR;
 
   @ViewChild(LoadingComponent) loadingComponent!: LoadingComponent;
 
@@ -159,6 +162,16 @@ export default class ConfirmInvComponent {
           sessionStorage.removeItem('lastMessage');
         }, 100); 
       }
+    }
+
+    get nombreCompleto(): string {
+      const p = this.response.persona || {};
+      return [p.nombres, p.apellidoPaterno, p.apellidoMaterno].filter(Boolean).join(' ');
+    }
+
+    get iniciales(): string {
+      const p = this.response.persona || {};
+      return ((p.nombres?.[0] || '') + (p.apellidoPaterno?.[0] || '')).toUpperCase();
     }
 
     formatNumberEspaciado(numero: string): string {

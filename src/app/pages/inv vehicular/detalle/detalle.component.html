@@ -1,182 +1,139 @@
-<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Detalle Vehicular</div>
+<div *ngIf="!isLoading" class="flujo">
+
+    <div class="text-2xl label-title dv-titulo">Detalle vehicular</div>
+
+    <!-- Hero fx: monto principal + acciones en círculos -->
+    <section class="dv-hero">
+        <div class="dv-hero-top">
+            <span class="dv-auto">
+                <i class="pi pi-car"></i>
+                <span *ngIf="invDetail.color1 || invDetail.color2" class="dv-colores">
+                    <span [style.background]="invDetail.color1"></span>
+                    <span [style.background]="invDetail.color2"></span>
+                </span>
+            </span>
+            <span class="dv-hero-text">
+                <span class="dv-nombre">{{invDetail.fullName}}</span>
+                <span *ngIf="invDetail.descripcion" class="dv-desc">{{invDetail.descripcion}}</span>
+            </span>
+            <span *ngIf="invDetail.placaVehiculo" class="dv-placa">{{invDetail.placaVehiculo}}</span>
+        </div>
+
+        <span class="dv-label">{{ perfil=='INV' ? 'Recaudado a la fecha' : 'Monto por día' }}</span>
+        <span class="dv-monto">
+            <small>{{currency}}</small>
+            {{ (perfil=='INV' ? invDetail.totalPagado : invDetail.montoDiario) | formatNumber }}
+        </span>
+        <span class="dv-pill">
+            <i class="pi" [ngClass]="estadoIcono"></i>
+            {{ estadoTexto }} · Cuota {{ invDetail.ultimaCuota | twoDigits }}
+        </span>
+
+        <div class="dv-circulos">
+            <button *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" type="button" class="dv-circulo"
+                [disabled]="registrandoCuota" (click)="agregarCuota()">
+                <span class="dv-circulo-ico"><i class="pi pi-plus"></i></span>
+                <span>Agregar cuota</span>
+            </button>
+            <button type="button" class="dv-circulo" (click)="verCronogramaPago()">
+                <span class="dv-circulo-ico"><i class="pi pi-calendar"></i></span>
+                <span>Cronograma</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Datos -->
+    <div class="dv-seccion">Datos de la inversión</div>
+    <section class="dv-card">
+        <div *ngIf="perfil=='INV'" class="dv-fila">
+            <span class="dv-fila-ico"><i class="pi pi-money-bill"></i></span>
+            <span class="dv-fila-label">Monto por día</span>
+            <span class="dv-fila-valor">{{currency}} {{invDetail.montoDiario | formatNumber}}</span>
+        </div>
+        <div class="dv-fila">
+            <span class="dv-fila-ico"><i class="pi pi-refresh"></i></span>
+            <span class="dv-fila-label">Frecuencia</span>
+            <span class="dv-fila-valor">{{invDetail.frecuencia | titlecase}}</span>
+        </div>
+        <div class="dv-fila">
+            <span class="dv-fila-ico"><i class="pi pi-hourglass"></i></span>
+            <span class="dv-fila-label">Duración</span>
+            <span class="dv-fila-valor">{{invDetail.duracionPago}} meses</span>
+        </div>
+        <div class="dv-fila">
+            <span class="dv-fila-ico"><i class="pi pi-calendar"></i></span>
+            <span class="dv-fila-label">Periodo</span>
+            <span class="dv-fila-valor dv-periodo">
+                {{invDetail.fechaInicio}} <i class="pi pi-arrow-right"></i> {{invDetail.fechaFin}}
+            </span>
+        </div>
+    </section>
+
+    <!-- Pagos -->
+    <div class="dv-seccion">
+        Pagos registrados
+        <span *ngIf="invDetail.body?.length" class="dv-count">{{ invDetail.ultimaCuota }}</span>
     </div>
+    <section class="dv-card">
 
-    <div class="flex flex-row w-full justify-content-center align-items-center gap-2 mb-5">
-        <div class="flex flex-column w-4 gap-2">
-            <div class="flex flex-column justify-content-center align-items-center">
-                <i class="pi pi-car icon-span"></i>
-            </div>
-            <div class="flex flex-row justify-content-center">
-                <div class="flex w-4 color1" [ngStyle]="{'background-color': invDetail.color1}"></div>
-                <div class="flex w-4 color2" [ngStyle]="{'background-color': invDetail.color2}"></div>
-            </div>
+        <div *ngIf="!invDetail.body?.length" class="dv-vacio">
+            <i class="pi pi-inbox"></i>
+            <span>Aún no hay cuotas registradas</span>
         </div>
-        <div class="flex flex-column w-10 gap-1">
-            <span class="span-nombre">{{invDetail.fullName}}</span>
-            <span class="span-desc">{{invDetail.descripcion}}</span>
-        </div>
-    </div>
 
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-2">Frecuencia</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-1">{{invDetail.frecuencia}}</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-2">Monto por día</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-1">{{currency}} {{invDetail.montoDiario | formatNumber}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-2">Placa vehículo</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-1">{{invDetail.placaVehiculo}}</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-2">Duración pago</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-1">{{invDetail.duracionPago}} meses</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line mb-3">
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-2">Fecha inicio</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-1">{{invDetail.fechaInicio}}</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-2">Fecha fin</span>
-        </div>
-        <div class="flex flex-column w-3 gap-1">
-            <span class="span-1">{{invDetail.fechaFin}}</span>
-        </div>
-    </div>
-
-    <div class="flex justify-content-center mb-3">
-        <a class="cronograma-link" (click)="verCronogramaPago()">
-            <i class="pi pi-calendar mr-2"></i>Ver cronograma de pago
-        </a>
-    </div>
-
-    <!-- *************************************************************** -->
-
-    <!-- HEADER -->
-    <div class="flex flex-row gap-1 align-items-center justify-content-center custom-banner-header mb-3">
-        <div *ngIf="perfil=='INV'" class="flex flex-column gap-1 justify-content-center align-items-center" [ngClass]="invDetail.estadoDeuda==='P'?'w-6':'w-6'">
-            <div>
-                <span class="span-body-desc">Recaudado a la fecha</span>
-            </div>
-            <div>
-                <span class="span-1-header">{{currency}} {{invDetail.totalPagado | formatNumber}}</span>
-            </div>
-        </div>
-        <div *ngIf="perfil=='INV'" class="line-right"></div>
-        <div class="flex flex-column w-6 gap-1 justify-content-center" [ngClass]="invDetail.estadoDeuda==='P'?'w-4':'w-6'">
-            <div>
-                <span class="span-body-desc">Cuotas canceladas</span>
-            </div>
-            <div >
-                <span class="span-1-header">{{ invDetail.ultimaCuota | twoDigits }}</span>
-            </div>
-        </div>
-        <div *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" class="line-right"></div>
-        <div *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" class="flex flex-column w-2 justify-content-center align-items-center" >
-            <div class="flex flex-row justify-content-center w-full">
-                <i class="pi pi-plus-circle icon-span" [class.icon-disabled]="registrandoCuota"
-                    (click)="agregarCuota()"></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- BODY SEMANAL -->
-    <ng-template [ngIf]="invDetail.frecuencia==='SEMANAL'">
-        <div *ngFor="let operaciones of invDetail.body; let o = index" class="flex flex-column justify-content-center custom-banner-detail-body-padre mb-3"> <!-- Padre -->
-            <div><span class="span-body-desc paddin-5"><b>{{operaciones.mes}}</b></span></div>
-            <div class="flex flex-column justify-content-center"> <!-- Hijos -->
-                <div *ngFor="let operacion of operaciones.pagosAgrupados; let i = index" class="flex flex-column align-items-center justify-content-center custom-banner-detail-body mb-1" (click)="mostrarDetalle(i, o)">
-                    <div class="flex flex-row justify-content-center align-items-center mb-1 w-full" style="height: 10px;">
-                        <div class="flex flex-column align-items-center w-5">
-                            <span class="span-body-desc">{{operacion.fechaPago}}</span>
-                        </div>
-                        <div class="line-right"></div>
-                        <div class="flex flex-column w-4 gap-1 align-items-center ">
-                            <span class="span-body-desc">Cuota {{ operacion.nroCuota | twoDigits}}</span>
-                        </div>
-                        <div class="line-right"></div>
-                        <div class="flex flex-column w-3 align-items-center" >
-                            <span class="span-body-desc"><b>{{currency}} {{operacion.montoPagado | formatNumber}}</b></span>
-                        </div>
-                    </div>
-                    <div *ngIf="operacion.mostrarDetalle" class="flex flex-column align-items-center w-full gap-2 detalle-cuota">
-                        <div class="flex flex-row justify-content-between w-full gap-1">
-                            <span class="span-body-desc">Fecha de registro</span>
-                            <span class="span-body-desc"><b>{{operacion.fechaCreacion}}</b></span>
-                        </div>
-                        <div class="flex flex-row justify-content-between w-full gap-1">
-                            <span class="span-body-desc">cód. op.</span>
-                            <span class="span-body-desc"><b>SSV-{{operacion.codOperacion}}</b></span>
-                        </div>
-                    </div>
+        <!-- Semanal: agrupado por mes -->
+        <ng-container *ngIf="invDetail.frecuencia==='SEMANAL'">
+            <div *ngFor="let operaciones of invDetail.body; let o = index" class="dv-mes">
+                <div class="dv-mes-head">
+                    <span class="dv-mes-nombre">{{operaciones.mes}}</span>
+                    <span *ngIf="perfil=='INV'" class="dv-mes-total">{{currency}} {{operaciones.montoTotal | formatNumber}}</span>
                 </div>
+                <ng-container *ngFor="let operacion of operaciones.pagosAgrupados; let i = index">
+                    <ng-container *ngTemplateOutlet="filaPago; context: { $implicit: operacion, i: i, o: o }"></ng-container>
+                </ng-container>
             </div>
-            <div *ngIf="perfil=='INV'" class="flex flex-row justify-content-end w-full gap-3 paddin-5">
-                <span class="span-body-desc">Total</span>
-                <span class="span-body-desc" style="margin-right: 5px;"><b>{{currency}} {{operaciones.montoTotal | formatNumber}}</b></span>
-            </div>
-        
-         </div>
-    </ng-template>
+        </ng-container>
 
-    <!-- BODY MENSUAL -->
-    <ng-template [ngIf]="invDetail.frecuencia==='MENSUAL'">
-        <div class="flex flex-column justify-content-center"> <!-- Hijos -->
-            <div *ngFor="let operacion of invDetail.body; let i = index" class="flex flex-column align-items-center justify-content-center custom-banner-detail-body mb-1" (click)="mostrarDetalle(i, 0)">
-                <div class="flex flex-row justify-content-center align-items-center mb-1 w-full" style="height: 10px;">
-                    <div class="flex flex-column align-items-center w-5">
-                        <span class="span-body-desc">{{operacion.fechaPago}}</span>
-                    </div>
-                    <div class="line-right"></div>
-                    <div class="flex flex-column w-4 gap-1 align-items-center ">
-                        <span class="span-body-desc">Cuota {{ operacion.nroCuota | twoDigits}}</span>
-                    </div>
-                    <div class="line-right"></div>
-                    <div class="flex flex-column w-3 align-items-center" >
-                        <span class="span-body-desc"><b>{{currency}} {{operacion.montoPagado | formatNumber}}</b></span>
-                    </div>
-                </div>
-                <div *ngIf="operacion.mostrarDetalle" class="flex flex-column align-items-center w-full gap-2 detalle-cuota">
-                    <div class="flex flex-row justify-content-between w-full gap-1">
-                        <span class="span-body-desc">Fecha de registro</span>
-                        <span class="span-body-desc"><b>{{operacion.fechaCreacion}}</b></span>
-                    </div>
-                    <div class="flex flex-row justify-content-between w-full gap-1">
-                        <span class="span-body-desc">cód. op.</span>
-                        <span class="span-body-desc"><b>SSV-{{operacion.codOperacion}}</b></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ng-template>
+        <!-- Mensual: lista simple -->
+        <ng-container *ngIf="invDetail.frecuencia==='MENSUAL'">
+            <ng-container *ngFor="let operacion of invDetail.body; let i = index">
+                <ng-container *ngTemplateOutlet="filaPago; context: { $implicit: operacion, i: i, o: 0 }"></ng-container>
+            </ng-container>
+        </ng-container>
+    </section>
 
-    <div style="height: 60px;"></div>
+    <button *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'" type="button" class="dv-cerrar"
+        (click)="cerrarInversion()">
+        <i class="pi pi-lock"></i> Cerrar inversión
+    </button>
 
-    <button pButton *ngIf="invDetail.estadoDeuda==='P' && perfil=='INV'"
-        pRipple label="Cerrar inversión" (click)="cerrarInversion()" class="btn-float" severity="danger"></button>
-     
+    <div style="height: 20px;"></div>
 </div>
+
+<!-- Fila de pago (semanal y mensual) -->
+<ng-template #filaPago let-operacion let-i="i" let-o="o">
+    <div class="dv-pago" [class.abierto]="operacion.mostrarDetalle" (click)="mostrarDetalle(i, o)">
+        <div class="dv-pago-fila">
+            <span class="dv-pago-nro"><i class="pi pi-check"></i></span>
+            <div class="dv-pago-info">
+                <span class="dv-pago-titulo">Cuota {{ operacion.nroCuota | twoDigits }}</span>
+                <span class="dv-pago-fecha">{{operacion.fechaPago}}</span>
+            </div>
+            <span class="dv-pago-monto">{{currency}} {{operacion.montoPagado | formatNumber}}</span>
+            <i class="pi pi-angle-down dv-pago-flecha"></i>
+        </div>
+        <div *ngIf="operacion.mostrarDetalle" class="dv-pago-detalle">
+            <div>
+                <span>Fecha de registro</span>
+                <b>{{operacion.fechaCreacion}}</b>
+            </div>
+            <div>
+                <span>Cód. op.</span>
+                <b>SSV-{{operacion.codOperacion}}</b>
+            </div>
+        </div>
+    </div>
+</ng-template>
 
 <div>
     <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
@@ -184,31 +141,17 @@
 
 <p-confirmDialog #close_inv key="close_inv">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                <i class="pi pi-ban"></i>
-            </div>
-            <span class="font-bold mb-3 mt-4 txt-red">
-                {{ message.header }}
+        <div class="ac-pop">
+            <span class="ac-pop-ico ac-pop-ico-rojo"><i class="pi pi-lock"></i></span>
+            <span class="ac-pop-titulo">{{ message.header }}</span>
+            <span class="ac-pop-desc">{{ invDetail.fullName }}</span>
+            <span class="ac-pop-texto">
+                <b>{{ message.message }}</b>
+                Ya no podrás agregar más cuotas de pago a esta inversión.
             </span>
-            <span class="flex flex-column gap-2 mb-3 txt-label">
-                <strong>{{ message.message }}</strong>
-                <span>Con esta acción ya no podra agregar más cuotas de pagos.</span>
-            </span>
-            <div class="flex align-items-center gap-2 mt-4">
-                <button 
-                    pButton 
-                    label="Cancelar" 
-                    (click)="onReject()"
-                    class="p-button-outlined w-8rem ">
-                </button>
-                <button 
-                severity="danger"
-                    pButton 
-                    label="Cerrar" 
-                    (click)="onAccept()"
-                    class=" w-8rem">
-                </button>
+            <div class="ac-pop-btns">
+                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                <button pButton severity="danger" label="Cerrar" (click)="onAccept()"></button>
             </div>
         </div>
     </ng-template>
@@ -216,47 +159,33 @@
 
 <p-confirmDialog #add_cuota key="add_cuota">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                <img src="assets/images/dashboard/money.png" width="110" height="110">
-            </div>
-            <span class="font-bold text-2xl mb-4 mt-4 txt-primary">
-                {{ message.header }}
-            </span>
+        <div class="ac-pop">
+            <span class="ac-pop-ico"><i class="pi pi-plus"></i></span>
+            <span class="ac-pop-titulo">{{ message.header }}</span>
+            <span class="ac-pop-desc">{{ invDetail.fullName }}</span>
 
             <!-- Cuota a agregar: monto y fecha ya vienen completados desde el servicio (próxima cuota) -->
-            <div class="cuota-hero w-full mb-3">
-                <div class="cuota-hero-badge">{{ invDetail.proximoPago?.nroCuota | twoDigits }}</div>
-                <div class="cuota-hero-info">
-                    <span class="cuota-hero-label">Cuota a agregar</span>
-                    <span class="cuota-hero-monto">{{currency}} {{ montoPago | formatNumber }}</span>
-                    <span class="cuota-hero-fecha"><i class="pi pi-calendar mr-1"></i>{{ invDetail.proximoPago?.fechaTexto }}</span>
-                </div>
+            <div class="ac-cuota">
+                <span class="ac-cuota-label">Cuota {{ invDetail.proximoPago?.nroCuota | twoDigits }}</span>
+                <span class="ac-cuota-monto"><small>{{currency}}</small> {{ montoPago | formatNumber }}</span>
+                <span class="ac-cuota-fecha">
+                    <i class="pi pi-calendar"></i> {{ invDetail.proximoPago?.fechaTexto }}
+                </span>
             </div>
 
-            <!-- Siguiente cuota, después de esta (informativo, en una sola línea) -->
-            <div *ngIf="invDetail.siguientePago" class="siguiente-cuota-preview w-full">
-                <i class="pi pi-arrow-circle-right"></i>
-                <span>Siguiente: Cuota {{ invDetail.siguientePago.nroCuota | twoDigits }} · {{ invDetail.siguientePago.fechaTexto }} · {{currency}} {{ invDetail.siguientePago.montoCuota | formatNumber }}</span>
+            <!-- Siguiente cuota, después de esta (informativo) -->
+            <div *ngIf="invDetail.siguientePago" class="ac-siguiente">
+                <span class="ac-siguiente-ico"><i class="pi pi-arrow-right"></i></span>
+                <span class="ac-siguiente-text">
+                    <span class="ac-siguiente-titulo">Después: Cuota {{ invDetail.siguientePago.nroCuota | twoDigits }}</span>
+                    <span class="ac-siguiente-fecha">{{ invDetail.siguientePago.fechaTexto }}</span>
+                </span>
+                <span class="ac-siguiente-monto">{{currency}} {{ invDetail.siguientePago.montoCuota | formatNumber }}</span>
             </div>
 
-            <div class="flex align-items-center gap-2 mt-2">
-                <button 
-                    pButton 
-                    label="Cancelar" 
-                    (click)="onReject()"
-                    class="p-button-outlined w-8rem ">
-                </button>
-                <button 
-                    [ngClass]="{
-                    'btn-disabled': !isFormValid() }"
-                    [disabled]="!isFormValid()"
-                    pButton 
-                    label="Siguiente" 
-                    (click)="onAccept()"
-                    class="w-8rem">
-                </button>
-                
+            <div class="ac-pop-btns">
+                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                <button pButton label="Siguiente" [disabled]="!isFormValid()" (click)="onAccept()"></button>
             </div>
         </div>
     </ng-template>
@@ -265,52 +194,32 @@
 <!-- Confirmar cuota a pagar -->
 <p-confirmDialog #add_cuota_ok key="add_cuota_ok">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-            <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                <i class="pi pi-check-square"></i>
-            </div>
-            <span class="font-bold text-2xl mb-4 mt-4 txt-primary">
-                {{ message.header }}
-            </span>
-            
-            <div class="w-full">
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
-                    <div class="w-6 txt-label mb-2">Número de cuota</div>
-                    <div class="w-6 dataConfirm">
-                        {{ invDetail.proximoPago?.nroCuota | twoDigits}}
-                    </div>
-                </div>
+        <div class="ac-pop">
+            <span class="ac-pop-ico"><i class="pi pi-check"></i></span>
+            <span class="ac-pop-titulo">{{ message.header }}</span>
+            <span class="ac-pop-desc">{{ invDetail.fullName }}</span>
 
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
-                    <div class="w-6 txt-label mb-2">Monto de la cuota</div>
-                    <div class="w-6 dataConfirm">
-                        {{currency}} {{montoPago | formatNumber}}
-                    </div>
+            <div class="ac-resumen">
+                <div class="dv-fila">
+                    <span class="dv-fila-ico"><i class="pi pi-hashtag"></i></span>
+                    <span class="dv-fila-label">Cuota</span>
+                    <span class="dv-fila-valor">{{ invDetail.proximoPago?.nroCuota | twoDigits }}</span>
                 </div>
-    
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
-                    <div class="txt-label w-6 mb-2">Fecha de pago</div>
-                    <div class="w-6 dataConfirm fechas">
-                        {{invDetail.proximoPago?.fechaTexto}}
-                    </div>
+                <div class="dv-fila">
+                    <span class="dv-fila-ico"><i class="pi pi-calendar"></i></span>
+                    <span class="dv-fila-label">Fecha de pago</span>
+                    <span class="dv-fila-valor">{{ invDetail.proximoPago?.fechaTexto }}</span>
                 </div>
-    
+                <div class="dv-fila">
+                    <span class="dv-fila-ico"><i class="pi pi-money-bill"></i></span>
+                    <span class="dv-fila-label">Monto</span>
+                    <span class="dv-fila-valor ac-monto">{{currency}} {{ montoPago | formatNumber }}</span>
+                </div>
             </div>
-    
-            <div class="flex align-items-center gap-2 mt-4">
-                <button 
-                    pButton 
-                    label="Volver" 
-                    (click)="onReject()"
-                    class="p-button-outlined w-8rem ">
-                </button>
-                <button 
-                    pButton 
-                    label="Confirmar" 
-                    (click)="onAccept()"
-                    class="w-8rem">
-                </button>
-                
+
+            <div class="ac-pop-btns">
+                <button pButton label="Volver" (click)="onReject()" class="p-button-outlined"></button>
+                <button pButton label="Confirmar" (click)="onAccept()"></button>
             </div>
         </div>
     </ng-template>

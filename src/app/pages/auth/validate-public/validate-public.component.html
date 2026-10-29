@@ -1,84 +1,85 @@
-<div>
-    <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        <div class="comp_volver">
-            <!-- <a href="/login"><i id="volver-icon" class="pi pi-angle-left"></i><p>Volver</p></a> -->
-            <a (click)="volver()"><i id="volver-icon" class="pi pi-angle-left"></i>
-                <p>Volver</p>
-            </a>
+<div class="au auth-fade-in">
+
+    <button type="button" class="au-volver" (click)="volver()"><i class="pi pi-angle-left"></i>Volver</button>
+
+    <section class="au-hero">
+        <div class="au-logo"><img src="public/logos/logo_ssimple.png" alt="Sistema Simple"></div>
+        <h1 class="au-titulo">Únete a nosotros</h1>
+        <span class="au-sub">Crea tu cuenta en pocos pasos</span>
+        <span *ngIf="textoPrueba" class="vp-regalo"><i class="pi pi-gift"></i>{{ textoPrueba }}</span>
+        <div class="au-pasos">
+            <span class="on"></span>
+            <span [class.on]="documentoVerificado"></span>
+            <span></span>
+            <span></span>
         </div>
-        <div *ngIf="cargando" class="loading-bar"></div>
-        <div class="text-center mb-5">
-            <img src="public/logos/logo_ssimple.png" alt="Image" height="200" style="margin-bottom: 0;" class="mb-0">
-            <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3" (click)="respCodigoUnico()">Únete
-                a nosotros</div>
+        <span class="au-paso-text">Paso {{documentoVerificado ? 2 : 1}} de 4 · {{documentoVerificado ? 'Correo' : 'Documento'}}</span>
+    </section>
+
+    <div *ngIf="cargando" class="loading-bar"></div>
+
+    <!-- PASO 1: DOCUMENTO -->
+    <section *ngIf="!documentoVerificado" class="au-card">
+        <h2 class="au-card-titulo">Tu documento</h2>
+        <p class="au-texto">Ingresa tu tipo y número de documento para buscar tus datos.</p>
+
+        <label class="au-label">Tipo de documento</label>
+        <p-select [options]="tipoDocs" [(ngModel)]="selectedTipoDoc" optionLabel="descripcionAbrev"
+            (onChange)="onTipoDocChange()" placeholder="Selecciona el tipo" class="w-full" />
+
+        <ng-container *ngIf="selectedTipoDoc!=null">
+            <label class="au-label">Número de documento</label>
+            <input [value]="nroDocumento" (input)="onNroDocumentoInput($event)"
+                [attr.inputmode]="reglaDoc?.alfanumerico ? 'text' : 'numeric'" autocapitalize="characters"
+                [attr.maxlength]="reglaDoc?.max" pInputText placeholder="Número de documento" class="w-full" />
+            <small *ngIf="reglaDoc && nroDocumento.length > 0 && !isDocumentoValido()" class="au-ayuda au-error">
+                <i class="pi pi-info-circle"></i>{{ mensajeNroDoc }}
+            </small>
+        </ng-container>
+
+        <p-message *ngIf="showMessage" [severity]="severity" size="small" styleClass="mt-2">{{message}}</p-message>
+
+        <div class="au-acciones au-acciones-una">
+            <button type="button" class="au-btn" (click)="buscarCliente(selectedTipoDoc.codigo, nroDocumento)"
+                [disabled]="!isDocumentoValido() || cargando">
+                Siguiente <i class="pi pi-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- PASO 2: CORREO -->
+    <section *ngIf="documentoVerificado" class="au-card">
+        <span class="au-chip"><i class="pi pi-check-circle"></i>Documento verificado</span>
+
+        <p class="au-texto mt-2">
+            Hola <b>{{cliente.codTipoDoc==='06' ? cliente.razonSocial : cliente.nombres}}</b>, ingresa tu correo y te
+            crearemos tu código único para que disfrutes del sistema.
+        </p>
+
+        <label for="email" class="au-label">Correo electrónico</label>
+        <div class="relative w-full">
+            <i class="pi pi-envelope input-icon-left"></i>
+            <input id="email" type="email" inputmode="email" [(ngModel)]="correo" maxlength="70"
+                (ngModelChange)="correo = $event.toLowerCase(); showMessage = false" pInputText
+                placeholder="ejemplo@gmail.com" class="w-full input-with-icon" />
         </div>
 
-        <div>
+        <p-message *ngIf="showMessage" [severity]="severity" size="small" styleClass="mt-2">{{message}}</p-message>
 
-            <!-- DOCUMENTO Y NUMERO DE DOCUMENTO -->
-            <ng-container *ngIf="!documentoVerificado">
-                <div class="flex flex-column align-items-center gap-2 mx-auto text-center mb-4"
-                    style="max-width: 12rem;">
-                    <span class="block font-medium mb-2">Ingrese su tipo y número de documento</span>
-                    <p-select [options]="tipoDocs" [(ngModel)]="selectedTipoDoc" optionLabel="descripcionAbrev"
-                        (onChange)="onTipoDocChange()" placeholder="Selecciona Tipo de Documento" class="w-full " />
-                    <input appSoloNumeros (ngModelChange)="showMessage=false" *ngIf="selectedTipoDoc!=null"
-                        [(ngModel)]="nroDocumento" pInputText placeholder="Número de Documento" class="w-full" />
-                    <span *ngIf="selectedTipoDoc?.codigo === '01' && nroDocumento.length > 8" class="input-fail">El DNI
-                        ingresado supera los 8 dígitos.</span>
-                    <span *ngIf="selectedTipoDoc?.codigo === '06' && nroDocumento.length > 11" class="input-fail">El RUC
-                        ingresado supera los 11 dígitos.</span>
-                </div>
-                <div class="flex flex-column align-items-center gap-2 mx-auto text-center" style="max-width: 16rem;">
-                    <p-message *ngIf="showMessage" [severity]="severity" size="small">{{message}}</p-message>
-                </div>
-                <div class="flex pt-6 justify-content-end">
-                    <p-button (onClick)="buscarCliente(selectedTipoDoc.codigo, nroDocumento)" label="Siguiente"
-                        icon="pi pi-arrow-right" iconPos="right" [disabled]="!isDocumentoValido() || cargando" [ngClass]="{
-                    'btn-disabled': !isDocumentoValido() }" />
-                </div>
-            </ng-container>
-
-
-            <!-- CORREO DEL USUARIO -->
-            <ng-container *ngIf="documentoVerificado">
-                <div class="flex flex-column align-items-center gap-4 mx-auto text-center">
-                    <div style="max-width: 19rem;">
-                        <span class="text-gray-500 font-medium mb-2">Hola
-                            <span *ngIf="cliente.codTipoDoc==='01'" class="name">{{cliente.nombres}}</span>
-                            <span *ngIf="cliente.codTipoDoc==='06'" class="name">{{cliente.razonSocial}}</span>, ingresa
-                            tu
-                            correo y te crearemos tu código único para que disfrutes del sistema.
-                        </span>
-                    </div>
-                    <div class="flex flex-wrap justify-content-center gap-3" style="max-width: 12rem;">
-                        <!-- <label for="email" class="font-semibold">Correo electrónico</label> -->
-                        <input id="email" [(ngModel)]="correo" maxlength="70" (ngModelChange)="correo = $event.toLowerCase(); showMessage = false"
-                            pInputText placeholder="ejemplo@gmail.com" class="w-full" />
-                    </div>
-                    <div class="flex flex-column align-items-center gap-2 mx-auto text-center"
-                        style="max-width: 16rem;">
-                        <p-message *ngIf="showMessage" [severity]="severity" size="small">{{message}}</p-message>
-                    </div>
-                </div>
-                <div class="flex pt-6 justify-content-between">
-                    <p-button (onClick)="atras();" label="Atrás" severity="secondary" icon="pi pi-arrow-left" />
-                    <p-button (onClick)="validarCorreoExistente(correo)" label="Siguiente" icon="pi pi-arrow-right"
-                        iconPos="right" [disabled]="!isCorreoValido() || cargando" [ngClass]="{
-                    'btn-disabled': !isCorreoValido() }" />
-                </div>
-            </ng-container>
-
-
-            <!-- <button [ngClass]="{
-                'btn-disabled': !isFormValid()
-              }" pButton pRipple label="Continuar" (click)="validarDatos()" [disabled]="!isFormValid()" iconPos="right"
-                icon="pi pi-angle-right" class="w-full"></button> -->
+        <div class="au-acciones">
+            <button type="button" class="au-btn au-btn-sec" (click)="atras()">
+                <i class="pi pi-arrow-left"></i> Atrás
+            </button>
+            <button type="button" class="au-btn" (click)="validarCorreoExistente(correo)"
+                [disabled]="!isCorreoValido() || cargando">
+                Siguiente <i class="pi pi-arrow-right"></i>
+            </button>
         </div>
-    </div>
-    <app-loading></app-loading>
+    </section>
+
 </div>
+
+<app-loading></app-loading>
 
 <div>
     <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
@@ -86,28 +87,24 @@
 
 <p-confirmDialog #codigo_unico key="codigo_unico">
     <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round gap-3"
-            style="max-width: 20rem;">
+        <div class="au-pop">
+            <span class="au-pop-ico">
+                <i class="pi" [ngClass]="data.data?.estado === 'I' ? 'pi-user' : 'pi-check'"></i>
+            </span>
+            <h3 class="au-pop-titulo">{{headerMessage}}</h3>
+            <p class="au-pop-texto" [innerHTML]="bodyMessage"></p>
 
-            <span class="font-bold text-center labelCodUnico" style="font-size: 20px;">{{headerMessage}}</span>
+            <ng-container *ngIf="data.data?.estado === 'A'">
+                <span class="au-pop-texto">Tu código único es</span>
+                <span class="au-pop-codigo">{{data?.data?.codigo}}</span>
+            </ng-container>
 
-            <div class="card flex flex-column align-items-center gap-2 p-2 rounded shadow-md bg-white w-80">
-                <span [innerHTML]="bodyMessage" class="font-semibold text-gray-500">{{bodyMessage}}</span>
-            </div>
-
-            <div *ngIf="data.data?.estado === 'A'" class="card flex flex-column align-items-center gap-2 p-2 rounded shadow-md bg-white w-80">
-                <span class="font-semibold text-gray-500">Tu código único es: <span class="txt-green">{{data?.data?.codigo}}</span> </span>
-            </div>
-
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                </button>
-                <button *ngIf="data.data.estado === 'I'" severity="success" pButton
-                    label="Iniciar sesión" (click)="onAccept()" class=" w-8rem" [routerLink]="['/login']">
-                </button>
-                <button *ngIf="data.data.estado !== 'I'" severity="success" pButton
-                    label="Continuar" (click)="onAccept()" class=" w-8rem" [routerLink]="['/registrar']">
-                </button>
+            <div class="au-acciones">
+                <button type="button" class="au-btn au-btn-sec" (click)="onReject()">Cancelar</button>
+                <button *ngIf="data.data.estado === 'I'" type="button" class="au-btn"
+                    (click)="onAccept(); irALogin()">Iniciar sesión</button>
+                <button *ngIf="data.data.estado !== 'I'" type="button" class="au-btn"
+                    (click)="onAccept(); irARegistro()">Continuar</button>
             </div>
         </div>
     </ng-template>

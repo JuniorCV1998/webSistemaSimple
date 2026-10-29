@@ -1,0 +1,53 @@
+<div class="rc-fondo" (click)="cancelar()">
+    <div class="rc-hoja" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" [attr.aria-label]="titulo">
+        <span class="rc-asa"></span>
+
+        <header class="rc-cab">
+            <span class="rc-titulo">{{ titulo }}</span>
+            <span class="rc-sub">Arrastra para moverla y pellizca o usa el zoom para acomodarla.</span>
+        </header>
+
+        <div class="rc-marco" [class.rc-blanco]="fondoBlanco" [class.rc-moviendo]="moviendo"
+            [style.width.px]="lado" [style.height.px]="lado"
+            (pointerdown)="onPointerDown($event)" (pointermove)="onPointerMove($event)"
+            (pointerup)="onPointerUp($event)" (pointercancel)="onPointerUp($event)" (wheel)="onWheel($event)">
+            <img *ngIf="cargada" [src]="fuente" alt="" draggable="false"
+                [style.width.px]="anchoVisible" [style.height.px]="altoVisible"
+                [style.transform]="'translate(' + x + 'px,' + y + 'px)'">
+            <!-- Guías: tercios al mover y el círculo del sello -->
+            <span class="rc-tercios"></span>
+            <span class="rc-circulo"></span>
+        </div>
+        <span class="rc-nota"><i class="pi pi-circle"></i> El círculo muestra cómo se verá como sello</span>
+
+        <div class="rc-zoom">
+            <button type="button" (click)="zoomPaso(1 / 1.15)" aria-label="Alejar"><i class="pi pi-search-minus"></i></button>
+            <input type="range" min="0" max="100" step="0.5" [value]="zoomPorcentaje" (input)="onZoomSlider($event)"
+                aria-label="Zoom" [style.--avance]="zoomPorcentaje + '%'">
+            <button type="button" (click)="zoomPaso(1.15)" aria-label="Acercar"><i class="pi pi-search-plus"></i></button>
+        </div>
+
+        <div class="rc-herramientas">
+            <button type="button" class="rc-chip" [class.rc-chip-on]="modo === 'ajustar'" (click)="ajustar()">
+                <i class="pi pi-window-minimize"></i> Ajustar
+            </button>
+            <button type="button" class="rc-chip" [class.rc-chip-on]="modo === 'rellenar'" (click)="rellenar()">
+                <i class="pi pi-window-maximize"></i> Rellenar
+            </button>
+            <button type="button" class="rc-chip" (click)="girar()">
+                <i class="pi pi-refresh"></i> Girar
+            </button>
+            <button type="button" class="rc-chip" [class.rc-chip-on]="fondoBlanco" (click)="fondoBlanco = !fondoBlanco">
+                <i class="pi" [ngClass]="fondoBlanco ? 'pi-stop-circle' : 'pi-circle'"></i>
+                {{ fondoBlanco ? 'Fondo blanco' : 'Fondo transparente' }}
+            </button>
+        </div>
+
+        <div class="rc-botones">
+            <button type="button" class="rc-btn rc-btn-sec" (click)="cancelar()" [disabled]="procesando">Cancelar</button>
+            <button type="button" class="rc-btn" (click)="confirmar()" [disabled]="!cargada || procesando">
+                <i class="pi" [ngClass]="procesando ? 'pi-spin pi-spinner' : 'pi-check'"></i> Usar imagen
+            </button>
+        </div>
+    </div>
+</div>

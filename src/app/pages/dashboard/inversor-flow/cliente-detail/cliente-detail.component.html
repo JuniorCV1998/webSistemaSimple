@@ -1,122 +1,121 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="cd">
 
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Datos del Cliente</div>
-    </div>
+    <div class="text-2xl label-title cd-titulo">Datos del cliente</div>
 
-    <!-- Datos Personales -->
-    <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2 justify-content-between align-items-center">
-            <span class="block mb-2">Datos Personales</span>
-            <i *ngIf="!editando" class="pi pi-pencil editar-icon" (click)="toggleEditar()"></i>
-            <i *ngIf="editando" class="pi pi-times editar-icon" (click)="toggleEditar()"></i>
-        </div>
-        <div class="user-header">
-            <div class="user-avatar">
-                <i class='pi pi-user'></i>
+    <!-- Carga inicial: esqueleto con la misma forma de la pantalla (en vez de tarjetas vacías) -->
+    <ng-container *ngIf="isLoading">
+        <section class="cd-card cd-head cd-head-skel">
+            <p-skeleton shape="circle" size="76px" />
+            <p-skeleton width="170px" height="1.25rem" />
+            <p-skeleton width="130px" height="1.7rem" borderRadius="999px" />
+        </section>
+
+        <span class="cd-seccion">Datos personales</span>
+        <section class="cd-card">
+            <div *ngFor="let n of [1,2]" class="cd-fila">
+                <p-skeleton shape="circle" size="36px" />
+                <p-skeleton width="80px" height=".9rem" />
+                <p-skeleton width="100px" height=".9rem" class="ml-auto" />
             </div>
-            <div>
-                <h2 *ngIf="clienteData?.persona?.codTipoDoc==='01' || clienteData?.persona?.codTipoDoc===null"
-                    class="user-name">{{clienteData?.persona?.nombres+' '+clienteData?.persona?.apellidoPaterno+'
-                    '+clienteData?.persona?.apellidoMaterno}}</h2>
-                <h2 *ngIf="clienteData?.persona?.codTipoDoc==='06'" class="user-name">
-                    {{clienteData?.persona?.nombres+' '+clienteData?.persona?.apellidoPaterno+'
-                    '+clienteData?.persona?.apellidoMaterno}}</h2>
-                <!-- <div class="flex flex-row justify-content-start align-items-center gap-2">
-                    <i class="pi pi-id-card icon-span"></i>
-                    <p *ngIf="clienteData?.persona?.codTipoDoc==='01'" class="user-subtitle">DNI •
-                        <strong>{{clienteData?.persona?.nroDocumento}}</strong>
-                    </p>
-                    <p *ngIf="clienteData?.persona?.codTipoDoc===null" class="user-subtitle"><strong>- • -</strong></p>
-                    <p *ngIf="clienteData?.persona?.codTipoDoc==='06'" class="user-subtitle">DNI •
-                        <strong>{{clienteData?.persona?.nroDocumento}}</strong>
-                    </p>
-                </div> -->
+        </section>
 
+        <span class="cd-seccion">Cuenta</span>
+        <section class="cd-card">
+            <div *ngFor="let n of [1,2,3,4]" class="cd-fila">
+                <p-skeleton shape="circle" size="36px" />
+                <p-skeleton width="80px" height=".9rem" />
+                <p-skeleton width="120px" height=".9rem" class="ml-auto" />
             </div>
-        </div>
+        </section>
+    </ng-container>
 
-        <div *ngIf="!editando" class="flex flex-column gap-2 user-info ">
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-phone icon-span-gray"></i>
-                <span
-                    class="text-gray-500 font-medium line-height-3 w-full">{{formatNumberEspaciado(clienteData?.persona?.celular)}}</span>
-            </div>
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-map-marker icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{clienteData.persona.direccion}}</span>
-            </div>
-        </div>
+    <ng-container *ngIf="!isLoading">
 
-        <div *ngIf="editando" class="flex flex-column gap-2 edit-panel">
-            <label class="edit-label">Celular</label>
-            <div class="relative w-full">
-                <i class="pi pi-phone input-icon-left"></i>
-                <input [(ngModel)]="formEdit.celular" [ngModelOptions]="{standalone: true}" appNroCelular
-                    maxlength="11" placeholder="9** *** ***" pInputText class="w-full input-with-icon">
-            </div>
-            <small *ngIf="!celularValido" class="input-fail"><i class="pi pi-info-circle"></i> El celular debe tener
-                9 dígitos.</small>
+    <!-- Cabecera: avatar + nombre -->
+    <section class="cd-card cd-head">
+        <button type="button" class="cd-editar" [class.cd-editar-on]="editando" (click)="toggleEditar()"
+            [attr.aria-label]="editando ? 'Cancelar edición' : 'Editar datos'">
+            <i class="pi" [ngClass]="editando ? 'pi-times' : 'pi-pencil'"></i>
+        </button>
 
-            <label class="edit-label mt-2">Dirección</label>
+        <div class="cd-avatar">{{iniciales}}</div>
+        <h2 class="cd-nombre">{{nombreCompleto}}</h2>
+
+        <span class="cd-chip" [class.cd-chip-off]="!statusActivo">
+            <i class="pi" [ngClass]="statusActivo ? 'pi-check-circle' : 'pi-ban'"></i>
+            {{statusActivo ? 'Acceso activo' : 'Acceso bloqueado'}}
+        </span>
+    </section>
+
+    <!-- Datos personales -->
+    <span class="cd-seccion">Datos personales</span>
+    <section class="cd-card">
+        <ng-container *ngIf="!editando">
+            <div class="cd-fila">
+                <span class="cd-ico"><i class="pi pi-phone"></i></span>
+                <span class="cd-label">Celular</span>
+                <span class="cd-valor">{{celularMostrar || '—'}}</span>
+            </div>
+            <div class="cd-fila">
+                <span class="cd-ico"><i class="pi pi-map-marker"></i></span>
+                <span class="cd-label">Dirección</span>
+                <span class="cd-valor">{{clienteData?.persona?.direccion || '—'}}</span>
+            </div>
+        </ng-container>
+
+        <div *ngIf="editando" class="cd-edit">
+            <label class="cd-edit-label">Celular</label>
+            <app-celular-pais inputId="celular-edit" [(codPais)]="formEdit.codPais" [(celular)]="formEdit.celular" />
+
+            <label class="cd-edit-label mt-2">Dirección</label>
             <div class="relative w-full">
                 <i class="pi pi-map-marker input-icon-left"></i>
                 <input [(ngModel)]="formEdit.direccion" [ngModelOptions]="{standalone: true}"
                     placeholder="Dirección" pInputText class="w-full input-with-icon">
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Datos de la Cuenta -->
-    <div class="user-card mb-2">
-        <div class="flex flex-row w-full mb-2">
-            <span class="block mb-2">Datos de la Cuenta</span>
-        </div>
-
-        <div *ngIf="!editando" class="flex flex-column gap-2 user-info ">
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-at icon-span-gray"></i>
-                <span class="text-gray-500 font-medium line-height-3 w-full">{{clienteData.credenciales.correo}}</span>
+    <!-- Cuenta -->
+    <span class="cd-seccion">Cuenta</span>
+    <section class="cd-card">
+        <ng-container *ngIf="!editando">
+            <div class="cd-fila">
+                <span class="cd-ico"><i class="pi pi-at"></i></span>
+                <span class="cd-label">Correo</span>
+                <span class="cd-valor">{{clienteData?.credenciales?.correo}}</span>
             </div>
-            <div class="flex flex-row justify-content-start align-items-center gap-2">
-                <i class="pi pi-key icon-span-gray"></i>
-                <span
-                    class="text-gray-500 font-medium line-height-3 w-full">{{clienteData.credenciales.contrasena}}</span>
+            <div class="cd-fila">
+                <span class="cd-ico"><i class="pi pi-key"></i></span>
+                <span class="cd-label">Contraseña</span>
+                <span class="cd-valor">{{clienteData?.credenciales?.contrasena}}</span>
             </div>
 
-            <div class="flex flex-row w-full text-center mb-3">
-                <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small"
-                    (onClick)="copyCredentials()" />
-                <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small"
-                    (onClick)="copyCredentials()" />
-            </div>
+            <button type="button" class="cd-copiar" [class.cd-copiado]="copy" (click)="copyCredentials()">
+                <i class="pi" [ngClass]="copy ? 'pi-check' : 'pi-copy'"></i>
+                {{copy ? 'Credenciales copiadas' : 'Copiar credenciales'}}
+            </button>
 
-            <div class="flex flex-row justify-content-between align-items-center gap-2 mb-2">
-                <label class="w-5  text-gray-500 font-medium line-height-3 w-full">Acceso</label>
-                <div class="toggle">
+            <div class="cd-fila">
+                <span class="cd-ico"><i class="pi pi-lock-open"></i></span>
+                <span class="cd-label">Acceso</span>
+                <span class="cd-valor">
                     <input type="checkbox" [checked]="statusActivo" (change)="onToggleChange($event)" id="customToggle"
                         class="toggle-input">
-                    <label for="customToggle" class="toggle-label">
-                        <span class="toggle-handle">
-                            <i class="pi pi-times"></i>
-                        </span>
+                    <label for="customToggle" class="toggle-label" aria-label="Acceso del cliente">
+                        <span class="toggle-handle"></span>
                     </label>
-                </div>
+                </span>
             </div>
-
-            <div class="flex flex-row w-full justify-content-between align-items-center gap-1">
-                <div class="w-6 text-gray-500 font-medium line-height-3">
-                    <i class="pi pi-calendar icon-span-gray"></i>
-                    <label>Registro</label>
-                </div>
-                <span
-                    class="w-6 text-center text-gray-500 font-medium line-height-3 w-full">{{clienteData.fechaRegistro}}</span>
+            <div class="cd-fila">
+                <span class="cd-ico"><i class="pi pi-calendar"></i></span>
+                <span class="cd-label">Registro</span>
+                <span class="cd-valor">{{clienteData?.fechaRegistro}}</span>
             </div>
+        </ng-container>
 
-        </div>
-
-        <div *ngIf="editando" class="flex flex-column gap-2 edit-panel">
-            <label class="edit-label">Nueva contraseña (opcional)</label>
+        <div *ngIf="editando" class="cd-edit">
+            <label class="cd-edit-label">Nueva contraseña (opcional)</label>
             <div class="relative w-full">
                 <i class="pi pi-lock input-icon-left"></i>
                 <input [(ngModel)]="formEdit.contrasena" [ngModelOptions]="{standalone: true}" [type]="passwordFieldType"
@@ -127,123 +126,62 @@
             <small *ngIf="!contrasenaValida" class="input-fail"><i class="pi pi-info-circle"></i> Debe contener
                 exactamente 6 dígitos numéricos.</small>
 
-            <div class="flex flex-row w-full gap-2 mt-3">
-                <p-button class="w-6" label="Cancelar" severity="secondary" outlined="true" styleClass="w-full"
+            <div class="cd-edit-botones">
+                <p-button label="Cancelar" severity="secondary" outlined="true" styleClass="w-full"
                     [disabled]="guardandoDatos" (onClick)="toggleEditar()" />
-                <p-button class="w-6" label="Guardar" icon="pi pi-check" styleClass="w-full"
+                <p-button label="Guardar" icon="pi pi-check" styleClass="w-full"
                     [disabled]="!puedeGuardar" [loading]="guardandoDatos" (onClick)="guardarDatos()" />
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Tabla de los ultimos registros de inversiones -->
-    <div class="table-container">
-        <!-- [ngIf]="!skeletonShow" -->
-        <div class="flex flex-column gap-2 div-monto custom-banner-4">
-            <div class="flex flex-row justify-content-between txt-green w-full">
-                <div class="flex w-8 gap-2 justify-content-start">
-                    <i class="pi pi-list"></i>
-                    <span class="">Inversiones del cliente</span>
+    </ng-container>
+
+    <!-- Inversiones del cliente -->
+    <section class="cd-card cd-inv">
+        <button type="button" class="cd-inv-head" (click)="mostrarRegistros()" [attr.aria-expanded]="mostrarInversiones">
+            <span class="cd-ico"><i class="pi pi-list"></i></span>
+            <span class="cd-inv-titulo">Inversiones del cliente</span>
+            <i class="pi cd-flecha" [ngClass]="mostrarInversiones ? 'pi-angle-up' : 'pi-angle-down'"></i>
+        </button>
+
+        <ng-container *ngIf="mostrarInversiones">
+            <ng-container *ngIf="!skeletonShow">
+                <div *ngFor="let inversion of ultimasInversiones" class="cd-item"
+                    [class.cd-item-fin]="inversion.estadoDeuda !== 'P'">
+                    <div class="cd-item-fila" (click)="inversion.detalle=!inversion.detalle">
+                        <span class="cd-item-num">
+                            <ng-container *ngIf="inversion.estadoDeuda === 'P'; else check">#{{inversion.nroInversion}}</ng-container>
+                            <ng-template #check><i class="pi pi-check"></i></ng-template>
+                        </span>
+                        <span class="cd-item-text">
+                            <b>Inversión #{{inversion.nroInversion}}</b>
+                            <small>{{inversion.nroCuotas}} cuotas · {{currency}} {{inversion.valorCuota | formatNumber}}</small>
+                        </span>
+                        <span class="cd-item-monto">{{currency}} {{inversion.monto | formatNumber}}</span>
+                        <a class="cd-item-ir" [routerLink]="['/inversion/cartilla']"
+                            [queryParams]="{ idInversion: inversion.idInversion}" (click)="$event.stopPropagation()"
+                            aria-label="Ver cartilla">
+                            <i class="pi pi-angle-right"></i>
+                        </a>
+                    </div>
+
+                    <div *ngIf="inversion.detalle" class="cd-item-detalle">
+                        <div><small>Pendientes</small><b>{{inversion.nroCuotas - inversion.ctasPagadas}} cuotas</b></div>
+                        <div><small>Interés</small><b>{{inversion.interes}} %</b></div>
+                        <div><small>Inicio</small><b>{{inversion.fechaInicio}}</b></div>
+                        <div><small>Fin</small><b>{{inversion.fechaFin}}</b></div>
+                    </div>
                 </div>
-                <div class="flex w-2 justify-content-center">
-                    <i (click)="mostrarRegistros()" [class.pi-angle-down]="!mostrarInversiones"
-                        [class.pi-angle-up]="mostrarInversiones" class="pi"></i>
-                </div>
+
+                <p *ngIf="ultimasInversiones.length==0" class="cd-vacio">Sin inversiones registradas.</p>
+            </ng-container>
+
+            <div *ngIf="skeletonShow" class="cd-skeleton">
+                <p-skeleton *ngFor="let item of [].constructor(forSkeleton)" height="3rem" borderRadius="14px" />
             </div>
-            <ng-template [ngIf]="mostrarInversiones">
-                <ng-template [ngIf]="!skeletonShow">
-                    <div class="w-full" *ngIf="ultimasInversiones.length!=0">
-                        <table class="w-full">
-                            <tbody>
-                                <div class="flex flex-row w-full mb-3" *ngFor="let inversion of ultimasInversiones"
-                                    [ngClass]="inversion.estadoDeuda === 'P' ? 'custom-banner-active' : 'custom-banner-passive'">
-                                    <div class="flex flex-column w-full">
-                                        <div class="flex flex-row w-11">
-                                            <div class="flex flex-column w-full gap-1"
-                                                (click)="inversion.detalle=!inversion.detalle">
-                                                <div class="flex flex-row w-full gap-5 mb-1">
-                                                    <span class="w-2"
-                                                        [ngClass]="inversion.estadoDeuda === 'P' ? 'span-nro-inv' : 'span-nro-inv-culm'">
-                                                        #{{inversion.nroInversion}}</span>
-                                                    <span class="span-cuotas w-4"><b>{{inversion.nroCuotas}}</b>
-                                                        cuotas</span>
-                                                    <span class="span-monto w-6">{{currency}} {{inversion.monto |
-                                                        formatNumber}}</span>
-                                                </div>
-                                                <div *ngIf="inversion.detalle">
-                                                    <div class="linea-bottom mb-1"></div>
-                                                    <div class="flex flex-row w-full gap-2 mb-1">
-                                                        <!--  -->
-                                                        <div class="flex flex-column w-6">
-                                                            <div class="flex flex-column gap-1">
-                                                                <span class="span-cuotas"><b>Pendiente</b></span>
-                                                                <span class="span-cuotas">{{inversion.nroCuotas -
-                                                                    inversion.ctasPagadas}}
-                                                                    cuotas</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex flex-column w-6 gap-1">
-                                                            <span class="span-cuotas"><b>De</b></span>
-                                                            <span class="span-cuotas">{{currency}}
-                                                                {{inversion.valorCuota |
-                                                                formatNumber}}</span>
-                                                        </div>
-                                                        <div class="flex flex-column w-6">
-                                                            <div class="flex flex-column gap-1">
-                                                                <span class="span-cuotas"><b>Interes</b></span>
-                                                                <span class="span-cuotas">{{inversion.interes}}
-                                                                    %</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="linea-bottom mb-1"></div>
-                                                    <div class="flex flex-row w-full gap-2">
-                                                        <div class="flex flex-column w-6 gap-1">
-                                                            <span class="span-cuotas"><b>Fecha inicio</b></span>
-                                                            <span class="span-cuotas">{{inversion.fechaInicio}}</span>
-                                                        </div>
-                                                        <div class="flex flex-column w-6 gap-1">
-                                                            <span class="span-cuotas"><b>Fecha fin</b></span>
-                                                            <span class="span-cuotas">{{inversion.fechaFin}}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="flex flex-column w-1 justify-content-center align-items-center">
-                                        <i class="pi pi-window-maximize"
-                                            [ngClass]="inversion.estadoDeuda === 'P' ? 'pi-inv-off' : 'pi-inv-on'"
-                                            [routerLink]="['/inversion/cartilla']"
-                                            [queryParams]="{ idInversion: inversion.idInversion}"></i>
-                                    </div>
-                                </div>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div *ngIf="ultimasInversiones.length==0"
-                        class="flex flex-row justify-content-center align-items-center w-full">
-                        <span class="span-empty">Sin inversiones registradas.</span>
-                    </div>
-                </ng-template>
-
-                <ng-template [ngIf]="skeletonShow">
-                    <div class="flex flex-row w-full" style="min-width: 278px;">
-                        <div class="w-full p-2">
-                            <div *ngFor="let item of [].constructor(forSkeleton); let i = index"
-                                class="flex w-full mb-1 gap-2 row-skeleton">
-                                <p-skeleton class="w-12 mb-1" height="2rem" />
-                            </div>
-                        </div>
-                    </div>
-                </ng-template>
-            </ng-template>
-
-
-        </div>
-    </div>
-
+        </ng-container>
+    </section>
 
     <div style="height: 70px;"></div>
     <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>

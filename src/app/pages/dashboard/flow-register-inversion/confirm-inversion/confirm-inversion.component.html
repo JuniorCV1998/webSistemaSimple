@@ -1,130 +1,102 @@
-<div *ngIf="!isLoading" class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div *ngIf="!isLoading" class="flujo fx">
 
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Confirmar inversión</div>
-    </div>
+    <app-flow-steps [pasos]="PASOS_PRESTAMO" [actual]="3" titulo="Revisa y confirma"
+         /> <!-- subtitulo="Verifica que todo esté correcto antes de registrar el préstamo." -->
 
-    <!-- DATOS DEL CLIENTE  -->
+    <!-- Hero tipo "saldo" con el degradado del tema -->
+    <section class="fx-hero">
+        <span class="fx-hero-label">Monto a prestar</span>
+        <span class="fx-hero-monto"><small>{{currency}}</small>{{response.monto | formatNumber}}</span>
+        <span *ngIf="validado" class="fx-pill"><i class="pi pi-check-circle"></i> Datos validados</span>
+        <span *ngIf="!validado" class="fx-pill">Préstamo</span>
 
-    <div class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
-        <div class="flex flex-row w-full gap-2">
-            <div class="flex flex-row w-full">
-                <span class="span-padre">Cliente</span>
+        <div class="fx-accesos">
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-money-bill"></i></span>
+                <span class="fx-acceso-label">{{currency}} {{response.valorCuota | formatNumber}}</span>
+                <span class="fx-acceso-cap">{{etiquetaCuota}}</span>
+            </div>
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-list"></i></span>
+                <span class="fx-acceso-label">{{response.nroCuotas}}</span>
+                <span class="fx-acceso-cap">Cuotas</span>
+            </div>
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-wallet"></i></span>
+                <span class="fx-acceso-label">{{currency}} {{totalACobrar | formatNumber}}</span>
+                <span class="fx-acceso-cap">Total a cobrar</span>
+            </div>
+            <div class="fx-acceso">
+                <span class="fx-circulo"><i class="pi pi-chart-line"></i></span>
+                <span class="fx-acceso-label">{{currency}} {{ganancia | formatNumber}}</span>
+                <span class="fx-acceso-cap">Ganancia</span>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line" [ngClass]="response.fkUsuario==null?'':'mb-5'">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Nombre</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-desc">{{response.nombres+' '+response.apellidoPaterno+' '+response.apellidoMaterno}}</span>
-        </div>
-    </div>
-
-    <div *ngIf="response.fkUsuario==null">
-        <div *ngIf="response.celular!=''" class="flex flex-row w-full justify-content-center gap-2 container-line">
-            <div class="flex flex-column w-5 gap-1">
-                <span class="span-2">Celular</span>
-            </div>
-            <div class="flex flex-column w-7 gap-1">
-                <span class="span-1">{{formatNumberEspaciado(response.celular)}}</span>
+    <!-- Cliente -->
+    <section class="fx-card">
+        <div class="fx-cliente">
+            <span class="fx-avatar">{{iniciales}}</span>
+            <div class="fx-cliente-text">
+                <span class="fx-nombre">{{response.nombres+' '+response.apellidoPaterno+' '+response.apellidoMaterno}}</span>
+                <span class="fx-sub">{{response.fkUsuario!=null ? 'Cliente registrado' : 'Cliente nuevo'}}</span>
             </div>
         </div>
-    
-        <div class="flex flex-row w-full justify-content-center gap-2 container-line mb-5">
-            <div class="flex flex-column w-5 gap-1">
-                <span class="span-2">Dirección</span>
+        <ng-container *ngIf="response.fkUsuario==null">
+            <div *ngIf="persona.codTipoDoc && persona.nroDocumento" class="fx-fila">
+                <span class="fx-ico"><i class="pi pi-id-card"></i></span>
+                <span class="fx-k">{{etiquetaDoc}}</span>
+                <span class="fx-v">{{persona.nroDocumento}}</span>
             </div>
-            <div class="flex flex-column w-7 gap-1">
-                <span class="span-desc">{{response.direccion}}</span>
+            <div *ngIf="response.celular" class="fx-fila">
+                <span class="fx-ico"><i class="pi pi-phone"></i></span>
+                <span class="fx-k">Celular</span>
+                <span class="fx-v">{{celularMostrar}}</span>
             </div>
-        </div>
-    </div>
-
-    <!-- DATOS DEL PRESTAMO  -->
-
-    <div class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
-        <div class="flex flex-row w-full gap-2">
-            <div class="flex flex-row w-full">
-                <span class="span-padre">Inversión</span>
+            <div *ngIf="response.direccion" class="fx-fila">
+                <span class="fx-ico"><i class="pi pi-map-marker"></i></span>
+                <span class="fx-k">Dirección</span>
+                <span class="fx-v">{{response.direccion}}</span>
             </div>
-        </div>
-    </div>
+        </ng-container>
+    </section>
 
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Monto a invertir</span>
+    <!-- Condiciones -->
+    <section class="fx-card">
+        <div class="fx-fila">
+            <span class="fx-ico"><i class="pi pi-percentage"></i></span>
+            <span class="fx-k">Interés</span>
+            <span class="fx-v">{{response.interes}} %</span>
         </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{currency}} {{response.monto | formatNumber}}</span>
+        <div class="fx-fila">
+            <span class="fx-ico"><i class="pi pi-sliders-h"></i></span>
+            <span class="fx-k">Tipo de interés</span>
+            <span class="fx-v"><span class="fx-chip">{{tipoInteresTexto}}</span></span>
         </div>
-    </div>
+        <div *ngIf="response.comentario" class="fx-fila">
+            <span class="fx-ico"><i class="pi pi-comment"></i></span>
+            <span class="fx-k">Comentario</span>
+            <span class="fx-v fx-comentario">{{response.comentario}}</span>
+        </div>
+    </section>
 
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Número de cuotas</span>
+    <!-- Periodo de cuotas -->
+    <section class="fx-card fx-periodo">
+        <div class="fx-periodo-item">
+            <span class="fx-k">Primera cuota</span>
+            <span class="fx-fecha">{{response.fechaInicio}}</span>
         </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.nroCuotas}}</span>
+        <span class="fx-periodo-flecha"><i class="pi pi-arrow-right"></i></span>
+        <div class="fx-periodo-item fx-derecha">
+            <span class="fx-k">Última cuota</span>
+            <span class="fx-fecha">{{response.fechaFin}}</span>
         </div>
-    </div>
+    </section>
 
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Interés</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.interes}} %</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-between gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Valor de cuota</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{currency}} {{response.valorCuota | formatNumber}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Fecha inicio</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.fechaInicio}}</span>
-        </div>
-    </div>
-
-    <div class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Fecha fin</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-1">{{response.fechaFin}}</span>
-        </div>
-    </div>
-
-    <div *ngIf="response.comentario!==''" class="flex flex-row w-full justify-content-center gap-2 container-line">
-        <div class="flex flex-column w-5 gap-1">
-            <span class="span-2">Comentario</span>
-        </div>
-        <div class="flex flex-column w-7 gap-1">
-            <span class="span-desc">{{response.comentario}}</span>
-        </div>
-    </div>
-
-    <div style="height: 60px;"></div>
-
-    <button pButton
-    pRipple label="Confirmar" (click)="generateRequestService(true)" class="btn-float"></button>
-
+    <div style="height: 70px;"></div>
+    <button pButton pRipple label="Confirmar préstamo" (click)="generateRequestService(true)"
+        class="btn-float"></button>
 </div>
 
 <app-loading></app-loading>
-    <div>
-        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
-    </div>
-

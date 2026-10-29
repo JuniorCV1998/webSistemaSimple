@@ -45,6 +45,23 @@ export default class DetalleComponent {
      antes de que invDetail.proximoPago se refresque con el pago recién insertado. */
   registrandoCuota: boolean = false;
 
+  /* estadoDeuda: P = Pendiente, F = Finalizado (pagó todas sus cuotas, lo asigna el backend),
+     C = Cerrado (cierre manual del inversor). Una 'P' sin próxima cuota es una inversión antigua
+     ya pagada que el backend no marcó como 'F': se muestra igual que 'F'. */
+  get estadoTexto(): string {
+    const e = this.invDetail?.estadoDeuda;
+    if (e === 'C') return 'Cerrada';
+    if (e === 'F' || !this.invDetail?.proximoPago) return 'Pagado';
+    return 'En curso';
+  }
+
+  get estadoIcono(): string {
+    const e = this.invDetail?.estadoDeuda;
+    if (e === 'C') return 'pi-lock';
+    if (e === 'F' || !this.invDetail?.proximoPago) return 'pi-check-circle';
+    return 'pi-clock';
+  }
+
   currency: string | null = null;
   
   constructor(
@@ -162,23 +179,42 @@ confirmCerrarInv(): Promise<boolean> {
 
   agregarCuota(){
     if (this.registrandoCuota) return; // ya hay un registro de cuota en curso: ignorar el tap repetido
+    // Sin próxima cuota el backend ya no tiene nada que cobrar (cronograma completo): no abrir el modal vacío
+    if (!this.invDetail?.proximoPago) {
+        this.messageService.add({
+            severity: 'info', summary: 'Cronograma completo',
+            detail: 'Ya se registraron todas las cuotas. Puedes cerrar la inversión.', life: 3500
+        });
+        return;
+    }
     this.registrandoCuota = true;
 
     const proximo = this.invDetail?.proximoPago;
     this.montoPago = proximo?.montoCuota ?? null;
     this.fechaPago = proximo?.fecha ? this.parseFecha(proximo.fecha) : new Date();
+    this.pasoAgregarCuota();
+  }
+
+  /** Paso 1 "Agregar cuota" -> paso 2 "Confirmar pago". "Volver" en el paso 2 regresa al paso 1;
+   *  "Cancelar" en el paso 1 termina el flujo. El setTimeout deja que el confirm anterior
+   *  termine de cerrarse antes de abrir el siguiente (comparten ConfirmationService). */
+  private pasoAgregarCuota() {
     this.modalCuota().then((result) => {
-        if(result){
-            this.confirmCuota().then((confirm) => {
-                if(confirm){
-                    /* Servicio de insertar pago */
-                    this.insertPayService();
-                } else {
-                    this.registrandoCuota = false; // canceló la confirmación: liberar
-                }
-            });
-        } else {
+        if (!result) {
             this.registrandoCuota = false; // canceló el primer modal: liberar
+            return;
+        }
+        setTimeout(() => this.pasoConfirmarCuota());
+    });
+  }
+
+  private pasoConfirmarCuota() {
+    this.confirmCuota().then((confirm) => {
+        if (confirm) {
+            /* Servicio de insertar pago */
+            this.insertPayService();
+        } else {
+            setTimeout(() => this.pasoAgregarCuota()); // "Volver": regresar al primer modal
         }
     });
   }

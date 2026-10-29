@@ -1,20 +1,30 @@
-<p-confirmDialog [visible]="visible" [closable]="false" styleClass="renovar-dialog">
+<p-confirmDialog [visible]="visible" [closable]="false">
     <ng-template pTemplate="headless">
-        <div class="flex flex-column align-items-center p-5 surface-overlay border-round w-20rem">
-            <h3 class="titulo">Renovar Membresía</h3>
-            <p>Seleccione una opción</p>
-
-            <div class="flex flex-column gap-3 w-full mt-3">
-                <button *ngFor="let opcion of opciones" pButton [label]="opcion.label + ' - S/' + opcion.precio"
-                    (click)="seleccionar(opcion)" [class.selected]="opcionSeleccionada === opcion"
-                    class="plan-btn w-full"></button>
+        <div class="rm-pop">
+            <div class="rm-cabecera">
+                <span class="rm-ico"><i class="pi pi-star-fill"></i></span>
+                <h3 class="rm-titulo">Elige tu plan</h3>
+                <p class="rm-sub">Mientras más tiempo, más ahorras.</p>
             </div>
 
+            <div class="rm-cuerpo">
+                <app-planes-membresia *ngIf="ajustes; else cargando" [ajustes]="ajustes"
+                    [(seleccionado)]="seleccionado"></app-planes-membresia>
+                <ng-template #cargando>
+                    <div class="rm-cargando"><i class="pi pi-spin pi-spinner"></i></div>
+                </ng-template>
+            </div>
 
-            <div class="flex align-items-center gap-2 mt-4">
-                <button pButton label="Cancelar" (click)="cerrar()" class="p-button-outlined w-8rem"></button>
-                <button pButton label="Solicitar" icon="pi pi-whatsapp" severity="success"
-                    [disabled]="!opcionSeleccionada" (click)="confirmar()" class="w-8rem"></button>
+            <div class="rm-pie">
+                <div class="rm-botones">
+                    <button type="button" class="rm-btn rm-btn-sec" (click)="cerrar()">Ahora no</button>
+                    <button type="button" class="rm-btn rm-btn-wa" [disabled]="!seleccionado" (click)="confirmar()">
+                        <i class="pi pi-whatsapp"></i>Solicitar
+                    </button>
+                </div>
+                <small *ngIf="ajustes?.contacto?.horario" class="rm-horario">
+                    <i class="pi pi-clock"></i>Te atendemos {{ ajustes!.contacto.horario }}
+                </small>
             </div>
         </div>
     </ng-template>

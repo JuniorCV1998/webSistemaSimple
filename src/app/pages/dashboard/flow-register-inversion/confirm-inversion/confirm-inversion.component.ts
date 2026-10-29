@@ -3,9 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { LoadingComponent } from '../../../modal/loading/loading.component';
 import { GetInversionService } from '../../../../core/services/inversion/get-inversion.service';
@@ -15,12 +13,16 @@ import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop
 import { DialogService } from 'primeng/dynamicdialog';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
+import { COD_PAIS_PERU, celularLimpio, celularParaMostrar, etiquetaDocumento } from '../../../../core/utils/documento-pais';
+import { TIPO_INTERES } from '../../../../core/utils/tipo-interes';
+import { FlowStepsComponent } from '../../../../components/resources/flow-steps/flow-steps.component';
+import { PASOS_PRESTAMO } from '../../../../core/utils/flujos';
 
 @Component({
   selector: 'app-confirm-inversion',
   standalone: true,
-  imports: [InputTextModule, FloatLabelModule, InputTextModule, FormsModule, CommonModule, ButtonModule,
-    ToastModule, LoadingComponent, FormatNumberPipe],
+  imports: [InputTextModule, FormsModule, CommonModule, ButtonModule, LoadingComponent, FormatNumberPipe,
+    FlowStepsComponent],
   templateUrl: './confirm-inversion.component.html',
   styleUrl: './confirm-inversion.component.scss'
 })
@@ -110,13 +112,17 @@ export default class ConfirmInversionComponent {
       monto: this.objNuevaInv.monto,
       nroCuotas: this.objNuevaInv.nroCuotas,
       interes: this.objNuevaInv.interes,
+      tipoInteres: this.objNuevaInv.tipoInteres || TIPO_INTERES.SIMPLE,
       //comentario
       comentario: this.objNuevaInv.comentario,
-      // objeto cliente
+      // objeto cliente (documento opcional)
+      codTipoDoc: this.persona.idUsuario || !this.persona.nroDocumento ? null : this.persona.codTipoDoc,
+      nroDocumento: this.persona.idUsuario || !this.persona.codTipoDoc ? null : (this.persona.nroDocumento || null),
       nombres: this.persona.idUsuario ? null : this.persona.nombres,
       apellidoPaterno: this.persona.idUsuario ? null : this.persona.apellidoPaterno,
       apellidoMaterno: this.persona.idUsuario ? null : this.persona.apellidoMaterno,
-      celular: this.persona.idUsuario ? null : this.persona.celular.replace(/ /g, ""),
+      celular: this.persona.idUsuario ? null : celularLimpio(this.persona.celular),
+      codPais: this.persona.idUsuario ? null : (this.persona.codPais || COD_PAIS_PERU),
       direccion: this.persona.idUsuario ? null : this.persona.direccion,
       fechaInicio: this.objNuevaInv.fechaInicio,
       fechaFin: this.objNuevaInv.fechaFin,
@@ -187,14 +193,8 @@ export default class ConfirmInversionComponent {
         this.router.navigate(['registrar/inversiondetalle'], { queryParams: { "idInversion": resp.data } })
       } else if (resp.codigo === Constantes.CODIGO_STATUS_202) {
         this.response = resp.data;
-        const messageData = {
-          severity: 'success',
-          summary: '¡DATOS VALIDADOS!',
-          detail: resp.descripcion,
-          life: 3000
-        };
-
-        this.messageService.add(messageData);
+        // Se muestra dentro de la página (antes era un toast que tapaba el encabezado)
+        this.validado = true;
       }
     });
   }
@@ -238,6 +238,41 @@ export default class ConfirmInversionComponent {
 
   formatNumberEspaciado(numero: string): string {
     return numero.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  readonly PASOS_PRESTAMO = PASOS_PRESTAMO;
+  validado = false;
+
+  get etiquetaCuota(): string {
+    return this.objNuevaInv?.codigo === 'S' ? 'Cuota semanal' : 'Cuota diaria';
+  }
+
+  get totalACobrar(): number {
+    return Math.round((this.response.valorCuota || 0) * (this.response.nroCuotas || 0) * 100) / 100;
+  }
+
+  get ganancia(): number {
+    return Math.round((this.totalACobrar - (this.response.monto || 0)) * 100) / 100;
+  }
+
+  get iniciales(): string {
+    const n = (this.response.nombres || '').trim().charAt(0);
+    const a = (this.response.apellidoPaterno || '').trim().charAt(0);
+    return (n + a).toUpperCase() || '?';
+  }
+
+  get etiquetaDoc(): string {
+    return etiquetaDocumento(this.persona.codTipoDoc);
+  }
+
+  get celularMostrar(): string {
+    // Siempre con prefijo (también +51) para confirmar el país antes de registrar
+    return celularParaMostrar(this.response.celular, this.response.codPais || this.persona.codPais, true);
+  }
+
+  get tipoInteresTexto(): string {
+    const tipo = this.response.tipoInteres || this.objNuevaInv.tipoInteres || TIPO_INTERES.SIMPLE;
+    return tipo === TIPO_INTERES.PROGRESIVO ? 'Progresivo' : 'Simple';
   }
 
 }

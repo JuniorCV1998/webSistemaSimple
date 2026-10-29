@@ -153,8 +153,11 @@ export default class CollectionReportComponent {
     });
   }
 
+  cuotaSeleccionada: number = 0;
+
   confirm(nroCuota: number): Promise<boolean> {
     this.date = new Date();
+    this.cuotaSeleccionada = nroCuota;
     return new Promise((resolve) => {
       this.confirmationService.confirm({
         key: 'cd',
@@ -170,6 +173,18 @@ export default class CollectionReportComponent {
     });
   }
 
+  /** Cartilla desde el modal de pago: se cierra el modal (como "Cancelar") y se navega cuando
+   *  terminó de ocultarse, por el mismo motivo que se explica abajo. */
+  abrirCartilla(cerrarModal: () => void) {
+    const idInversion = this.IdInversion;
+    cerrarModal();
+    setTimeout(() => this.router.navigate(['/inversion/cartilla'], { queryParams: { idInversion } }), 200);
+  }
+
+  /* "Ver historial de cobros": primero se cierra el modal y se navega cuando terminó de ocultarse.
+     Si se navega durante la animación de salida, Ionic oculta esta página, la animación no termina
+     y el modal (vive en <body>) queda encima de la pantalla siguiente. onHide se emite al iniciar
+     el cierre, por eso se espera la duración de la animación (150 ms) antes de navegar. */
   questionMondoRecaudado() {
     this.confirmMontoRecaudado().then((result) => {
       if (result) {

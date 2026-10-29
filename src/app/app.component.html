@@ -5,5 +5,7 @@
 
 <app-navegation></app-navegation>
 
-
+@if (mostrarIntro) {
+<app-intro-app [listo]="primeraPantallaLista" (terminada)="mostrarIntro = false" />
+}
 

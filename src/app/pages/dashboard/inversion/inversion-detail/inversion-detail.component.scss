@@ -1,296 +1,866 @@
+/* Cartilla de inversión: estilo fintech mobile light (hero fx + tarjetas blancas) */
+$ink: var(--gray-700);
+$muted: var(--gray-500);
+$blue: var(--blue-400);
+$green: var(--primary-500);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$green-soft: color-mix(in srgb, var(--primary-500) 12%, #fff);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
 
-.icon-span{
-    color: var(--primary-500);
-    margin-bottom: 8px;
+.ct {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 4px 2px 0;
 }
-.pi-present{
-    font-size: 1.2rem;
-    font-weight: 800;
+
+.ct-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
 }
-.div-icon-profile{
-  padding:7px;
+
+.ct-desc {
+  font-size: 13.5px;
+  color: $muted;
+}
+
+/* ===== Hero ===== */
+.ct-hero {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  border-radius: 100px;
-}
-.pi-user{
-    font-size: 1.5rem;
-}
-.params-txt{
-    margin-left: 5px;
-    font-weight: 600;
-    font-size: 15px;
-}
-.txt-detalles{
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-
-/* propiedades de la tabla */
-.position{
-    min-width: 25px;
-    background-color: var(--gray-300);
-    border-radius: 50%;
-    color: white;
-    text-align: center;
-    font-size: 15px;
-    padding: 5px;
-}
-.position_pass{
-    min-width: 25px;
-    background-color: var(--primary-500);
-    border-radius: 50%;
-    color: white;
-    text-align: center;
-    font-size: 15px;
-    padding: 5px;
-}
-table {
-    width: 100%;
-    border-collapse: collapse; /* Funde los bordes para evitar bordes dobles */
-    align-items: center;
-    text-align: center;
-}
-td{
-    min-width: 70px;
-    min-height: 70px;
-    display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente (opcional) */
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    /*   */
-    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    align-items: center;
-
+  gap: 4px;
+  padding: 14px 16px 18px;
+  border-radius: 26px;
+  color: #fff;
+  overflow: hidden;
+  background:
+    radial-gradient(140% 55% at 0% 112%, rgba(255, 255, 255, .20) 0 48%, transparent 49%),
+    radial-gradient(120% 50% at 100% 108%, rgba(255, 255, 255, .14) 0 50%, transparent 51%),
+    radial-gradient(160% 60% at 50% 128%, rgba(255, 255, 255, .10) 0 50%, transparent 51%),
+    radial-gradient(80% 60% at 85% 0%, rgba(255, 255, 255, .28), transparent 70%),
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--blue-400) 85%, #fff) 0%,
+      var(--blue-400) 35%,
+      color-mix(in srgb, var(--primary-500) 80%, var(--blue-400)) 100%);
+  box-shadow: 0 16px 32px -18px color-mix(in srgb, var(--blue-400) 80%, transparent);
 }
 
-.cont-pago{
-    padding: 3px;
-    min-width: 70px;
-    min-height: 70px;
-}
+.ct-cliente {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px 10px 8px 8px;
+  border: none;
+  border-radius: 18px;
+  font: inherit;
+  text-align: left;
+  color: #fff;
+  /* Sin backdrop-filter: sobre el brillo del hero, Chrome lo pinta como un rectángulo claro de borde recto */
+  background: rgba(255, 255, 255, .18);
+  cursor: pointer;
+  transition: background .15s;
 
-.fecha{
-    font-size: 8.5px;
-    font-weight: 800;
-    margin-top: 3px;
-}
-.pendiente-txt{
-    text-align: right;
-    color: var(--gray-500);
-    font-size: 13px;
-    margin-top: .5rem;
-}
-
-/* DATOS DE LA INVERSION */
-
-.valor-txt-detail{
-    margin-left: 5px;
-    color: var(--gray-500);
-    font-weight: 400;
-    font-size: 16px;
-
-    word-wrap: break-word;           // permite dividir palabras largas
-    overflow-wrap: break-word;       // lo mismo, versión más moderna
-    white-space: pre-line;
-}
-
-/* DATOS DEL CLIENTE */
-.custom-banner-credentials{
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    padding: 10px;                  /* Espacio dentro de cada banner */
-    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);                 /* Color del texto del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 3px;
+  &:active {
+    background: rgba(255, 255, 255, .28);
   }
-  .txt-span-bold{
-    text-align: right;
-    font-weight: 500;
-    min-width: 90px;
-    padding-right: 5px;
-  }
-  .txt-span-text{
-    text-align: center;
-  }
-
-  /* POP UP DE CONFIRMACION */
-  ::ng-deep .p-dialog{
-    width: 90%;
-    max-width: 550px;
-  }
-
-  /* banner gris */
-  .custom-banner-present {
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.2); 
-    color: var(--gray-500);                 /* Color del texto del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 30px;
-    align-items: center;
-    padding: 10px;
-  }
-
-  /* Estilos de la linea de tiempo */
-  .timeline span{
-    font-size: 12px;
-    color: var(--gray-500);
-  }
-    .space-timeline{
-        
-        align-items: center;
-        height: 2px;
-    }
-    .done{
-        background-color: var(--blue-300);
-    }
-    .not-done{
-        background-color: var(--gray-300);
-    }
-    .pi-stop-circle{
-        color: var(--gray-400);
-    }
-    .pi-check-circle{
-        color: var(--blue-400);
-    }
-  .custom-banner-blue {
-    flex: 1;  
-    padding: 10px;
-    background: var(--primary-500);
-    background: #fff;
-    box-shadow: 0 0px 4px var(--blue-400);
-    color: var(--gray-500);
-    border-radius: 8px;
-    min-width: 3px;
-  }
-
-  // CAROUSEL
-.promocion_cash{
-    flex: 1;  
-    background: #fff;
-    box-shadow: 0 0px 6px var(--primary-400);
-    border-radius: 10px;
-    cursor: pointer;
 }
 
-.pi-trash{
-  font-size: 60px;
+.ct-avatar {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
   font-weight: 700;
-  color: red;
-}
-.txt-primary{
-    color: var(--primary-500);
-}
-.txt-left {
-    text-align: left;
-    width: 100%;
-    color: var(--gray-500);
-    font-weight: 500;
-    font-size: 15px;
-}
-.txt-left .pi{
-    color: var(--primary-500);
-    font-size: 12px;
-    font-weight: 700;
-}
-.monto-txt{
-    color: var(--primary-500);
-    font-weight: 700;
-    font-size: 18px;
-}
-/* Confirmacion */
-.txt-label{
-    color: var(--gray-500);
-}
-.dataConfirm{
-    color: var(--primary-500);
-    font-weight: 500;
-}
-.linea{
-    border-bottom: 1px dashed var(--gray-400);
-    padding-bottom: 12px;
-}
-.pi-question{
-    font-size: 20px;
-}
-.fechasPagos{
-    min-height:40px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    /* white-space: nowrap; */
+  color: $blue;
+  background: #fff;
 }
 
-.nowrap {
+.ct-cliente-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ct-cliente-nombre {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-cliente-sub {
+  font-size: 12px;
+  opacity: .85;
+}
+
+.ct-cliente-flecha {
+  font-size: 14px;
+  opacity: .85;
+}
+
+.ct-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  opacity: .92;
+}
+
+.ct-monto {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+
+  small {
+    font-size: .5em;
+    font-weight: 600;
+    opacity: .9;
+  }
+}
+
+.ct-progreso {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.ct-progreso-fila {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12.5px;
+  opacity: .95;
+
+  b {
+    font-size: 14px;
+  }
+}
+
+.ct-barra {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .28);
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: #fff;
+    transition: width .5s ease;
+  }
+}
+
+.ct-circulos {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.ct-circulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+
+  &:active .ct-circulo-ico {
+    transform: scale(.92);
+  }
+
+  &:disabled {
+    opacity: .6;
+    cursor: default;
+  }
+}
+
+.ct-circulo-ico {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+  transition: transform .12s;
+
+  .pi {
+    font-size: 18px;
+  }
+}
+
+/* ===== Alerta cuotas vencidas ===== */
+.ct-alerta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  color: $ink;
+  background: color-mix(in srgb, var(--orange-500) 10%, #fff);
+
+  b {
+    color: var(--orange-600, var(--orange-500));
+  }
+}
+
+.ct-alerta-ico {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange-500);
+  background: #fff;
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+.ct-alerta-grave {
+  background: color-mix(in srgb, var(--red-500) 9%, #fff);
+
+  b,
+  .ct-alerta-ico {
+    color: var(--red-500);
+  }
+}
+
+/* ===== Secciones y tarjetas ===== */
+.ct-seccion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 6px 4px -4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $muted;
+}
+
+.ct-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: $blue;
+  background: $blue-soft;
+  border-radius: 999px;
+  padding: 1px 9px;
+}
+
+.ct-card {
+  padding: 6px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: $sombra;
+}
+
+/* ===== Cartilla ===== */
+.ct-grid-card {
+  padding: 12px;
+}
+
+.ct-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.ct-celda {
+  position: relative;
+  aspect-ratio: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px;
+  border: none;
+  border-radius: 16px;
+  font: inherit;
+  background: var(--gray-50);
+  cursor: pointer;
+  transition: transform .12s, background .15s;
+
+  &:active {
+    transform: scale(.94);
+  }
+}
+
+.ct-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gray-400);
+  background: #fff;
+}
+
+/* Pagada: sello */
+.ct-celda-pagada {
+  background: color-mix(in srgb, var(--primary-500) 7%, #fff);
+
+  img {
+    width: 62%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    mix-blend-mode: multiply; /* el fondo blanco del sello se funde con la casilla */
+  }
+}
+
+.ct-celda-fecha {
+  max-width: 100%;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+  color: $muted;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Siguiente: la que se puede pagar */
+.ct-celda-siguiente {
+  background: $blue-soft;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--blue-400) 45%, transparent);
+
+  .ct-num {
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue-400) 50%, transparent);
+    animation: ct-pulso 2s infinite;
+  }
+}
+
+.ct-celda-tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+}
+
+@keyframes ct-pulso {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue-400) 45%, transparent); }
+  70% { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Vencida */
+.ct-celda-vencida {
+  background: color-mix(in srgb, var(--red-500) 8%, #fff);
+
+  .ct-num {
+    color: var(--red-500);
+  }
+}
+
+.ct-celda-siguiente.ct-celda-vencida {
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--red-500) 40%, transparent);
+
+  .ct-num {
+    color: #fff;
+    background: var(--red-500);
+  }
+
+  .ct-celda-tag {
+    color: var(--red-500);
+  }
+}
+
+.ct-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gray-100);
+  font-size: 11.5px;
+  color: $muted;
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.ct-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gray-200);
+}
+
+.ct-dot-pagada {
+  background: $green;
+}
+
+.ct-dot-siguiente {
+  background: $blue;
+}
+
+.ct-dot-vencida {
+  background: var(--red-500);
+}
+
+/* ===== Línea de tiempo (semanal) ===== */
+.ct-timeline {
+  display: flex;
+  padding: 14px 10px 12px;
+  overflow-x: auto;
+}
+
+.ct-tl-paso {
+  position: relative;
+  flex: 1;
+  min-width: 36px; /* 8 fechas caben en un celular de 360px; con más, la línea se desplaza */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.ct-tl-punto {
+  position: relative;
+  z-index: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-100);
+  box-shadow: 0 0 0 3px #fff;
+
+  .pi {
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+  }
+}
+
+.ct-tl-linea {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--gray-100);
+}
+
+.ct-tl-hecho {
+  .ct-tl-punto {
+    background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  }
+
+  .ct-tl-linea {
+    background: color-mix(in srgb, var(--blue-400) 50%, #fff);
+  }
+}
+
+.ct-tl-fecha {
+  font-size: 10px;
+  font-weight: 600;
+  color: $muted;
   white-space: nowrap;
 }
 
-.bgRed{
- background-color: rgb(255, 95, 95);
+/* ===== Renovación ===== */
+.ct-renovacion img {
+  display: block;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: $sombra;
+  cursor: pointer;
 }
 
-/* STYLE ADVERTENCIA - MESSAGE */
-.message-container {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .message {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 1rem;
-      border-radius: 8px;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-      min-width: 160px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.05);
-    }
-
-    .success {
-      background-color: #e6f5ea;
-      color: #2e7d32;
-      border: 1px solid #a5d6a7;
-    }
-
-    .info {
-      background-color: #e3f2fd;
-      color: #1976d2;
-      border: 1px solid #90caf9;
-    }
-
-    .warn {
-      background-color: #fff8e1;
-      color: #f9a825;
-      border: 1px solid #ffe082;
-    }
-
-    .error {
-      background-color: #ffebee;
-      color: #d32f2f;
-      border: 1px solid #ef9a9a;
-    }
-
-    .icon {
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-.cod-operacion{
-  background: linear-gradient(to right, var(--primary-500), var(--blue-500));
-  color: white;
-  font-weight: 700;
+/* ===== Filas de detalle ===== */
+.ct-fila {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 10px;
+
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 56px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
+  }
+}
+
+.ct-fila-ico {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $blue;
+  background: $blue-soft;
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+.ct-fila-label {
+  flex: 1;
+  font-size: 13.5px;
+  color: $muted;
+}
+
+.ct-fila-valor {
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+  text-align: right;
+}
+
+.ct-periodo {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+
+  .pi {
+    font-size: 10px;
+    color: var(--gray-400);
+  }
+}
+
+.ct-comentario {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 4px;
+  padding: 10px 8px;
+  border-radius: 14px;
+  background: var(--gray-50);
+}
+
+.ct-comentario-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ct-comentario-valor {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: $ink;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+/* ===== Acciones al pie ===== */
+.ct-eliminar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--red-500);
+  background: color-mix(in srgb, var(--red-500) 7%, #fff);
+  cursor: pointer;
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+.ct-inicio {
+  width: 100%;
+  justify-content: center;
+  border-radius: 14px;
+  margin-bottom: 4px;
+}
+
+/* ===== Pop ups (Pagar cuota / Eliminar) ===== */
+.ct-pop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 20px 20px;
+  border-radius: 24px;
+  background: #fff;
   text-align: center;
-  border-radius: 5px;
+}
+
+.ct-pop-ico {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .pi {
+    font-size: 22px;
+  }
+}
+
+.ct-pop-ico-rojo {
+  color: var(--red-500);
+  background: color-mix(in srgb, var(--red-500) 10%, #fff);
+}
+
+.ct-pop-sello {
+  width: 72px;
+  height: 72px;
+  padding: 8px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  box-shadow: 0 10px 24px -12px rgba(15, 23, 42, .3), 0 0 0 1px var(--gray-100);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.ct-pop-titulo {
+  margin-top: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: $ink;
+}
+
+.ct-pop-sub {
+  margin-top: -4px;
+  font-size: 13px;
+  color: $muted;
+  text-transform: capitalize;
+}
+
+.ct-pop-pregunta {
+  margin-top: 6px;
+  font-size: 14px;
+  color: $ink;
+}
+
+.ct-pop-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-align: left;
+  color: $muted;
+  background: color-mix(in srgb, var(--red-500) 5%, #fff);
+
+  span {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .pi {
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--red-500);
+  }
+}
+
+.ct-pop-resumen {
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px;
+  border-radius: 18px;
+  text-align: left;
+  background: color-mix(in srgb, var(--blue-400) 5%, #fff);
+
+  .ct-fila + .ct-fila::before {
+    border-top-color: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  }
+
+  .ct-fila-ico {
+    background: #fff;
+  }
+}
+
+.ct-pop-monto {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ct-pop-label {
+  align-self: flex-start;
+  margin-top: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $muted;
+}
+
+/* El confirmDialog se dibuja en <body>: sin :host para que el selector lo alcance */
+::ng-deep .ct-pop p-datepicker {
+  display: block;
+  width: 100%;
+}
+
+::ng-deep .ct-pop .ct-fecha {
+  display: flex;
+  width: 100%;
+
+  .p-datepicker-input {
+    flex: 1;
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: 14px 0 0 14px;
+    background: var(--gray-50);
+    font-weight: 600;
+    color: var(--gray-700);
+    box-shadow: none;
+  }
+
+  .p-datepicker-dropdown {
+    border: none;
+    border-radius: 0 14px 14px 0;
+    color: var(--blue-400);
+    background: var(--gray-50);
+  }
+}
+
+.ct-pop-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 10px;
+
+  button {
+    justify-content: center;
+    border-radius: 14px;
+  }
+}
+
+.ct-pop-btns-una {
+  grid-template-columns: 1fr;
+}
+
+.ct-pop-texto {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: $muted;
+
+  b { color: $ink; }
+}
+
+/* ===== Modales de renovación ===== */
+::ng-deep .p-dialog {
+  width: 90%;
+  max-width: 550px;
+}
+
+/* Cuotas que se cancelan con la renovación */
+.ct-pop-cuotas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+
+  span {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: color-mix(in srgb, var(--blue-400) 10%, #fff);
+    color: var(--blue-400);
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+.ct-pop-dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+}
+
+.ct-pop-check {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 13.5px;
+  color: var(--gray-600);
+  cursor: pointer;
+}
+
+.ct-pop-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--gray-50);
+  font: inherit;
+  font-size: 14px;
+  color: $ink;
+  resize: none;
+}
+
+.txt-break {
+  word-break: break-word;
+  white-space: normal;
 }

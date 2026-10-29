@@ -11,11 +11,13 @@ import { TableModule } from 'primeng/table';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 
 @Component({
   selector: 'app-profitability',
   standalone: true,
-  imports: [TabMenuModule, RouterLink, ButtonModule, CommonModule, ChartModule, TableModule, ConfirmDialogModule,LoadingComponent],
+  imports: [TabMenuModule, RouterLink, ButtonModule, CommonModule, ChartModule, TableModule, ConfirmDialogModule, LoadingComponent,
+    FormatNumberPipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './profitability.component.html',
   styleUrl: './profitability.component.scss',
@@ -38,6 +40,8 @@ export default class ProfitabilityComponent {
   currency: string | null = null;
 
   actual: boolean = false;
+  /** Rango de la vista mensual: últimos 6 o 12 meses. */
+  meses: number = 6;
 
   /** Fila del período vigente (hoy si es vista diaria, mes en curso si es vista mensual):
    *  se usa para destacar sus valores en las tarjetas KPI, sin inventar sumas nuevas sobre datos financieros. */
@@ -116,10 +120,21 @@ export default class ProfitabilityComponent {
 
   initChart(labels: string[], rentabilidad: number[], capital: number[], cobros: number[]) {
     if (isPlatformBrowser(this.platformId)) {
-      const documentStyle = getComputedStyle(document.documentElement);
-      const textColor = documentStyle.getPropertyValue('--p-text-color');
-      const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
-      const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+      const css = getComputedStyle(document.documentElement);
+      const color = (v: string) => css.getPropertyValue(v).trim();
+      const azul = color('--blue-400');
+      const verde = color('--primary-500');
+      const gris = color('--gray-500');
+      const grid = color('--gray-100');
+      const moneda = this.currency ?? '';
+      const fmt = (n: number) => Number(n ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const compacto = (n: number) => Math.abs(n) >= 1000 ? (n / 1000).toLocaleString('en-US', { maximumFractionDigits: 1 }) + 'k' : String(n);
+      // El canvas no entiende color-mix: se pasa el hex del tema a rgba
+      const tenue = (hex: string, a: number) => {
+        const h = hex.replace('#', '');
+        const [r, g, b] = [0, 2, 4].map(i => parseInt(h.substring(i, i + 2), 16));
+        return h.length === 6 ? `rgba(${r}, ${g}, ${b}, ${a / 100})` : hex;
+      };
 
       this.data = {
         labels,
@@ -127,56 +142,81 @@ export default class ProfitabilityComponent {
           {
             type: 'line',
             label: 'Rentabilidad',
-            borderColor: documentStyle.getPropertyValue('--primary-500'),
-            backgroundColor: 'white',
-            borderWidth: 2,
-            fill: false,
-            tension: 0.4,
-            data: rentabilidad
+            data: rentabilidad,
+            borderColor: verde,
+            backgroundColor: verde,
+            borderWidth: 2.5,
+            tension: 0.35,
+            pointRadius: 3,
+            pointHoverRadius: 5,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: verde,
+            pointBorderWidth: 2,
+            order: 0
           },
           {
             type: 'bar',
             label: 'Capital',
-            backgroundColor: documentStyle.getPropertyValue('--blue-300'),
             data: capital,
-            borderColor: 'white',
-            borderWidth: 2
+            backgroundColor: tenue(azul, 75),
+            hoverBackgroundColor: azul,
+            borderRadius: 6,
+            borderSkipped: false,
+            maxBarThickness: 14,
+            order: 1
           },
           {
             type: 'bar',
-            label: 'Cobros',
-            backgroundColor: documentStyle.getPropertyValue('--primary-300'),
-            data: cobros
+            label: 'Cobrado',
+            data: cobros,
+            backgroundColor: tenue(verde, 45),
+            hoverBackgroundColor: verde,
+            borderRadius: 6,
+            borderSkipped: false,
+            maxBarThickness: 14,
+            order: 1
           }
         ]
       };
 
       this.options = {
         maintainAspectRatio: false,
-        aspectRatio: 0.9,
+        interaction: { mode: 'index', intersect: false },
         plugins: {
           legend: {
-            labels: {
-              color: textColor
-            }
+            position: 'bottom',
+            labels: { color: gris, usePointStyle: true, pointStyle: 'circle', boxWidth: 7, boxHeight: 7, padding: 16, font: { size: 11, weight: 600 } }
+          },
+          tooltip: {
+            backgroundColor: '#fff',
+            titleColor: color('--gray-700'),
+            bodyColor: gris,
+            borderColor: grid,
+            borderWidth: 1,
+            padding: 10,
+            cornerRadius: 12,
+            usePointStyle: true,
+            boxPadding: 4,
+            callbacks: { label: (c: any) => ` ${c.dataset.label}: ${moneda} ${fmt(c.parsed.y)}` }
           }
         },
         scales: {
           x: {
+            // Vista mensual con más de 6 meses: un mes sí y otro no, empezando por el último (el actual);
+            // el tooltip sigue mostrando todos. La vista diaria deja que Chart.js salte etiquetas solo.
             ticks: {
-              color: textColorSecondary
+              color: gris, font: { size: 10.5 }, maxRotation: 0, autoSkip: this.actual,
+              callback: (_: any, i: number) =>
+                this.actual || labels.length <= 6 || (labels.length - 1 - i) % 2 === 0 ? labels[i] : ''
             },
-            grid: {
-              color: surfaceBorder
-            }
+            grid: { display: false },
+            border: { display: false }
           },
           y: {
-            ticks: {
-              color: textColorSecondary
-            },
-            grid: {
-              color: surfaceBorder
-            }
+            beginAtZero: true,
+            ticks: { color: gris, font: { size: 10.5 }, maxTicksLimit: 5, callback: (v: number) => compacto(v) },
+            grid: { color: grid },
+            border: { display: false }
           }
         }
       };
@@ -184,8 +224,9 @@ export default class ProfitabilityComponent {
     }
   }
 
-  changeOpen(status: boolean) {
+  changeOpen(status: boolean, meses: number = 6) {
     this.actual = status;
+    if (!status) this.meses = meses;
 
     const hoy = new Date();
 
@@ -198,11 +239,11 @@ export default class ProfitabilityComponent {
       // Solo mes actual
       inicio = fin;
     } else {
-      // Últimos 6 meses incluyendo actual
-      const seisMesesAtras = new Date(hoy);
-      seisMesesAtras.setMonth(hoy.getMonth() - 5);
+      // Últimos 6 o 12 meses incluyendo actual (día 1 para que setMonth no se desborde en meses cortos)
+      const mesesAtras = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+      mesesAtras.setMonth(mesesAtras.getMonth() - (this.meses - 1));
 
-      inicio = seisMesesAtras.toISOString().slice(0, 7);
+      inicio = `${mesesAtras.getFullYear()}-${String(mesesAtras.getMonth() + 1).padStart(2, '0')}`;
     }
 
     this.getRentabilidad(inicio, fin);

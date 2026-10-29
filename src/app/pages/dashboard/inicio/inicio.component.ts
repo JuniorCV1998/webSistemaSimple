@@ -42,13 +42,14 @@ export class InicioComponent {
     if (decodedToken) {
       
       const codTipoDoc = sessionStorage.getItem('codTipoDoc');
-      if (codTipoDoc === "01" || codTipoDoc === null || codTipoDoc === "" || codTipoDoc === "null") {
-        const fullName = decodedToken.nombre.split(" ");
-        this.nombreUsuario = fullName[0] + (fullName.length > 1 ? ' ' + fullName[1] : '');
-      }else if (sessionStorage.getItem('codTipoDoc') === "06") {
+      // RUC muestra el nombre comercial; DNI, C.E. y pasaporte el nombre de la persona
+      if (codTipoDoc === "06") {
         const fullName = (sessionStorage.getItem('nombreComercial') || sessionStorage.getItem('razonSocial') || '').trim();
         const parts = fullName.split(" ");
         this.nombreUsuario = parts[0] + (parts.length > 1 ? ' ' + parts[1] : '');
+      } else {
+        const fullName = decodedToken.nombre.split(" ");
+        this.nombreUsuario = fullName[0] + (fullName.length > 1 ? ' ' + fullName[1] : '');
       }
     }
     this.currency = this.tempDataService.getConstant('currency') || 'S/';

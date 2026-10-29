@@ -9,7 +9,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { KnobModule } from 'primeng/knob';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ToastModule } from 'primeng/toast';
-import { NroCelularDirective } from '../../../../components/directives/nro-celular.directive';
+import { CelularPaisComponent } from '../../../../components/resources/celular-pais/celular-pais.component';
+import { COD_PAIS_PERU, celularLimpio, celularParaMostrar, celularValido, etiquetaDocumento } from '../../../../core/utils/documento-pais';
+import { nombrePlanContratado, solesCorto } from '../../../../core/utils/membresia';
 import { SoloNumerosDirective } from '../../../../components/directives/solo-numeros.directive';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number.pipe';
 import { UsuarioService } from '../../../../core/services/usuario/usuario.service';
@@ -19,7 +21,7 @@ import { Constantes } from '../../../../core/constant/Constantes';
 import { DialogService } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 import { MessagePopUpComponent } from '../../../modal/message-pop-up/message-pop-up.component';
-import { DialogRenovarMembresiaComponent } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
+import { DialogRenovarMembresiaComponent, SolicitudRenovacion } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
 import { ConfirmationService } from 'primeng/api';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 
@@ -27,7 +29,7 @@ import { TempDataService } from '../../../../core/services/temp-data.service';
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, FormsModule, ConfirmDialogModule, KnobModule, LoadingComponent, ToastModule, InputNumberModule,
-    TabMenuModule, ButtonModule, RouterModule, RouterLink, DialogRenovarMembresiaComponent, NroCelularDirective,
+    TabMenuModule, ButtonModule, RouterModule, RouterLink, DialogRenovarMembresiaComponent, CelularPaisComponent,
     SoloNumerosDirective, InputTextModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './profile.component.html',
@@ -40,6 +42,9 @@ export default class ProfileComponent {
 
   /* Número de celular */
   nroCelular = "920605673";
+
+  nombrePlanContratado = nombrePlanContratado;
+  solesCorto = solesCorto;
 
   usuarioData: any = {
     "codUnico": "",
@@ -57,7 +62,37 @@ export default class ProfileComponent {
   editando: boolean = false;
   guardandoDatos: boolean = false;
   passwordFieldType: string = 'password';
-  formEdit = { celular: '', direccion: '', contrasena: '' };
+  formEdit = { celular: '', codPais: COD_PAIS_PERU, direccion: '', contrasena: '' };
+
+  get etiquetaDoc(): string {
+    return etiquetaDocumento(this.usuarioData?.persona?.codTipoDoc);
+  }
+
+  get esJuridica(): boolean {
+    return this.usuarioData?.persona?.codTipoDoc === '06';
+  }
+
+  get nombreCompleto(): string {
+    const p = this.usuarioData?.persona || {};
+    if (this.esJuridica) return p.razonSocial || '';
+    return [p.nombres, p.apellidoPaterno, p.apellidoMaterno].filter(Boolean).join(' ');
+  }
+
+  get iniciales(): string {
+    const p = this.usuarioData?.persona || {};
+    const base = this.esJuridica ? (p.razonSocial || '') : `${p.nombres || ''} ${p.apellidoPaterno || ''}`;
+    return base.trim().split(/\s+/).filter(Boolean).slice(0, 2).map((s: string) => s[0]).join('').toUpperCase();
+  }
+
+  /* Color según estado de la membresía: ACT verde, PEX naranja, VEN rojo */
+  get claseMembresia(): string {
+    const cod = this.usuarioData?.membresia?.codMembresia;
+    return cod === 'VEN' ? 'pf-rojo' : cod === 'PEX' ? 'pf-naranja' : 'pf-verde';
+  }
+
+  get celularMostrar(): string {
+    return celularParaMostrar(this.usuarioData?.persona?.celular, this.usuarioData?.persona?.codPais);
+  }
 
   constructor(
     private usuarioService: UsuarioService,
@@ -108,6 +143,7 @@ export default class ProfileComponent {
     if (this.perfil === 'CLI') return; // Solo el inversor puede editar sus propios datos, el cliente no.
     if (!this.editando) {
       this.formEdit.celular = this.usuarioData?.persona?.celular || '';
+      this.formEdit.codPais = this.usuarioData?.persona?.codPais || COD_PAIS_PERU;
       this.formEdit.direccion = this.usuarioData?.persona?.direccion || '';
       this.formEdit.contrasena = '';
       this.passwordFieldType = 'password';
@@ -120,8 +156,11 @@ export default class ProfileComponent {
   }
 
   get celularValido(): boolean {
-    const limpio = this.formEdit.celular.replace(/\s+/g, '');
-    return limpio === '' || limpio.length === 9;
+    return celularLimpio(this.formEdit.celular) === '' || celularValido(this.formEdit.celular, this.formEdit.codPais);
+  }
+
+  private get codPaisActual(): string {
+    return this.usuarioData?.persona?.codPais || COD_PAIS_PERU;
   }
 
   get contrasenaValida(): boolean {
@@ -131,7 +170,8 @@ export default class ProfileComponent {
   private hayCambios(): boolean {
     const celularActual = (this.usuarioData?.persona?.celular || '').replace(/\s+/g, '');
     const direccionActual = (this.usuarioData?.persona?.direccion || '').trim();
-    return this.formEdit.celular.replace(/\s+/g, '') !== celularActual
+    return celularLimpio(this.formEdit.celular) !== celularActual
+      || this.formEdit.codPais !== this.codPaisActual
       || this.formEdit.direccion.trim() !== direccionActual
       || this.formEdit.contrasena !== '';
   }
@@ -143,10 +183,14 @@ export default class ProfileComponent {
   guardarDatos(): void {
     if (this.perfil === 'CLI' || !this.puedeGuardar) return;
 
-    const body: { celular?: string; direccion?: string; contrasena?: string } = {};
+    const body: { celular?: string; codPais?: string; direccion?: string; contrasena?: string } = {};
     const celularActual = (this.usuarioData?.persona?.celular || '').replace(/\s+/g, '');
-    const celularNuevo = this.formEdit.celular.replace(/\s+/g, '');
-    if (celularNuevo && celularNuevo !== celularActual) body.celular = celularNuevo;
+    const celularNuevo = celularLimpio(this.formEdit.celular);
+    // Celular y código de país viajan juntos: el backend valida uno según el otro
+    if (celularNuevo && (celularNuevo !== celularActual || this.formEdit.codPais !== this.codPaisActual)) {
+      body.celular = celularNuevo;
+      body.codPais = this.formEdit.codPais;
+    }
 
     const direccionActual = (this.usuarioData?.persona?.direccion || '').trim();
     const direccionNueva = this.formEdit.direccion.trim();
@@ -213,10 +257,8 @@ export default class ProfileComponent {
     }
   }
 
-  solicitarPorWhatsapp(opcion: any) {
-    const mensaje = encodeURIComponent(
-      `¡Hola! Me gustaría renovar mi membresía con el plan de ${opcion.label} por S/${opcion.precio}.`
-    );
-    window.open(`https://wa.me/51${this.nroCelular}?text=${mensaje}`, '_blank');
+  /** El modal arma el mensaje y el enlace con el WhatsApp configurado por el admin. */
+  solicitarPorWhatsapp(solicitud: SolicitudRenovacion) {
+    window.open(solicitud.enlace, '_blank');
   }
 }

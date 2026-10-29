@@ -1,8 +1,7 @@
 <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
         
-    <div class="text-center mb-5">
-        <div class=" text-2xl mb-3 label-title">Datos de la inversión</div>
-    </div>
+    <app-flow-steps class="mb-4" [pasos]="PASOS_VEHICULAR" [actual]="2" titulo="Datos de la inversión"
+        /> <!-- subtitulo="Registra el vehículo y cómo se pagará."  -->
 
     <div class="flex flex-row w-full gap-2 align-items-center justify-content-center mb-3">
         <div class="flex flex-column w-6">
@@ -67,7 +66,8 @@
                 [touchUI]="false"
                 [dateFormat]="'dd/mm/yy'"
                 [showTime]="false"
-                inputId="fecha1" 
+                [readonlyInput]="true"
+                inputId="fecha1"
                 (ngModelChange)="updateDate2()"
                 />
             </div>
@@ -127,9 +127,8 @@
     pRipple label="Siguiente" (click)="registerInvFalse()" [disabled]="!isFormValid()" class="w-full btn-tall"></button>
     
     <app-loading></app-loading>
-    <div>
-        <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
-    </div>
+    <!-- Los toasts los muestra el <p-toast> global de navegation (mismo MessageService raíz) -->
+
     
 </div>
 

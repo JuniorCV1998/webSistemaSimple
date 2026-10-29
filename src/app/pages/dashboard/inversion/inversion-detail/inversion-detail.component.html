@@ -1,267 +1,188 @@
 <div *ngIf="!isLoading">
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+    <div class="ct">
 
-        <div class="text-center mb-3">
-            <div id="div_line_bootom" class=" text-2xl font-medium label-title">Cartilla de inversión</div>
+        <div class="ct-head">
+            <div class="text-2xl label-title">Cartilla de inversión</div>
+            <span class="ct-desc">Avance de pagos y detalles del préstamo.</span>
         </div>
 
-        <div class="flex flex-row w-full mb-3 custom-banner-present">
-            <div class="flex flex-row justify-content-center align-items-center w-full gap-2" [routerLink]="['/cliente']"
-                [queryParams]="{ idUsuario: objInvDetail.idUsuario}">
-                <div class="flex align-items-center div-icon-profile"><i class="pi pi-user icon-span pi-present"></i>
+        <!-- ===== Hero: cliente + valor de cuota + progreso ===== -->
+        <section class="ct-hero">
+            <button type="button" class="ct-cliente" [routerLink]="['/cliente']"
+                [queryParams]="{ idUsuario: objInvDetail.idUsuario }">
+                <span class="ct-avatar">{{ iniciales }}</span>
+                <span class="ct-cliente-text">
+                    <span class="ct-cliente-nombre">{{ nombreCompleto }}</span>
+                    <span class="ct-cliente-sub">Ver cliente</span>
+                </span>
+                <i class="pi pi-angle-right ct-cliente-flecha"></i>
+            </button>
+
+            <span class="ct-label">Valor de cuota</span>
+            <span class="ct-monto"><small>{{ currency }}</small> {{ objInvDetail.valorCuota | formatNumber }}</span>
+
+            <div class="ct-progreso">
+                <div class="ct-progreso-fila">
+                    <span><b>{{ objInvDetail.ctasPagadas }}</b> de {{ objInvDetail.nroCuotas }} cuotas pagadas</span>
+                    <span>{{ porcentajePagado }}%</span>
                 </div>
-                <div class="flex flex-column justify-content-center w-full">
-                    <span class="text-gray-500 font-medium line-height-3 w-full">{{objInvDetail.persona.nombres+'
-                        '+objInvDetail.persona.apellidoPaterno+' '+objInvDetail.persona.apellidoMaterno}}</span>
-                </div>
+                <span class="ct-barra"><span [style.width.%]="porcentajePagado"></span></span>
             </div>
-            <!-- <div class="flex flex-row w-5 paddin-5 cont-banner gap-2">
-                <div class="flex flex-column justify-content-center align-items-center" style="padding-top: 5px;">
-                    <span class="icon-span pi-present">{{currency}}</span>
-                </div>
-                <div class="flex flex-column justify-content-center w-full">
-                    <span class="text-gray-500 font-medium line-height-3 w-full">{{objInvDetail.monto | formatNumber}}</span>
-                </div>
-            </div> -->
+
+            <!-- Acciones del inversor -->
+            <div *ngIf="codPerfil==='INV'" class="ct-circulos">
+                <button type="button" class="ct-circulo" (click)="verComprobante()">
+                    <span class="ct-circulo-ico"><i class="pi pi-file-pdf"></i></span>
+                    <span>Comprobante</span>
+                </button>
+                <button type="button" class="ct-circulo" [disabled]="enviandoComprobante"
+                    (click)="enviarComprobanteWhatsapp()">
+                    <span class="ct-circulo-ico"><i class="pi pi-whatsapp"></i></span>
+                    <span>Enviar</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ===== Alerta de cuotas vencidas ===== -->
+        <div *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas > 0" class="ct-alerta"
+            [class.ct-alerta-grave]="objInvDetail.frecuenciaPago.cuotasAtrasadas >= 3">
+            <span class="ct-alerta-ico">
+                <i class="pi" [ngClass]="objInvDetail.frecuenciaPago.cuotasAtrasadas >= 3 ? 'pi-times-circle' : 'pi-exclamation-triangle'"></i>
+            </span>
+            <span>
+                Inversión con <b>{{ objInvDetail.frecuenciaPago.cuotasAtrasadas }}</b>
+                {{ objInvDetail.frecuenciaPago.cuotasAtrasadas === 1 ? 'cuota vencida' : 'cuotas vencidas' }}.
+            </span>
         </div>
 
+        <!-- ===== Línea de tiempo (frecuencia semanal) ===== -->
         <ng-template [ngIf]="objInvDetail.frecuenciaPago.frecuencia == 'S'">
-            <div class="flex flex-row w-full mb-3 custom-banner-blue">
-                <div class="flex flex-column w-full timeline mb-2">
-                    <span class="mb-2 params-txt">Fechas de pago</span>
-
-                    <div class="flex flex-row w-full timeline mb-1">
-                        <div *ngFor="let obj of objInvDetail.frecuenciaPago.fechasPagos; let i = index"
-                            class="flex w-full justify-content-center">
-                            <div class="flex align-items-center" [ngClass]="objInvDetail.nroCuotas == 1 ? 'w-9':'w-6'">
-                                <div class="w-full space-timeline" [ngClass]="obj.isPagado ? 'done' : 'not-done'"></div>
-                            </div>
-                            <div class="flex flex-column text-center"
-                                [ngClass]="objInvDetail.nroCuotas == 1 ? 'w-3':'w-6'">
-                                <div class="fechasPagos flex flex-column justify-content-end"
-                                    [ngClass]="{'nowrap': objInvDetail.nroCuotas == 4}"><span
-                                        *ngIf="i % 2 === 0">{{getFechaSinAnio(obj.fechaPagar) }}</span></div>
-                                <i class="pi" [ngClass]="obj.isPagado ? 'pi-check-circle' : 'pi-stop-circle'"></i>
-                                <div class="fechasPagos flex flex-column justify-content-start"
-                                    [ngClass]="{'nowrap': objInvDetail.nroCuotas == 4}"><span
-                                        *ngIf="i % 2 !== 0">{{getFechaSinAnio(obj.fechaPagar) }}</span></div>
-                            </div>
-
-                        </div>
-                    </div>
+            <div class="ct-seccion">Fechas de pago</div>
+            <section class="ct-card ct-timeline">
+                <div *ngFor="let obj of objInvDetail.frecuenciaPago.fechasPagos; let i = index; let last = last"
+                    class="ct-tl-paso" [class.ct-tl-hecho]="obj.isPagado">
+                    <span class="ct-tl-punto"><i *ngIf="obj.isPagado" class="pi pi-check"></i></span>
+                    <span *ngIf="!last" class="ct-tl-linea"></span>
+                    <span class="ct-tl-fecha">{{ getFechaSinAnio(obj.fechaPagar) }}</span>
                 </div>
-            </div>
+            </section>
         </ng-template>
 
-        <div class="w-full mb-2">
-            <table>
-                <tbody>
-                    <tr *ngFor="let fila of getCuotasEnFilas(); let i = index; trackBy: trackByFila"
-                        class="flex flex-row w-full">
-                        <td *ngFor="let obj of fila; let j = index; trackBy: trackByObj" class="w-full">
-                            <!-- Pagado -->
-                            <div *ngIf="obj.isPagado" class="flex flex-column align-items-center cont-pago"
-                                (click)="mostrarFechaPagar(obj.fechaPagar)">
-                                <img [src]="pathSello" loading="lazy" width="50" height="50">
-                                <span class="fecha">{{ obj.fechaPago }}</span>
-                            </div>
-
-                            <!-- Habilitado -->
-                            <div *ngIf="!obj.isPagado && (obj.globalIndex === 0 || objInvDetail.frecuenciaPago.fechasPagos[obj.globalIndex - 1]?.isPagado)"
-                                class="position_pass" (click)="pagarCuota(obj.globalIndex + 1)">
-                                {{ obj.globalIndex + 1 }}
-                            </div>
-
-                            <!-- Bloqueado -->
-                            <div *ngIf="!obj.isPagado && (obj.globalIndex !== 0 && !objInvDetail.frecuenciaPago.fechasPagos[obj.globalIndex - 1]?.isPagado)"
-                                class="position" (click)="mostrarFechaPagar(obj.fechaPagar)" [ngClass]="{
-                                        'bgRed': obj.isAtrasado
-                                    }">
-                                {{ obj.globalIndex + 1 }}
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- ===== Cartilla ===== -->
+        <div class="ct-seccion">
+            <span>Cartilla</span>
+            <span class="ct-count">{{ objInvDetail.nroCuotas - objInvDetail.ctasPagadas }} pendientes</span>
         </div>
+        <section class="ct-card ct-grid-card">
+            <div class="ct-grid">
+                <ng-container *ngFor="let obj of objInvDetail.frecuenciaPago.fechasPagos; let i = index; trackBy: trackByObj">
+                    <!-- Pagado -->
+                    <button *ngIf="obj.isPagado" type="button" class="ct-celda ct-celda-pagada"
+                        (click)="mostrarFechaPagar(obj.fechaPagar)">
+                        <img [src]="pathSello" loading="lazy" alt="Pagado">
+                        <span class="ct-celda-fecha">{{ obj.fechaPago }}</span>
+                    </button>
 
-        <div class="pendiente-txt mb-3"><b>{{objInvDetail.nroCuotas-objInvDetail.ctasPagadas}}</b> Cuotas pendientes.
-        </div>
+                    <!-- Habilitado: la siguiente cuota a pagar -->
+                    <button *ngIf="!obj.isPagado && (i === 0 || objInvDetail.frecuenciaPago.fechasPagos[i - 1]?.isPagado)"
+                        type="button" class="ct-celda ct-celda-siguiente" [class.ct-celda-vencida]="obj.isAtrasado"
+                        (click)="pagarCuota(i + 1)">
+                        <span class="ct-num">{{ i + 1 }}</span>
+                        <span class="ct-celda-tag">{{ codPerfil === 'INV' ? 'Pagar' : 'Siguiente' }}</span>
+                    </button>
 
-        <!-- <div class="card mb-3">
-            <p-message closable>Closable Message</p-message>
-        </div> -->
+                    <!-- Bloqueado -->
+                    <button *ngIf="!obj.isPagado && (i !== 0 && !objInvDetail.frecuenciaPago.fechasPagos[i - 1]?.isPagado)"
+                        type="button" class="ct-celda" [class.ct-celda-vencida]="obj.isAtrasado"
+                        (click)="mostrarFechaPagar(obj.fechaPagar)">
+                        <span class="ct-num">{{ i + 1 }}</span>
+                    </button>
+                </ng-container>
+            </div>
 
-        <div class="card flex justify-content-center mb-3">
-            <p-message severity="warn" icon="pi pi-exclamation-triangle"
-                *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas<3 && objInvDetail.frecuenciaPago.cuotasAtrasadas!==0"
-                [text]="'Inversión con ' + objInvDetail.frecuenciaPago.cuotasAtrasadas + 
-                    (objInvDetail.frecuenciaPago.cuotasAtrasadas === 1 ? ' cuota vencida.' : ' cuotas vencidas.')">
-            </p-message>
-            <p-message severity="error" icon="pi pi-times-circle" *ngIf="objInvDetail.frecuenciaPago.cuotasAtrasadas>=3"
-                [text]="'Inversión con ' + objInvDetail.frecuenciaPago.cuotasAtrasadas + 
-                    (objInvDetail.frecuenciaPago.cuotasAtrasadas === 1 ? ' cuota vencida.' : ' cuotas vencidas.')">
-            </p-message>
-        </div>
+            <div class="ct-leyenda">
+                <span><i class="ct-dot ct-dot-pagada"></i> Pagada</span>
+                <span><i class="ct-dot ct-dot-siguiente"></i> Siguiente</span>
+                <span><i class="ct-dot ct-dot-vencida"></i> Vencida</span>
+                <span><i class="ct-dot"></i> Pendiente</span>
+            </div>
+        </section>
 
+        <!-- ===== Renovación ===== -->
         <ng-template [ngIf]="objInvDetail.renovacion == 'S'">
-            <div class="flex flex-column align-items-center mb-3">
+            <div class="ct-renovacion">
                 <img *ngIf="codPerfil==='INV'" (click)="renovacion()" src="assets/images/gates/RENOVACION_INV.png"
-                    width="98%" class="promocion_cash">
+                    alt="Renovar préstamo">
                 <img *ngIf="codPerfil==='CLI'" (click)="confirm_cli()" src="assets/images/gates/RENOVACION_CLI.png"
-                    width="98%" class="promocion_cash">
+                    alt="Renovación disponible">
             </div>
         </ng-template>
 
-        <div class="detail-inv">
-            <div class="custom-banner-present mb-4">
-                <div class="mb-3">
-                    <span class="txt-detalles icon-span">DETALLES DE LA INVERSION</span>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                    <div class="flex flex-column w-full">
-                        <span class="mb-2 params-txt">Monto invertido</span>
-                        <span class="valor-txt-detail">
-                            {{currency}} {{objInvDetail.monto | formatNumber }}
-                        </span>
-                    </div>
-
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Número de cuotas</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.nroCuotas}}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Interés</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.interes | twoDigits }} %
-                        </span>
-                    </div>
-
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">valor de cuota</label>
-                        <span class="valor-txt-detail">
-                            {{currency}} {{objInvDetail.valorCuota | formatNumber}}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Fecha de registro</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.fechaRegistro}}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Fecha inicio</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.fechaInicio}}
-                        </span>
-                    </div>
-
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Fecha fin</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.fechaFin}}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3">
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Código de Operación</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.codOperacion}}
-                        </span>
-                    </div>
-                </div>
-
+        <!-- ===== Detalles ===== -->
+        <div class="ct-seccion">Detalles de la inversión</div>
+        <section class="ct-card">
+            <div class="ct-fila">
+                <span class="ct-fila-ico"><i class="pi pi-wallet"></i></span>
+                <span class="ct-fila-label">Monto invertido</span>
+                <span class="ct-fila-valor">{{ currency }} {{ objInvDetail.monto | formatNumber }}</span>
             </div>
-
-            <!-- <div class="custom-banner-present mb-4">
-                <div class="mb-3">
-                    <span class="txt-detalles icon-span">DETALLES DEL CLIENTE</span>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-between mb-3">
-                    <div class="flex flex-column"
-                        [ngClass]="objInvDetail.persona.celular=='' || objInvDetail.persona.celular==null?'w-12':'w-7'">
-                        <label class="mb-2 params-txt">Nombres</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+'
-                            '+objInvDetail.persona.apellidoMaterno}}
-                        </span>
-                    </div>
-                    <div class="flex flex-column w-5"
-                        *ngIf="objInvDetail.persona.celular!='' && objInvDetail.persona.celular!=null">
-                        <label class="mb-2 params-txt">Celular</label>
-                        <span class="valor-txt-detail">
-                            {{formatNumberEspaciado(objInvDetail.persona.celular)}}
-                        </span>
-                    </div>
-                </div>
-
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Dirección</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.persona.direccion}}
-                        </span>
-                    </div>
-                </div>
-            </div> -->
-
-            <div *ngIf="objInvDetail.comentario!=''" class="custom-banner-present mb-4">
-                <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-4">
-                    <div class="flex flex-column w-full">
-                        <label class="mb-2 params-txt">Comentario</label>
-                        <span class="valor-txt-detail">
-                            {{objInvDetail.comentario}}
-                        </span>
-                    </div>
-                </div>
+            <div class="ct-fila">
+                <span class="ct-fila-ico"><i class="pi pi-percentage"></i></span>
+                <span class="ct-fila-label">Interés</span>
+                <span class="ct-fila-valor">{{ objInvDetail.interes | twoDigits }}%</span>
             </div>
+            <div class="ct-fila">
+                <span class="ct-fila-ico"><i class="pi pi-list"></i></span>
+                <span class="ct-fila-label">Número de cuotas</span>
+                <span class="ct-fila-valor">{{ objInvDetail.nroCuotas }}</span>
+            </div>
+            <div class="ct-fila">
+                <span class="ct-fila-ico"><i class="pi pi-calendar-plus"></i></span>
+                <span class="ct-fila-label">Fecha de registro</span>
+                <span class="ct-fila-valor">{{ objInvDetail.fechaRegistro }}</span>
+            </div>
+            <div class="ct-fila">
+                <span class="ct-fila-ico"><i class="pi pi-calendar"></i></span>
+                <span class="ct-fila-label">Periodo</span>
+                <span class="ct-fila-valor ct-periodo">
+                    {{ objInvDetail.fechaInicio }} <i class="pi pi-arrow-right"></i> {{ objInvDetail.fechaFin }}
+                </span>
+            </div>
+            <div class="ct-fila">
+                <span class="ct-fila-ico"><i class="pi pi-hashtag"></i></span>
+                <span class="ct-fila-label">Código de operación</span>
+                <span class="ct-fila-valor">{{ objInvDetail.codOperacion }}</span>
+            </div>
+            <div *ngIf="objInvDetail.comentario" class="ct-comentario">
+                <span class="ct-fila-ico"><i class="pi pi-comment"></i></span>
+                <span class="ct-comentario-text">
+                    <span class="ct-fila-label">Comentario</span>
+                    <span class="ct-comentario-valor">{{ objInvDetail.comentario }}</span>
+                </span>
+            </div>
+        </section>
 
-        </div>
-
-        <!-- Eliminar inversion -->
-        <div *ngIf="codPerfil==='INV' && !(objInvDetail.ctasPagadas===objInvDetail.nroCuotas)"
-            class="flex align-items-center justify-content-center mb-4">
-            <span class="font-bold txt-red-link" (click)="eliminarInversion()">Eliminar inversión</span>
-        </div>
+        <!-- Eliminar inversión -->
+        <button *ngIf="codPerfil==='INV' && !(objInvDetail.ctasPagadas===objInvDetail.nroCuotas)" type="button"
+            class="ct-eliminar" (click)="eliminarInversion()">
+            <i class="pi pi-trash"></i> Eliminar inversión
+        </button>
 
         <p-confirmDialog #delete_inv key="delete_inv">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <i class="pi pi-trash"></i>
+                <div class="ct-pop">
+                    <span class="ct-pop-ico ct-pop-ico-rojo"><i class="pi pi-trash"></i></span>
+                    <span class="ct-pop-titulo">{{ message.header }}</span>
+                    <span class="ct-pop-sub">{{ nombreCompleto }}</span>
+                    <b class="ct-pop-pregunta">{{ message.message }}</b>
+                    <div class="ct-pop-lista">
+                        <span><i class="pi pi-ban"></i> Ya no se podrán registrar más cuotas de pago.</span>
+                        <span><i class="pi pi-chart-line"></i> No se considerará en el cálculo de rentabilidad.</span>
+                        <span><i class="pi pi-history"></i> Se perderá el historial asociado.</span>
                     </div>
-                    <span class="font-bold mb-3 mt-4 txt-red" style="font-size: 20px;">
-                        {{ message.header }}
-                    </span>
-                    <span class="flex flex-column gap-3 mb-3 txt-label">
-                        <strong class="text-center w-full">{{ message.message }}</strong>
-                        <ul>
-                            <li class="mb-1">Ya no se podrán registrar más cuotas de pago.</li>
-                            <li class="mb-1">La inversión no será considerada en el cálculo de rentabilidad.</li>
-                            <li class="mb-1">El historial asociado a esta inversión se perderá.</li>
-                        </ul>
-                        <strong class="text-center w-full">¿Desea continuar?</strong>
-                    </span>
-                    <div class="flex align-items-center gap-2 mt-4">
-                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                        </button>
-                        <button severity="danger" pButton label="Eliminar" (click)="onAccept()" class=" w-8rem">
-                        </button>
+                    <div class="ct-pop-btns">
+                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                        <button pButton severity="danger" label="Eliminar" (click)="onAccept()"></button>
                     </div>
                 </div>
             </ng-template>
@@ -269,25 +190,31 @@
 
         <p-confirmDialog #cdpago key="cdpago">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <div
-                        class="border-circle bg-primary inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <img [src]="pathSello" loading="lazy" width="110" height="110">
-                    </div>
-                    <span class="font-bold text-2xl block mb-2 mt-4 txt-primary">
-                        {{ message.header }}
-                    </span>
-                    <p class="mb-2">{{ message.message }}</p>
-                    <div class="flex flex-column">
-                        <p-datepicker [(ngModel)]="date" [showIcon]="true" [showOnFocus]="true" [touchUI]="false"
-                            [dateFormat]="'dd/mm/yy'" [showTime]="true" inputId="fecha" />
-                    </div>
-                    <div class="flex align-items-center gap-2 mt-4">
-                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                        </button>
-                        <button pButton label="Guardar" (click)="onAccept()" class="w-8rem">
-                        </button>
+                <div class="ct-pop">
+                    <span class="ct-pop-sello"><img [src]="pathSello" loading="lazy" alt="Sello"></span>
+                    <span class="ct-pop-titulo">{{ message.header }}</span>
+                    <span class="ct-pop-sub">{{ nombreCompleto }}</span>
 
+                    <div class="ct-pop-resumen">
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-hashtag"></i></span>
+                            <span class="ct-fila-label">Cuota</span>
+                            <span class="ct-fila-valor">{{ cuotaAPagar | twoDigits }} de {{ objInvDetail.nroCuotas }}</span>
+                        </div>
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-money-bill"></i></span>
+                            <span class="ct-fila-label">Monto</span>
+                            <span class="ct-fila-valor ct-pop-monto">{{ currency }} {{ objInvDetail.valorCuota | formatNumber }}</span>
+                        </div>
+                    </div>
+
+                    <label class="ct-pop-label" for="fecha">Fecha y hora del pago</label>
+                    <p-datepicker [(ngModel)]="date" [showIcon]="true" [showOnFocus]="true" [touchUI]="false" [readonlyInput]="true"
+                        [dateFormat]="'dd/mm/yy'" [showTime]="true" inputId="fecha" styleClass="ct-fecha" />
+
+                    <div class="ct-pop-btns">
+                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                        <button pButton label="Guardar" (click)="onAccept()"></button>
                     </div>
                 </div>
             </ng-template>
@@ -295,66 +222,50 @@
 
         <p-confirmDialog #cdrenovacion key="cdrenovacion" [blockScroll]="true" [baseZIndex]="10000">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <img src="assets/images/logos/renovacion.png" width="110" height="110">
-                    </div>
-                    <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
-                        {{ message.header }}
-                    </span>
-                    <!-- <p class="mb-2">{{ message.message }}</p> -->
-                    <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Estas son las cuotas a
-                        cancelar</span>
-                    <div class="flex flex-row align-items-center gap-4 mb-3">
-                        <div class="position"
-                            *ngFor="let num of getRango(objInvDetail.ctasPagadas + 1, objInvDetail.nroCuotas)">
-                            {{ num }}
-                        </div>
-                    </div>
-                    <span class="mb-3 txt-left"><i class="pi pi-chevron-circle-right mr-1"></i>Monto a renovar</span>
-                    <div class="flex flex-row align-items-center gap-4 mb-3">
-                        <span class="monto-txt">{{currency}} {{objInvDetail.monto | formatNumber}}</span>
+                <div class="ct-pop">
+                    <span class="ct-pop-ico"><i class="pi pi-replay"></i></span>
+                    <span class="ct-pop-titulo">{{ message.header }}</span>
+                    <span class="ct-pop-sub">{{ nombreCompleto }}</span>
+
+                    <span class="ct-pop-label">Cuotas a cancelar</span>
+                    <div class="ct-pop-cuotas">
+                        <span *ngFor="let num of getRango(objInvDetail.ctasPagadas + 1, objInvDetail.nroCuotas)">{{ num }}</span>
                     </div>
 
-                    <!-- Fecha inicio y fin -->
-                    <div class="flex flex-column gap-2 justify-content-center">
-                        <label for="interes" class="block txt-left mb-2"><i
-                                class="pi pi-chevron-circle-right mr-1"></i>Establecer fecha inicio y fin</label>
-                        <div class="flex flex-row justify-content-between align-items-center gap-2 mb-3">
-                            <div class="flex flex-column w-6 mb-2">
-                                <label for="fecha1" class="txt-left">Fecha inicio</label>
-                                <p-datepicker [(ngModel)]="date1" [showIcon]="true" [showOnFocus]="true"
-                                    [touchUI]="false" [dateFormat]="'dd/mm/yy'" [showTime]="false" inputId="fecha1"
-                                    (ngModelChange)="updateDate2()" />
-                            </div>
-                            <div class="flex flex-column w-6 mb-2">
-                                <label for="fecha2" class="txt-left">Fecha fin</label>
-                                <p-datepicker [(ngModel)]="date2" [showIcon]="true" [showOnFocus]="true"
-                                    [touchUI]="false" [dateFormat]="'dd/mm/yy'" [showTime]="false" inputId="fecha2"
-                                    [disabled]="true" />
-                            </div>
+                    <div class="ct-pop-resumen">
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-money-bill"></i></span>
+                            <span class="ct-fila-label">Monto a renovar</span>
+                            <span class="ct-fila-valor ct-pop-monto">{{currency}} {{objInvDetail.monto | formatNumber}}</span>
                         </div>
                     </div>
 
-                    <div class="flex align-items-center gap-1 mb-4 txt-left">
+                    <div class="ct-pop-dos">
+                        <div>
+                            <label for="fecha1" class="ct-pop-label">Fecha inicio</label>
+                            <p-datepicker [(ngModel)]="date1" [showIcon]="true" [showOnFocus]="true" [touchUI]="false" [readonlyInput]="true"
+                                [dateFormat]="'dd/mm/yy'" [showTime]="false" inputId="fecha1" styleClass="ct-fecha"
+                                (ngModelChange)="updateDate2()" />
+                        </div>
+                        <div>
+                            <label for="fecha2" class="ct-pop-label">Fecha fin</label>
+                            <p-datepicker [(ngModel)]="date2" [showIcon]="true" [showOnFocus]="true" [touchUI]="false"
+                                [dateFormat]="'dd/mm/yy'" [showTime]="false" inputId="fecha2" styleClass="ct-fecha"
+                                [disabled]="true" />
+                        </div>
+                    </div>
+
+                    <label class="ct-pop-check">
                         <p-checkbox inputId="ny" [(ngModel)]="showComent" [binary]="true" />
-                        <label for="ny">Agregar comentario(opcional)</label>
-                    </div>
+                        <span>Agregar comentario (opcional)</span>
+                    </label>
 
-                    <div *ngIf="showComent" class="card w-full mb-1">
-                        <p-floatLabel class="w-full">
-                            <textarea (focus)="focusTextArea($event)" class="w-full" id="float-comentario" rows="3"
-                                cols="30" [(ngModel)]="txtComentario" [maxLength]="180" pTextarea>
-                    </textarea>
-                            <label for="float-comentario">Comentario</label>
-                        </p-floatLabel>
-                    </div>
-                    <div class="flex align-items-center gap-2 mt-2">
-                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined w-8rem ">
-                        </button>
-                        <button pButton label="Siguiente" (click)="onAccept()" class="w-8rem">
-                        </button>
+                    <textarea *ngIf="showComent" (focus)="focusTextArea($event)" class="ct-pop-textarea" id="float-comentario"
+                        rows="3" [(ngModel)]="txtComentario" [maxLength]="180" placeholder="Escribe un comentario" pTextarea></textarea>
 
+                    <div class="ct-pop-btns">
+                        <button pButton label="Cancelar" (click)="onReject()" class="p-button-outlined"></button>
+                        <button pButton label="Siguiente" (click)="onAccept()"></button>
                     </div>
                 </div>
             </ng-template>
@@ -362,84 +273,50 @@
 
         <p-confirmDialog #cdrenovacion_ok key="cdrenovacion_ok" [blockScroll]="true" [baseZIndex]="10000">
             <ng-template pTemplate="headless" let-message let-onAccept="onAccept" let-onReject="onReject">
-                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <img src="assets/images/logos/renovacion.png" width="110" height="110">
-                    </div>
-                    <span class="font-bold text-2xl block mb-4 mt-4 txt-primary">
-                        {{ message.header }}
-                    </span>
+                <div class="ct-pop">
+                    <span class="ct-pop-ico"><i class="pi pi-check"></i></span>
+                    <span class="ct-pop-titulo">{{ message.header }}</span>
+                    <span class="ct-pop-sub">{{ nombreCompleto }}</span>
 
-                    <div class="w-full">
-                        <div class="mb-2 txt-label">Nombres</div>
-                        <div pInputText class="w-full mb-3 dataConfirm linea">
-                            {{objInvDetail.persona.nombres+' '+objInvDetail.persona.apellidoPaterno+'
-                            '+objInvDetail.persona.apellidoMaterno}}
+                    <div class="ct-pop-resumen">
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-money-bill"></i></span>
+                            <span class="ct-fila-label">Monto</span>
+                            <span class="ct-fila-valor ct-pop-monto">{{currency}} {{objInvDetail.monto | formatNumber}}</span>
                         </div>
-
-                        <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
-                            <div class="flex flex-column w-full">
-                                <div class="txt-label mb-2">Monto</div>
-                                <div pInputText class="w-full dataConfirm">
-                                    {{objInvDetail.monto | formatNumber }}
-                                </div>
-                            </div>
-
-                            <div class="flex flex-column w-full">
-                                <div for="cuotas" class="txt-label mb-2">Nro. Cuotas</div>
-                                <div id="cuotas" pInputText class="w-full dataConfirm">
-                                    {{objInvDetail.nroCuotas}}
-                                </div>
-                            </div>
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-hashtag"></i></span>
+                            <span class="ct-fila-label">Nº de cuotas</span>
+                            <span class="ct-fila-valor">{{objInvDetail.nroCuotas}}</span>
                         </div>
-
-                        <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
-                            <div class="flex flex-column w-full">
-                                <div for="interes" class="txt-label mb-2">Interés</div>
-                                <div id="interes" pInputText class="w-full dataConfirm">
-                                    {{objInvDetail.interes | twoDigits }} %
-                                </div>
-                            </div>
-
-                            <div class="flex flex-column w-full">
-                                <div class="txt-label mb-2">Valor de cuota</div>
-                                <div pInputText class="w-full dataConfirm">
-                                    <span *ngIf="valorCuota!==0">{{valorCuota | formatNumber}}</span>
-                                    <span *ngIf="valorCuota===0">Calculando...</span>
-                                </div>
-                            </div>
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-percentage"></i></span>
+                            <span class="ct-fila-label">Interés</span>
+                            <span class="ct-fila-valor">{{objInvDetail.interes | twoDigits }} %</span>
                         </div>
-
-                        <div class="flex flex-row gap-2 align-items-top justify-content-cente mb-3 linea">
-                            <div class="flex flex-column w-full">
-                                <div for="fechai" class="txt-label mb-2">Fecha inicio</div>
-                                <div id="fechai" pInputText class="w-full dataConfirm fechas">
-                                    {{date1Show}}
-                                </div>
-                            </div>
-
-                            <div class="flex flex-column w-full">
-                                <div class="txt-label mb-2">Fecha fin</div>
-                                <div pInputText class="w-full dataConfirm fechas">
-                                    {{date2Show}}
-                                </div>
-                            </div>
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-wallet"></i></span>
+                            <span class="ct-fila-label">Valor de cuota</span>
+                            <span class="ct-fila-valor">
+                                <ng-container *ngIf="valorCuota!==0; else calculando">{{currency}} {{valorCuota | formatNumber}}</ng-container>
+                                <ng-template #calculando><i class="pi pi-spin pi-spinner"></i></ng-template>
+                            </span>
                         </div>
-
-                        <div *ngIf="txtComentario!==''" class="w-full linea">
-                            <div class="txt-label mb-2">Comentario</div>
-                            <div pInputText class="w-full dataConfirm txt-break">
-                                {{txtComentario}}
-                            </div>
+                        <div class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-calendar"></i></span>
+                            <span class="ct-fila-label">Periodo</span>
+                            <span class="ct-fila-valor">{{date1Show}} → {{date2Show}}</span>
+                        </div>
+                        <div *ngIf="txtComentario!==''" class="ct-fila">
+                            <span class="ct-fila-ico"><i class="pi pi-comment"></i></span>
+                            <span class="ct-fila-label">Comentario</span>
+                            <span class="ct-fila-valor txt-break">{{txtComentario}}</span>
                         </div>
                     </div>
 
-                    <div class="flex align-items-center gap-2 mt-4">
-                        <button pButton label="Volver" (click)="onReject()" class="p-button-outlined w-8rem ">
-                        </button>
-                        <button pButton label="Registrar" (click)="onAccept()" class="w-8rem">
-                        </button>
-
+                    <div class="ct-pop-btns">
+                        <button pButton label="Volver" (click)="onReject()" class="p-button-outlined"></button>
+                        <button pButton label="Registrar" (click)="onAccept()"></button>
                     </div>
                 </div>
             </ng-template>
@@ -447,28 +324,20 @@
 
         <p-confirmDialog #reno_cli key="reno_cli">
             <ng-template pTemplate="headless" let-message let-onReject="onReject">
-                <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                    <div class="border-circle inline-flex justify-content-center align-items-center h-5rem w-5rem">
-                        <img src="assets/images/logos/renovacion.png" width="110" height="110">
-                    </div>
-                    <span class="font-bold text-2xl block mb-3 mt-4 txt-primary">
-                        {{ message.header }}
-                    </span>
-                    <span class="text-1xl block mb-3 txt-label">
-                        <strong>{{ message.message }}</strong>, Comunícate con tu socio(a) y accede a las mejores
-                        opciones para ti.
-                    </span>
-                    <div class="flex align-items-center gap-2 mt-3">
-                        <button pButton label="Aceptar" (click)="onReject()" class="p-button-outlined w-16rem ">
-                        </button>
-
+                <div class="ct-pop">
+                    <span class="ct-pop-ico"><i class="pi pi-replay"></i></span>
+                    <span class="ct-pop-titulo">{{ message.header }}</span>
+                    <p class="ct-pop-texto">
+                        <b>{{ message.message }}</b>, comunícate con tu socio(a) y accede a las mejores opciones para ti.
+                    </p>
+                    <div class="ct-pop-btns ct-pop-btns-una">
+                        <button pButton label="Entendido" (click)="onReject()"></button>
                     </div>
                 </div>
             </ng-template>
         </p-confirmDialog>
 
-
-        <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="w-full mb-1"></button>
+        <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="ct-inicio btn-tall"></button>
     </div>
 </div>
 

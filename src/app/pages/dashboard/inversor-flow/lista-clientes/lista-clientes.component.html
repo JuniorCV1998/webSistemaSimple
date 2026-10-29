@@ -1,86 +1,60 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
+<div class="lc">
 
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Clientes</div>
+    <div class="lc-head">
+        <div class="text-2xl label-title">Clientes</div>
+        <span class="lc-desc">Consulta los datos y préstamos de cada cliente.</span>
     </div>
 
-    <div class="flex flex-row w-full justify-content-start mb-3">
-        <ng-template [ngIf]="isLoading">
-            <div class="flex flex-row w-full" style="min-width: 278px;">
-                <div class="w-full p-2">
-                    <div class="flex w-full mb-3 gap-2 row-skeleton">
-                        <div class="flex flex-column w-full gap-3">
-                            <p-skeleton class="w-6" height="1rem" />
-                            <p-skeleton class="w-12" height="2rem" />
-                        </div>
-                    </div>
+    <!-- Buscador -->
+    <div class="lc-search">
+        <i class="pi pi-search lc-search-icon"></i>
+        <input (input)="filtrarCliente()" id="buscar-cliente" name="usuario" [(ngModel)]="busqueda" [maxlength]="30"
+            type="text" placeholder="Buscar por nombre o celular" pInputText autocomplete="off" class="w-full"
+            [disabled]="isLoading">
+        <i *ngIf="busqueda" class="pi pi-times-circle lc-search-clear" (click)="cleanFiltroFunct()"></i>
+    </div>
+
+    <!-- Lista -->
+    <div class="lc-seccion">
+        <span>Tus clientes</span>
+        <span *ngIf="!isLoading && totalClientes" class="lc-count">{{totalClientes}}</span>
+    </div>
+    <section class="lc-lista">
+
+        <ng-container *ngIf="isLoading">
+            <div *ngFor="let item of [].constructor(forSkeleton)" class="lc-item">
+                <p-skeleton shape="circle" size="44px" />
+                <div class="flex flex-column w-full gap-2">
+                    <p-skeleton width="70%" height="1rem" />
+                    <p-skeleton width="35%" height=".8rem" />
                 </div>
             </div>
-        </ng-template>
-        <ng-template [ngIf]="!isLoading">
-            <span class="text-gray-500 font-medium line-height-3 w-full">Se listaron {{totalClientes}} clientes.</span>
-        </ng-template>
+        </ng-container>
 
-    </div>
-
-    <ng-template [ngIf]="!isLoading">
-        <div class="relative w-full mb-3">
-            <input (input)="filtrarCliente()" id="email1" name="usuario" [(ngModel)]="busqueda" [maxlength]="30"
-                type="text" placeholder="Buscar por nombre o celular" pInputText class="w-full mb-3">
-            <i class="pi" [ngClass]="busqueda ? 'pi-times-circle' : ''" (click)="cleanFiltroFunct()"
-                style="position: absolute; top: 40%; right: 10px; transform: translateY(-60%); cursor: pointer;">
-            </i>
-        </div>
-    </ng-template>
-
-
-    <!-- <div class="flex flex-row w-full justify-content-between mb-5">
-        <span class="text-gray-500 font-medium line-height-3 text-center w-full">Tus clientes</span>
-    </div> -->
-
-    <div *ngIf="filtroVacio && listaClientesRecovery.length!=0"
-        class="flex flex-column w-full justify-content-center align-items-center gap-2">
-        <i class="pi pi-search-minus"></i>
-        <span class="span-empty">Parece que no tienes un cliente <b>"{{busqueda}}"</b></span>
-    </div>
-
-    <div *ngIf="listaClientesRecovery.length==0 && !isLoading"
-        class="flex flex-row justify-content-center align-items-center w-full">
-        <span class="w-10 span-empty">Aún no tienes clientes registrados.</span>
-    </div>
-
-    <ng-template [ngIf]="isLoading">
-        <div class="flex flex-row w-full" style="min-width: 278px;">
-            <div class="w-full p-2">
-                <div *ngFor="let item of [].constructor(forSkeleton); let i = index"
-                    class="flex w-full mb-3 gap-2 row-skeleton">
-                    <div class="flex flex-column w-full gap-1">
-                        <p-skeleton class="w-10" height="1rem" />
-                        <p-skeleton class="w-4" height="1rem" />
-                    </div>
-                    <p-skeleton class="w-1" height="2rem" />
-                </div>
+        <ng-container *ngIf="!isLoading">
+            <div *ngIf="filtroVacio && listaClientesRecovery.length != 0" class="lc-empty">
+                <i class="pi pi-search-minus"></i>
+                <span>No encontramos a <b>"{{busqueda}}"</b> entre tus clientes.</span>
             </div>
-        </div>
-    </ng-template>
 
-    <ng-template [ngIf]="!isLoading">
-        <div *ngFor="let cliente of listaClientes"
-            class="flex w-column justify-content-center gap-2 mb-3 w-full align-items-center">
-            <div class="flex flex-row w-full justify-content-center container-cliente gap-2"
-                [routerLink]="['/cliente']" [queryParams]="{ idUsuario: cliente.idUsuario}">
-                <div class="flex flex-column w-10 gap-1">
-                    <span class="span-nombre">{{cliente.persona.nombres+' '+cliente.persona.apellidoPaterno+'
-                        '+cliente.persona.apellidoMaterno}}</span>
-                    <span class="span-desc">{{ formatNumberEspaciado(cliente.persona.celular) }}</span>
-                </div>
-                <div class="flex flex-row justify-content-end align-items-center w-2 gap-1">
-                    <i class="pi pi-angle-right"></i>
-                </div>
+            <div *ngIf="listaClientesRecovery.length == 0" class="lc-empty">
+                <i class="pi pi-users"></i>
+                <span>Aún no tienes clientes registrados.</span>
             </div>
-        </div>
-    </ng-template>
+
+            <button type="button" *ngFor="let cliente of listaClientes" class="lc-item lc-item-btn"
+                [routerLink]="['/cliente']" [queryParams]="{ idUsuario: cliente.idUsuario }">
+                <span class="lc-avatar">{{ iniciales(cliente.persona) }}</span>
+                <span class="lc-item-text">
+                    <span class="lc-nombre">{{cliente.persona.nombres+' '+cliente.persona.apellidoPaterno+' '+cliente.persona.apellidoMaterno}}</span>
+                    <span class="lc-celular" *ngIf="cliente.persona.celular">
+                        <i class="pi pi-phone"></i>{{ formatNumberEspaciado(cliente.persona.celular) }}
+                    </span>
+                </span>
+                <i class="pi pi-angle-right lc-chevron"></i>
+            </button>
+        </ng-container>
+    </section>
 
     <div style="height: 50px;"></div>
-
 </div>

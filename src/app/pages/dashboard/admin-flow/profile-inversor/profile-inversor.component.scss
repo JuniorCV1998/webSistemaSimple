@@ -1,154 +1,175 @@
-.user-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  padding: 20px;
-  width: 100%;
-  max-width: 600px;
-  margin: auto;
-}
-.user-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-.user-avatar {
-  display: flex;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  
-}
-.pi-user{
-  font-size: 40px;
-  font-weight: 600;
-  color: white;
-}
-span {
-  display: block;
-  max-width: 100%;
-  word-break: break-word;  /* Rompe palabras largas */
-  white-space: normal;     /* Permite saltos de línea */
+/* Datos del inversor (admin): clases globales .adm-* (styles.scss) + tarjeta de membresía */
+
+/* Colores por estado de la membresía: --c define el tono */
+.adm-verde { --c: var(--primary-500); }
+.adm-naranja { --c: var(--orange-500); }
+.adm-rojo { --c: var(--red-500); }
+
+.pi-mem {
+  padding: 16px;
 }
 
-.user-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.user-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #1a1f2c;
-  margin: 0;
+.pi-mem-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.span-nombre{
+.pi-mem-ico {
+  width: 42px;
+  height: 42px;
+}
+
+.pi-mem-plan {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+
+  small { font-size: 12px; color: var(--gray-500); }
+  b { font-size: 15px; color: var(--gray-700); }
+}
+
+.pi-dias {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 14px 0 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--c, var(--blue-400)) 8%, #fff);
+
+  b {
+    font-size: 1.7rem;
+    line-height: 1;
     font-weight: 700;
-    color: var(--gray-500);
-    font-size: 16px;
-    text-align: left;
-  }
-.span-desc{
-    color: var(--gray-500);
-    font-size: 14px;
-    text-align: left;
+    color: var(--c, var(--blue-400));
   }
 
-.input-fail{
-  color: red;
-  font-size: 12px;
+  span {
+    font-size: 13px;
+    color: var(--gray-600);
+  }
 }
 
-
- 
- /* ACCESO, ACTIVO - INACTIVO */
-.toggle {
-  display: inline-block;
+.pi-extender {
+  width: 100%;
+  margin-top: 10px;
 }
 
-/* ocultamos el checkbox */
-.toggle-input {
-  display: none;
-}
-
-.toggle-label {
-  display: block;
-  width: 50px;
-  height: 26px;
-  background-color: #e53935; /* rojo apagado */
-  border-radius: 50px;
-  position: relative;
+/* ===== Historial de pagos de la membresía ===== */
+.pi-hist-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: var(--blue-400);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+
+  .pi { font-size: 12px; }
 }
 
-/* handle (el círculo) */
-.toggle-handle {
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-radius: 50%;
-  position: absolute;
-  top: 4px;
-  left: 2px;
+.pi-hist {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.pi-hist-fila {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: #e53935;
-  transition: all 0.3s ease;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: var(--gray-100);
 }
 
-/* cuando está activo (checked) */
-.toggle-input:checked + .toggle-label {
-  background-color: #4caf50; /* verde */
+.pi-hist-texto {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+
+  b { font-size: 13.5px; color: var(--gray-700); }
+  small { font-size: 12px; color: var(--gray-500); }
 }
 
-.toggle-input:checked + .toggle-label .toggle-handle {
-  left: 26px;
-  color: #4caf50;
+.pi-hist-precio {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  s { font-size: 11.5px; color: var(--gray-400); }
 }
 
-/* cambiar icono dinámicamente */
-.toggle-input:checked + .toggle-label .toggle-handle i::before {
-  content: "\e909"; /* código unicode pi-check */
+.pi-hist-monto {
+  font-size: 14px;
+  color: var(--gray-700);
 }
 
-.toggle-input:not(:checked) + .toggle-label .toggle-handle i::before {
-  content: "\e90b"; /* código unicode pi-times */
+/* Popup: aviso de que se conservan los días vigentes */
+.pi-nota {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--gray-500);
+  text-align: left;
+
+  .pi { margin-top: 2px; font-size: 12px; color: var(--blue-400); }
 }
 
-/* ACTUALZIAR MEMBRESIA */
-.slider {
-  -webkit-appearance: none;
+/* ===== Popup extender membresía (se dibuja en <body>: sin :host) ===== */
+.pi-meses {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
   width: 100%;
-  height: 6px;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-  border-radius: 6px;
-  outline: none;
-  cursor: pointer;
+
+  button {
+    height: 44px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--gray-600);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.on {
+      border-color: var(--blue-400);
+      background: color-mix(in srgb, var(--blue-400) 10%, #fff);
+      color: var(--blue-400);
+    }
+  }
 }
 
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #6366f1;
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
+::ng-deep .adm-pop .pi-monto {
+  display: block;
+  width: 100%;
+
+  .p-inputnumber-input { width: 100%; text-align: center; font-size: 1.1rem; font-weight: 600; }
 }
 
-.slider::-webkit-slider-thumb:hover {
-  background: #4338ca;
+.pi-error {
+  align-self: flex-start;
+  font-size: 12px;
+  color: var(--red-500);
 }
 
+.pi-nueva-fecha {
+  color: var(--primary-500);
+}

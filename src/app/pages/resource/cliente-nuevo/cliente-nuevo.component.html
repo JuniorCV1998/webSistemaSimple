@@ -1,50 +1,71 @@
-<div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
-    <div class="text-center mb-4">
-        <div class=" text-2xl mb-3 label-title">Nuevo cliente</div>
-    </div>
+<div class="flujo fx-form">
 
-    <div class="flex flex-row w-full justify-content-between mb-3">
-        <span class="text-gray-500 font-medium line-height-3 text-center w-full">Ingresa los datos del nuevo cliente</span>
-    </div>
+    <app-flow-steps [pasos]="pasos" [actual]="pasoActual" titulo="Nuevo cliente"
+        /> <!-- subtitulo="Ingresa los datos de la persona a la que le prestas."  -->
 
-    <div>
-        <label for="nombres" class="block title-input font-medium mb-2">Nombres</label>
-        <input [(ngModel)]="persona.nombres" [maxlength]="25" [disabled]="clientSelect" id="nombres" type="text" autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full mb-3">
-         
-        <div class="flex flex-row gap-2 align-items-center justify-content-center">
-            <div class="flex flex-column w-full">
-                <label for="apellidop" class="block title-input font-medium mb-2">Apellido paterno</label>
-                <input [(ngModel)]="persona.apellidoPaterno" [maxlength]="20" [disabled]="clientSelect" id="apellidop" type="text" placeholder="Apellido paterno" pInputText appSoloLetras class="w-full mb-3">
+    <!-- Vista previa del cliente (se actualiza mientras escribe) -->
+    <section class="cn-preview">
+        <span class="cn-avatar">
+            <ng-container *ngIf="inicialesPreview; else iconoVacio">{{inicialesPreview}}</ng-container>
+            <ng-template #iconoVacio><i class="pi pi-user"></i></ng-template>
+        </span>
+        <div class="cn-preview-text">
+            <span class="cn-preview-nombre">{{nombrePreview || 'Nombre del cliente'}}</span>
+            <span class="cn-pill">Cliente nuevo</span>
+        </div>
+    </section>
+
+    <!-- Datos personales -->
+    <span class="cn-seccion">Datos personales</span>
+    <section class="cn-card">
+        <label for="nroDoc" class="flujo-label">Documento <span class="flujo-opcional">(opcional)</span></label>
+        <div class="doc-row">
+            <p-select [options]="tipoDocs" [(ngModel)]="persona.codTipoDoc" (onChange)="onTipoDocChange()"
+                optionLabel="descripcionAbrev" optionValue="codigo" [showClear]="true" placeholder="Tipo"
+                [disabled]="clientSelect" appendTo="body" class="doc-tipo" />
+            <input id="nroDoc" pInputText class="doc-nro" [value]="persona.nroDocumento"
+                (input)="onNroDocumentoInput($event)" [disabled]="clientSelect || !persona.codTipoDoc"
+                [attr.inputmode]="reglaDoc?.alfanumerico ? 'text' : 'numeric'" autocapitalize="characters"
+                [attr.maxlength]="reglaDoc?.max" [placeholder]="persona.codTipoDoc ? 'Número' : 'Elige el tipo'">
+        </div>
+        <small *ngIf="documentoIncompleto" class="flujo-error"><i class="pi pi-info-circle"></i> {{mensajeNroDoc}}</small>
+
+        <label for="nombres" class="flujo-label mt-3">Nombres</label>
+        <input [(ngModel)]="persona.nombres" [maxlength]="25" [disabled]="clientSelect" id="nombres" type="text"
+            autocomplete="off" placeholder="Nombres" pInputText appSoloLetras class="w-full">
+
+        <div class="nombres-row mt-3">
+            <div>
+                <label for="apellidop" class="flujo-label">Apellido paterno</label>
+                <input [(ngModel)]="persona.apellidoPaterno" [maxlength]="20" [disabled]="clientSelect" id="apellidop"
+                    type="text" placeholder="Paterno" pInputText appSoloLetras class="w-full">
             </div>
-
-            <div class="flex flex-column w-full">
-                <label for="apellidom" class="block title-input font-medium mb-2">Apellido materno</label>
-                <input [(ngModel)]="persona.apellidoMaterno" [maxlength]="20" [disabled]="clientSelect" id="apellidom" type="text" placeholder="Apellido materno" pInputText appSoloLetras class="w-full mb-3">
+            <div>
+                <label for="apellidom" class="flujo-label">Apellido materno</label>
+                <input [(ngModel)]="persona.apellidoMaterno" [maxlength]="20" [disabled]="clientSelect" id="apellidom"
+                    type="text" placeholder="Materno" pInputText appSoloLetras class="w-full">
             </div>
         </div>
+    </section>
 
-        <div class="flex flex-row gap-2 align-items-center justify-content-center">
-            <div class="flex flex-column w-full">
-                <label for="celular" class="block title-input font-medium mb-2">Celular<span id="span-celular">(Opcional)</span></label>
-                <input [(ngModel)]="persona.celular" [maxlength]="11" [disabled]="clientSelect" id="celular" type="text" placeholder="Celular" pInputText appNroCelular class="w-full mb-3">
-            </div>
+    <!-- Contacto -->
+    <span class="cn-seccion">Contacto</span>
+    <section class="cn-card">
+        <label for="celular" class="flujo-label">Celular <span class="flujo-opcional">(opcional)</span></label>
+        <app-celular-pais inputId="celular" [(codPais)]="persona.codPais" [(celular)]="persona.celular"
+            [disabled]="clientSelect" />
 
-            <div class="flex flex-column w-full">
-                <label for="direccion" class="block title-input font-medium mb-2">Dirección</label>
-                <input [(ngModel)]="persona.direccion" [maxlength]="60" [disabled]="clientSelect" id="direccion" type="text" placeholder="Dirección" pInputText class="w-full mb-3">
-            </div>
-        </div>
+        <label for="direccion" class="flujo-label mt-3">Dirección</label>
+        <input [(ngModel)]="persona.direccion" [maxlength]="60" [disabled]="clientSelect" id="direccion" type="text"
+            placeholder="Av., calle, distrito" pInputText class="w-full">
+    </section>
 
-        <div class="flex flex-row justify-content-center gap-1 w-full mb-5" style="max-width: 550px;">
-            <i class="pi pi-info-circle"></i><small>Al crear la inversión se creara un correo y contraseña para que tu cliente le pueda dar seguimiento.</small>
-        </div>
-
+    <div class="cn-hint">
+        <span class="cn-hint-ico"><i class="pi pi-key"></i></span>
+        <span>Al registrar el préstamo le crearemos un correo y una contraseña para que tu cliente pueda ver sus pagos.</span>
     </div>
 
-    <button pButton [ngClass]="{
-        'btn-disabled': !isFormValid()
-      }"
-    pRipple label="Siguiente" (click)="irDatosInversion()" [disabled]="!isFormValid()" class="p-component w-full btn-tall"></button>
-
+    <div style="height: 70px;"></div>
+    <button pButton pRipple label="Siguiente" icon="pi pi-arrow-right" iconPos="right" (click)="irDatosInversion()"
+        [disabled]="!isFormValid()" [ngClass]="{'btn-disabled': !isFormValid()}" class="btn-float"></button>
 </div>

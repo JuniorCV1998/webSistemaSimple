@@ -1,0 +1,72 @@
+/* Actualización disponible: popup fintech mobile light */
+.ua {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.ua-anim {
+  width: 170px;
+  height: 140px;
+}
+
+.ua-titulo {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-700);
+}
+
+.ua-version {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  color: var(--blue-400);
+  font-size: 12.5px;
+  font-weight: 600;
+
+  .pi { font-size: 12px; }
+}
+
+.ua-texto {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--gray-500);
+}
+
+.ua-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.ua-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .pi { font-size: 14px; }
+
+  &.ua-btn-sec {
+    background: transparent;
+    color: var(--gray-500);
+  }
+}

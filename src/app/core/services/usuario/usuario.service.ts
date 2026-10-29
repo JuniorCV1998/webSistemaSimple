@@ -18,7 +18,7 @@ export class UsuarioService {
   }
 
   /** Actualiza celular, dirección y/o contraseña del usuario logueado. Enviar solo los campos que cambiaron. */
-  updateProfile(body: { celular?: string; direccion?: string; contrasena?: string }) {
+  updateProfile(body: { celular?: string; codPais?: string; direccion?: string; contrasena?: string }) {
     return this.http.post(this.baseUrl + this.baseComponent + 'updateProfile', body);
   }
 }

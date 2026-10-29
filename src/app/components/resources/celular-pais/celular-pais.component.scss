@@ -1,0 +1,107 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.cel-pais {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid var(--p-inputtext-border-color, #cbd5e1);
+  border-radius: var(--p-inputtext-border-radius, 6px);
+  background: var(--p-inputtext-background, #fff);
+  transition: border-color .2s, box-shadow .2s;
+  overflow: hidden;
+
+  &:focus-within {
+    border-color: var(--p-primary-color, #10b981);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--p-primary-color, #10b981) 18%, transparent);
+  }
+}
+
+.cel-pais-invalido {
+  border-color: #ef4444;
+}
+
+.cel-pais-disabled {
+  opacity: .6;
+  background: var(--p-inputtext-disabled-background, #f1f5f9);
+}
+
+/* El select va "pegado" al input: sin borde propio, separado por una línea */
+/* En PrimeNG 18 la clase .p-select está en el mismo host <p-select> */
+.cel-pais-select {
+  flex: 0 0 auto;
+  height: auto;
+  border: none;
+  border-right: 1px solid var(--p-inputtext-border-color, #e2e8f0);
+  border-radius: 0;
+  box-shadow: none !important;
+  background: #f8fafc;
+
+  ::ng-deep .p-select-label {
+    padding: .5rem .25rem .5rem .6rem;
+  }
+
+  ::ng-deep .p-select-dropdown {
+    width: 1.6rem;
+  }
+}
+
+.cel-pais-sel {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.cel-pais-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.cel-pais-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: .5rem .75rem;
+  font: inherit;
+  color: var(--p-inputtext-color, #334155);
+  letter-spacing: .02em;
+
+  &::placeholder {
+    color: var(--p-inputtext-placeholder-color, #94a3b8);
+  }
+}
+
+.cel-pais-error {
+  display: block;
+  margin-top: .3rem;
+  color: #ef4444;
+  font-size: 12px;
+}
+
+/* Opciones del desplegable (va al body por appendTo) */
+::ng-deep .cel-pais-panel {
+  min-width: 16rem;
+
+  .cel-pais-item {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    width: 100%;
+  }
+
+  .cel-pais-nombre {
+    flex: 1;
+  }
+
+  .cel-pais-cod {
+    color: #64748b;
+    font-variant-numeric: tabular-nums;
+  }
+}

@@ -1,9 +1,10 @@
+/* Activar huella: popup fintech mobile light */
 .biometric-activation {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0.5rem 0.25rem;
+  padding: 6px 2px 0;
 }
 
 .icon-wrapper {
@@ -13,14 +14,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--blue-400) 10%, #fff);
 }
 
 .icon-pulse {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: var(--primary-100, #d1fae5);
+  background: color-mix(in srgb, var(--blue-400) 22%, #fff);
   animation: pulse-ring 1.8s ease-out infinite;
 }
 
@@ -31,44 +34,48 @@
   }
 
   70% {
-    transform: scale(1.15);
+    transform: scale(1.2);
     opacity: 0;
   }
 
   100% {
-    transform: scale(1.15);
+    transform: scale(1.2);
     opacity: 0;
   }
 }
 
 .fingerprint-icon {
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   z-index: 1;
 }
 
 .titulo {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--gray-800, #1f2937);
-  margin: 0 0 .5rem;
+  color: var(--gray-700);
+  margin: 0 0 6px;
 }
 
 .descripcion {
-  font-size: .88rem;
+  font-size: 14px;
   color: var(--gray-500);
-  line-height: 1.4;
+  line-height: 1.5;
   margin: 0;
 }
 
 .btn-activar {
-  background: var(--primary-500);
-  border: none;
-  font-weight: 700;
-  border-radius: var(--radius-sm);
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+  font-weight: 600;
 }
 
 .btn-omitir {
+  height: 44px;
+  border-radius: 14px;
   color: var(--gray-500);
+  font-weight: 600;
 }

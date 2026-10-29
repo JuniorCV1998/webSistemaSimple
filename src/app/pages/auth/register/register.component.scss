@@ -1,24 +1,7 @@
-#div_line_bootom{
-    /* min-width: 315px; */
-    /* border-bottom: solid 1px var(--gray-300); */
-}
-.codUnico-help{
-    font-size: 16px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-}
-small {
-    color: var(--gray-500);
-}
-#terminos_condiciones{
-    margin-left: 10px;
-}
-i{
-    color: var(--blue-400);
-    font-size: .8rem;
-}
-#iconPassword1, #iconPassword2{
-    color: var(--gray-500);
-    font-size: 1rem;
+/* Estilos de la pantalla: clases globales .au-* (styles.scss) */
+
+/* Código único completo: chip en verde */
+.au-chip.au-chip-ok {
+    background: color-mix(in srgb, var(--primary-500) 12%, #fff);
+    color: var(--primary-500);
 }

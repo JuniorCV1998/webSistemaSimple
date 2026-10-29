@@ -1,242 +1,294 @@
-.image-presentacion{
-    background: linear-gradient(135deg, var(--blue-500), var(--primary-500));
-    width: 100%;
-    height: 290px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 12px 24px -10px rgba(2, 202, 85, 0.45);
-}
-.image-presentacion img{
-    background-color: white;
-    border-radius: var(--radius-md);
-    padding: 10px;
+/* Ingreso con clave: estilo fintech mobile light */
+$ink: var(--gray-700);
+$muted: var(--gray-500);
+$blue: var(--blue-400);
+$green: var(--primary-500);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+
+::ng-deep .p-dialog {
+  width: 90%;
+  max-width: 550px;
 }
 
-::ng-deep .p-dialog{
-    width: 90%;
-    max-width: 550px;
+.lu {
+  position: relative;
+  isolation: isolate; // el brillo (z-index:-1) queda detrás del contenido pero sobre el fondo de la página
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 18px 2px 12px;
+
+  /* Brillo de marca muy suave arriba (mismo look que el login) */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -40px -40px auto;
+    height: 300px;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 70% at 90% 10%, color-mix(in srgb, var(--blue-400) 16%, transparent), transparent 70%),
+      radial-gradient(55% 60% at 5% 0%, color-mix(in srgb, var(--primary-500) 12%, transparent), transparent 70%);
+  }
 }
-.relative i{
-    color: var(--gray-500);
+
+/* ===== Encabezado (sin hero) ===== */
+.lu-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
 }
 
-/*  */
-
-.login-container {
-    text-align: center;
-    /* Agregar flexbox para centrar */
-    display: flex;
-    flex-direction: column; /* Para mantener los elementos en una columna */
-    justify-content: center; /* Centra verticalmente */
-    align-items: center; /* Centra horizontalmente */
-    margin-bottom: 10px;
-  }
-  
-  
-  .keypad{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    justify-items: center;
-    max-width: 300px;
-  }
-
-  .keypad-button {
-    width: 80px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 28px;
-    font-size: 23px;
-    background-color: var(--primary-400);
-    color: white;
-    font-weight: 700;
-    border: none;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    box-shadow: 0 4px 10px -4px rgba(2, 202, 85, 0.5);
-    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
-  }
-
-
-  .keypad button:active {
-    background-color: var(--primary-500);
-    transform: scale(0.94);
-    box-shadow: 0 2px 6px -3px rgba(2, 202, 85, 0.5);
-  }
-
-  button:disabled {
-    background-color: #ccc;
-  }
-
-  .delete-button {
-    /* grid-column: span 1.5; */ /* Hace que el botón ocupe toda la fila inferior */
-    background-color: transparent;
-    color: var(--gray-500);
-    font-size: 24px;
-    border-radius: 50px;
-    box-shadow: none;
-  }
-
-  .delete-button:active {
-    background-color: var(--gray-100);
-    box-shadow: none;
-  }
-
-  .delete-button i{
-    font-size: 2rem;
-    font-weight: 500;
-  }
-
-  /* Estilo para la contrasea ofuscada */
-  .passCheck{
-    font-size: 1rem;
-    color: var(--primary-500);
-  }
-  .passNoCheck{
-    font-size: 1rem;
-    color: var(--gray-300);
-    
-  }
-  .div-pass{
-    height: 50px;
-    align-items: center;
-  }
-
-  /* Botón de huella dentro del teclado (mismo lugar donde antes iba el ojo) */
-  .huella-button {
-    background-color: transparent;
-    box-shadow: none;
-  }
-
-  .huella-button:active {
-    background-color: var(--gray-100);
-    box-shadow: none;
-  }
-
-  .huella-button lottie-player {
-    display: block;
-    flex-shrink: 0;
-    width: 55px;
-    height: 55px;
-  }
-
-.version-style-float {
+.lu-version {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.75rem;
-  color: #999;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 2px 6px;
-  border-radius: 6px;
-  z-index: 5;
+  top: -8px;
+  right: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--gray-100);
+  color: $muted;
+  font-size: 11px;
+  font-weight: 600;
 }
 
-/* Carrusel de cuentas guardadas (deslizable, hasta 3 cuentas) */
-.cuentas-carousel-wrapper {
+.lu-logo {
+  width: 64px;
+  height: 64px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.lu-hero-titulo {
+  margin-top: 14px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: color-mix(in srgb, var(--blue-400) 28%, var(--gray-600));
+}
+
+.lu-hero-sub {
+  margin-top: 4px;
+  font-size: 14px;
+  color: $muted;
+}
+
+/* ===== Cuentas ===== */
+.lu-cuentas {
   width: 100%;
 }
 
-.cuentas-carousel {
+.lu-carousel {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
 }
 
-.cuentas-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.cuenta-slide {
+.lu-slide {
   flex: 0 0 100%;
   scroll-snap-align: center;
   display: flex;
   justify-content: center;
-  padding: 0 4px;
+  padding: 4px 4px 16px; // espacio para la sombra de la píldora (el carrusel recorta lo que sobresale)
 }
 
-.cuenta-card {
-  position: relative;
+.lu-cuenta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: var(--primary-50, #ecfdf5);
-  border: 1px solid var(--primary-200, #a7f3d0);
-  border-radius: var(--radius-md);
+  gap: 10px;
   max-width: 100%;
+  padding: 6px 14px 6px 6px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: $sombra;
 }
 
-.cuenta-icon {
-  color: var(--primary-500);
-  font-size: 1rem;
+.lu-cuenta-avatar {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, $blue, $green);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
 }
 
-.cuenta-correo {
-  font-size: 0.85rem;
+.lu-cuenta-correo {
+  min-width: 0;
+  max-width: 220px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: var(--gray-700);
+  color: $ink;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
 }
 
-.cuenta-eliminar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
-  border-radius: 50%;
-  background: var(--red-50, #fef2f2);
-  color: var(--red-500, #ef4444);
-  font-size: 0.75rem;
-  cursor: pointer;
-  margin-left: 4px;
+.lu-cuenta-eliminar {
   flex-shrink: 0;
-  transition: background-color .15s ease, transform .1s ease;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--red-500) 10%, #fff);
+  color: var(--red-500);
+  font-size: 12px;
+  cursor: pointer;
+
+  &:active { transform: scale(.92); }
 }
 
-.cuenta-eliminar:hover {
-  background: var(--red-100, #fee2e2);
-}
-
-.cuenta-eliminar:active {
-  transform: scale(0.92);
-}
-
-.cuentas-dots {
+.lu-dots-cuentas {
   display: flex;
   justify-content: center;
   gap: 6px;
-  margin-top: 6px;
+  margin-top: -8px;
 }
 
-.dot {
+.lu-dot-cuenta {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: 999px;
   background: var(--gray-300);
   cursor: pointer;
-  transition: background-color .2s ease, transform .2s ease;
+  transition: width .2s ease, background-color .2s ease;
+
+  &.lu-dot-cuenta-on {
+    width: 16px;
+    background: $blue;
+  }
 }
 
-.dot-active {
-  background: var(--primary-500);
-  transform: scale(1.3);
-}
-
-.modo-edicion-hint {
-  font-size: 0.78rem;
+.lu-hint {
+  margin: -4px 0 0;
+  font-size: 12.5px;
   font-weight: 600;
-  color: var(--red-500, #ef4444);
+  color: var(--red-500);
   text-align: center;
+
+  i { font-size: 12px; }
+}
+
+/* ===== Clave ===== */
+.lu-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.lu-pin {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  height: 22px;
+  align-items: center;
+}
+
+.lu-pin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px var(--gray-300);
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+
+  &.lu-pin-on {
+    background: linear-gradient(135deg, $blue, $green);
+    box-shadow: none;
+    transform: scale(1.1);
+  }
+}
+
+/* ===== Teclado ===== */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 72px);
+  gap: 14px 26px;
+  justify-content: center;
+}
+
+.keypad-button {
+  width: 72px;
+  height: 72px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: #fff;
+  color: $ink;
+  font: inherit;
+  font-size: 26px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  box-shadow: $sombra;
+  cursor: pointer;
+  transition: transform .12s ease, background-color .12s ease;
+
+  &:active {
+    transform: scale(.92);
+    background: $blue-soft;
+    color: $blue;
+  }
+}
+
+/* Teclas sin fondo: borrar y huella */
+.keypad-plano {
+  background: transparent;
+  box-shadow: none;
+  color: $muted;
+
+  i { font-size: 1.6rem; }
+
+  &:active {
+    background: var(--gray-100);
+    color: $ink;
+  }
+}
+
+.huella-button lottie-player {
+  display: block;
+  width: 52px;
+  height: 52px;
+}
+
+/* ===== Otra cuenta ===== */
+.lu-otra {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: $blue-soft;
+  color: $blue;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  i { font-size: 14px; }
 }

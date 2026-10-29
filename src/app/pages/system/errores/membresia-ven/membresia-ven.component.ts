@@ -6,7 +6,9 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { DialogRenovarMembresiaComponent } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
+import { DialogRenovarMembresiaComponent, SolicitudRenovacion } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
+import { navegacionActual } from '../../../../core/ionic/page-host.component';
+import { Constantes } from '../../../../core/constant/Constantes';
 
 @Component({
   selector: 'app-membresia-ven',
@@ -27,23 +29,37 @@ export class MembresiaVenComponent {
 
   opcionSeleccionada: any = null;
 
+  /** Perfil de quien intentó ingresar (lo envía el login). */
+  perfil: string | null = null;
+
+  /**
+   * Solo el inversor renueva su membresía; el cliente depende de la de su inversor.
+   * Si el backend aún no envía el perfil, se muestra (como antes) para no bloquear al inversor.
+   */
+  get esCliente(): boolean {
+    return this.perfil === Constantes.PERFIL_CLI;
+  }
+
+  get puedeRenovar(): boolean {
+    return this.perfil ? this.perfil === Constantes.PERFIL_INV : true;
+  }
+
   constructor(
     private router: Router
   ) {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras?.state as { header?: string; body?: string };
+    const navigation = navegacionActual(this.router);
+    const state = navigation?.extras?.state as { header?: string; body?: string; perfil?: string };
 
     if (state) {
       this.header = state.header ?? this.header;
       this.body = state.body ?? this.body;
+      this.perfil = state.perfil ?? null;
     }
   }
 
-  solicitarPorWhatsapp(opcion: any) {
-    const mensaje = encodeURIComponent(
-      `¡Hola! Me gustaría renovar mi membresía con el plan de ${opcion.label} por S/${opcion.precio}.`
-    );
-    window.open(`https://wa.me/51${this.nroCelular}?text=${mensaje}`, '_blank');
+  /** El modal arma el mensaje y el enlace con el WhatsApp configurado por el admin. */
+  solicitarPorWhatsapp(solicitud: SolicitudRenovacion) {
+    window.open(solicitud.enlace, '_blank');
   }
 
 

@@ -1,209 +1,135 @@
+/* Inicio del administrador: hero como el dashboard del inversor + clases globales .adm-* (styles.scss) */
 
+.ai-saludo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
+}
 
-/* Estilo para el nombre y presentacion del usuario*/
-.label-nombre{
-  background: linear-gradient(to right, var(--primary-500), var(--blue-400)); /* Degradado de colores */
-  -webkit-background-clip: text; /* Aplicar el fondo degradado al texto para navegadores WebKit */
-  background-clip: text; /* Aplicar el fondo degradado al texto */
-  -webkit-text-fill-color: transparent; /* Hacer el color del texto transparente para WebKit */
+/* Saludo: mismo estilo que .label-title */
+.label-nombre {
+  color: color-mix(in srgb, var(--blue-400) 28%, var(--gray-600));
   font-weight: 700;
-  white-space: nowrap; /* Evita el salto de línea */
-  overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-  text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Estilo para el menú inferior */
-.footer-menu {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.04);
-    display: flex; 
-    justify-content: center;
+.ai-hola {
+  font-size: 1.6rem;
+  line-height: 1.25;
 }
 
-/* Estilo para el Banner */
+/* ===== Hero ===== */
+.ai-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 12px 18px;
+  border-radius: 26px;
+  color: #fff;
+  overflow: hidden;
+  background:
+    radial-gradient(140% 55% at 0% 112%, rgba(255, 255, 255, .20) 0 48%, transparent 49%),
+    radial-gradient(120% 50% at 100% 108%, rgba(255, 255, 255, .14) 0 50%, transparent 51%),
+    radial-gradient(160% 60% at 50% 128%, rgba(255, 255, 255, .10) 0 50%, transparent 51%),
+    radial-gradient(80% 60% at 85% 0%, rgba(255, 255, 255, .28), transparent 70%),
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--blue-400) 85%, #fff) 0%,
+      var(--blue-400) 35%,
+      color-mix(in srgb, var(--primary-500) 80%, var(--blue-400)) 100%);
+  box-shadow: 0 14px 30px -16px color-mix(in srgb, var(--blue-400) 70%, transparent);
+}
 
-  .custom-banner-1, .custom-banner-2 {
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 5px;                   /* Espacio alrededor de cada banner */
-    padding: 10px;                  /* Espacio dentro de cada banner */
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 30px;
-    align-items: center;
-  }
-  .custom-banner-codigo-unico{
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 5px;                   /* Espacio alrededor de cada banner */
-    padding: 10px;
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--gray-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 30px;
-    align-items: center;
-    height: 80px;
-  }
-  
-  .mostrar-datos{
-    background: linear-gradient(to right, var(--primary-500), var(--blue-400));
-    color: white;
-    border-radius: 10px;
-    font-size: 15px;
-  }
-  .mostrar-datos i{
-    font-size: 15px;
-    margin-right: .5rem;
-  }
- 
-/*   .span-1 span{
-    color: var(--primary-500);
-    font-size: 16px;
-  }
-  .span-2 span{
-    color: var(--blue-400);
-    font-size: 16px;
-  }
-  .span-1 i{
-    font-size: 16px;
-    color: var(--primary-500);
-  } */
+.ai-hero-label {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: .9;
+}
 
+.ai-metricas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  margin: 10px 0 12px;
+}
 
-  /* Estilo para la tabla de CODIGO UNICO */
-  /* Estilos para la tabla */
-  .custom-banner-4 {
-    flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-    margin: 5px;                   /* Espacio alrededor de cada banner */
-    padding: 15px;                  /* Espacio dentro de cada banner */
-    /* background: linear-gradient(to right, var(--primary-500), white); */    /* Color de fondo del banner */
-    background: #fff;
-    box-shadow: 0 0px 4px rgba(20, 184, 166, 0.5);
-    color: var(--primary-500);                 /* Color del texto del banner */
-    text-align: center;             /* Centra el texto dentro del banner */
-    border-radius: 8px;             /* Bordes redondeados */
-    min-width: 30px;
-    align-items: center;
+.ai-metrica {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+
+  b {
+    min-height: 2.6rem;
     display: flex;
-    justify-content: space-between;
-    pointer-events: auto;
-  }
-  .class-name-date{
-    display: flex;
-    justify-content: space-between;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+
+    .pi { font-size: 1.3rem; }
   }
 
-  table .span-monto{
-    margin-right: 5px;
-    font-size: 15px;
-  }
-  table .span-nombre{
-    font-weight: 500;
-    color: var(--gray-700);
-    font-size: 15px;
-    margin-top: 5px;
-    text-align: left;
-  }
-  table .span-fecha{
-    color: var(--gray-500);
-    font-size: 12px;
-    text-align: left;
-  }
-  table .tr-registros{
-    padding: 5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    /* margin-bottom: 8px; */
-    border-bottom: 1px solid var(--gray-300);
-  }
-  table .tr-registros-s{
-    padding: 5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  table .tr-registros:hover{
-    background-color: var(--gray-100);
-  }
-  .table-container{
-    overflow-y: auto;
-    max-height: 500px; 
-    -ms-overflow-style: none;  /* Para Internet Explorer y Edge */
-    scrollbar-width: none;  /* Para Firefox */
-  }
+  span { font-size: 13px; opacity: .9; }
+}
 
-  .table-container::-webkit-scrollbar {
-    display: none;  /* Para Chrome, Safari y Opera */
-  }
+.ai-metrica-sep {
+  width: 1px;
+  height: 44px;
+  background: rgba(255, 255, 255, .35);
+}
 
-  table .tr-cabecera{
-    padding: 5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    /* margin-bottom: 10px; */
-    border-bottom: 1px solid var(--gray-300);
-    
-  }
-  .span-1 span{
-    color: var(--primary-500);
-    font-size: 16px;
-  }
-  .span-2 span{
-    color: var(--blue-400);
-    font-size: 16px;
-  }
-  .span-1 i{
-    font-size: 16px;
-    color: var(--primary-500);
-  }
+.ai-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .25);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
 
-  table .tr-cabecera .span-1{
-    border-right: 1px solid var(--gray-300);
-    padding-right: 10px;
-  }
-  .row-skeleton{
-    padding: 5px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    /* margin-bottom: 8px; */
-    border-bottom: 1px solid var(--gray-300);
-  }
+  .pi { font-size: 13px; }
+}
 
+.ai-accesos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  margin-top: 18px;
+}
 
-  .tag-transparent-red{
-    border: 1px solid var(--red-500);
-    color: var(--red-500);
-    border-radius: 5px;
-    background-color: transparent;
-    padding: 2px;
-    font-size: 10px;
-    font-weight: 600;
-    width: auto;
-  }
-    .tag-transparent-primary{
-    border: 1px solid var(--primary-500);
-    color: var(--primary-500);
-    border-radius: 5px;
-    background-color: transparent;
-    padding: 2px;
-    font-size: 10px;
-    font-weight: 600;
-    width: auto;
-  }
+.ai-acceso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 600;
+}
 
-  
-  /* Estilo para comp update correo */
-.update-correo {
-  border-radius: 8px;
-  padding: 10px;
-  border: 2px solid transparent; /* importante: transparente */
-  background: 
-    linear-gradient(white, white) padding-box, /* fondo interior */
-    linear-gradient(to right, var(--primary-500), var(--blue-400)) border-box; /* borde degradado */
+.ai-acceso-ico {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, .25);
+
+  .pi { font-size: 19px; }
 }

@@ -7,6 +7,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { DialogRenovarMembresiaComponent } from '../../../modal/dialog-renovar-membresia/dialog-renovar-membresia.component';
+import { navegacionActual } from '../../../../core/ionic/page-host.component';
 
 @Component({
   selector: 'app-without-access',
@@ -31,7 +32,7 @@ export class WithoutAccessComponent {
   constructor(
     private router: Router
   ) {
-    const navigation = this.router.getCurrentNavigation();
+    const navigation = navegacionActual(this.router);
     const state = navigation?.extras?.state as { header?: string; body?: string };
 
     if (state) {

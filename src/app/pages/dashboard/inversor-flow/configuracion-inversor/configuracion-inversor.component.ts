@@ -20,12 +20,14 @@ import { ErrorGeneralComponent } from '../../../system/errores/error-general/err
 import { LoginService } from '../../../../core/services/auth/login/login.service';
 import { TempDataService } from '../../../../core/services/temp-data.service';
 import { appsettings } from '../../../../core/appsettings';
+import { RecortarImagenComponent } from '../../../../components/recortar-imagen/recortar-imagen.component';
 
 @Component({
   selector: 'app-configuracion-inversor',
   standalone: true,
   imports: [ToastModule, FormsModule, ErrorGeneralComponent, CommonModule, LoadingComponent,
-    ButtonModule, MessageModule, SelectModule, Checkbox, FormatNumberPipe, BiometriaConfigCardComponent],
+    ButtonModule, MessageModule, SelectModule, Checkbox, FormatNumberPipe, BiometriaConfigCardComponent,
+    RecortarImagenComponent],
   providers: [ConfirmationService, MessageService,],
   templateUrl: './configuracion-inversor.component.html',
   styleUrl: './configuracion-inversor.component.scss'
@@ -301,49 +303,51 @@ export default class ConfiguracionInversorComponent {
       return;
     }
 
-    const maxSize = 200 * 1024;
-    if (file.size > maxSize) {
-      this.showImageError("El archivo es muy grande. Máximo 200 KB.");
-      return;
-    }
-
     if (file.type !== 'image/svg+xml') {
-      const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
-      img.onload = () => {
-        const { width, height } = img;
-        const ratio = width / height;
-
-        if (ratio < 0.95 || ratio > 1.05) {
-          this.showImageError(`La imagen debe ser cuadrada. Dimensiones actuales: ${width}x${height}`);
-          URL.revokeObjectURL(objectUrl);
-          return;
-        }
-
-        this.previewImage(objectUrl, tipo);
-        if (tipo === 'logo') {
-          this.selectedFile = file;
-          this.selectedFileName = file.name;
-        } else if (tipo === 'sello') {
-          this.selectedFileSello = file;
-          this.selectedFileNameSello = file.name;
-        }
-
-        this.updateConfigField(tipo);
-      };
-      img.src = objectUrl;
-    } else {
-      // SVG directo
-      this.previewImage(URL.createObjectURL(file), tipo);
-      if (tipo === 'logo') {
-        this.selectedFile = file;
-        this.selectedFileName = file.name;
-      } else if (tipo === 'sello') {
-        this.selectedFileSello = file;
-        this.selectedFileNameSello = file.name;
+      // PNG/JPG de cualquier forma y tamaño: el recortador la deja cuadrada y liviana (≤ 200 KB)
+      const maxSize = 15 * 1024 * 1024;
+      if (file.size > maxSize) {
+        this.showImageError("El archivo es muy grande. Máximo 15 MB.");
+        return;
       }
-      this.updateConfigField(tipo);
+      this.recorte = { url: URL.createObjectURL(file), tipo: tipo as 'logo' | 'sello' };
+    } else {
+      // SVG directo (es vectorial: se adapta a cualquier tamaño)
+      const maxSize = 200 * 1024;
+      if (file.size > maxSize) {
+        this.showImageError("El archivo es muy grande. Máximo 200 KB.");
+        return;
+      }
+      this.usarImagen(file, file.name, tipo);
     }
+    // Permite volver a elegir el mismo archivo
+    (event.target as HTMLInputElement).value = '';
+  }
+
+  /** Imagen pendiente de recortar (abre el recortador). */
+  recorte: { url: string; tipo: 'logo' | 'sello' } | null = null;
+
+  onRecorteListo(file: File): void {
+    if (!this.recorte) return;
+    this.usarImagen(file, file.name, this.recorte.tipo);
+    this.cerrarRecorte();
+  }
+
+  cerrarRecorte(): void {
+    if (this.recorte) URL.revokeObjectURL(this.recorte.url);
+    this.recorte = null;
+  }
+
+  private usarImagen(file: File, nombre: string, tipo: string): void {
+    this.previewImage(URL.createObjectURL(file), tipo);
+    if (tipo === 'logo') {
+      this.selectedFile = file;
+      this.selectedFileName = nombre;
+    } else if (tipo === 'sello') {
+      this.selectedFileSello = file;
+      this.selectedFileNameSello = nombre;
+    }
+    this.updateConfigField(tipo);
   }
 
 

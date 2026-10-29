@@ -1,57 +1,40 @@
-<div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
-    
-    <div class="mb-2">
-        <div id="div_line_bootom" class=" text-2xl font-medium label-title">Registros</div>
+<div class="la">
+
+    <div class="la-head">
+        <span class="text-2xl label-title">Registros</span>
+        <span *ngIf="!skeletonShow && ultimasInversiones.length" class="la-count">{{ultimasInversiones.length}}</span>
     </div>
 
-    <div class="table-container">
-        <ng-template [ngIf]="skeletonShow">
-            <div class="flex flex-row" style="min-width: 287px;">
-                <div class="w-full p-2">
-                    <div class="flex w-full mb-1 gap-2 row-skeleton">
-                        <p-skeleton class="w-7" styleClass="mb-2" height="1.5rem"/>
-                        <p-skeleton class="w-2" styleClass="mb-2" height="1.5rem"/>
-                        <p-skeleton class="w-3" styleClass="mb-2" height="1.5rem"/>
-                    </div>
-                    <div *ngFor="let item of [].constructor(forSkeleton); let i = index" class="flex w-full mb-1 gap-2 row-skeleton">
-                        <div class="flex flex-column w-full gap-1">
-                            <p-skeleton class="w-10" height="1rem" />
-                            <p-skeleton class="w-8" height="1rem" />
-                        </div>
-                        <p-skeleton class="w-4" height="2rem" />
-                    </div>
+    <!-- Misma lista que "Últimos registros" del inicio -->
+    <section class="la-card">
+        <ng-container *ngIf="skeletonShow">
+            <div *ngFor="let item of [].constructor(forSkeleton)" class="la-item">
+                <p-skeleton shape="circle" size="40px" />
+                <div class="flex flex-column w-full gap-2">
+                    <p-skeleton width="70%" height="1rem" />
+                    <p-skeleton width="40%" height=".8rem" />
                 </div>
+                <p-skeleton width="4.5rem" height="1rem" />
             </div>
-        </ng-template>
-        
-        <ng-template [ngIf]="!skeletonShow">
-            <table class="w-full">
-                <thead>
-                  <!-- <div class="flex flex-row tr-cabecera">
-                    <div class="span-1 w-10 flex justify-content-between" >
-                        <span>Últimos registros</span>
-                        <i class="pi pi-refresh" (click)="getInversionesLast()"></i>
-                    </div>
-                    <div class="span-2 w-5 flex justify-content-end">
-                        <span (click)="verRegistros()">Ver todos</span>
-                    </div>
-                    
-                  </div> -->
-                </thead>
-                <tbody>
-                  <div *ngFor="let inversion of ultimasInversiones" class="tr-registros">
-                    <div class="flex flex-row" [routerLink]="['/registrar/inversiondetalle']" [queryParams]="{ idInversion: inversion.idInversion }">
-                        <div class="flex flex-column w-10" >
-                            <span class="span-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
-                            <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
-                        </div>
-                        <div class="flex flex-column justify-content-center w-5 ">
-                            <span class="flex justify-content-end span-monto" >{{currency}} {{ inversion.monto | formatNumber }}</span>
-                        </div>
-                    </div>
-                </div>
-                </tbody>
-              </table>
-        </ng-template>
-     </div>
+        </ng-container>
+
+        <ng-container *ngIf="!skeletonShow">
+            <a *ngFor="let inversion of ultimasInversiones" class="la-item la-item-link"
+                [routerLink]="['/registrar/inversiondetalle']" [queryParams]="{ idInversion: inversion.idInversion }">
+                <span class="la-avatar">{{ (inversion.nombres || '').charAt(0) }}{{ (inversion.apellidoPaterno || '').charAt(0) }}</span>
+                <span class="la-item-text">
+                    <span class="la-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
+                    <span class="la-fecha">{{ inversion.fechaCreacion }}</span>
+                </span>
+                <span class="la-monto">{{currency}} {{ inversion.monto | formatNumber }}</span>
+            </a>
+
+            <div *ngIf="ultimasInversiones.length === 0" class="la-vacio">
+                <span class="la-ico"><i class="pi pi-inbox"></i></span>
+                <span>Aún no hay registros.</span>
+            </div>
+        </ng-container>
+    </section>
+
+    <div style="height: 16px;"></div>
 </div>

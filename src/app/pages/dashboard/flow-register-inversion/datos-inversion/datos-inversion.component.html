@@ -1,193 +1,148 @@
+<div class="di">
 
-<div>
-    <!-- <div class="surface-card p-4 shadow-2 border-round w-full lg:w-12"> -->
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        <div class="text-center mb-5">
-            <div id="div_line_bootom" class=" text-2xl mb-3 label-title">Datos de la inversión</div>
+    <!-- Encabezado -->
+    <app-flow-steps [pasos]="PASOS_PRESTAMO" [actual]="1" titulo="Datos del préstamo"
+        /> <!-- subtitulo="Define cuánto prestas, en cuántas cuotas y con qué interés."  -->
+
+    <!-- Monto -->
+    <section class="di-hero">
+        <label for="monto" class="di-hero-label">¿Cuánto vas a prestar?</label>
+        <div class="di-monto" [class.di-monto-error]="montoFueraDeRango">
+            <p-inputNumber [(ngModel)]="valueMonto" (ngModelChange)="simular()" inputId="monto"
+                [minFractionDigits]="2" [maxFractionDigits]="2" mode="decimal" [prefix]="currency + ' '"
+                autocomplete="off" [placeholder]="currency + ' 0.00'" inputmode="decimal" class="di-monto-input" />
         </div>
-        
-        <div>
-            <!-- Monto a invertir -->
-             <div class="classInputMonto mb-3">
-                <label for="monto" class="block text-600 font-medium mb-2 title-input">Monto</label>
-                <p-inputNumber
-                [(ngModel)]="valueMonto"
-                 id="monto" 
-                 [minFractionDigits]="2" [maxFractionDigits]="2"  
-                 mode="decimal" autocomplete="off" 
-                 placeholder="Ingrese monto..." class="w-full mb-1"
-                 [min]="objValidationValues.montoLimit.montoMin" [max]="objValidationValues.montoLimit.montoMax"
-                 />
-                <span *ngIf="valueMonto !== null && valueMonto < objValidationValues.montoLimit.montoMin" class="input-fail">El monto no puede ser menor a {{currency}} {{objValidationValues.montoLimit.montoMin | formatNumber}}.</span>
-                <span *ngIf="valueMonto !== null && valueMonto > objValidationValues.montoLimit.montoMax" class="input-fail">El monto no puede ser mayor a {{currency}} {{objValidationValues.montoLimit.montoMax | formatNumber}}.</span>
-             </div>
-            
-            
-             <!-- cantidad de cuotas -->
-             <label for="cuotas" class="block text-600 font-medium mb-2 title-input">Nro. de cuotas</label>
-             <div class="button-container mb-3 slider-container">
-                <div class="flex flex-row justify-content-between slide">
-                    <div *ngFor="let cuota of cuotasDiarias; let i = index"  class="flex flex-column justify-content-center gap-2">
-                    <button 
-                        class="p-button-rounded" 
-                        [ngClass]="{'active-button': selected == i + 1}" 
-                        (click)="selectButton(i + 1, cuota.valor, cuota.codigo)">
-                        {{ ('0' + cuota.valor).slice(-2) }}
-                    </button>
-                    <span class="desc-cuota"
-                    [ngClass]="{'desc-cuota-active': selected == i + 1}" 
-                    >días</span>
-                </div>
-                </div>
-                <div class="flex flex-row justify-content-between slide">
-                    <div *ngFor="let cuota of cuotasMensuales; let i = index"  class="flex flex-column justify-content-between gap-2">
-                    <button 
-                        class="p-button-rounded" 
-                        [ngClass]="{'active-button': selected == i + 4}" 
-                        (click)="selectButton(i + 4, cuota.valor, cuota.codigo)">
-                        {{ ('0' + cuota.valor).slice(-2) }}
-                    </button>
-                    <span class="desc-cuota"
-                    [ngClass]="{'desc-cuota-active': selected == i + 4}" 
-                    >{{cuota.valor==1?"semana":"semanas"}}</span>
-                </div>
-                </div>
-            </div>
-
-
-            <!-- valor de interes a aplicar -->
-            <label for="interes" class="block text-600 font-medium mb-2 title-input">Interés</label>
-            <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3">
-                <div class="flex flex-column w-full">
-                    <div class="card flex flex-column align-items-center w-full">
-                        <p-knob [(ngModel)]="valueInteres" size="100" readonly="true" [disabled]="statusPersonalizado"/>
-                        <div class="flex gap-2">
-                            <p-button 
-                                icon="pi pi-plus" 
-                                (onClick)="valueInteres = valueInteres+5" 
-                                [disabled]="valueInteres >= 100 || statusPersonalizado"/>
-                            <p-button 
-                                icon="pi pi-minus" 
-                                (onClick)="valueInteres = valueInteres-5" 
-                                [disabled]="valueInteres <= 5 || statusPersonalizado" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-column w-10"  style="margin-top: auto;">
-                    <div class="flex align-items-center gap-1 mb-4">
-                        <p-checkbox 
-                            inputId="ny" 
-                            [(ngModel)]="statusPersonalizado" 
-                            [binary]="true" 
-                            (onChange)="clicIntPersonalizado()"/>
-                        <label for="ny">Personalizado</label>
-                    </div>
-                        <p-inputNumber
-                        [(ngModel)]="valueInteresPerso"
-                        id="monto" 
-                        [maxFractionDigits]="2"  
-                        mode="decimal" autocomplete="off" 
-                        placeholder="Ingrese interés..." class="mb-3 w-full"
-                        [min]="objValidationValues.interesLimit.interesMin" [max]="objValidationValues.interesLimit.interesMax"
-                        [disabled]="!statusPersonalizado"
-                        />
-                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso < objValidationValues.interesLimit.interesMin" class="input-fail">El interés no puede ser menor a {{objValidationValues.interesLimit.interesMin}}%.</span>
-                        <span *ngIf="valueInteresPerso !== null && valueInteresPerso > objValidationValues.interesLimit.interesMax" class="input-fail">El interés no puede ser mayor a {{objValidationValues.interesLimit.interesMax}}%.</span>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3 lineaSeparar"></div>
-            
-            <!-- Simular cuota del usuario -->
-            <div class="flex flex-row gap-2 align-items-center justify-content-center mb-3">
-
-                <div class="flex flex-column w-6">
-                    <div class="card flex flex-column align-items-center w-full">
-                        <div class="button-press" (click)="simularCuota()"
-                        [ngClass]="{
-                            'button-press-disabled': !isFormValid()
-                          }"
-                        >
-                            <span>SIMULAR</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-column w-full">
-                    <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                        <div class="flex flex-column justify-content-center w-full custom-banner">
-                            <span class="text-center mb-1 text-gray-500 font-medium">Valor de la cuota</span>
-                            <div class="flex flex-column justify-content-between align-items-center w-full">
-                                <span class="w-8">{{currency}}</span>
-                                <span class="text-4xl font-medium" style="word-break: break-all;">
-                                    <div *ngIf="cuotaCargada">{{ valorCuota | formatNumber  }}</div>
-                                    <i *ngIf="!cuotaCargada" class="pi pi-spinner pi-spin" style="color: var(--gray-400); font-size: 1.8rem;"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-row gap-2 align-items-center justify-content-between mb-3 lineaSeparar"></div>
-
-            <!-- Fecha inicio y fin -->
-            <div class="flex flex-column gap-2 justify-content-center">
-                <div class="flex flex-row justify-content-between align-items-center gap-2 mb-4">
-                    <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha1" class="block text-600 font-medium mb-2 title-input">Fecha inicio</label>
-                        <p-datepicker 
-                        [(ngModel)]="date1" 
-                        [showIcon]="true" 
-                        [showOnFocus]="true" 
-                        [dateFormat]="'dd/mm/yy'"
-                        [showTime]="false"
-                        inputId="fecha1" 
-                        (ngModelChange)="updateDate2()"
-                        />
-                    </div>
-                    <div class="flex flex-column w-6 mb-2">
-                        <label for="fecha2" class="block text-600 font-medium mb-2 title-input">Fecha fin</label>
-                        <p-datepicker 
-                        [(ngModel)]="date2" 
-                        [showIcon]="true" 
-                        [showOnFocus]="true" 
-                        [touchUI]="true"
-                        [dateFormat]="'dd/mm/yy'"
-                        [showTime]="false"
-                        inputId="fecha2" 
-                        [disabled]="true"
-                        />
-                    </div>
-                    
-                </div>
-            </div>
-
-            <div class="card mb-2" style="padding: 5px;">
-                <p-floatLabel class="w-full">
-                    <textarea 
-                    pTextarea
-                        class="w-full"
-                        id="float-comentario" 
-                        rows="3"
-                        cols="30" 
-                        [(ngModel)]="comentario"
-                        [maxLength]="180"
-                        pInputTextarea>
-                    </textarea>
-                    <label for="float-comentario">Agrega un comentario (opcional)</label>
-                </p-floatLabel>
-            </div>
-             
-            <button
-            [disabled]="!isFormValid()"
-            [ngClass]="{
-                'btn-disabled': !isFormValid()
-              }"
-            pButton pRipple label="Siguiente" (click)="validarDatosInversion()" class="w-full mb-1 btn-tall"></button>
-        
+        <div class="di-chips di-chips-grid" *ngIf="montosRapidos.length">
+            <button type="button" *ngFor="let m of montosRapidos" class="di-chip" [class.di-chip-active]="valueMonto === m"
+                (click)="elegirMonto(m)">{{currency}} {{m}}</button>
         </div>
-    </div>
+        <small *ngIf="montoFueraDeRango" class="di-error">
+            <i class="pi pi-info-circle"></i>
+            El monto debe estar entre {{currency}} {{montoMin | formatNumber}} y {{currency}} {{montoMax | formatNumber}}.
+        </small>
+    </section>
+
+    <!-- Cuotas -->
+    <span class="di-seccion">Plazo</span>
+    <section class="di-card">
+        <div class="di-row-between">
+            <span class="di-label">Número de cuotas</span>
+            <div class="di-segment di-segment-sm" *ngIf="cuotasSemanales.length && cuotasDiarias.length">
+                <button type="button" [class.active]="frecuencia === 'D'" (click)="cambiarFrecuencia('D')">Diario</button>
+                <button type="button" [class.active]="frecuencia === 'S'" (click)="cambiarFrecuencia('S')">Semanal</button>
+            </div>
+        </div>
+        <div class="di-cuotas">
+            <button type="button" *ngFor="let c of cuotasVisibles" class="di-cuota" [class.di-cuota-active]="esCuotaActiva(c)"
+                (click)="seleccionarCuota(c)">
+                <span class="di-cuota-num">{{c.valor}}</span>
+                <span class="di-cuota-unit">{{unidadCuota(c)}}</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Interés -->
+    <span class="di-seccion">Interés</span>
+    <section class="di-card">
+        <div class="di-interes">
+            <p-inputNumber [(ngModel)]="valueInteres" (ngModelChange)="simular()" inputId="interes" ariaLabel="Interés" [showButtons]="true"
+                buttonLayout="horizontal" [step]="5" [min]="0" [maxFractionDigits]="2" suffix=" %"
+                incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" inputmode="decimal"
+                class="di-interes-input" />
+        </div>
+        <div class="di-chips di-chips-center">
+            <button type="button" *ngFor="let i of interesesRapidos" class="di-chip" [class.di-chip-active]="valueInteres === i"
+                (click)="elegirInteres(i)">{{i}}%</button>
+        </div>
+        <small *ngIf="interesFueraDeRango" class="di-error">
+            <i class="pi pi-info-circle"></i>
+            El interés debe estar entre {{interesMin}}% y {{interesMax}}%.
+        </small>
+
+        <span class="di-label di-label-sm">Tipo de interés</span>
+        <div class="di-tipo">
+            <button type="button" class="di-tipo-opt" [class.active]="tipoInteres === TIPO_INTERES.SIMPLE"
+                (click)="cambiarTipoInteres(TIPO_INTERES.SIMPLE)">
+                <span class="di-tipo-ico"><i class="pi pi-minus"></i></span>
+                <span class="di-tipo-title">Simple</span>
+                <span class="di-tipo-desc">Se calcula solo sobre el monto prestado.</span>
+            </button>
+            <button type="button" class="di-tipo-opt" [class.active]="tipoInteres === TIPO_INTERES.PROGRESIVO"
+                [disabled]="!progresivoDisponible" (click)="cambiarTipoInteres(TIPO_INTERES.PROGRESIVO)">
+                <span class="di-tipo-ico"><i class="pi" [ngClass]="progresivoDisponible ? 'pi-chart-line' : 'pi-lock'"></i></span>
+                <span class="di-tipo-title">Progresivo</span>
+                <span class="di-tipo-desc">{{ progresivoDisponible ? 'El interés se acumula por cada semana del plazo.'
+                    : 'Disponible solo para préstamos semanales.' }}</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Resumen / simulación automática -->
+    <span class="di-seccion">Resumen</span>
+    <section class="di-resumen" [class.di-resumen-vacio]="!isFormValid()">
+        <div class="di-resumen-top">
+            <span class="di-resumen-label">{{etiquetaCuota}}</span>
+            <span class="di-resumen-tag">{{nroCuota}} {{frecuencia === 'S' ? 'semanas' : 'días'}} ·
+                {{tipoInteres === TIPO_INTERES.PROGRESIVO ? 'Progresivo' : 'Simple'}}</span>
+        </div>
+        <div class="di-resumen-valor">
+            <ng-container *ngIf="!simulando && valorCuota !== null">
+                <span class="di-resumen-currency">{{currency}}</span>{{ valorCuota | formatNumber }}
+            </ng-container>
+            <i *ngIf="simulando" class="pi pi-spinner pi-spin"></i>
+            <span *ngIf="!simulando && valorCuota === null && !errorSimulacion" class="di-resumen-placeholder">
+                Completa el monto para ver la cuota
+            </span>
+            <button *ngIf="!simulando && errorSimulacion" type="button" class="di-retry" (click)="simular()">
+                <i class="pi pi-refresh"></i> No se pudo calcular. Reintentar
+            </button>
+        </div>
+        <div class="di-resumen-grid" *ngIf="!simulando && valorCuota !== null">
+            <div>
+                <span class="di-resumen-ico"><i class="pi pi-wallet"></i></span>
+                <span class="di-resumen-txt">
+                    <span class="di-resumen-k">Total a cobrar</span>
+                    <span class="di-resumen-v">{{currency}} {{ totalACobrar | formatNumber }}</span>
+                </span>
+            </div>
+            <div>
+                <span class="di-resumen-ico di-resumen-ico-verde"><i class="pi pi-chart-line"></i></span>
+                <span class="di-resumen-txt">
+                    <span class="di-resumen-k">Ganancia</span>
+                    <span class="di-resumen-v di-ganancia">{{currency}} {{ ganancia | formatNumber }}</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fechas -->
+    <span class="di-seccion">Fechas y nota</span>
+    <section class="di-card">
+        <div class="di-fechas">
+            <div class="di-fecha">
+                <label for="fecha1" class="di-label di-label-sm">Primera cuota</label>
+                <p-datepicker [(ngModel)]="date1" (ngModelChange)="updateDate2()" [showIcon]="true" [iconDisplay]="'input'"
+                    [dateFormat]="'dd/mm/yy'" inputId="fecha1" appendTo="body" [readonlyInput]="true" class="w-full" />
+            </div>
+            <i class="pi pi-arrow-right di-fechas-sep"></i>
+            <div class="di-fecha">
+                <span class="di-label di-label-sm">Última cuota</span>
+                <div class="di-fecha-fin">
+                    <i class="pi pi-flag"></i>{{ fechaCorta(date2) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Comentario -->
+        <label for="comentario" class="di-label di-label-sm di-mt">Comentario <span class="di-opcional">(opcional)</span></label>
+        <textarea pTextarea id="comentario" class="w-full di-textarea" rows="2" [(ngModel)]="comentario" [maxLength]="180"
+            placeholder="Ej.: préstamo para mercadería"></textarea>
+        <span class="di-counter">{{comentario.length}}/180</span>
+    </section>
+
+    <div style="height: 70px;"></div>
+    <button pButton pRipple label="Siguiente" icon="pi pi-arrow-right" iconPos="right" (click)="validarDatosInversion()"
+        [disabled]="!isFormValid()" [ngClass]="{'btn-disabled': !isFormValid()}" class="btn-float"></button>
+
     <app-loading></app-loading>
 </div>

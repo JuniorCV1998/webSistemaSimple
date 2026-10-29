@@ -1,67 +1,73 @@
+<div *ngIf="!isLoading" class="flujo rg">
 
-<div *ngIf="!isLoading">
-    <div class="surface-card p-0 shadow-0 border-round w-full lg:w-12">
-        
-        <div class="flex flex-column justify-content-center align-items-center text-center mb-1">
-            <lottie-player *ngIf="confetti" src="/public/elements/done.json" background="transparent" speed="1" loop autoplay
-                style="width: 120px; transition: transform 0.2s;">
-            </lottie-player>
-            <div *ngIf="!confetti" id="div_line_bootom" class=" label-title-green">¡INVERSION <br>REGISTRADA!</div>
-            <div *ngIf="confetti" id="div_line_bootom" class=" label-title-green diezpx">¡INVERSION REGISTRADA!</div>
+    <!-- Encabezado de éxito -->
+    <section class="rg-exito">
+        <div class="rg-icono" (click)="triggerConfetti()">
+            <i class="pi pi-wallet"></i>
+            <span class="rg-check"><i class="pi pi-check"></i></span>
         </div>
+        <h1 class="rg-titulo label-title">¡Préstamo registrado!</h1>
+        <p class="rg-sub">¡Genial! Tu registro se realizó con éxito</p>
+    </section>
 
-        <div class="flex flex-column w-full">
-            <div class="flex flex-row gap-2 align-items-center justify-content-center">
-                <div class="flex flex-column justify-content-center w-full custom-banner">
-                    <div class="flex flex-column justify-content-between align-items-center w-full">
-                        <span class="w-10">{{currency}}</span>
-                        <span class="txt-span text-5xl" style="word-break: break-all;" (click)="triggerConfetti()">{{ objInversion.monto | formatNumber }}</span>
-                    </div>
-                </div>
+    <!-- Resumen -->
+    <section class="flujo-card rg-card">
+        <div class="rg-cliente">
+            <span class="flujo-avatar">{{iniciales}}</span>
+            <div class="rg-cliente-text">
+                <span class="rg-nombre">{{nombreCompleto}}</span>
+                <span class="rg-desc">Cliente</span>
             </div>
-        </div>
-        
-        <div  id="nombres" pInputText class="w-full mb-4 text-center">
-            {{objInversion.nombres +' '+ objInversion.apellidoPaterno+' '+ objInversion.apellidoMaterno}}
+            <span class="rg-monto"><small>{{currency}}</small>{{ objInversion.monto | formatNumber }}</span>
         </div>
 
-        <div class="custom-banner-credentials mb-4">
-            <div class="flex flex-row w-full justify-content-center mb-2">
-                <span class="txt-span-bold">CORREO:</span>
-                <span class="w-full txt-span-text">{{objInversion.correo}}</span>
-            </div><!--  -->
-            <div class="flex flex-row w-full justify-content-around mb-3">
-                <span class="txt-span-bold">PASS:</span>
-                <div class="flex flex-row justify-content-between w-full txt-span-text">
-                    <div class="w-10">
-                        <span *ngIf="mostrar" >{{ objInversion.contrasenaClient }}</span>
-                        <span *ngIf="!mostrar" >**********</span>
-                    </div>
-                    <div class="w-2">
-                        <i *ngIf="mostrar" class="pi pi-eye" (click)="mostrarContrasena()"></i>
-                        <i *ngIf="!mostrar" class="pi pi-eye-slash" (click)="mostrarContrasena()"></i>
-                    </div>
-                </div>
+        <dl class="rg-list">
+            <div>
+                <dt><i class="pi pi-clock"></i> Fecha de registro</dt>
+                <dd>{{objInversion.fechaCreacion}}</dd>
             </div>
-            <div class="flex flex-row w-full text-center">
-                <p-button *ngIf="!copy" class="w-full" label="Copiar" icon="pi pi-copy" size="small" (onClick)="copyCredentials()"/>
-                <p-button *ngIf="copy" class="w-full" label="Copiar" icon="pi pi-check" size="small" (onClick)="copyCredentials()"/>
+            <div>
+                <dt><i class="pi pi-hashtag"></i> Cód. op.</dt>
+                <dd>SS-{{objInversion.codOperacion}}</dd>
             </div>
-            <p-toast [breakpoints]="{ '500px': { width: '80%', right: '1', left: '3' } }" />
-        </div>
-        
-        <div class="flex flex-row w-full justify-content-center mb-2">
-            <span class="txt-aditional w-full">{{objInversion.fechaCreacion}}</span>
-        </div>
-        <div class="flex flex-row w-full justify-content-center mb-3">
-            <span class="txt-aditional w-full">cód. op.: SS-{{objInversion.codOperacion}}</span>
-        </div>
-        <div class="flex flex-row w-full justify-content-center mb-5">
-            <a class="terminos_condiciones" [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: idInversion ,from: 'register'}">Abrir cartilla</a>
-        </div>
-        <div style="height: 60px;"></div>
-        <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
-    </div>
+        </dl>
+    </section>
+
+    <!-- Credenciales del cliente -->
+    <section *ngIf="objInversion.correo" class="flujo-card rg-card">
+        <h2 class="flujo-card-title"><i class="pi pi-key"></i> Acceso del cliente</h2>
+        <dl class="rg-list rg-list-plano">
+            <div>
+                <dt>Correo</dt>
+                <dd>{{objInversion.correo}}</dd>
+            </div>
+            <div *ngIf="objInversion.contrasenaClient">
+                <dt>Contraseña</dt>
+                <dd class="rg-pass">
+                    <span>{{ mostrar ? objInversion.contrasenaClient : '••••••' }}</span>
+                    <button type="button" class="rg-ojo" (click)="mostrarContrasena()"
+                        [attr.aria-label]="mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                        <i class="pi" [ngClass]="mostrar ? 'pi-eye' : 'pi-eye-slash'"></i>
+                    </button>
+                </dd>
+            </div>
+        </dl>
+        <button pButton type="button" class="p-button-outlined rg-copiar"
+            [icon]="copy ? 'pi pi-check' : 'pi pi-copy'" [label]="copy ? 'Copiado' : 'Copiar credenciales'"
+            (click)="copyCredentials()"></button>
+    </section>
+
+    <a class="rg-ver" [routerLink]="['/inversion/cartilla']" [queryParams]="{ idInversion: idInversion, from: 'register' }">
+        <span class="rg-ver-ico"><i class="pi pi-file"></i></span>
+        <span class="rg-ver-text">
+            <span class="rg-ver-titulo">Abrir cartilla</span>
+            <span class="rg-ver-sub">Cuotas y cronograma del préstamo</span>
+        </span>
+        <i class="pi pi-angle-right rg-ver-flecha"></i>
+    </a>
+
+    <div style="height: 70px;"></div>
+    <button pButton pRipple label="Ir al inicio" routerLink="/inicio" class="btn-float"></button>
 </div>
 
-<app-loading *ngIf="isLoading"></app-loading> 
+<app-loading *ngIf="isLoading"></app-loading>

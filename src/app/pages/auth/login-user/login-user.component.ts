@@ -10,6 +10,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { finalize } from 'rxjs';
+import { guardarDocumento } from '../../../core/utils/membresia';
 import { Constantes } from '../../../core/constant/Constantes';
 import { LoginService } from '../../../core/services/auth/login/login.service';
 import { TempDataService } from '../../../core/services/temp-data.service';
@@ -181,6 +182,7 @@ export default class LoginUserComponent implements AfterViewInit {
         // desde la pantalla de Configuración, sin tener que pedirla de nuevo por otra vía.
         sessionStorage.setItem('contrasenaSesion', this.credenciales.contrasena);
         sessionStorage.setItem('codTipoDoc', response.data.person.codTipoDoc);
+        guardarDocumento(response.data.person);
         if (response.data.person.codTipoDoc === "06") {
           sessionStorage.setItem('nombreComercial', response.data.person.nombreComercial);
           sessionStorage.setItem('razonSocial', response.data.person.razonSocial);
@@ -190,7 +192,10 @@ export default class LoginUserComponent implements AfterViewInit {
         sessionStorage.setItem('pathLogo', response.data.config.pathLogo);
         sessionStorage.setItem('pathSello', response.data.config.pathSello);
 
-        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS) {
+        // El aviso de "membresía por vencer" es solo para el inversor: el cliente (CLI) entra directo
+        const porVencerCliente = response.codigoMessage === Constantes.COD_MEMBRESIA_POR_VENCER
+          && response.data?.codPerfil === Constantes.PERFIL_CLI;
+        if (response.codigoMessage === Constantes.STATUS_LOGIN_SUCCESS || porVencerCliente) {
           this.ofrecerActivarBiometria(this.credenciales.correo, this.credenciales.contrasena);
           this.router.navigate(['inicio']);
         }
@@ -198,7 +203,8 @@ export default class LoginUserComponent implements AfterViewInit {
           this.router.navigate(['/membresia-exp'], {
             state: {
               header: 'Membresía por expirar',
-              body: response.data.membresia.descripcion
+              body: response.data.membresia.descripcion,
+              perfil: response.data?.codPerfil
             }
           });
 
@@ -207,22 +213,30 @@ export default class LoginUserComponent implements AfterViewInit {
       },
       error: err => {
         if (err.status === 401) {
-          this.show(Constantes.MSG_401);
+          // Credenciales inválidas (correo o contraseña): 401 con body { codigoMessage: 'SS00L401', message }
+          this.show(err.error?.message || Constantes.MSG_401);
         } else if (err.status === 403) {
-          if (err.error.codigoMessage === Constantes.COD_MEMBRESIA_VENCIDA) {
+          // Bloqueos de membresía/acceso: si el backend envía el documento, se usa al pedir la renovación
+          guardarDocumento(err.error?.data);
+          if (err.error?.codigoMessage === Constantes.COD_MEMBRESIA_VENCIDA) {
             this.router.navigate(['/membresia-ven'], {
               state: {
                 header: 'Membresía expirada',
-                body: err.error.message
+                body: err.error.message,
+                perfil: err.error?.data?.codPerfil
               }
             });
-          } else if (err.error.codigoMessage === Constantes.COD_USUARIO_BLOQUEADO) {
+          } else if (err.error?.codigoMessage === Constantes.COD_USUARIO_BLOQUEADO) {
             this.router.navigate(['/usuario-sin-acceso'], {
               state: {
                 header: 'Usuario sin acceso',
                 body: err.error.message
               }
             });
+          } else {
+            // Otros bloqueos de negocio sobre una cuenta autenticada (acceso restringido, cuenta inactiva...):
+            // el 403 trae su propio mensaje
+            this.show(err.error?.message || Constantes.MSG_401);
           }
         }
         else {

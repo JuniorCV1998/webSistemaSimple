@@ -1,44 +1,69 @@
+<div class="lg auth-fade-in">
 
-<div>
-    <div class="auth-card auth-fade-in">
-        <div class="text-center mb-5">
-            <img src="public/logos/logo_ssimple.png" alt="Image" height="150" style="margin-bottom: 0;" class="mb-0">
-            <div id="div_line_bootom" class="text-gray-1000 text-2xl font-medium mb-3">¡Qué alegría verte otra vez!</div>
-            <span class="text-gray-500 font-medium line-height-3">¿No tienes una cuenta?</span>
-            <a class="font-medium no-underline ml-2 text-blue-400 cursor-pointer" (click)="creaHoy()">¡Crea hoy!</a>
+    <header class="lg-head">
+        <img class="lg-logo" src="public/logos/logo_ssimple.png" alt="Sistema Simple">
+        <h1 class="lg-titulo">¡Qué alegría<br>verte otra vez!</h1>
+        <p class="lg-sub">Ingresa con tu correo y tu clave de 6 dígitos.</p>
+    </header>
+
+    <form #form="ngForm" (ngSubmit)="login(form)" class="lg-form">
+        <label for="email1" class="lg-label">Correo electrónico</label>
+        <div class="relative w-full">
+            <i class="pi pi-envelope input-icon-left"></i>
+            <input id="email1" name="usuario" [(ngModel)]="credenciales.correo" [maxlength]="120" type="email"
+                inputmode="email" autocomplete="username" placeholder="tucorreo@gmail.com" pInputText
+                class="w-full input-with-icon lg-input" (ngModelChange)="credenciales.correo = $event.toLowerCase()">
+            <i *ngIf="credenciales.correo" class="pi pi-times-circle input-icon-right" (click)="cleanCorreoFunct()"></i>
         </div>
 
-        <div>
-            <form #form="ngForm" (ngSubmit)="login(form)">
-                <label for="email1" class="block font-medium mb-2">Correo electrónico</label>
-                <div class="relative w-full mb-3">
-                    <i class="pi pi-envelope input-icon-left"></i>
-                    <input id="email1" name="usuario" [(ngModel)]="credenciales.correo" [maxlength]="120" type="text"
-                    placeholder="Dirección de correo electrónico" pInputText class="w-full input-with-icon" (ngModelChange)="credenciales.correo = $event.toLowerCase()">
-                    <!-- Icono de eliminar x -->
-                    <i class="pi input-icon-right" [ngClass]="credenciales.correo ? 'pi-times-circle' : ''"
-                      (click)="cleanCorreoFunct()">
-                    </i>
-                </div>
+        <label class="lg-label">Clave</label>
+        <!-- Clave ofuscada: al tocarla se abre el teclado aleatorio (nunca el del celular) -->
+        <button #cajasClave type="button" class="lg-cajas" [class.lg-cajas-activa]="tecladoAbierto"
+            (click)="abrirTeclado()" aria-label="Ingresar clave">
+            <span *ngFor="let n of [1,2,3,4,5,6]" class="lg-caja"
+                [class.lg-caja-llena]="credenciales.contrasena.length >= n"
+                [class.lg-caja-actual]="tecladoAbierto && credenciales.contrasena.length === n - 1"></span>
+        </button>
 
+        <button type="submit" class="lg-btn" [disabled]="!isFormValid()">
+            Iniciar sesión <i class="pi pi-arrow-right"></i>
+        </button>
+    </form>
 
-                <label for="password1" class="block font-medium mb-2">Contraseña</label>
-                <p-inputOtp [(ngModel)]="credenciales.contrasena" [integerOnly]="true" [length]="6" class="w-full mb-6"/>
-
-                <div class="flex align-items-center justify-content-center mb-6"> <!-- between: cuando acompaña el rememberme -->
-                    <!-- <div class="flex align-items-center">
-                        <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>
-                        <label for="rememberme1">Acuérdate de mí</label>
-                    </div> -->
-                    <!-- <a class="font-medium no-underline ml-2 text-blue-400 text-right cursor-pointer">¿Has olvidado tu contraseña?</a> -->
-                </div>
-
-                <button pButton pRipple [ngClass]="{
-                    'btn-disabled': !isFormValid() }"
-                    pRipple label="Iniciar sesión" [disabled]="!isFormValid()"
-                    icon="pi pi-sign-in" class="btn-float"></button>
-            </form>
-        </div>
+    <div class="lg-pie">
+        <span *ngIf="textoPrueba" class="lg-regalo"><i class="pi pi-gift"></i>{{ textoPrueba }}</span>
+        <p>
+            ¿No tienes una cuenta?
+            <button type="button" class="lg-link" (click)="creaHoy()">Crea una hoy</button>
+        </p>
     </div>
-    <app-loading></app-loading>
+
+    <!-- Espacio para que la clave no quede tapada por el teclado -->
+    <div class="lg-espacio-teclado" [class.lg-espacio-on]="tecladoAbierto"></div>
+
 </div>
+
+<!-- Teclado aleatorio: sube desde abajo solo mientras se ingresa la clave -->
+<div class="lg-teclado" [class.lg-teclado-on]="tecladoAbierto" (click)="$event.stopPropagation()"
+    [attr.aria-hidden]="!tecladoAbierto">
+    <div class="lg-teclado-cab">
+        <span><i class="pi pi-lock"></i> Teclado seguro</span>
+        <button type="button" class="lg-teclado-listo" (click)="cerrarTeclado()">Listo</button>
+    </div>
+    <div class="lg-teclas">
+        <button *ngFor="let numero of teclas.slice(0, 9)" type="button" class="lg-tecla"
+            (click)="presionarDigito(numero)" [tabindex]="tecladoAbierto ? 0 : -1">{{ numero }}</button>
+        <button type="button" class="lg-tecla lg-tecla-plana" (click)="cerrarTeclado()"
+            [tabindex]="tecladoAbierto ? 0 : -1" aria-label="Ocultar teclado">
+            <i class="pi pi-chevron-down"></i>
+        </button>
+        <button type="button" class="lg-tecla" (click)="presionarDigito(teclas[9])"
+            [tabindex]="tecladoAbierto ? 0 : -1">{{ teclas[9] }}</button>
+        <button type="button" class="lg-tecla lg-tecla-plana" (click)="borrarDigito()"
+            [disabled]="!credenciales.contrasena" [tabindex]="tecladoAbierto ? 0 : -1" aria-label="Borrar">
+            <i class="pi pi-delete-left"></i>
+        </button>
+    </div>
+</div>
+
+<app-loading></app-loading>

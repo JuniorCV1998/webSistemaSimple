@@ -1,15 +1,198 @@
-
-#span-celular{
-    color: var(--gray-400);
-    font-size: 13px;
-    margin-left: .2rem;
+/* Estilo fintech mobile light (ver confirm-inv / cliente, clases fx-*) */
+.fx-form {
+  gap: 10px;
 }
 
-i{
-    color: var(--blue-400);
-    font-size: .8rem;
-    margin-top: 2px;
+/* ---------- Vista previa con el degradado del tema ---------- */
+.cn-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  border-radius: 22px;
+  color: #fff;
+  overflow: hidden;
+  background:
+    radial-gradient(140% 70% at 0% 125%, rgba(255, 255, 255, .20) 0 48%, transparent 49%),
+    radial-gradient(120% 65% at 100% 120%, rgba(255, 255, 255, .14) 0 50%, transparent 51%),
+    radial-gradient(80% 80% at 90% 0%, rgba(255, 255, 255, .25), transparent 70%),
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--blue-400) 85%, #fff) 0%,
+      var(--blue-400) 40%,
+      color-mix(in srgb, var(--primary-500) 80%, var(--blue-400)) 100%);
+  box-shadow: 0 14px 30px -16px color-mix(in srgb, var(--blue-400) 70%, transparent);
 }
-small {
+
+.cn-avatar {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+
+  .pi {
+    font-size: 20px;
+  }
+}
+
+.cn-preview-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cn-preview-nombre {
+  max-width: 100%;
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cn-pill {
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, .25);
+}
+
+/* ---------- Secciones y tarjetas ---------- */
+.cn-seccion {
+  margin: 8px 4px -2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-500);
+}
+
+.cn-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+
+  .flujo-label {
+    font-size: 12.5px;
+    font-weight: 600;
     color: var(--gray-500);
+  }
+}
+
+/* ---------- Inputs rellenos (sin borde, gris claro, radius 14) ---------- */
+$campo-bg: var(--gray-50);
+$campo-focus: 0 0 0 2px color-mix(in srgb, var(--blue-400) 35%, transparent);
+
+.cn-card {
+  input[pInputText],
+  .p-select {
+    height: 48px;
+    border: none !important;
+    border-radius: 14px !important;
+    background: $campo-bg !important;
+    box-shadow: none;
+    color: var(--gray-700);
+  }
+
+  input[pInputText]:focus {
+    background: #fff !important;
+    box-shadow: $campo-focus !important;
+  }
+
+  .p-select.p-focus {
+    background: #fff !important;
+    box-shadow: $campo-focus !important;
+  }
+
+  ::ng-deep .p-select-label {
+    display: flex;
+    align-items: center;
+  }
+
+  input:disabled,
+  .p-select.p-disabled {
+    opacity: .7;
+  }
+
+  /* Celular con país (componente compartido) */
+  ::ng-deep .cel-pais {
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: $campo-bg;
+
+    &:focus-within {
+      background: #fff;
+      box-shadow: $campo-focus;
+    }
+
+    .cel-pais-select {
+      background: transparent;
+      border-right: 1px solid var(--gray-200);
+
+      .p-select-label {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+.doc-row {
+  display: flex;
+  gap: .5rem;
+}
+
+.doc-tipo {
+  flex: 0 0 9.5rem;
+  min-width: 0;
+}
+
+.doc-nro {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.nombres-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+}
+
+/* ---------- Aviso ---------- */
+.cn-hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--gray-500);
+  background: color-mix(in srgb, var(--blue-400) 8%, #fff);
+}
+
+.cn-hint-ico {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-400);
+  background: #fff;
+
+  .pi {
+    font-size: 14px;
+  }
 }

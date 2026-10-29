@@ -1,117 +1,90 @@
-<div>
-    <div class="surface-card p-2 shadow-0 border-round w-full lg:w-12">
-        <div class="text-center mb-5">
-            <div id="div_line_bootom" class="text-2xl mb-3 label-nombre" style="text-align: left;"><label class="">Hola,
-                    {{nombreUsuario}}</label></div>
-            <span class="text-gray-500 font-medium line-height-3">¿Qué hacemos hoy?</span>
-        </div>
+<div class="home">
 
-        <div class="flex flex-row gap-2 align-items-center justify-content-center mb-1">
-            <div class="flex flex-column w-full custom-banner-1" routerLink="/inversion/lista">
-                <i class="pi pi-chart-bar icon-span"></i>
-                <span class="txt-span">Inversiones</span>
-            </div>
+    <!-- Saludo -->
+    <header class="home-saludo">
+        <span class="home-hola label-nombre">Hola, {{nombreUsuario}}</span>
+        <span class="home-sub">¿Qué hacemos hoy?</span>
+    </header>
 
-            <div class="flex flex-column w-full custom-banner-2" routerLink="/registrar/datosinversion">
-                <i class="pi pi-money-bill icon-span"></i>
-                <span class="txt-span">Invertir</span>
-            </div>
-        </div>
+    <!-- Hero: saldo + accesos (estilo fintech mobile light) -->
+    <section class="home-hero">
+        <span class="home-hero-label">Saldo por cobrar</span>
 
-        <div class="flex flex-row gap-2 align-items-center justify-content-center">
-            <div class="flex flex-column w-full justify-content-center custom-banner-cobranza"
-                routerLink="/reporte/pagos-pendientes">
-                <img src="assets/images/dashboard/money.png" height="40">
-                <span class="txt-span">Cobranza</span>
-            </div>
-        </div>
+        <button type="button" class="home-saldo" (click)="mostrarMonto()"
+            [attr.aria-label]="mostrar ? 'Ocultar saldo' : 'Mostrar saldo'">
+            <ng-container *ngIf="mostrar">
+                <ng-container *ngIf="montoCargado && monto !== 'x'"><small>{{currency}}</small>{{ monto | formatNumber }}</ng-container>
+                <span *ngIf="montoCargado && monto === 'x'" class="home-saldo-error">No se pudo cargar</span>
+                <i *ngIf="!montoCargado" class="pi pi-spinner pi-spin home-saldo-spin"></i>
+            </ng-container>
+            <ng-container *ngIf="!mostrar"><small>{{currency}}</small>••••••</ng-container>
+        </button>
 
-        <div class="flex flex-row gap-2 div-monto" (click)="mostrarMonto()">
-            <div class="flex-row w-full custom-banner-3">
-                <div class="flex w-1 justify-content-center">
-                    <i *ngIf="mostrar" class="pi pi-eye"></i>
-                    <i *ngIf="!mostrar" class="pi pi-eye-slash"></i>
+        <button type="button" class="home-pill" (click)="mostrarMonto()">
+            <i class="pi" [ngClass]="mostrar ? 'pi-eye-slash' : 'pi-eye'"></i>
+            {{ mostrar ? 'Ocultar saldo' : 'Ver saldo' }}
+        </button>
+
+        <nav class="home-accesos">
+            <a class="home-acceso" routerLink="/registrar/datosinversion">
+                <span class="home-circulo"><i class="pi pi-plus"></i></span>
+                <span class="home-acceso-label">Invertir</span>
+            </a>
+            <a class="home-acceso" routerLink="/inversion/lista">
+                <span class="home-circulo"><i class="pi pi-chart-bar"></i></span>
+                <span class="home-acceso-label">Inversiones</span>
+            </a>
+            <a class="home-acceso" routerLink="/reporte/pagos-pendientes">
+                <span class="home-circulo"><i class="pi pi-wallet"></i></span>
+                <span class="home-acceso-label">Cobranza</span>
+            </a>
+        </nav>
+    </section>
+
+    <!-- Últimos registros -->
+    <section class="home-card">
+        <button type="button" class="home-card-head" (click)="mostrarRegistros()"
+            [attr.aria-expanded]="mostrarUltRegistros">
+            <span class="home-ico"><i class="pi pi-history"></i></span>
+            <span class="home-card-title">Últimos registros</span>
+            <i class="pi pi-angle-down home-flecha" [class.abierta]="mostrarUltRegistros"></i>
+        </button>
+
+        <ng-container *ngIf="mostrarUltRegistros">
+            <div *ngIf="skeletonShow" class="home-lista">
+                <div *ngFor="let item of [].constructor(forSkeleton)" class="home-item">
+                    <p-skeleton shape="circle" size="40px" />
+                    <div class="flex flex-column w-full gap-2">
+                        <p-skeleton width="70%" height="1rem" />
+                        <p-skeleton width="40%" height=".8rem" />
+                    </div>
+                    <p-skeleton width="4.5rem" height="1rem" />
                 </div>
-                <div class="flex w-6 justify-content-center">
-                    <span class="txt-span">Saldo por cobrar</span>
-                </div>
-                <div class="flex w-5 justify-content-center">
-                    <span *ngIf="mostrar" class="txt-span">
-                        <div *ngIf="montoCargado">{{currency}} {{ monto | formatNumber }}</div><i *ngIf="!montoCargado"
-                            class="pi pi-spinner pi-spin" style="color: var(--gray-500); font-size: .9rem;"></i>
+            </div>
+
+            <div *ngIf="!skeletonShow" class="home-lista">
+                <a *ngFor="let inversion of ultimas10Inversiones" class="home-item home-item-link"
+                    [routerLink]="['/registrar/inversiondetalle']" [queryParams]="{ idInversion: inversion.idInversion }">
+                    <span class="home-avatar">{{ (inversion.nombres || '').charAt(0) }}{{ (inversion.apellidoPaterno || '').charAt(0) }}</span>
+                    <span class="home-item-text">
+                        <span class="home-nombre">{{ inversion.nombres+' '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
+                        <span class="home-fecha">{{ inversion.fechaCreacion }}</span>
                     </span>
-                    <span *ngIf="!mostrar" class="txt-span">********</span>
+                    <span class="home-monto">{{currency}} {{ inversion.monto | formatNumber }}</span>
+                </a>
+
+                <div *ngIf="ultimasInversiones.length === 0" class="home-vacio">
+                    <span class="home-ico"><i class="pi pi-inbox"></i></span>
+                    <span>Aún no hay registros.</span>
                 </div>
 
-
+                <button *ngIf="ultimasInversiones.length > 10" type="button" class="home-ver-todos" (click)="verRegistros()">
+                    Ver todos <i class="pi pi-angle-right"></i>
+                </button>
             </div>
-        </div>
+        </ng-container>
+    </section>
 
-        <!-- Tabla de los ultimos registros de inversiones -->
-        <div class="table-container">
-            <!-- [ngIf]="!skeletonShow" -->
-            <div class="flex flex-column gap-2 div-monto custom-banner-4">
-                <div class="flex flex-row justify-content-between  w-full">
-                    <div class="flex w-8 gap-2 justify-content-start">
-                        <i class="pi pi-list"></i>
-                        <span class="txt-span">Últimos registros</span>
-                    </div>
-                    <div class="flex w-2 justify-content-center">
-                        <i (click)="mostrarRegistros()" [class.pi-angle-down]="!mostrarUltRegistros"
-                            [class.pi-angle-up]="mostrarUltRegistros" class="pi"></i>
-                    </div>
-                </div>
-                <ng-template [ngIf]="mostrarUltRegistros">
-                    <ng-template [ngIf]="!skeletonShow">
-                        <div class="w-full">
-                            <table class="w-full">
-                                <tbody>
-                                    <div *ngFor="let inversion of ultimas10Inversiones" class="tr-registros">
-                                        <div class="flex flex-row" [routerLink]="['/registrar/inversiondetalle']"
-                                            [queryParams]="{ idInversion: inversion.idInversion }">
-                                            <div class="flex flex-column w-10">
-                                                <span class="span-nombre">{{ inversion.nombres+'
-                                                    '+inversion.apellidoPaterno+' '+inversion.apellidoMaterno }}</span>
-                                                <span class="span-fecha">{{ inversion.fechaCreacion }}</span>
-                                            </div>
-                                            <div class="flex flex-column justify-content-center w-5">
-                                                <span class="flex justify-content-end span-monto">{{currency}} {{
-                                                    inversion.monto | formatNumber }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="ultimasInversiones.length > 10 || ultimasInversiones.length === 0"
-                                        class="tr-registros-s">
-                                        <div class="flex justify-content-center flex-row span-2">
-                                            <span *ngIf="ultimasInversiones.length > 10" (click)="verRegistros()">Ver
-                                                todos</span>
-                                            <span *ngIf="ultimasInversiones.length === 0">Aún no hay registros.</span>
-                                        </div>
-                                    </div>
-                                </tbody>
-                            </table>
-                        </div>
-                    </ng-template>
-
-                    <ng-template [ngIf]="skeletonShow">
-                        <div class="flex flex-row w-full" style="min-width: 278px;">
-                            <div class="w-full p-2">
-                                <div *ngFor="let item of [].constructor(forSkeleton); let i = index"
-                                    class="flex w-full mb-1 gap-2 row-skeleton">
-                                    <div class="flex flex-column w-full gap-1">
-                                        <p-skeleton class="w-10" height="1rem" />
-                                        <p-skeleton class="w-8" height="1rem" />
-                                    </div>
-                                    <p-skeleton class="w-4" height="2rem" />
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </ng-template>
-
-
-            </div>
-        </div>
-    </div>
+    <div style="height: 16px;"></div>
     <app-loading></app-loading>
 </div>

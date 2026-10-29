@@ -1,90 +1,76 @@
-<div>
-    <div class="auth-card auth-fade-in" (click)="modoEdicion && cancelarEdicion()">
-        <div class="flex flex-column w-full justify-content-center gap-2 mb-3 image-presentacion">
-            <div class="flex flex-row w-11 justify-content-center">
-                <img src="public/logos/logo_ssimple.png" alt="Image" height="230" style="margin-bottom: 0;"
-                    class="mb-0">
-            </div>
-            <span *ngIf="appVersion!=''" class="version-style-float">v{{appVersion}}</span>
-        </div>
+<div class="lu auth-fade-in" (click)="modoEdicion && cancelarEdicion()">
 
-        <!-- Selector de cuentas guardadas -->
-        <div class="cuentas-carousel-wrapper mb-2">
-            <div class="cuentas-carousel" #carousel (scroll)="onCarouselScroll()">
-                <div class="cuenta-slide" *ngFor="let cuenta of cuentas; let i = index">
-                    <div class="cuenta-card">
-                        <i class="pi pi-user cuenta-icon"></i>
-                        <span class="cuenta-correo">{{cuenta}}</span>
-                        <button *ngIf="modoEdicion" type="button" class="cuenta-eliminar"
-                            (click)="eliminarCuenta(i, $event)" aria-label="Eliminar cuenta">
-                            <i class="pi pi-trash"></i>
-                        </button>
-                    </div>
+    <!-- Hero compacto con el logo -->
+    <section class="lu-hero">
+        <span *ngIf="appVersion!=''" class="lu-version">v{{appVersion}}</span>
+        <div class="lu-logo">
+            <img src="public/logos/logo_ssimple.png" alt="Sistema Simple">
+        </div>
+        <span class="lu-hero-titulo">Hola de nuevo</span>
+        <span class="lu-hero-sub">Ingresa tu clave de 6 dígitos</span>
+    </section>
+
+    <!-- Selector de cuentas guardadas -->
+    <div class="lu-cuentas">
+        <div class="lu-carousel" #carousel (scroll)="onCarouselScroll()">
+            <div class="lu-slide" *ngFor="let cuenta of cuentas; let i = index">
+                <div class="lu-cuenta">
+                    <span class="lu-cuenta-avatar">{{cuenta.charAt(0).toUpperCase()}}</span>
+                    <span class="lu-cuenta-correo">{{cuenta}}</span>
+                    <button *ngIf="modoEdicion" type="button" class="lu-cuenta-eliminar"
+                        (click)="eliminarCuenta(i, $event)" aria-label="Eliminar cuenta">
+                        <i class="pi pi-trash"></i>
+                    </button>
                 </div>
             </div>
-
-            <div class="cuentas-dots" *ngIf="cuentas.length > 1">
-                <span *ngFor="let cuenta of cuentas; let i = index" class="dot"
-                    [ngClass]="{'dot-active': i === cuentaActivaIndex}" (click)="irACuenta(i)"></span>
-            </div>
         </div>
 
-        <div *ngIf="modoEdicion" class="flex justify-content-center mb-2 modo-edicion-hint">
-            <span>Máximo 3 cuentas. Elimina una para agregar otra.</span>
+        <div class="lu-dots-cuentas" *ngIf="cuentas.length > 1">
+            <span *ngFor="let cuenta of cuentas; let i = index" class="lu-dot-cuenta"
+                [class.lu-dot-cuenta-on]="i === cuentaActivaIndex" (click)="irACuenta(i)"></span>
+        </div>
+    </div>
+
+    <p *ngIf="modoEdicion" class="lu-hint">
+        <i class="pi pi-info-circle"></i> Máximo 3 cuentas. Elimina una para agregar otra.
+    </p>
+
+    <form #form="ngForm" class="lu-form">
+        <!-- Clave ofuscada -->
+        <div class="lu-pin" aria-label="Clave ingresada">
+            <span *ngFor="let n of [1,2,3,4,5,6]" class="lu-pin-dot" [class.lu-pin-on]="enteredCode.length >= n"></span>
         </div>
 
-        <div>
-            <form #form="ngForm">
-
-                <div class="login-container">
-                    <div class="flex flex-row gap-5 justify-content-center mb-3 div-pass">
-                        <i class="pi pi-circle-fill"
-                            [ngClass]="enteredCode.length >= 1 ? 'passCheck':'passNoCheck'"></i>
-                        <i class="pi pi-circle-fill"
-                            [ngClass]="enteredCode.length >= 2 ? 'passCheck':'passNoCheck'"></i>
-                        <i class="pi pi-circle-fill"
-                            [ngClass]="enteredCode.length >= 3 ? 'passCheck':'passNoCheck'"></i>
-                        <i class="pi pi-circle-fill"
-                            [ngClass]="enteredCode.length >= 4 ? 'passCheck':'passNoCheck'"></i>
-                        <i class="pi pi-circle-fill"
-                            [ngClass]="enteredCode.length >= 5 ? 'passCheck':'passNoCheck'"></i>
-                        <i class="pi pi-circle-fill"
-                            [ngClass]="enteredCode.length == 6 ? 'passCheck':'passNoCheck'"></i>
-                    </div>
-
-                    <!-- Teclado numérico aleatorio -->
-                    <div class="keypad">
-                        <button *ngFor="let number of randomNumbers.slice(0, 9)" (click)="onDigitPress(number)"
-                            class="keypad-button" type="button">
-                            {{ number }}
-                        </button>
-                        <!-- Ingreso rápido con huella para la cuenta activa (o espacio vacío para mantener la cuadrícula) -->
-                        <button *ngIf="biometriaDisponibleActiva" (click)="ingresarConBiometria()"
-                            class="keypad-button huella-button" type="button" aria-label="Ingresar con huella">
-                            <lottie-player src="/public/system/fingerprint.json" background="transparent" speed="1"
-                                loop autoplay></lottie-player>
-                        </button>
-                        <div *ngIf="!biometriaDisponibleActiva" class="keypad-button" style="visibility: hidden;"></div>
-                        <!-- Mostrar el último número -->
-                        <button *ngIf="randomNumbers.length > 9"
-                            (click)="onDigitPress(randomNumbers[randomNumbers.length - 1])"
-                            class="keypad-button last-button" type="button">
-                            {{ randomNumbers[randomNumbers.length - 1] }}
-                        </button>
-                        <!-- Botón de "Borrar" en la parte inferior derecha -->
-                        <button (click)="onDelete()" class="keypad-button delete-button" type="button">
-                            <i class="pi pi-delete-left"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
-            <div>
-
-                <div class="flex w-full justify-content-center">
-                    <a class="font-medium no-underline ml-2 text-blue-400 cursor-pointer"
-                        (click)="usarOtraCuenta($event)">Agregar otra cuenta</a>
-                </div>
-
-            </div>
-            <app-loading></app-loading>
+        <!-- Teclado numérico aleatorio -->
+        <div class="keypad">
+            <button *ngFor="let number of randomNumbers.slice(0, 9)" (click)="onDigitPress(number)"
+                class="keypad-button" type="button">
+                {{ number }}
+            </button>
+            <!-- Ingreso rápido con huella para la cuenta activa (o espacio vacío para mantener la cuadrícula) -->
+            <button *ngIf="biometriaDisponibleActiva" (click)="ingresarConBiometria()"
+                class="keypad-button keypad-plano huella-button" type="button" aria-label="Ingresar con huella">
+                <lottie-player src="/public/system/fingerprint.json" background="transparent" speed="1"
+                    loop autoplay></lottie-player>
+            </button>
+            <div *ngIf="!biometriaDisponibleActiva" class="keypad-button" style="visibility: hidden;"></div>
+            <!-- Último número -->
+            <button *ngIf="randomNumbers.length > 9"
+                (click)="onDigitPress(randomNumbers[randomNumbers.length - 1])"
+                class="keypad-button" type="button">
+                {{ randomNumbers[randomNumbers.length - 1] }}
+            </button>
+            <!-- Borrar -->
+            <button (click)="onDelete()" class="keypad-button keypad-plano" type="button" aria-label="Borrar">
+                <i class="pi pi-delete-left"></i>
+            </button>
         </div>
+    </form>
+
+    <button type="button" class="lu-otra" (click)="usarOtraCuenta($event)">
+        <i class="pi pi-user-plus"></i> Agregar otra cuenta
+    </button>
+
+</div>
+
+<app-loading></app-loading>

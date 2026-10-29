@@ -1,152 +1,672 @@
-.icon-disabled {
-    opacity: .4;
-    pointer-events: none;
+/* Detalle vehicular: estilo fintech mobile light (hero fx de confirm-inv + tarjetas blancas) */
+$ink: var(--gray-700);
+$muted: var(--gray-500);
+$blue: var(--blue-400);
+$blue-soft: color-mix(in srgb, var(--blue-400) 12%, #fff);
+$sombra: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+
+.dv-titulo {
+  padding: 0 4px;
 }
 
-.color1{
-    height: 12px;
-    border-top: solid 1px var(--gray-300);
-    border-left: solid 1px var(--gray-300);
-    border-bottom: solid 1px var(--gray-300);
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    /* background-color: #8b0dfa; */
-}
-.color2{
-    height: 12px;
-    border-top: solid 1px var(--gray-300);
-    border-right: solid 1px var(--gray-300);
-    border-bottom: solid 1px var(--gray-300);
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    /* background-color: #adff2f; */
-}
-.span-nombre{
-    font-weight: 500;
-    color: black;
-    font-size: 14px;
-    text-align: left;
-    word-break: break-word; /* rompe palabras largas */
-    white-space: normal;    /* permite múltiples líneas */
-  }
-  .span-desc{
-    color: var(--gray-500);
-    font-size: 12px;
-    text-align: left;
-    word-break: break-word; /* rompe palabras largas */
-    white-space: normal;    /* permite múltiples líneas */
-  }
-  .pi-car{
-    font-size: 45px;
-}
-.span-1{
-  font-weight: 500;
-  color: rgb(43, 43, 43);
-  font-size: 10px;
-  text-align: left;
-  word-break: break-word; /* rompe palabras largas */
-  white-space: normal;    /* permite múltiples líneas */
-}
-.span-2{
-  color: var(--gray-500);
-  font-size: 10px;
-  text-align: left;
-  white-space: nowrap; /* Evita el salto de línea */
-  overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-  text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
+/* ===== Hero ===== */
+.dv-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 16px 18px;
+  border-radius: 26px;
+  color: #fff;
+  overflow: hidden;
+  background:
+    radial-gradient(140% 55% at 0% 112%, rgba(255, 255, 255, .20) 0 48%, transparent 49%),
+    radial-gradient(120% 50% at 100% 108%, rgba(255, 255, 255, .14) 0 50%, transparent 51%),
+    radial-gradient(160% 60% at 50% 128%, rgba(255, 255, 255, .10) 0 50%, transparent 51%),
+    radial-gradient(80% 60% at 85% 0%, rgba(255, 255, 255, .28), transparent 70%),
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--blue-400) 85%, #fff) 0%,
+      var(--blue-400) 35%,
+      color-mix(in srgb, var(--primary-500) 80%, var(--blue-400)) 100%);
+  box-shadow: 0 16px 32px -18px color-mix(in srgb, var(--blue-400) 80%, transparent);
 }
 
-.container-line{
-  border-bottom: solid 1px var(--gray-200);
-  padding: 10px;
-}
-
-.cronograma-link{
+.dv-hero-top {
   display: flex;
   align-items: center;
-  color: var(--primary-500);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.dv-auto {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+
+  .pi {
+    font-size: 18px;
+  }
+}
+
+/* Colores del vehículo como insignia pequeña */
+.dv-colores {
+  position: absolute;
+  right: -4px;
+  bottom: -2px;
+  display: flex;
+  padding: 2px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .2);
+
+  span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(15, 23, 42, .12);
+
+    & + span {
+      margin-left: -3px;
+    }
+  }
+}
+
+.dv-hero-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.dv-nombre {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dv-desc {
+  font-size: 12.5px;
+  opacity: .9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dv-placa {
+  flex: 0 0 auto;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+}
+
+.dv-label {
+  font-size: 13.5px;
   font-weight: 600;
-  font-size: 13px;
+  opacity: .92;
+}
+
+.dv-monto {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+
+  small {
+    font-size: .5em;
+    font-weight: 600;
+    opacity: .9;
+    margin-right: 2px;
+  }
+}
+
+.dv-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+
+  .pi {
+    font-size: 11px;
+  }
+}
+
+/* Acciones en círculos */
+.dv-circulos {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 16px;
+}
+
+.dv-circulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
   cursor: pointer;
-  text-decoration: none;
+
+  &:active .dv-circulo-ico {
+    transform: scale(.92);
+  }
+
+  &:disabled {
+    opacity: .6;
+    cursor: default;
+  }
 }
 
-.cronograma-link:hover{
-  text-decoration: underline;
-}
-
-/* Body */
-
-.custom-banner-header{
-  flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-  margin: 5px;                   /* Espacio alrededor de cada banner */
-  padding: 3px;
-  background: #fff;
-  box-shadow: 0 0px 3px rgba(20, 184, 166, 0.5);
-  color: var(--gray-500);                 /* Color del texto del banner */
-  text-align: center;             /* Centra el texto dentro del banner */
-  border-radius: 8px;             /* Bordes redondeados */
-  min-width: 30px;
+.dv-circulo-ico {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: inline-flex;
   align-items: center;
-  height: 75px;
-}
-.custom-banner-detail-body {
-  flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-  margin: 5px;                   /* Espacio alrededor de cada banner */
-  padding: 12px;
-  background: #fff;
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2); 
-  color: var(--gray-500);                 /* Color del texto del banner */
-  text-align: center;             /* Centra el texto dentro del banner */
-  border-radius: 8px;             /* Bordes redondeados */
-  min-width: 30px;
-  align-items: center;
-  height: auto;
+  justify-content: center;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+  transition: transform .12s;
+
+  .pi {
+    font-size: 18px;
+  }
 }
 
-.span-body-desc{
-  color: var(--gray-500);
-  font-size: 11px;
-  text-align: left;
-  word-break: break-word; /* rompe palabras largas */
-  white-space: normal;    /* permite múltiples líneas */
-}
-.span-1-header{
-  font-weight: 500;
-  color: rgb(43, 43, 43);
+/* ===== Secciones y tarjetas ===== */
+.dv-seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 4px -4px;
   font-size: 13px;
-  text-align: left;
-  word-break: break-word; /* rompe palabras largas */
-  white-space: normal;    /* permite múltiples líneas */
-}
-.line-right{
-  border-right: solid 1px var(--gray-200);
-  padding-right: 2px;
-  height: 80%;
-}
-.pi-plus-circle{
-  font-size: 25px;
-  padding: 5px;
+  font-weight: 600;
+  color: $muted;
 }
 
-.detalle-cuota {
-  padding: 0.5rem;
-  background: #f7f7f7;
-  border-radius: 8px;
-  margin-top: 0.5rem;
-  transition: all 0.3s ease-in-out;
+.dv-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: $blue;
+  background: $blue-soft;
+  border-radius: 999px;
+  padding: 1px 9px;
 }
 
-.custom-banner-detail-body-padre{
-  flex: 1;                        /* Permite que cada banner tome el mismo espacio disponible */
-  padding: 5px;
+.dv-card {
+  padding: 6px;
+  border-radius: 20px;
   background: #fff;
-  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.2); 
-  color: var(--gray-500);                 /* Color del texto del banner */
-  border-radius: 5px;             /* Bordes redondeados */
-  min-width: 30px;
-  height: auto;
+  box-shadow: $sombra;
 }
+
+/* Filas tipo movimientos */
+.dv-fila {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+
+  & + &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 56px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
+  }
+}
+
+.dv-fila-ico {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $blue;
+  background: $blue-soft;
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+.dv-fila-label {
+  flex: 1;
+  font-size: 13.5px;
+  color: $muted;
+}
+
+.dv-fila-valor {
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+  text-align: right;
+}
+
+.dv-periodo {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+
+  .pi {
+    font-size: 10px;
+    color: var(--gray-400);
+  }
+}
+
+/* ===== Pagos ===== */
+.dv-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 12px 20px;
+  font-size: 13.5px;
+  color: $muted;
+
+  .pi {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: $blue;
+    background: $blue-soft;
+  }
+}
+
+.dv-mes + .dv-mes {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.dv-mes-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px 2px;
+}
+
+.dv-mes-nombre {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $muted;
+  text-transform: capitalize;
+}
+
+.dv-mes-total {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: $ink;
+}
+
+.dv-pago {
+  position: relative;
+  padding: 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background .15s;
+
+  & + .dv-pago::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 56px;
+    right: 10px;
+    border-top: 1px solid var(--gray-100);
+  }
+
+  &.abierto {
+    background: color-mix(in srgb, var(--blue-400) 6%, #fff);
+
+    &::before,
+    & + .dv-pago::before {
+      display: none;
+    }
+
+    .dv-pago-flecha {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.dv-pago-fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dv-pago-nro {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-500);
+  background: color-mix(in srgb, var(--primary-500) 12%, #fff);
+
+  .pi {
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+.dv-pago-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.dv-pago-titulo {
+  font-size: 14px;
+  font-weight: 600;
+  color: $ink;
+}
+
+.dv-pago-fecha {
+  font-size: 12px;
+  color: $muted;
+}
+
+.dv-pago-monto {
+  font-size: 14px;
+  font-weight: 700;
+  color: $ink;
+  white-space: nowrap;
+}
+
+.dv-pago-flecha {
+  font-size: 12px;
+  color: var(--gray-400);
+  transition: transform .2s;
+}
+
+.dv-pago-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 10px 0 0 46px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gray-100);
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12.5px;
+    color: $muted;
+  }
+
+  b {
+    color: $ink;
+    text-align: right;
+  }
+}
+
+/* Cerrar inversión: acción discreta al final */
+.dv-cerrar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--red-500);
+  background: color-mix(in srgb, var(--red-500) 7%, #fff);
+  cursor: pointer;
+
+  &:active {
+    background: color-mix(in srgb, var(--red-500) 12%, #fff);
+  }
+
+  .pi {
+    font-size: 13px;
+  }
+}
+
+/* ===== Pop up "Agregar cuota" (formato mr-pop de Pagos pendientes) ===== */
+.ac-pop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 20px 20px;
+  border-radius: 24px;
+  background: #fff;
+  text-align: center;
+}
+
+.ac-pop-ico {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary-500), var(--blue-400));
+  box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--blue-400) 80%, transparent);
+
+  .pi {
+    font-size: 22px;
+  }
+}
+
+/* Variante destructiva (Cerrar inversión) */
+.ac-pop-ico-rojo {
+  color: var(--red-500);
+  background: color-mix(in srgb, var(--red-500) 10%, #fff);
+  box-shadow: none;
+}
+
+.ac-pop-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: $muted;
+
+  b {
+    color: $ink;
+  }
+}
+
+.ac-pop-titulo {
+  margin-top: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  color: $ink;
+}
+
+.ac-pop-desc {
+  margin-top: -4px;
+  font-size: 13px;
+  color: $muted;
+  text-transform: capitalize;
+}
+
+.ac-cuota {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 16px 14px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--blue-400) 7%, #fff);
+}
+
+.ac-cuota-label {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: $blue;
+  background: $blue-soft;
+}
+
+.ac-cuota-monto {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+  color: $ink;
+
+  small {
+    font-size: .5em;
+    font-weight: 600;
+    color: $muted;
+  }
+}
+
+.ac-cuota-fecha {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: $muted;
+
+  .pi {
+    font-size: 11px;
+  }
+}
+
+.ac-siguiente {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 4px;
+  text-align: left;
+}
+
+.ac-siguiente-ico {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-400);
+  background: var(--gray-100);
+
+  .pi {
+    font-size: 11px;
+  }
+}
+
+.ac-siguiente-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ac-siguiente-titulo {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $muted;
+}
+
+.ac-siguiente-fecha {
+  font-size: 11.5px;
+  color: var(--gray-400);
+}
+
+.ac-siguiente-monto {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: $muted;
+  white-space: nowrap;
+}
+
+/* Confirmar pago: resumen en filas tipo movimientos */
+.ac-resumen {
+  width: 100%;
+  margin-top: 8px;
+  padding: 4px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--blue-400) 5%, #fff);
+  text-align: left;
+
+  .dv-fila + .dv-fila::before {
+    border-top-color: color-mix(in srgb, var(--blue-400) 12%, #fff);
+  }
+
+  .dv-fila-ico {
+    background: #fff;
+  }
+}
+
+.ac-monto {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ac-pop-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 6px;
+
+  button {
+    justify-content: center;
+    border-radius: 14px;
+  }
+}
+
 /* POP UP DE CONFIRMACION */
   ::ng-deep .p-dialog{
     width: 90%;

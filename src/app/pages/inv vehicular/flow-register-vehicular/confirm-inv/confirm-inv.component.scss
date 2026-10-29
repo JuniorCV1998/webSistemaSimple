@@ -1,49 +1,257 @@
+/* Estilo fintech mobile light (inspirado en apps bancarias): hero con degradado
+   suave y "dunas", accesos circulares translúcidos y tarjetas blancas debajo. */
+.fx {
+  gap: 12px;
+}
 
-.span-padre{
-    font-weight: 500;
-    color: rgb(43, 43, 43);
-    font-size: 15px;
-    text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
-  .span-1{
-    font-weight: 500;
-    color: rgb(43, 43, 43);
-    font-size: 13px;
-    text-align: right;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
-  .span-desc{
-    font-weight: 500;
-    color: rgb(43, 43, 43);
-    font-size: 13px;
-    text-align: right;
-    word-break: break-word; /* rompe palabras largas */
-    white-space: normal;    /* permite múltiples líneas */
-  }
-.span-2{
-    color: var(--gray-500);
-    font-size: 13px;
-    text-align: left;
-    white-space: nowrap; /* Evita el salto de línea */
-    overflow: hidden; /* Oculta el texto que sobrepasa el ancho */
-    text-overflow: ellipsis; /* Agrega los "..." cuando el texto es muy largo */
-  }
+/* ---------- Hero ---------- */
+.fx-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 12px 18px;
+  border-radius: 26px;
+  color: #fff;
+  overflow: hidden;
+  background:
+    /* dunas */
+    radial-gradient(140% 55% at 0% 112%, rgba(255, 255, 255, .20) 0 48%, transparent 49%),
+    radial-gradient(120% 50% at 100% 108%, rgba(255, 255, 255, .14) 0 50%, transparent 51%),
+    radial-gradient(160% 60% at 50% 128%, rgba(255, 255, 255, .10) 0 50%, transparent 51%),
+    /* brillo superior */
+    radial-gradient(80% 60% at 85% 0%, rgba(255, 255, 255, .28), transparent 70%),
+    linear-gradient(165deg,
+      color-mix(in srgb, var(--blue-400) 85%, #fff) 0%,
+      var(--blue-400) 35%,
+      color-mix(in srgb, var(--primary-500) 80%, var(--blue-400)) 100%);
+  box-shadow: 0 14px 30px -16px color-mix(in srgb, var(--blue-400) 70%, transparent);
+}
 
-.container-line{
-    border-bottom: solid 1px var(--gray-200);
-    padding: 10px;
-  }
+.fx-hero-label {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: .9;
+}
 
-  .cuadro-color{
-    background-color: aqua;
-    text-align: right;
-    width: 20px;
-    height: 20px;
-    border: 1px solid var(--gray-300);
-    border-radius: 5px;
+.fx-hero-monto {
+  margin: 2px 0 10px;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+  word-break: break-all;
+  text-align: center;
+
+  small {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-right: 6px;
+    opacity: .9;
+    letter-spacing: 0;
   }
+}
+
+.fx-pill {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+}
+
+/* Accesos circulares */
+.fx-accesos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+  margin-top: 26px;
+}
+
+.fx-acceso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fx-circulo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .25);
+  backdrop-filter: blur(6px);
+
+  .pi {
+    font-size: 18px;
+  }
+}
+
+.fx-acceso-label {
+  max-width: 100%;
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fx-placa {
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 700;
+}
+
+.fx-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.fx-dot-2 {
+  margin-left: -5px;
+}
+
+/* ---------- Tarjetas ---------- */
+.fx-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 4px 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 8px 24px -12px rgba(15, 23, 42, .14);
+}
+
+/* Cliente */
+.fx-cliente {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+}
+
+.fx-avatar {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue-400), var(--primary-500));
+}
+
+.fx-cliente-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fx-nombre {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+.fx-sub {
+  font-size: 13px;
+  color: var(--gray-500);
+}
+
+/* Filas */
+.fx-fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+
+  & + &,
+  .fx-cliente + & {
+    border-top: 1px solid var(--gray-100);
+  }
+}
+
+.fx-ico {
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-400);
+  background: color-mix(in srgb, var(--blue-400) 12%, #fff);
+
+  .pi {
+    font-size: 14px;
+  }
+}
+
+.fx-k {
+  font-size: 13.5px;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+
+.fx-v {
+  margin-left: auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* Periodo */
+.fx-periodo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+}
+
+.fx-periodo-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.fx-derecha {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.fx-fecha {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+.fx-periodo-flecha {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-500);
+  background: color-mix(in srgb, var(--primary-500) 12%, #fff);
+
+  .pi {
+    font-size: 12px;
+  }
+}

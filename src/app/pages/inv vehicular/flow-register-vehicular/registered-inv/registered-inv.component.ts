@@ -45,6 +45,11 @@ export default class RegisteredInvComponent {
     fechaCreacion: ""
 };
 
+  get iniciales(): string {
+    const partes = (this.objInversionVeh.fullName || '').trim().split(/\s+/);
+    return ((partes[0]?.[0] || '') + (partes[1]?.[0] || '')).toUpperCase();
+  }
+
   ngOnInit(): void{
     // Recuperar el parámetro de consulta `idInversion`
     this.route.queryParamMap.subscribe(params => {
